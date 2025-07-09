@@ -4,6 +4,8 @@ import ChatRoom from './components/ChatRoom';
 import socketService from './service/socketService';
 import DragLineTwoBox from './components/DragLineTwoBox';
 import { useTranslation } from 'react-i18next';
+import { ModeToggle } from '@/components/mode-toggle';
+import { Button } from './components/ui/button';
 
 function App() {
   const [roomId, setRoomId] = useState('room1');
@@ -17,9 +19,12 @@ function App() {
         marginLeft: '10rem',
       }}
     >
-      <h1>{t('greeting')}</h1>
-      <button onClick={() => i18n.changeLanguage('vi')}>Tiếng Việt</button>
-      <button onClick={() => i18n.changeLanguage('en')}>English</button>
+      <ModeToggle />
+      <h1 className="text-3xl font-bold underline text-red-400">
+        {t('greeting')}
+      </h1>
+      <Button onClick={() => i18n.changeLanguage('vi')}>Tiếng Việt</Button>
+      <Button onClick={() => i18n.changeLanguage('en')}>English</Button>
       <h1>Realtime Room Chat</h1>
       <select value={roomId} onChange={(e) => setRoomId(e.target.value)}>
         <option value="room1">Phòng 1</option>
