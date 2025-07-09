@@ -9,19 +9,21 @@ type ColumnMeta = {
   rowStart: number;
   rowEnd: number;
   header: string;
+  width?: number;
 };
+
 const mockColumns = [
-  { header: 'ID', key: 'id' },
+  { header: 'ID', key: 'id', width: 20 },
   {
     header: 'Thông tin cá nhân',
     children: [
-      { header: 'Họ tên', key: 'name' },
-      { header: 'Trạng thái', key: 'status' },
+      { header: 'Họ tên', key: 'name', width: 20 },
+      { header: 'Trạng thái', key: 'status', width: 15 },
       {
         header: 'Liên hệ',
         children: [
-          { header: 'Email', key: 'email' },
-          { header: 'SĐT', key: 'phone' },
+          { header: 'Email', key: 'email', width: 25 },
+          { header: 'SĐT', key: 'phone', width: 15 },
         ],
       },
     ],
@@ -47,7 +49,7 @@ const mockData = [
   },
 ];
 
-/* hàm này dùng để tự động lấy các giá trị A,B,C,D,1,2,3,4 trong excel */
+// Lấy tên cột Excel: A, B, C...
 const columnLetter = (colIndex: number): string => {
   let letter = '';
   let num = colIndex;
@@ -59,7 +61,7 @@ const columnLetter = (colIndex: number): string => {
   return letter;
 };
 
-/* hàm này dùng để tìm đến cấp độ của các giá trị trong excel thông qua children của columns */
+// Lấy độ sâu tối đa của headers
 const getMaxDepth = (cols: any[], depth = 1): number =>
   Math.max(
     ...cols.map((col) =>
@@ -67,7 +69,7 @@ const getMaxDepth = (cols: any[], depth = 1): number =>
     ),
   );
 
-/* hàm này dùng để tìm đến các giá trị trong excel */
+// Phân tích headers để lấy thông tin merge + key
 const parseHeaders = (
   cols: any[],
   depth: number,
@@ -79,7 +81,6 @@ const parseHeaders = (
   for (const colItem of cols) {
     const isParent = !!colItem.children;
     const rowStart = row;
-    const colStartHere = col;
 
     if (isParent) {
       const { nextCol } = parseHeaders(
@@ -105,6 +106,7 @@ const parseHeaders = (
         colEnd: col,
         rowStart,
         rowEnd: depth,
+        width: colItem.width,
       });
       col++;
     }
@@ -132,7 +134,7 @@ export const useExportExcel = () => {
       const maxDepth = getMaxDepth(columns);
       const { metas } = parseHeaders(columns, maxDepth);
 
-      // Headers
+      // === Headers
       metas.forEach(({ header, colStart, colEnd, rowStart, rowEnd }) => {
         const from = columnLetter(colStart);
         const to = columnLetter(colEnd);
@@ -144,9 +146,18 @@ export const useExportExcel = () => {
         }
       });
 
-      const leafKeys = metas.filter((m) => m.key).map((m) => m.key!);
+      const leafMetas = metas.filter((m) => m.key);
+      const leafKeys = leafMetas.map((m) => m.key!);
+
+      // === Set column width
+      leafMetas.forEach((meta, index) => {
+        if (meta.width) {
+          sheet.getColumn(index + 1).width = meta.width;
+        }
+      });
+
+      // === Gán dữ liệu
       const formatters: Record<string, (value: any) => any> = {
-        // status: (v) => (v === 'single' ? 'Độc thân' : v === 'married' ? 'Đã kết hôn' : 'Khác'),
         ...format,
       };
 
