@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import useSocket from '../hooks/useSocket';
-import socketService from '../service/socketService';
+import socketService from '../lib/socket';
 
 type Message = {
   sender: string;

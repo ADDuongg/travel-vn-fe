@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import socketService from '../service/socketService';
+import socketService from '../lib/socket';
 
 type SocketEvent = string;
 type Handler = (...args: any[]) => void;

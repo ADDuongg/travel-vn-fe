@@ -7,7 +7,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@lib/*": ["./src/lib/*"],
@@ -15,8 +14,9 @@
       "@pages/*": ["./src/pages/*"],
       "@styles/*": ["./src/styles/*"],
       "@assets/*": ["./src/assets/*"],
-      "@types/*": ["./src/types/*"],
-      "@store/*": ["./src/store/*"]
+      "@interface/*": ["./src/interface/*"],
+      "@store/*": ["./src/store/*"],
+      "@/*": ["./src/*"],
     }
   }
 }

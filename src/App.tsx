@@ -1,11 +1,11 @@
 // App.tsx
-import React, { useEffect, useState } from 'react';
-import ChatRoom from './components/ChatRoom';
-import socketService from './service/socketService';
-import DragLineTwoBox from './components/DragLineTwoBox';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ModeToggle } from '@/components/mode-toggle';
+import ChatRoom from './components/ChatRoom';
+import DragLineTwoBox from './components/DragLineTwoBox';
 import { Button } from './components/ui/button';
+import socketService from './lib/socket';
+import { ModeToggle } from './components/mode-toggle';
 
 function App() {
   const [roomId, setRoomId] = useState('room1');
