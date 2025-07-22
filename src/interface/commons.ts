@@ -16,3 +16,8 @@ export type HeaderItemType = {
   path?: string;
   children?: HeaderItemType[];
 };
+
+export type CountryFlag = {
+  label: string;
+  code: string;
+};

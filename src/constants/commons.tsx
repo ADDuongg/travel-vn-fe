@@ -1,4 +1,4 @@
-import type { HeaderItemType } from '@/interface/commons';
+import type { CountryFlag, HeaderItemType } from '@/interface/commons';
 
 export const HeaderItem: HeaderItemType[] = [
   {
@@ -74,3 +74,8 @@ export const HeaderItem: HeaderItemType[] = [
     path: '/blog',
   },
 ];
+
+export const countryFlags: Record<string, CountryFlag> = {
+  vi: { label: 'VI', code: 'VN' },
+  en: { label: 'ENG', code: 'US' },
+};

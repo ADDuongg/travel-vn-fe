@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { RoleEnum, type RouteConfig } from './interface/commons';
-import HomePage from '@/pages/home';
-import LoginPage from './pages/auth/login';
+import { DestinationSearchPage, HomePage, LoginPage } from '@/pages';
 
 export const routes: RouteConfig[] = [
   {
@@ -13,5 +12,9 @@ export const routes: RouteConfig[] = [
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  {
+    path: '/destination/search',
+    element: <DestinationSearchPage />,
   },
 ];
