@@ -3,8 +3,15 @@ import { Ratings } from './ui/rating';
 import { getOfferLabel } from './TourCard';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { CardName } from '@components/ui/typography';
-const CardSearching: React.FC<{ item: any }> = ({ item }) => {
-  return (
+import { EnumDisplayItem } from '@interface/commons';
+import CardSearchingFlex from './CardSearchingFlex';
+const CardSearching: React.FC<{ item: any; displayType?: EnumDisplayItem }> = ({
+  item,
+  displayType = EnumDisplayItem.GRID,
+}) => {
+  return displayType === EnumDisplayItem.FLEX ? (
+    <CardSearchingFlex item={item} />
+  ) : (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col w-full mx-auto">
       <div className="relative h-56 w-full">
         <img
@@ -12,7 +19,7 @@ const CardSearching: React.FC<{ item: any }> = ({ item }) => {
           alt={item.name}
           className="object-cover w-full h-full"
         />
-        {(item.hasSpecialOffer || item.sale_percent) && (
+        {(item.hasSpecialOffer || item.sale_percent || item.bestSeller) && (
           <div className="text-white text-[13px] font-semibold absolute z-[3] p-2 top-5 right-5 bg-primary rounded-md">
             {getOfferLabel(item)}
           </div>

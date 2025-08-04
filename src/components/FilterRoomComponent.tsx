@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import CustomInput from './CustomInput';
 import { Ratings } from './ui/rating';
@@ -11,49 +11,35 @@ import {
 } from './ui/accordion';
 import { FaSlidersH } from 'react-icons/fa';
 import { Label } from './ui/label';
-import { ResponsiveH3, ResponsiveH6 } from './ui/typography';
+import {
+  ResponsiveH3,
+  ResponsiveH4,
+  ResponsiveH5,
+  ResponsiveH6,
+} from './ui/typography';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { AiOutlineMinus } from 'react-icons/ai';
+import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
+import { ChevronDownIcon } from 'lucide-react';
 
-const durations = [
-  { label: 'Any', value: 'Any' },
-  { label: '1-3 days', value: '1-3' },
-  { label: '4-7 days', value: '4-7' },
-  { label: '8+ days', value: '8+' },
+const facilities = [
+  { label: 'Air Conditioning', value: 'air_condition' },
+  { label: 'Elevator', value: 'elevator' },
+  { label: 'Parking', value: 'parking' },
+  { label: 'Pool', value: 'pool' },
+  { label: 'Restroom', value: 'restroom' },
+  { label: 'Smoking Area', value: 'smoking_area' },
+  { label: 'WiFi', value: 'wifi' },
+  { label: 'Washroom', value: 'washroom' },
+  { label: 'Wheelchair Accessible', value: 'wheelchair_accessible' },
 ];
-const months = [
-  { label: 'Any', value: 'Any' },
-  { label: 'Jan', value: 'Jan' },
-  { label: 'Feb', value: 'Feb' },
-  { label: 'Mar', value: 'Mar' },
-  { label: 'Apr', value: 'Apr' },
-  { label: 'May', value: 'May' },
-  { label: 'Jun', value: 'Jun' },
-  { label: 'Jul', value: 'Jul' },
-  { label: 'Aug', value: 'Aug' },
-  { label: 'Sep', value: 'Sep' },
-  { label: 'Oct', value: 'Oct' },
-  { label: 'Nov', value: 'Nov' },
-  { label: 'Dec', value: 'Dec' },
-];
-const ages = [
-  { label: '10+', value: '10' },
-  { label: '12+', value: '12' },
-  { label: '15+', value: '15' },
-];
-const activities = [
-  { label: 'City Tours', value: 'city' },
-  { label: 'Cultural & Thematic Tours', value: 'cultural' },
-  { label: 'Family Friendly Tours', value: 'family' },
-  { label: 'Holiday & Seasonal Tours', value: 'holiday' },
-  { label: 'Indulgence & Luxury Tours', value: 'luxury' },
-];
-const destinations = [
-  { label: 'America', value: 'america' },
-  { label: 'Asia', value: 'asia' },
-  { label: 'Egypt', value: 'egypt' },
-  { label: 'Scandinavia', value: 'scandinavia' },
-  { label: 'South Africa', value: 'southafrica' },
+const roomSize = [
+  { label: '20 m²', value: '20' },
+  { label: '25 m²', value: '25' },
+  { label: '30 m²', value: '30' },
+  { label: '35 m²', value: '35' },
+  { label: '40 m²', value: '40' },
+  { label: '45 m²', value: '45' },
 ];
 
 export type FilterValues = {
@@ -64,8 +50,8 @@ export type FilterValues = {
   minPrice: string;
   maxPrice: string;
   rating: number;
-  ages: string[];
-  activities: string[];
+  facilities: string[];
+  roomSize: string[];
   destinations: string[];
 };
 
@@ -74,7 +60,12 @@ interface Props {
   onClear?: () => void;
 }
 
-const FilterComponent: React.FC<Props> = ({ onFilter, onClear }) => {
+const FilterRoomComponent: React.FC<Props> = ({ onFilter, onClear }) => {
+  const [roomCount, setRoomCount] = useState(5);
+
+  const handleChange = (val: number) => {
+    setRoomCount(Math.max(1, val));
+  };
   const methods = useForm<FilterValues>({
     defaultValues: {
       keyword: '',
@@ -84,33 +75,21 @@ const FilterComponent: React.FC<Props> = ({ onFilter, onClear }) => {
       minPrice: '',
       maxPrice: '',
       rating: 2,
-      ages: [],
-      activities: [],
+      facilities: [],
+      roomSize: [],
       destinations: [],
     },
   });
 
   const handleSubmit = methods.handleSubmit(onFilter || (() => {}));
+  console.log('roomCount', roomCount);
 
   return (
     <FormProvider {...methods}>
       <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
-        <CustomInput name="keyword" type="text" label="Keywords" />
-        <CustomInput
-          name="duration"
-          type="select"
-          className="w-full"
-          label="Duration"
-          options={durations}
-        />
-        <CustomInput name="date" type="date" label="Date" />
-        <CustomInput
-          name="month"
-          type="select"
-          className="w-full"
-          label="Month"
-          options={months}
-        />
+        <ResponsiveH5>Check Availability</ResponsiveH5>
+        <CustomInput name="check_in" type="date" label="Check in" />
+        <CustomInput name="check_out" type="date" label="Check out" />
         <div className="flex gap-2 w-full">
           <CustomInput
             className="w-full"
@@ -125,6 +104,46 @@ const FilterComponent: React.FC<Props> = ({ onFilter, onClear }) => {
             label="Max Price"
           />
         </div>
+        <CustomInput
+          name="roomCount"
+          type="custom-input"
+          label="Room"
+          render={({}) => {
+            return (
+              <Select>
+                <SelectTrigger className=" w-full flex items-center bg-white">
+                  {roomCount}
+                </SelectTrigger>
+                <SelectContent className="p-4 w-auto">
+                  <div className="flex justify-between items-center gap-2">
+                    <span className="uppercase text-sm tracking-wide font-semibold">
+                      Room
+                    </span>
+                    <div className="flex items-center gap-4">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleChange(roomCount - 1)}
+                      >
+                        −
+                      </Button>
+                      <ResponsiveH6 className="font-medium">
+                        {roomCount}
+                      </ResponsiveH6>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleChange(roomCount + 1)}
+                      >
+                        +
+                      </Button>
+                    </div>
+                  </div>
+                </SelectContent>
+              </Select>
+            );
+          }}
+        />
         <div>
           <label className="font-semibold">Rating</label>
           <Ratings
@@ -148,16 +167,16 @@ const FilterComponent: React.FC<Props> = ({ onFilter, onClear }) => {
               iconClosed={<AiOutlineMinus />}
               className="font-semibold text-base py-2 flex items-center gap-2"
             >
-              <ResponsiveH6>Tour Age</ResponsiveH6>
+              <ResponsiveH6>Facilities</ResponsiveH6>
             </AccordionTrigger>
             <AccordionContent>
               <div className="space-y-3 mt-3">
-                {ages.map((age) => (
+                {facilities.map((facilitie) => (
                   <CustomInput
-                    key={age.value}
-                    name={`ages.${age.value}`}
+                    key={facilitie.value}
+                    name={`facilities.${facilitie.value}`}
                     type="checkbox"
-                    label={age.label}
+                    label={facilitie.label}
                   />
                 ))}
               </div>
@@ -172,47 +191,16 @@ const FilterComponent: React.FC<Props> = ({ onFilter, onClear }) => {
               iconClosed={<AiOutlineMinus />}
               className="font-semibold text-base py-2 flex items-center gap-2"
             >
-              <ResponsiveH6>Activity</ResponsiveH6>
+              <ResponsiveH6>Room Size</ResponsiveH6>
             </AccordionTrigger>
             <AccordionContent>
               <div className="space-y-3 mt-3">
-                {activities.map((act) => (
+                {roomSize.map((act) => (
                   <CustomInput
                     key={act.value}
-                    name={`activities.${act.value}`}
+                    name={`roomSize.${act.value}`}
                     type="checkbox"
                     label={act.label}
-                  />
-                ))}
-              </div>
-              <Button
-                type="button"
-                variant="link"
-                className="text-blue-500 px-0"
-              >
-                More
-              </Button>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-
-        <Accordion type="single" collapsible defaultValue="destination">
-          <AccordionItem value="destination">
-            <AccordionTrigger
-              iconOpen={<AiOutlinePlus />}
-              iconClosed={<AiOutlineMinus />}
-              className="font-semibold text-base py-2 flex items-center gap-2"
-            >
-              <ResponsiveH6>Destination</ResponsiveH6>
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-3 mt-3">
-                {destinations.map((dest) => (
-                  <CustomInput
-                    key={dest.value}
-                    name={`destinations.${dest.value}`}
-                    type="checkbox"
-                    label={dest.label}
                   />
                 ))}
               </div>
@@ -235,4 +223,4 @@ const FilterComponent: React.FC<Props> = ({ onFilter, onClear }) => {
   );
 };
 
-export default FilterComponent;
+export default FilterRoomComponent;

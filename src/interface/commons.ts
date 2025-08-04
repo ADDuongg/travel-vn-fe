@@ -1,4 +1,4 @@
-export enum RoleEnum {
+export enum EnumRole {
   ADMIN = 'admin',
   USER = 'user',
   GUEST = 'guest',
@@ -6,7 +6,7 @@ export enum RoleEnum {
 export interface RouteConfig {
   path: string;
   element: React.ReactElement;
-  rolesAllowed?: RoleEnum[];
+  rolesAllowed?: EnumRole[];
   children?: RouteConfig[];
 }
 
@@ -21,3 +21,9 @@ export type CountryFlag = {
   label: string;
   code: string;
 };
+
+export enum EnumDisplayItem {
+  TABLE = 'table',
+  GRID = 'grid',
+  FLEX = 'flex',
+}

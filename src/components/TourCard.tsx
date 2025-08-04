@@ -12,11 +12,13 @@ export interface TourItem {
   sale_percent?: number;
   duration?: string;
   hasSpecialOffer?: boolean;
+  bestSeller?: boolean;
   review_number?: number;
   rate?: number;
 }
 
 export const getOfferLabel = (item: TourItem) => {
+  if (item.bestSeller) return 'Best Seller';
   if (item.hasSpecialOffer) return 'Special Offer';
   if (item.sale_percent) return `${item.sale_percent}% Off`;
   return '';

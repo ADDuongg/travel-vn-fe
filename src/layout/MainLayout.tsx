@@ -9,7 +9,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="h-screen flex flex-col ">
       <div className="flex-1">
         <Header />
-        <div className="pt-[156px]">{children}</div>
+        <div className="lg:pt-[156px] pt-[136px]">{children}</div>
         <Footer />
       </div>
     </div>

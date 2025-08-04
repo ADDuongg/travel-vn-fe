@@ -7,17 +7,17 @@ import {
 } from 'react-router-dom';
 import { routes } from './router';
 import ProtectedRoute from './components/ProtectedRoute';
-import type { RoleEnum, RouteConfig } from '@interface/commons';
+import type { EnumRole, RouteConfig } from '@interface/commons';
 
 localStorage.setItem('userRole', 'admin');
 
-const useUserRole = (): RoleEnum | undefined => {
-  return localStorage.getItem('userRole') as RoleEnum | undefined;
+const useUserRole = (): EnumRole | undefined => {
+  return localStorage.getItem('userRole') as EnumRole | undefined;
 };
 
 const transformRoutes = (
   configs: RouteConfig[],
-  userRole: RoleEnum | undefined,
+  userRole: EnumRole | undefined,
 ): RouteObject[] => {
   return configs.map(({ path, element, rolesAllowed, children }) => ({
     path,

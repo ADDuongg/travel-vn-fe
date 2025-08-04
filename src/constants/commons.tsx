@@ -59,12 +59,12 @@ export const HeaderItem: HeaderItemType[] = [
       {
         name: 'tour-search',
         label: 'Tour Search',
-        path: '/tour-search',
+        path: '/tour/search',
       },
       {
         name: 'room-search',
         label: 'Room Search',
-        path: '/room-search',
+        path: '/room/search',
       },
     ],
   },

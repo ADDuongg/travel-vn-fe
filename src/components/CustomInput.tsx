@@ -21,9 +21,11 @@ interface CustomInputProps {
     | 'autocomplete'
     | 'multi-select'
     | 'checkbox'
-    | 'date';
+    | 'date'
+    | 'custom-input';
   label?: string;
   options?: { label: string; value: string }[];
+  render?: (field: any) => React.ReactNode;
   labelPosition?: 'vertical' | 'horizontal';
   [key: string]: any;
 }
@@ -53,7 +55,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
         );
       case 'checkbox':
         return (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <Checkbox
               checked={field.value}
               onCheckedChange={field.onChange}
@@ -75,14 +77,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
       case 'select':
       case 'autocomplete':
         return (
-          <Select
-            onValueChange={(val) => {
-              const selected = options.find((opt) => opt.value === val);
-              field.onChange(selected || null);
-              console.log('field', field);
-            }}
-            value={field.value?.value}
-          >
+          <Select onValueChange={field.onChange} value={field.value}>
             <SelectTrigger {...props}>
               <SelectValue placeholder="Chọn..." />
             </SelectTrigger>
@@ -95,7 +90,11 @@ const CustomInput: React.FC<CustomInputProps> = ({
             </SelectContent>
           </Select>
         );
-
+      case 'custom-input':
+        if (props.render) {
+          return props.render(field);
+        }
+        return null;
       case 'text':
       default:
         return <Input {...props} {...field} name={name} type="text" />;
