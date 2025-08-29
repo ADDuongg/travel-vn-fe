@@ -4,82 +4,120 @@ import { DropdownLanguage } from '@components/DropdownLanguage';
 import { Button } from '@components/ui/button';
 import useMediaQuery from '@hooks/useMediaQuery';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from 'react-router-dom';
-import DrawerHeader from './DrawerHeader';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import DrawerHeader from '../components/DrawerHeader';
 import logox1 from '/images/logox1.png';
+import { ROUTES } from '@/constants/router';
+import { Separator } from '@components/ui/separator';
 
 const HeaderList = () => {
   const location = useLocation();
   const { t } = useTranslation();
   const isMediumScreen = useMediaQuery('(max-width: 900px)');
+
+  if (isMediumScreen) return null;
+
   return (
-    <>
-      {!isMediumScreen && (
-        <nav>
-          <ul className="flex space-x-6 px-4 py-3 text-sm font-medium">
-            {HeaderItem.map((item) => {
-              const isActive = location.pathname === item.path;
+    <nav>
+      <ul className="flex space-x-6 px-4 py-3 text-sm font-medium">
+        {HeaderItem.map((item) => {
+          const isActive = location.pathname === item.path;
 
-              return (
-                <li key={item.name} className="relative group">
-                  <Link
-                    to={item.path || ''}
-                    className={`hover:text-black transition-colors ${
-                      isActive ? 'text-black font-bold' : 'text-paleGray'
-                    }`}
-                  >
-                    {t(item.label)} {/* Sử dụng i18next để dịch */}
-                  </Link>
+          return (
+            <li key={item.name} className="relative group">
+              <Link
+                to={item.path || ''}
+                className={`hover:text-black transition-colors ${
+                  isActive ? 'text-black font-bold' : 'text-paleGray'
+                }`}
+              >
+                {t(item.label)}
+              </Link>
 
-                  <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-3 w-full h-2 z-20 flex justify-center">
-                    <div
-                      className={`w-2 h-2 bg-transparent group-hover:bg-gray-400 rounded-full transition-all`}
-                    ></div>
-                  </div>
+              <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-3 w-full h-2 z-50 flex justify-center">
+                <div className="w-2 h-2 bg-transparent group-hover:bg-gray-400 rounded-full transition-all"></div>
+              </div>
 
-                  {item.children && (
-                    <ul className="absolute top-full left-0 mt-4 w-40 bg-white shadow-lg rounded-sm opacity-0 group-hover:opacity-100 group-hover:visible transition-opacity duration-200 z-10">
-                      {item.children.map((child) => (
-                        <li key={child.name}>
-                          <Link
-                            to={child.path || ''}
-                            className={`block px-4 py-2 text-gray-700 hover:text-black ${
-                              isActive
-                                ? 'text-black font-bold'
-                                : 'text-paleGray'
-                            }`}
-                          >
-                            {t(child.label)} {/* Sử dụng i18next để dịch */}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-      )}
-    </>
+              {item.children && (
+                <ul className="absolute top-full left-0 mt-4 w-40 bg-white shadow-lg rounded-sm opacity-0 group-hover:opacity-100 group-hover:visible transition-opacity duration-200 z-10">
+                  {item.children.map((child) => (
+                    <li key={child.name}>
+                      <Link
+                        to={child.path || ''}
+                        className={`block px-4 py-2 text-gray-700 hover:text-black ${
+                          isActive ? 'text-black font-bold' : 'text-paleGray'
+                        }`}
+                      >
+                        {t(child.label)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
   );
 };
+
+const UserMenu = ({ userName }: { userName: string }) => (
+  <div className="relative group cursor-pointer">
+    <div className="flex items-center gap-2">
+      <img
+        src="https://picsum.photos/400/250?random=6"
+        alt="avatar"
+        className="w-8 h-8 rounded-full"
+      />
+      <span className="text-sm font-medium hidden md:inline">{userName}</span>
+    </div>
+    <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 group-hover:visible transition-opacity duration-200 z-20">
+      <Link
+        to="/dashboard"
+        className="block px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
+      >
+        Dashboard
+      </Link>
+      <Link
+        to="/profile/edit"
+        className="block px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
+      >
+        Edit Profile
+      </Link>
+      <Link
+        to="/wishlist"
+        className="block px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
+      >
+        Wish List
+      </Link>
+      <Separator className="my-1" />
+      <button className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-paleGray">
+        Sign Out
+      </button>
+    </div>
+  </div>
+);
 
 const Header = () => {
   const isMediumScreen = useMediaQuery('(max-width: 900px)');
   const [isScrolled, setIsScrolled] = useState(false);
+  const { t } = useTranslation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 156);
+      setIsScrolled(window.scrollY > 0);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const isLoggedIn = true; // fake state
+
   return (
     <div
-      className={`w-full h-auto bg-background_paleGray flex items-center justify-between md:px-10 px-5 fixed top-0 left-0 z-50 ${
+      className={`w-full h-[136px] bg-background_paleGray flex items-center justify-between md:px-10 px-5 fixed top-0 left-0 z-50 ${
         isScrolled ? 'shadow-lg backdrop-blur-md' : ''
       }`}
       style={{
@@ -91,13 +129,36 @@ const Header = () => {
         paddingBottom: isScrolled ? '12px' : '56px',
       }}
     >
-      <img src={logox1} alt="logox1" className="h-full" />
-      <HeaderList />
-      {isMediumScreen && <DrawerHeader />}
+      <img src={logox1} alt="logox1" className="h-[20px]" />
+
+      {/* Desktop */}
       {!isMediumScreen && (
-        <div className="flex gap-2">
-          <DropdownLanguage />
-          <Button>Login</Button>
+        <>
+          <HeaderList />
+          <div className="flex gap-2 items-center">
+            <DropdownLanguage />
+            {!isLoggedIn ? (
+              <Button onClick={() => navigate(ROUTES.LOGIN)}>
+                {t('buttons.login')}
+              </Button>
+            ) : (
+              <UserMenu userName="nguyen duong" />
+            )}
+          </div>
+        </>
+      )}
+
+      {/* Mobile */}
+      {isMediumScreen && (
+        <div className="flex items-center gap-4">
+          <DrawerHeader />
+          {!isLoggedIn ? (
+            <Button onClick={() => navigate(ROUTES.LOGIN)}>
+              {t('buttons.login')}
+            </Button>
+          ) : (
+            <UserMenu userName="nguyen duong" />
+          )}
         </div>
       )}
     </div>

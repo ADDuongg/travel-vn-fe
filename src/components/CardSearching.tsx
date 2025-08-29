@@ -3,8 +3,8 @@ import { Ratings } from './ui/rating';
 import { getOfferLabel } from './TourCard';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 import { CardName } from '@components/ui/typography';
-import { EnumDisplayItem } from '@interface/commons';
 import CardSearchingFlex from './CardSearchingFlex';
+import { EnumDisplayItem } from '@/constants/commons';
 const CardSearching: React.FC<{ item: any; displayType?: EnumDisplayItem }> = ({
   item,
   displayType = EnumDisplayItem.GRID,

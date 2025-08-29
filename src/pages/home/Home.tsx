@@ -9,7 +9,7 @@ import {
   TopDestination,
 } from '@/sections';
 
-export const HomePage = () => {
+const HomePage = () => {
   return (
     <MainLayout>
       <div className="bg-background_paleGray">
@@ -42,3 +42,5 @@ export const HomePage = () => {
     </MainLayout>
   );
 };
+
+export default HomePage;

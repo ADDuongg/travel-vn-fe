@@ -1,4 +1,71 @@
 {
   "greeting": "Xin chào",
-  "welcome": "Chào mừng bạn đến với ứng dụng"
+  "welcome": "Chào mừng đến với ứng dụng",
+  "home": "Trang chủ",
+  "pages": "Trang",
+  "tour_list": "Danh sách tour",
+  "room_list": "Danh sách phòng",
+  "search": "Tìm kiếm",
+  "blog": "Blog",
+  "about_us": "Về chúng tôi",
+  "contact": "Liên hệ",
+  "our_services": "Dịch vụ của chúng tôi",
+  "team": "Đội ngũ",
+  "gallery": "Bộ sưu tập",
+  "tour_search": "Tìm kiếm tour",
+  "room_search": "Tìm kiếm phòng",
+  "input": {
+    "field_label": {
+      "keyword": "Từ khóa",
+      "destination": "Điểm đến",
+      "role": "Vai trò",
+      "sort_by": "Sắp xếp theo",
+      "sort": "Sắp xếp",
+      "duration": "Thời lượng",
+      "date": "Ngày",
+      "month": "Tháng",
+      "min_price": "Giá tối thiểu",
+      "max_price": "Giá tối đa",
+      "rating": "Đánh giá",
+      "facilities": "Tiện nghi",
+      "room_size": "Kích thước phòng",
+      "ages": "Độ tuổi",
+      "activities": "Hoạt động",
+      "username_or_email": "Tên người dùng hoặc email",
+      "password": "Mật khẩu",
+      "remember_me": "Nhớ tôi",
+      "forgot_password": "Quên mật khẩu?"
+    },
+    "placeholder": {
+      "keyword": "Nhập từ khóa",
+      "destination": "Chọn điểm đến",
+      "role": "Chọn vai trò",
+      "sort_by": "Chọn sắp xếp theo",
+      "sort": "Chọn sắp xếp",
+      "duration": "Chọn thời lượng",
+      "date": "Chọn ngày",
+      "month": "Chọn tháng",
+      "min_price": "Nhập giá tối thiểu",
+      "max_price": "Nhập giá tối đa",
+      "rating": "Chọn đánh giá",
+      "facilities": "Chọn tiện nghi",
+      "room_size": "Chọn kích thước phòng",
+      "ages": "Chọn độ tuổi",
+      "activities": "Chọn hoạt động",
+      "username_or_email": "Nhập tên người dùng hoặc email",
+      "password": "Nhập mật khẩu"
+    }
+  },
+  "buttons": {
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "register": "Đăng ký",
+    "search_now": "Tìm kiếm ngay",
+    "cancel": "Hủy"
+  },
+  "home_page": {
+    "book_with_us": "Đặt ngay với chúng tôi!",
+    "hero_title": "Tìm địa điểm tiếp theo<0/>Để <1>Tham quan</1>",
+    "hero_subtitle": "Khám phá những địa điểm tuyệt vời với ưu đãi độc quyền.<0/>Ăn uống, mua sắm, tham quan những nơi thú vị trên khắp thế giới."
+  }
 }

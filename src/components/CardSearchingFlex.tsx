@@ -1,10 +1,10 @@
 import React from 'react';
-import { EnumDisplayItem } from '@interface/commons';
 import { Ratings } from './ui/rating';
 import { CardName } from '@components/ui/typography';
 import clsx from 'clsx';
 import { Button } from './ui/button';
 import { getOfferLabel } from './TourCard';
+import { EnumDisplayItem } from '@/constants/commons';
 
 const CardSearchingFlex: React.FC<{
   item: any;

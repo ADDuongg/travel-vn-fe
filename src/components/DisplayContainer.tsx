@@ -1,4 +1,4 @@
-import { EnumDisplayItem } from '@interface/commons';
+import { EnumDisplayItem } from '@/constants/commons';
 import clsx from 'clsx';
 
 interface DisplayContainerProps {

@@ -107,6 +107,7 @@ const FilterComponent: React.FC<Props> = ({ onFilter, onClear }) => {
         <CustomInput
           name="month"
           type="select"
+          classNameContainer="w-full"
           className="w-full"
           label="Month"
           options={months}

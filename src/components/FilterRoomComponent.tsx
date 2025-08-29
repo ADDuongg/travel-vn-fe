@@ -82,8 +82,11 @@ const FilterRoomComponent: React.FC<Props> = ({ onFilter, onClear }) => {
   });
 
   const handleSubmit = methods.handleSubmit(onFilter || (() => {}));
-  console.log('roomCount', roomCount);
+  const [guests, setGuests] = useState({ adults: 1, children: 0 });
 
+  const updateGuests = (key: 'adults' | 'children', value: number) => {
+    setGuests((prev) => ({ ...prev, [key]: value }));
+  };
   return (
     <FormProvider {...methods}>
       <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -111,7 +114,10 @@ const FilterRoomComponent: React.FC<Props> = ({ onFilter, onClear }) => {
           render={({}) => {
             return (
               <Select>
-                <SelectTrigger className=" w-full flex items-center bg-white">
+                <SelectTrigger
+                  classNameContainer="w-full"
+                  className=" w-full flex items-center bg-white"
+                >
                   {roomCount}
                 </SelectTrigger>
                 <SelectContent className="p-4 w-auto">
@@ -144,6 +150,70 @@ const FilterRoomComponent: React.FC<Props> = ({ onFilter, onClear }) => {
             );
           }}
         />
+        <Select>
+          <SelectTrigger
+            label={'Guests'}
+            required
+            className="w-full border rounded-md px-3 py-2 text-sm text-left"
+          >
+            <span className="text-sm font-medium">
+              Adult {guests.adults} - Children {guests.children}
+            </span>
+          </SelectTrigger>
+          <SelectContent className="!p-0 w-[--radix-select-trigger-width]">
+            <div className="p-4 space-y-4">
+              {/* Adults */}
+              <div className="flex items-center justify-between">
+                <span className="font-medium">Adults</span>
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() =>
+                      updateGuests('adults', Math.max(1, guests.adults - 1))
+                    }
+                  >
+                    −
+                  </Button>
+                  <span className="w-6 text-center">{guests.adults}</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => updateGuests('adults', guests.adults + 1)}
+                  >
+                    +
+                  </Button>
+                </div>
+              </div>
+              <hr />
+              {/* Children */}
+              <div className="flex items-center justify-between">
+                <span className="font-medium">Children</span>
+                <div className="flex items-center gap-3">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() =>
+                      updateGuests('children', Math.max(0, guests.children - 1))
+                    }
+                  >
+                    −
+                  </Button>
+                  <span className="w-6 text-center">{guests.children}</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() =>
+                      updateGuests('children', guests.children + 1)
+                    }
+                  >
+                    +
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </SelectContent>
+        </Select>
         <div>
           <label className="font-semibold">Rating</label>
           <Ratings

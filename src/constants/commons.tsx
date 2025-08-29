@@ -1,76 +1,77 @@
 import type { CountryFlag, HeaderItemType } from '@/interface/commons';
+import { ROUTES } from './router';
 
 export const HeaderItem: HeaderItemType[] = [
   {
     name: 'home',
-    label: 'Home',
-    path: '/',
+    label: 'home',
+    path: ROUTES.HOME,
   },
   {
     name: 'pages',
-    label: 'Pages',
+    label: 'pages',
     children: [
       {
         name: 'destination',
-        label: 'Destination',
+        label: 'destination',
         path: '/destination',
       },
       {
         name: 'about-us',
-        label: 'About Us',
+        label: 'about_us',
         path: '/about-us',
       },
       {
         name: 'contact',
-        label: 'Contact',
+        label: 'contact',
         path: '/contact',
       },
       {
         name: 'our-services',
-        label: 'Our Services',
+        label: 'our_services',
         path: '/our-services',
       },
       {
         name: 'team',
-        label: 'Team',
+        label: 'team',
         path: '/team',
       },
       {
         name: 'gallery',
-        label: 'Gallery',
+        label: 'gallery',
         path: '/gallery',
       },
     ],
   },
   {
     name: 'tour-list',
-    label: 'Tour List',
-    path: '/tour-list',
+    label: 'tour_list',
+    path: ROUTES.TOUR.INDEX,
   },
   {
     name: 'room-list',
-    label: 'Room List',
+    label: 'room_list',
     path: '/room-list',
   },
   {
     name: 'search',
-    label: 'Search',
+    label: 'search',
     children: [
       {
         name: 'tour-search',
-        label: 'Tour Search',
+        label: 'tour_search',
         path: '/tour/search',
       },
       {
         name: 'room-search',
-        label: 'Room Search',
+        label: 'room_search',
         path: '/room/search',
       },
     ],
   },
   {
     name: 'blog',
-    label: 'Blog',
+    label: 'blog',
     path: '/blog',
   },
 ];
@@ -79,3 +80,15 @@ export const countryFlags: Record<string, CountryFlag> = {
   vi: { label: 'VI', code: 'VN' },
   en: { label: 'ENG', code: 'US' },
 };
+
+export enum EnumRole {
+  ADMIN = 'admin',
+  USER = 'user',
+  GUEST = 'guest',
+}
+
+export enum EnumDisplayItem {
+  TABLE = 'table',
+  GRID = 'grid',
+  FLEX = 'flex',
+}

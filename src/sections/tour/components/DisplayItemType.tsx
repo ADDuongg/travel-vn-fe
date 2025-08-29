@@ -1,5 +1,5 @@
+import { EnumDisplayItem } from '@/constants/commons';
 import CustomInput from '@components/CustomInput';
-import { EnumDisplayItem } from '@interface/commons';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { AiOutlineAppstore, AiOutlineBars } from 'react-icons/ai';
@@ -32,12 +32,22 @@ const DisplayItemType: React.FC<{
   });
   return (
     <div className="border border-[#e1e1e1] rounded-md p-4 flex justify-between items-center">
-      <div className="flex gap-2 items-center ">
+      <div className="flex gap-5 items-center ">
         <span>Sort by</span>
         <FormProvider {...form}>
           <form onSubmit={handleSubmit} className="flex gap-2">
-            <CustomInput type="select" options={sortByOptions} name="sortBy" />
-            <CustomInput type="select" options={sortOptions} name="sort" />
+            <CustomInput
+              type="select"
+              className="border-0"
+              options={sortByOptions}
+              name="sortBy"
+            />
+            <CustomInput
+              type="select"
+              className="border-0"
+              options={sortOptions}
+              name="sort"
+            />
           </form>
         </FormProvider>
       </div>

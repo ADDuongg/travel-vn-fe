@@ -6,7 +6,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import Container from '@/layout/Container';
+import Container from '@components/Container';
 import { ToursItem } from '@/mock';
 import TourCard from '@components/TourCard';
 import { ButtonNavigate } from '@components/ui/button';

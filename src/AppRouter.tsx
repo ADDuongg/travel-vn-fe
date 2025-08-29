@@ -7,7 +7,9 @@ import {
 } from 'react-router-dom';
 import { routes } from './router';
 import ProtectedRoute from './components/ProtectedRoute';
-import type { EnumRole, RouteConfig } from '@interface/commons';
+import type { RouteConfig } from '@interface/commons';
+import ErrorBoundary from '@lib/ErrorBoundary';
+import type { EnumRole } from './constants/commons';
 
 localStorage.setItem('userRole', 'admin');
 
@@ -22,9 +24,11 @@ const transformRoutes = (
   return configs.map(({ path, element, rolesAllowed, children }) => ({
     path,
     element: (
-      <ProtectedRoute rolesAllowed={rolesAllowed} userRole={userRole}>
-        {element}
-      </ProtectedRoute>
+      <ErrorBoundary>
+        <ProtectedRoute rolesAllowed={rolesAllowed} userRole={userRole}>
+          {element}
+        </ProtectedRoute>
+      </ErrorBoundary>
     ),
     children: children ? transformRoutes(children, userRole) : undefined,
   }));

@@ -1,22 +1,24 @@
 import { MainLayout } from '@/layout';
-import Container from '@/layout/Container';
-import DisplayContainer from '@/layout/DisplayContainer';
-import DisplayItemType from '@/sections/tour/DisplayItemType';
+import Container from '@components/Container';
+import DisplayContainer from '@components/DisplayContainer';
+import DisplayItemType from '@/sections/tour/components/DisplayItemType';
 import CardSearching from '@components/CardSearching';
 import FilterRoomComponent from '@components/FilterRoomComponent';
 import { ResponsiveH1, ResponsiveH3 } from '@components/ui/typography';
-import { EnumDisplayItem } from '@interface/commons';
 import React from 'react';
 import { ToursItem } from '../../mock';
+import { EnumDisplayItem } from '@/constants/commons';
 
-export const RoomSearchPage: React.FC = () => {
+const RoomSearchPage: React.FC = () => {
   const [displayType, setDisplayType] = React.useState<EnumDisplayItem>(
     EnumDisplayItem.GRID,
   );
   return (
     <MainLayout>
       <div className="bg-background_paleGray p-32 text-center space-y-3">
-        <ResponsiveH1>Search Room</ResponsiveH1>
+        <ResponsiveH1 className="font-dm-serif-display">
+          Search Room
+        </ResponsiveH1>
       </div>
       <Container>
         <div className="flex flex-col lg:flex-row gap-12 py-8 ">
@@ -38,10 +40,7 @@ export const RoomSearchPage: React.FC = () => {
               gridClassName="grid-cols-1 sm:grid-cols-2 justify-items-stretch lg:grid-cols-2 gap-12 "
             >
               {ToursItem.map((item) => (
-                <CardSearching
-                  item={item}
-                  displayType={displayType}
-                ></CardSearching>
+                <CardSearching item={item} displayType={displayType} />
               ))}
             </DisplayContainer>
           </div>
@@ -50,3 +49,5 @@ export const RoomSearchPage: React.FC = () => {
     </MainLayout>
   );
 };
+
+export default RoomSearchPage;

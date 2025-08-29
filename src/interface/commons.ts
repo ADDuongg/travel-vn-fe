@@ -1,10 +1,9 @@
-export enum EnumRole {
-  ADMIN = 'admin',
-  USER = 'user',
-  GUEST = 'guest',
-}
+import type { EnumRole } from '@/constants/commons';
+import type { RegisterOptions } from 'react-hook-form';
+
 export interface RouteConfig {
-  path: string;
+  index?: boolean;
+  path?: string;
   element: React.ReactElement;
   rolesAllowed?: EnumRole[];
   children?: RouteConfig[];
@@ -22,8 +21,26 @@ export type CountryFlag = {
   code: string;
 };
 
-export enum EnumDisplayItem {
-  TABLE = 'table',
-  GRID = 'grid',
-  FLEX = 'flex',
-}
+export type InputType =
+  | 'text'
+  | 'select'
+  | 'autocomplete'
+  | 'multi-select'
+  | 'checkbox'
+  | 'date'
+  | 'custom-input';
+
+export type ComponentSize = 'sm' | 'md' | 'lg' | 'xl';
+
+export type InputInterface = {
+  name: string;
+  label: string;
+  placeholder?: string;
+  gridClass?: string;
+  options?: { label: string; value: string }[];
+  render?: (field: any) => React.ReactNode;
+  labelPosition?: 'vertical' | 'horizontal';
+  type?: InputType;
+  rules?: RegisterOptions;
+  [key: string]: any;
+};

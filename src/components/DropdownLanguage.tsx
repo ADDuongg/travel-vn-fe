@@ -17,7 +17,7 @@ export const DropdownLanguage = () => {
   };
   return (
     <Select value={language} onValueChange={handleLanguageChange}>
-      <SelectTrigger className="w-auto flex items-center bg-white">
+      <SelectTrigger className="w-[5rem] flex items-center bg-white">
         <WorldFlag
           code={countryFlags[language]?.code}
           alt={countryFlags[language]?.label}

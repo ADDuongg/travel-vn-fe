@@ -1,4 +1,4 @@
-import Container from '@/layout/Container';
+import Container from '@components/Container';
 import { DestinationItem } from '@/mock';
 import DestinationPreviewCard from '@components/DestinationPreviewCard';
 import { ButtonNavigate } from '@components/ui/button';

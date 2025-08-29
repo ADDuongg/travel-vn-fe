@@ -8,6 +8,7 @@ import heroRight from '/images/heroRight.png';
 import { Separator } from '@/components/ui/separator';
 import { Select } from '@components/ui/select';
 import { SubTitle } from '@components/ui/typography';
+import { Trans, useTranslation } from 'react-i18next';
 type FormData = z.infer<typeof schema>;
 const schema = z.object({
   key: z.string(),
@@ -22,6 +23,7 @@ const schema = z.object({
 });
 
 export const TitleSection = () => {
+  const { t } = useTranslation();
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -60,17 +62,16 @@ export const TitleSection = () => {
       <div className="relative h-auto max-w-[1400px] mx-auto px-5">
         <div className="flex flex-col gap-10 relative z-[2] lg:w-[75%] w-full">
           <div className="bg-white rounded-full text-green-400 py-2 px-4 font-medium w-fit">
-            Book With Us!
+            {t('home_page.book_with_us')}
           </div>
           <div className="sm:text-7xl text-5xl font-dm-serif-display text-[#1e1e1e]">
-            Find Next Place
-            <br />
-            To <span className="text-primary">Visit</span>
+            <Trans
+              i18nKey="home_page.hero_title"
+              components={[<br />, <span className="text-primary" />]}
+            />
           </div>
           <SubTitle>
-            Discover amazing places at exclusive deals.
-            <br />
-            Eat, Shop, Visit interesting places around the world.
+            <Trans i18nKey="home_page.hero_subtitle" components={[<br />]} />
           </SubTitle>
 
           <FormProvider {...form}>
@@ -79,8 +80,8 @@ export const TitleSection = () => {
                 <div className="w-full md:py-12 py-10 px-5 flex flex-col md:flex-row items-center gap-2 md:w-[80%]">
                   <CustomInput
                     name="key"
-                    label="Key Word"
-                    placeHolder="Enter keyword"
+                    label={t('input.field_label.keyword')}
+                    placeHolder={t('input.placeholder.keyword')}
                     className="custom-input border-0 px-0 shadow-none"
                     type="text"
                     labelPosition="vertical"
@@ -88,9 +89,9 @@ export const TitleSection = () => {
                   <Separator className="my-2 block md:hidden" />
                   <CustomInput
                     name="destination"
-                    label="Destination"
+                    label={t('input.field_label.destination')}
                     type="select"
-                    className="custom-input"
+                    className="custom-input border-0"
                     value={form.watch('destination')}
                     options={destinationOptions}
                     labelPosition="vertical"
@@ -98,9 +99,9 @@ export const TitleSection = () => {
                   <Separator className="my-2 block md:hidden" />
                   <CustomInput
                     name="role"
-                    label="Role"
+                    label={t('input.field_label.role')}
                     type="select"
-                    className="custom-input"
+                    className="custom-input border-0"
                     value={form.watch('role')}
                     options={roleOptions}
                     labelPosition="vertical"
@@ -112,7 +113,7 @@ export const TitleSection = () => {
                   className="bg-primary p-5 flex flex-col justify-center items-center gap-2 md:w-[20%] w-full h-full text-white"
                 >
                   <AiOutlineSearch size={32} />
-                  Search Now
+                  {t('buttons.search_now')}
                 </Button>
               </div>
             </form>

@@ -1,5 +1,9 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import {
+  Controller,
+  useFormContext,
+  type RegisterOptions,
+} from 'react-hook-form';
 import { Input } from './ui/input';
 import { Checkbox } from './ui/checkbox';
 import { MultiSelect } from './ui/multiple-select';
@@ -12,21 +16,17 @@ import {
 } from '@/components/ui/select';
 import { Label } from './ui/label';
 import { DatePicker } from './ui/datepicker';
+import type { InputType } from '@interface/commons';
 
 interface CustomInputProps {
   name: string;
-  type:
-    | 'text'
-    | 'select'
-    | 'autocomplete'
-    | 'multi-select'
-    | 'checkbox'
-    | 'date'
-    | 'custom-input';
-  label?: string;
+  type?: InputType;
+  label?: string | React.ReactNode;
   options?: { label: string; value: string }[];
   render?: (field: any) => React.ReactNode;
   labelPosition?: 'vertical' | 'horizontal';
+  placeHolder?: string;
+  rules?: RegisterOptions;
   [key: string]: any;
 }
 
@@ -36,6 +36,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   label,
   options = [],
   labelPosition = 'vertical',
+  placeHolder = 'Chọn...',
   ...props
 }) => {
   const {
@@ -59,9 +60,15 @@ const CustomInput: React.FC<CustomInputProps> = ({
             <Checkbox
               checked={field.value}
               onCheckedChange={field.onChange}
+              className="shadow-md"
               {...props}
             />
-            {label && <Label>{label}</Label>}
+            {label &&
+              (typeof label === 'string' ? (
+                <Label>{label}</Label>
+              ) : (
+                <div className="text-sm text-gray-600 leading-5">{label}</div>
+              ))}
           </div>
         );
       case 'multi-select':
@@ -79,7 +86,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
         return (
           <Select onValueChange={field.onChange} value={field.value}>
             <SelectTrigger {...props}>
-              <SelectValue placeholder="Chọn..." />
+              <SelectValue placeholder={placeHolder} />
             </SelectTrigger>
             <SelectContent>
               {options.map((option) => (
@@ -112,6 +119,8 @@ const CustomInput: React.FC<CustomInputProps> = ({
     }
     return undefined;
   };
+  const isRequired =
+    typeof props.rules?.required === 'string' || props.rules?.required === true;
 
   return (
     <div
@@ -129,15 +138,20 @@ const CustomInput: React.FC<CustomInputProps> = ({
           style={{
             marginRight: labelPosition === 'horizontal' ? '8px' : '0',
             marginBottom: labelPosition === 'vertical' ? '8px' : '0',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
           }}
         >
           {label}
+          {isRequired && <span style={{ color: 'red' }}>*</span>}
         </Label>
       )}
 
       <Controller
         name={name}
         control={control}
+        rules={props.rules}
         render={({ field }) => (
           <>
             {renderInput(field)}

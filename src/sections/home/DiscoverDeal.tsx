@@ -3,7 +3,7 @@ import CustomInput from '@/components/CustomInput';
 import { useForm, FormProvider } from 'react-hook-form';
 import { Button } from '@components/ui/button';
 import { AiOutlineSend } from 'react-icons/ai';
-import Container from '@/layout/Container';
+import Container from '@components/Container';
 export const DiscoverDeal: React.FC = () => {
   const methods = useForm();
 
@@ -63,7 +63,7 @@ export const DiscoverDeal: React.FC = () => {
                 />
                 <Button
                   type="submit"
-                  className=" text-white px-8 py-2 rounded-full transition text-[12px]"
+                  className=" text-white px-8 py-2 h-full rounded-full transition text-[12px]"
                 >
                   SUBSCRIBE
                 </Button>

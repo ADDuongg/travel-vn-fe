@@ -50,7 +50,7 @@ export const Lead = createComponent<HTMLParagraphElement>(
 
 export const P = createComponent<HTMLParagraphElement>(
   'p',
-  'leading-7 [&:not(:first-child)]:mt-6',
+  'leading-7 [&:not(:first-child)]:mt-3',
   'P',
 );
 
@@ -98,13 +98,13 @@ export const Quote = createComponent<HTMLQuoteElement>(
 
 export const Title = createComponent<HTMLHeadingElement>(
   'h1',
-  'title',
+  'text-[50px] sm:text-5xl font-dm-serif-display',
   'Title',
 );
 
 export const SubTitle = createComponent<HTMLParagraphElement>(
   'p',
-  'sub-title',
+  'sm:text-[20px] text-[15px] text-paleGray',
   'SubTitle',
 );
 
@@ -116,36 +116,36 @@ export const CardName = createComponent<HTMLDivElement>(
 
 export const ResponsiveH1 = createComponent<HTMLHeadingElement>(
   'h1',
-  'scroll-m-20 text-3xl sm:text-4xl xl:text-5xl font-extrabold tracking-tight font-dm-serif-display',
+  'scroll-m-20 text-3xl sm:text-4xl xl:text-5xl font-extrabold tracking-tight',
   'ResponsiveH1',
 );
 
 export const ResponsiveH2 = createComponent<HTMLHeadingElement>(
   'h2',
-  'scroll-m-20 text-2xl sm:text-3xl xl:text-4xl font-semibold tracking-tight font-dm-serif-display',
+  'scroll-m-20 text-2xl sm:text-3xl xl:text-4xl font-semibold tracking-tight',
   'ResponsiveH2',
 );
 
 export const ResponsiveH3 = createComponent<HTMLHeadingElement>(
   'h3',
-  'scroll-m-20 text-xl sm:text-lg xl:text-2xl font-semibold tracking-tight font-dm-serif-display',
+  'scroll-m-20 text-xl sm:text-lg xl:text-2xl font-semibold tracking-tight',
   'ResponsiveH3',
 );
 
 export const ResponsiveH4 = createComponent<HTMLHeadingElement>(
   'h4',
-  'scroll-m-20 text-md sm:text-lg xl:text-xl font-semibold tracking-tight font-dm-serif-display',
+  'scroll-m-20 text-md sm:text-lg xl:text-xl font-semibold tracking-tight',
   'ResponsiveH4',
 );
 
 export const ResponsiveH5 = createComponent<HTMLHeadingElement>(
   'h5',
-  'scroll-m-20 text-base sm:text-md xl:text-lg font-semibold tracking-tight font-dm-serif-display',
+  'scroll-m-20 text-base sm:text-md xl:text-lg font-semibold tracking-tight',
   'ResponsiveH5',
 );
 
 export const ResponsiveH6 = createComponent<HTMLHeadingElement>(
   'h6',
-  'scroll-m-20 text-sm sm:text-base xl:text-md font-semibold tracking-tight font-dm-serif-display',
+  'scroll-m-20 text-sm sm:text-base xl:text-md font-semibold tracking-tight',
   'ResponsiveH6',
 );

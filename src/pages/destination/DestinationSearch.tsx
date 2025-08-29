@@ -1,16 +1,18 @@
 import { MainLayout } from '@/layout';
-import Container from '@/layout/Container';
+import Container from '@components/Container';
 import CardSearching from '@components/CardSearching';
 import { ResponsiveH1 } from '@components/ui/typography';
 import React from 'react';
 import FilterComponent from '../../components/FilterComponent';
 import { ToursItem } from '../../mock';
 
-export const DestinationSearchPage: React.FC = () => {
+const DestinationSearchPage: React.FC = () => {
   return (
     <MainLayout>
       <div className="bg-background_paleGray p-32 text-center space-y-3">
-        <ResponsiveH1>Search Destination</ResponsiveH1>
+        <ResponsiveH1 className="font-dm-serif-display">
+          Search Destination
+        </ResponsiveH1>
       </div>
       <Container>
         <div className="flex flex-col lg:flex-row gap-12 py-8 ">
@@ -29,3 +31,4 @@ export const DestinationSearchPage: React.FC = () => {
     </MainLayout>
   );
 };
+export default DestinationSearchPage;

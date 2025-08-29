@@ -1,4 +1,4 @@
-import Container from '@/layout/Container';
+import Container from '@components/Container';
 import { services } from '@/mock';
 import React from 'react';
 

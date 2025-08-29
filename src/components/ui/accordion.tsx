@@ -10,20 +10,27 @@ type AccordionTriggerProps = React.ComponentProps<
   iconOpen?: React.ReactElement<{ className?: string }>;
   iconClosed?: React.ReactElement<{ className?: string }>;
 };
+type AccordionItemProps = React.ComponentProps<
+  typeof AccordionPrimitive.Item
+> & {
+  styleOpen?: string;
+};
 function Accordion({
   ...props
 }: React.ComponentProps<typeof AccordionPrimitive.Root>) {
   return <AccordionPrimitive.Root data-slot="accordion" {...props} />;
 }
 
-function AccordionItem({
-  className,
-  ...props
-}: React.ComponentProps<typeof AccordionPrimitive.Item>) {
+function AccordionItem({ className, styleOpen, ...props }: AccordionItemProps) {
   return (
     <AccordionPrimitive.Item
       data-slot="accordion-item"
-      className={cn('border-b last:border-b-0', className)}
+      className={cn(
+        'border-b last:border-b-0 transition-all',
+        // nếu có styleOpen thì apply khi open
+        styleOpen ? `data-[state=open]:${styleOpen}` : '',
+        className,
+      )}
       {...props}
     />
   );

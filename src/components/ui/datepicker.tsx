@@ -11,6 +11,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { cva } from 'class-variance-authority';
+import type { ComponentSize } from '@interface/commons';
 
 export interface DatePickerProps {
   value?: Date | undefined;
@@ -18,7 +20,18 @@ export interface DatePickerProps {
   placeholder?: string;
   className?: string;
   disabled?: (date: Date) => boolean;
+  size?: ComponentSize;
 }
+const datePickerVariants = cva('', {
+  variants: {
+    size: {
+      sm: 'h-8 ',
+      md: 'h-9 ',
+      lg: 'h-14 ',
+      xl: 'h-18 ',
+    },
+  },
+});
 
 export function DatePicker({
   value,
@@ -26,6 +39,7 @@ export function DatePicker({
   placeholder = 'Pick a date',
   className,
   disabled,
+  size = 'md',
 }: DatePickerProps) {
   return (
     <Popover>
@@ -33,6 +47,7 @@ export function DatePicker({
         <Button
           variant={'outline'}
           className={cn(
+            datePickerVariants({ size }),
             'w-full pl-3 text-left font-normal',
             !value && 'text-muted-foreground',
             className,

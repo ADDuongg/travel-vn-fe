@@ -1,30 +1,24 @@
 import { MainLayout } from '@/layout';
-import Container from '@/layout/Container';
+import DisplayItemType from '@/sections/tour/components/DisplayItemType';
 import CardSearching from '@components/CardSearching';
-import {
-  ResponsiveH1,
-  ResponsiveH2,
-  ResponsiveH3,
-} from '@components/ui/typography';
+import Container from '@components/Container';
+import DisplayContainer from '@components/DisplayContainer';
+import { ResponsiveH1, ResponsiveH3 } from '@components/ui/typography';
 import React from 'react';
 import FilterComponent from '../../components/FilterComponent';
 import { ToursItem } from '../../mock';
-import CustomInput from '@components/CustomInput';
-import { FormProvider, useForm } from 'react-hook-form';
-import { AiOutlineBars } from 'react-icons/ai';
-import { AiOutlineAppstore } from 'react-icons/ai';
-import { EnumDisplayItem } from '@interface/commons';
-import DisplayItemType from '@/sections/tour/DisplayItemType';
-import DisplayContainer from '@/layout/DisplayContainer';
+import { EnumDisplayItem } from '@/constants/commons';
 
-export const TourSearchPage: React.FC = () => {
+const TourSearchPage: React.FC = () => {
   const [displayType, setDisplayType] = React.useState<EnumDisplayItem>(
     EnumDisplayItem.GRID,
   );
   return (
     <MainLayout>
       <div className="bg-background_paleGray p-32 text-center space-y-3">
-        <ResponsiveH1>Search Destination</ResponsiveH1>
+        <ResponsiveH1 className="font-dm-serif-display">
+          Search Tour
+        </ResponsiveH1>
       </div>
       <Container>
         <div className="flex flex-col lg:flex-row gap-12 py-8 ">
@@ -46,10 +40,7 @@ export const TourSearchPage: React.FC = () => {
               gridClassName="grid-cols-1 sm:grid-cols-2 justify-items-stretch lg:grid-cols-2 gap-12 "
             >
               {ToursItem.map((item) => (
-                <CardSearching
-                  item={item}
-                  displayType={displayType}
-                ></CardSearching>
+                <CardSearching item={item} displayType={displayType} />
               ))}
             </DisplayContainer>
           </div>
@@ -58,3 +49,5 @@ export const TourSearchPage: React.FC = () => {
     </MainLayout>
   );
 };
+
+export default TourSearchPage;

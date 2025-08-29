@@ -19,16 +19,18 @@ import {
 import { AiOutlineBars } from 'react-icons/ai';
 import { FiChevronRight } from 'react-icons/fi';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { countryFlags, HeaderItem } from '@/constants/commons';
 import WorldFlag from 'react-world-flags';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@components/ui/button';
+import { ROUTES } from '@/constants/router';
 
 const DrawerHeader = () => {
   const [openItem, setOpenItem] = useState<string | null>(null);
   const [language, setLanguage] = useState('vi');
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
+  const navigate = useNavigate();
   const handleLanguageChange = (value: string) => {
     setLanguage(value);
     i18n.changeLanguage(value);
@@ -64,7 +66,7 @@ const DrawerHeader = () => {
                     }
                   }}
                 >
-                  <span>{item.label}</span>
+                  <span>{t(item.label)}</span>
 
                   {item.children && (
                     <FiChevronRight
@@ -83,7 +85,7 @@ const DrawerHeader = () => {
                           to={child.path || ''}
                           className="block text-sm text-gray-600 hover:text-black"
                         >
-                          {child.label}
+                          {t(child.label)}
                         </Link>
                       </li>
                     ))}
@@ -125,9 +127,13 @@ const DrawerHeader = () => {
         </div>
 
         <DrawerFooter>
-          <Button>Login</Button>
+          <Button onClick={() => navigate(ROUTES.LOGIN)}>
+            {t('buttons.login')}
+          </Button>
           <DrawerClose>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" className="w-full">
+              {t('buttons.cancel')}
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

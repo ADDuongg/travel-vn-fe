@@ -54,6 +54,7 @@
   --sidebar-ring: oklch(0.708 0 0);
   --primary-btn: oklch(0.6799 0.1478 258.31);
   --paleGray: oklch(0.6807 0.0105 252.85);
+  --paleGray-100: oklch(0.9761 0 0);
   --background_paleGray: oklch(0.9791 0 0);
 }
 
@@ -110,6 +111,7 @@ body {
   --color-sidebar-ring: var(--sidebar-ring);
   --color-primary-btn: var(--primary-btn);
   --color-paleGray: var(--paleGray);
+  --color-paleGray-100: var(--paleGray-100);
   --color-background_paleGray: var(--background_paleGray);
   --font-dm-serif-display: 'DM Serif Display', serif;
 }
@@ -161,13 +163,13 @@ body {
   @apply h-20 w-full;
 }
 
-.title {
+/* .title {
   @apply text-[50px] sm:text-5xl font-dm-serif-display;
 }
 
 .sub-title {
   @apply sm:text-[20px] text-[15px] text-paleGray;
-}
+} */
 
 .destination-card {
   @apply rounded-xl flex flex-col md:flex-row items-center justify-between gap-4  h-auto overflow-hidden max-w-[383px];

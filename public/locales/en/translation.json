@@ -1,4 +1,71 @@
 {
   "greeting": "Hello",
-  "welcome": "Welcome to the app"
+  "welcome": "Welcome to the app",
+  "home": "Home",
+  "pages": "Pages",
+  "tour_list": "Tour List",
+  "room_list": "Room List",
+  "search": "Search",
+  "blog": "Blog",
+  "about_us": "About Us",
+  "contact": "Contact",
+  "our_services": "Our Services",
+  "team": "Team",
+  "gallery": "Gallery",
+  "tour_search": "Tour Search",
+  "room_search": "Room Search",
+  "input": {
+    "field_label": {
+      "keyword": "Keyword",
+      "destination": "Destination",
+      "role": "Role",
+      "sort_by": "Sort by",
+      "sort": "Sort",
+      "duration": "Duration",
+      "date": "Date",
+      "month": "Month",
+      "min_price": "Min Price",
+      "max_price": "Max Price",
+      "rating": "Rating",
+      "facilities": "Facilities",
+      "room_size": "Room Size",
+      "ages": "Ages",
+      "activities": "Activities",
+      "username_or_email": "Username or email",
+      "password": "Password",
+      "remember_me": "Remember me",
+      "forgot_password": "Forgot password?"
+    },
+    "placeholder": {
+      "keyword": "Enter keyword",
+      "destination": "Select destination",
+      "role": "Select role",
+      "sort_by": "Select sort by",
+      "sort": "Select sort",
+      "duration": "Select duration",
+      "date": "Select date",
+      "month": "Select month",
+      "min_price": "Enter min price",
+      "max_price": "Enter max price",
+      "rating": "Select rating",
+      "facilities": "Select facilities",
+      "room_size": "Select room size",
+      "ages": "Select ages",
+      "activities": "Select activities",
+      "username_or_email": "Enter username or email",
+      "password": "Enter password"
+    }
+  },
+  "buttons": {
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "search_now": "Search Now",
+    "cancel": "Cancel"
+  },
+  "home_page": {
+    "book_with_us": "Book With Us!",
+    "hero_title": "Find Next Place<0/>To <1>Visit</1>",
+    "hero_subtitle": "Discover amazing places at exclusive deals.<0/>Eat, Shop, Visit interesting places around the world."
+  }
 }
