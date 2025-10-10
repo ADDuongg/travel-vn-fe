@@ -47,7 +47,7 @@ const SidebarDashboard = () => {
       <div>
         <h2 className="text-lg font-semibold mb-4">Tour Booking</h2>
         <div className="space-y-2">
-          <NavLink to={ROUTES.DASHBOARD.BOOKINGS} className={linkClasses}>
+          <NavLink to={ROUTES.DASHBOARD.TOUR_BOOKINGS} className={linkClasses}>
             <FiBookOpen /> My Bookings
           </NavLink>
           <NavLink to={ROUTES.DASHBOARD.INVOICES} className={linkClasses}>

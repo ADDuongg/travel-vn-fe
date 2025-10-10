@@ -1,4 +1,5 @@
 import type { EnumRole } from '@/constants/commons';
+import type { RowSelectionState, SortingState } from '@tanstack/react-table';
 import type { RegisterOptions } from 'react-hook-form';
 
 export interface RouteConfig {
@@ -7,6 +8,9 @@ export interface RouteConfig {
   element: React.ReactElement;
   rolesAllowed?: EnumRole[];
   children?: RouteConfig[];
+  handle?: {
+    crumb?: string | ((params: any) => string);
+  };
 }
 
 export type HeaderItemType = {
@@ -23,6 +27,7 @@ export type CountryFlag = {
 
 export type InputType =
   | 'text'
+  | 'password'
   | 'select'
   | 'autocomplete'
   | 'multi-select'
@@ -43,4 +48,18 @@ export type InputInterface = {
   type?: InputType;
   rules?: RegisterOptions;
   [key: string]: any;
+};
+
+export type TableState = {
+  pagination: { pageIndex: number; pageSize: number };
+  setPagination: React.Dispatch<
+    React.SetStateAction<{ pageIndex: number; pageSize: number }>
+  >;
+  sorting: SortingState;
+  setSorting: React.Dispatch<React.SetStateAction<SortingState>>;
+  globalFilter: string;
+  setGlobalFilter: (v: string) => void;
+  rowSelection?: RowSelectionState;
+  setRowSelection?: React.Dispatch<React.SetStateAction<RowSelectionState>>;
+  isFetching?: boolean;
 };

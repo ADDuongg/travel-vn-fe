@@ -82,6 +82,20 @@ const CustomInput: React.FC<CustomInputProps> = ({
           />
         );
       case 'select':
+        return (
+          <Select onValueChange={field.onChange} value={field.value}>
+            <SelectTrigger {...props} classNameContainer="w-full">
+              <SelectValue placeholder={placeHolder} />
+            </SelectTrigger>
+            <SelectContent>
+              {options.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        );
       case 'autocomplete':
         return (
           <Select onValueChange={field.onChange} value={field.value}>
@@ -97,6 +111,8 @@ const CustomInput: React.FC<CustomInputProps> = ({
             </SelectContent>
           </Select>
         );
+      case 'password':
+        return <Input {...props} {...field} name={name} type="password" />;
       case 'custom-input':
         if (props.render) {
           return props.render(field);

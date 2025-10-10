@@ -10,6 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import type { RouteConfig } from '@interface/commons';
 import ErrorBoundary from '@lib/ErrorBoundary';
 import type { EnumRole } from './constants/commons';
+import { QueryClient, useQueryClient } from '@tanstack/react-query';
 
 localStorage.setItem('userRole', 'admin');
 
@@ -36,7 +37,6 @@ const transformRoutes = (
 
 const AppRouter = () => {
   const userRole = useUserRole();
-
   const routeObjects = React.useMemo(
     () => transformRoutes(routes, userRole),
     [userRole],
