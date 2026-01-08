@@ -49,9 +49,9 @@ export const HeaderItem: HeaderItemType[] = [
     path: ROUTES.TOUR.INDEX,
   },
   {
-    name: 'room-list',
+    name: 'room',
     label: 'room_list',
-    path: '/room-list',
+    path: '/room',
   },
   {
     name: 'search',

@@ -1,16 +1,16 @@
 // AppRouter.tsx
+import { useInitAuth } from '@hooks/useInitAuth';
+import type { RouteConfig } from '@interface/commons';
+import ErrorBoundary from '@lib/ErrorBoundary';
 import React from 'react';
 import {
   createBrowserRouter,
   RouterProvider,
   type RouteObject,
 } from 'react-router-dom';
-import { routes } from './router';
 import ProtectedRoute from './components/ProtectedRoute';
-import type { RouteConfig } from '@interface/commons';
-import ErrorBoundary from '@lib/ErrorBoundary';
 import type { EnumRole } from './constants/commons';
-import { QueryClient, useQueryClient } from '@tanstack/react-query';
+import { routes } from './router';
 
 localStorage.setItem('userRole', 'admin');
 
@@ -36,6 +36,7 @@ const transformRoutes = (
 };
 
 const AppRouter = () => {
+  useInitAuth();
   const userRole = useUserRole();
   const routeObjects = React.useMemo(
     () => transformRoutes(routes, userRole),

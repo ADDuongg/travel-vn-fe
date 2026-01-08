@@ -2,6 +2,7 @@ import { Loadable } from './lib';
 import { ROUTES } from './constants/router';
 import type { RouteConfig } from './interface/commons';
 import DashboardLayout from './layout/DashboardLayout';
+import RoomListPage from '@pages/room/RoomList';
 
 const HomePage = Loadable(() => import('@/pages/home/Home'));
 const LoginPage = Loadable(() => import('@/pages/auth/login/Login'));
@@ -95,6 +96,10 @@ export const routes: RouteConfig[] = [
   {
     path: ROUTES.TOUR.DETAIL,
     element: <TourDetailPage />,
+  },
+  {
+    path: ROUTES.ROOM.INDEX,
+    element: <RoomListPage />,
   },
   {
     path: ROUTES.ROOM.DETAIL,

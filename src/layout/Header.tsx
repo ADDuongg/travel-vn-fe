@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
 import { HeaderItem } from '@/constants/commons';
+import { ROUTES } from '@/constants/router';
+import { useLogout } from '@/features/auth/hooks';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { DropdownLanguage } from '@components/DropdownLanguage';
 import { Button } from '@components/ui/button';
+import { Separator } from '@components/ui/separator';
 import useMediaQuery from '@hooks/useMediaQuery';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import DrawerHeader from '../components/DrawerHeader';
 import logox1 from '/images/logox1.png';
-import { ROUTES } from '@/constants/router';
-import { Separator } from '@components/ui/separator';
 
 const HeaderList = () => {
   const location = useLocation();
@@ -62,42 +64,84 @@ const HeaderList = () => {
   );
 };
 
-const UserMenu = ({ userName }: { userName: string }) => (
-  <div className="relative group cursor-pointer">
-    <div className="flex items-center gap-2">
-      <img
-        src="https://picsum.photos/400/250?random=6"
-        alt="avatar"
-        className="w-8 h-8 rounded-full"
-      />
-      <span className="text-sm font-medium hidden md:inline">{userName}</span>
+const UserMenu = ({ userName }: { userName: string }) => {
+  const { logout } = useLogout();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative cursor-pointer">
+      {/* ===== AVATAR (CLICK) ===== */}
+      <div
+        className="flex items-center gap-2"
+        onClick={() => setOpen((v) => !v)}
+      >
+        <img
+          src="https://picsum.photos/400/250?random=6"
+          alt="avatar"
+          className="w-8 h-8 rounded-full"
+        />
+        <span className="text-sm font-medium hidden md:inline">{userName}</span>
+      </div>
+
+      {/* ===== DROPDOWN ===== */}
+      <div
+        className={`
+          absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md
+          transition-opacity duration-200 z-20
+          ${open ? 'opacity-100 visible' : 'opacity-0 invisible'}
+        `}
+      >
+        <Link
+          to={ROUTES.DASHBOARD.INDEX}
+          className="block px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
+          onClick={() => setOpen(false)}
+        >
+          Dashboard
+        </Link>
+
+        <Link
+          to="/profile/edit"
+          className="block px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
+          onClick={() => setOpen(false)}
+        >
+          Edit Profile
+        </Link>
+
+        <Link
+          to="/wishlist"
+          className="block px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
+          onClick={() => setOpen(false)}
+        >
+          Wish List
+        </Link>
+
+        <Separator className="my-1" />
+
+        <button
+          className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
+          onClick={() => {
+            setOpen(false);
+            logout();
+          }}
+        >
+          Sign Out
+        </button>
+      </div>
     </div>
-    <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 group-hover:visible transition-opacity duration-200 z-20">
-      <Link
-        to="/dashboard"
-        className="block px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
-      >
-        Dashboard
-      </Link>
-      <Link
-        to="/profile/edit"
-        className="block px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
-      >
-        Edit Profile
-      </Link>
-      <Link
-        to="/wishlist"
-        className="block px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
-      >
-        Wish List
-      </Link>
-      <Separator className="my-1" />
-      <button className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-paleGray">
-        Sign Out
-      </button>
-    </div>
-  </div>
-);
+  );
+};
 
 const Header = () => {
   const isMediumScreen = useMediaQuery('(max-width: 900px)');
@@ -113,7 +157,8 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isLoggedIn = true; // fake state
+  // const { data: me } = useMe();
+  const { authUser } = useAuthStore();
 
   return (
     <div
@@ -137,12 +182,12 @@ const Header = () => {
           <HeaderList />
           <div className="flex gap-2 items-center">
             <DropdownLanguage />
-            {!isLoggedIn ? (
+            {!authUser ? (
               <Button onClick={() => navigate(ROUTES.LOGIN)}>
                 {t('buttons.login')}
               </Button>
             ) : (
-              <UserMenu userName="nguyen duong" />
+              <UserMenu userName={authUser?.username} />
             )}
           </div>
         </>
@@ -152,7 +197,7 @@ const Header = () => {
       {isMediumScreen && (
         <div className="flex items-center gap-4">
           <DrawerHeader />
-          {!isLoggedIn ? (
+          {!authUser ? (
             <Button onClick={() => navigate(ROUTES.LOGIN)}>
               {t('buttons.login')}
             </Button>

@@ -1,5 +1,4 @@
 // components/CardCarousel.tsx
-import React, { useMemo } from 'react';
 import {
   Carousel,
   CarouselContent,
@@ -7,8 +6,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import Container from '@components/Container';
-import { Title } from '@components/ui/typography';
+import React, { useMemo } from 'react';
 
 interface CardCarouselProps<T> {
   title?: React.ReactNode;

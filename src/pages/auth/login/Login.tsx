@@ -1,31 +1,23 @@
 import { ROUTES } from '@/constants/router';
+import { useLogin } from '@/features/auth/hooks';
 import { MainLayout } from '@/layout';
 import Container from '@components/Container';
 import CustomInput from '@components/CustomInput';
 import { Button } from '@components/ui/button';
 import { Separator } from '@components/ui/separator';
-import {
-  P,
-  ResponsiveH1,
-  ResponsiveH4,
-  ResponsiveH5,
-  ResponsiveH6,
-} from '@components/ui/typography';
-import React from 'react';
+import { P, ResponsiveH1, ResponsiveH5 } from '@components/ui/typography';
+import type { LoginFormValues } from '@interface/auth';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { AiOutlineGithub, AiOutlineGoogle } from 'react-icons/ai';
 import { useNavigate } from 'react-router';
 
 const LoginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const methods = useForm();
+  const methods = useForm<LoginFormValues>();
+  const { login, isPending } = useLogin();
 
-  const handleSubmit = (data: any) => {
-    // handle subscribe logic here
-    console.log(`Subscribed: ${data.minPrice}`);
-  };
+  const handleSubmit = (data: LoginFormValues) => login(data);
   return (
     <MainLayout>
       <div className="bg-background_paleGray p-32 text-center space-y-3">
@@ -41,23 +33,24 @@ const LoginPage = () => {
               <div className="flex gap-2 w-full flex-col md:flex-row">
                 <CustomInput
                   className="w-full"
-                  name="minPrice"
+                  name="username"
                   type="text"
                   label={t('input.field_label.username_or_email')}
                   placeHolder={t('input.placeholder.username_or_email')}
                   size={'lg'}
-                  // rules={{ required: 'Trường này bắt buộc' }}
                 />
                 <CustomInput
                   className="w-full"
-                  name="maxPrice"
+                  name="password"
                   type="text"
                   label={t('input.field_label.password')}
                   placeHolder={t('input.placeholder.password')}
                   size={'lg'}
                 />
               </div>
-              <Button size="lg">{t('buttons.login')}</Button>
+              <Button size="lg" loading={isPending}>
+                {t('buttons.login')}
+              </Button>
             </form>
           </FormProvider>
           <div className="flex justify-end">

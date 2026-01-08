@@ -1,11 +1,12 @@
 // axios.ts
-import axios from 'axios';
 import type {
   AxiosInstance,
   AxiosRequestConfig,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+import axios from 'axios';
+import { authUtils } from './auth-token';
 
 // Mở rộng config để xin "raw response" khi cần
 declare module 'axios' {
@@ -18,23 +19,27 @@ class AxiosClient {
   private client: AxiosInstance;
 
   constructor(baseURL: string = import.meta.env.VITE_API_BASE_URL || '') {
-    this.client = axios.create({ baseURL, timeout: 10000 });
+    this.client = axios.create({
+      baseURL,
+      timeout: 10000,
+      withCredentials: true,
+    });
 
     this.client.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
-        const token =
-          typeof window !== 'undefined'
-            ? localStorage.getItem('access_token')
-            : null;
+        const token = authUtils.getAccessToken();
+
         if (token) {
           config.headers = config.headers ?? {};
           config.headers.Authorization = `Bearer ${token}`;
         }
+
         return config;
       },
       (error) => Promise.reject(error),
     );
 
+    /* ================= RESPONSE ================= */
     this.client.interceptors.response.use(
       (res: AxiosResponse) => (res.config.rawResponse ? res : res.data?.data),
       (error) => {
@@ -42,6 +47,7 @@ class AxiosClient {
           error?.response?.data?.message ??
           error?.message ??
           'Unexpected error';
+
         return Promise.reject({ ...error, message });
       },
     );
