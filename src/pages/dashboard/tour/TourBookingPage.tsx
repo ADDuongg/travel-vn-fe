@@ -12,7 +12,7 @@ import { ArrowUpDown, DollarSign, Trash2 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import DataTable from '../../../sections/shared/DataTable';
+import DataTable from '../../../shared/table/DataTable';
 import api from '@/lib/axios'; // axios client của bạn
 import { useBookingsQuery } from '@/features/tours/hooks';
 import type { SortParam } from '@interface/api';
@@ -38,7 +38,7 @@ type BookingRow = {
   paymentStatus: PaymentStatus;
 };
 
-type ApiPage<T> = {
+type ApiListResponse<T> = {
   data: T[];
   meta: {
     pageIndex: number;

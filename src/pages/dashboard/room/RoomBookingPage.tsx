@@ -1,312 +1,33 @@
-// RoomBookingPage.tsx
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
-import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, DollarSign, Trash2 } from 'lucide-react';
-import React, { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import DataTable from './DataTable';
+import { useMyBookings } from '@/features/booking/hooks';
+import type { Booking } from '@/features/shared/types';
+import DataTable from '@/shared/table/DataTable';
+import type { Paginate, SortParam } from '@interface/api';
+import type { RowSelectionState, SortingState } from '@tanstack/react-table';
+import React, { useState } from 'react';
+import { useColumns } from './table/room-booking-columns';
+import { useNavigate } from 'react-router';
 
-/* ==== types & mock ==== */
-type BookingStatus =
+type BookingStatusFilter =
   | 'all'
-  | 'pending'
-  | 'approved'
-  | 'receipt_submitted'
-  | 'online_paid'
-  | 'deposit_paid'
-  | 'departed'
-  | 'rejected'
-  | 'wait_for_approval';
-type PaymentStatus = 'pending' | 'paid' | 'refunded';
+  | 'PENDING'
+  | 'APPROVED'
+  | 'REJECTED'
+  | 'CANCELLED'
+  | 'COMPLETED';
 
-type BookingRow = {
-  id: string;
-  tourName: string;
-  tourUrl?: string;
-  travelDate: string; // ISO
-  total: number; // USD
-  status: BookingStatus;
-  paymentStatus: PaymentStatus;
-};
-
-const STATUS_ITEMS: { key: BookingStatus; label: string }[] = [
+const STATUS_ITEMS: { key: BookingStatusFilter; label: string }[] = [
   { key: 'all', label: 'All' },
-  { key: 'pending', label: 'Pending' },
-  { key: 'approved', label: 'Approved' },
-  { key: 'receipt_submitted', label: 'Receipt Submitted' },
-  { key: 'online_paid', label: 'Online Paid' },
-  { key: 'deposit_paid', label: 'Deposit Paid' },
-  { key: 'departed', label: 'Departed' },
-  { key: 'rejected', label: 'Rejected' },
-  { key: 'wait_for_approval', label: 'Wait For Approval' },
+  { key: 'PENDING', label: 'Pending' },
+  { key: 'APPROVED', label: 'Approved' },
+  { key: 'COMPLETED', label: 'Completed' },
+  { key: 'REJECTED', label: 'Rejected' },
+  { key: 'CANCELLED', label: 'Cancelled' },
 ];
 
-type MockApiPage<T> = {
-  data: T[];
-  meta: {
-    pageIndex: number; // 0-based
-    pageSize: number;
-    total: number;
-    pageCount: number;
-  };
-};
-const mockData: MockApiPage<BookingRow> = {
-  data: [
-    {
-      id: 'bk_001',
-      tourName: 'Dubai – All Stunning Places',
-      tourUrl: '/tours/dubai-all-stunning-places',
-      travelDate: '2025-09-04',
-      total: 6884.44,
-      status: 'pending',
-      paymentStatus: 'pending',
-    },
-    {
-      id: 'bk_002',
-      tourName: 'Ha Long Bay Cruise 2D1N',
-      tourUrl: '/tours/ha-long-bay-cruise-2d1n',
-      travelDate: '2025-10-12',
-      total: 320,
-      status: 'approved',
-      paymentStatus: 'paid',
-    },
-    {
-      id: 'bk_003',
-      tourName: 'Ha Long Bay Cruise 2D1N',
-      tourUrl: '/tours/ha-long-bay-cruise-2d1n',
-      travelDate: '2025-10-12',
-      total: 320,
-      status: 'approved',
-      paymentStatus: 'paid',
-    },
-    {
-      id: 'bk_004',
-      tourName: 'Ha Long Bay Cruise 2D1N',
-      tourUrl: '/tours/ha-long-bay-cruise-2d1n',
-      travelDate: '2025-10-12',
-      total: 320,
-      status: 'approved',
-      paymentStatus: 'paid',
-    },
-    {
-      id: 'bk_005',
-      tourName: 'Ha Long Bay Cruise 2D1N',
-      tourUrl: '/tours/ha-long-bay-cruise-2d1n',
-      travelDate: '2025-10-12',
-      total: 320,
-      status: 'approved',
-      paymentStatus: 'paid',
-    },
-    {
-      id: 'bk_006',
-      tourName: 'Ha Long Bay Cruise 2D1N',
-      tourUrl: '/tours/ha-long-bay-cruise-2d1n',
-      travelDate: '2025-10-12',
-      total: 320,
-      status: 'approved',
-      paymentStatus: 'paid',
-    },
-    {
-      id: 'bk_007',
-      tourName: 'Ha Long Bay Cruise 2D1N',
-      tourUrl: '/tours/ha-long-bay-cruise-2d1n',
-      travelDate: '2025-10-12',
-      total: 320,
-      status: 'receipt_submitted',
-      paymentStatus: 'refunded',
-    },
-    {
-      id: 'bk_008',
-      tourName: 'Ha Long Bay Cruise 2D1N',
-      tourUrl: '/tours/ha-long-bay-cruise-2d1n',
-      travelDate: '2025-10-12',
-      total: 320,
-      status: 'approved',
-      paymentStatus: 'paid',
-    },
-    {
-      id: 'bk_009',
-      tourName: 'Ha Long Bay Cruise 2D1N',
-      tourUrl: '/tours/ha-long-bay-cruise-2d1n',
-      travelDate: '2025-10-12',
-      total: 320,
-      status: 'approved',
-      paymentStatus: 'paid',
-    },
-    {
-      id: 'bk_0010',
-      tourName: 'Ha Long Bay Cruise 2D1N',
-      tourUrl: '/tours/ha-long-bay-cruise-2d1n',
-      travelDate: '2025-10-12',
-      total: 320,
-      status: 'approved',
-      paymentStatus: 'paid',
-    },
-  ],
-  meta: {
-    pageIndex: 0,
-    pageSize: 5,
-    total: 7,
-    pageCount: 1,
-  },
-};
-
-/* ==== helpers ==== */
-const currency = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
-const fmtDate = (iso: string) =>
-  new Intl.DateTimeFormat('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  }).format(new Date(iso));
-
-const PaymentBadge: React.FC<{ status: PaymentStatus }> = ({ status }) => {
-  switch (status) {
-    case 'paid':
-      return (
-        <Badge className="bg-emerald-500 hover:bg-emerald-600">Paid</Badge>
-      );
-    case 'pending':
-      return (
-        <Badge
-          variant="outline"
-          className="text-emerald-600 border-emerald-200"
-        >
-          Pending
-        </Badge>
-      );
-    case 'refunded':
-      return <Badge className="bg-gray-500 hover:bg-gray-600">Refunded</Badge>;
-  }
-};
-
-const ActionsCell: React.FC<{
-  row: BookingRow;
-  onPay: (row: BookingRow) => void;
-  onDelete: (row: BookingRow) => void;
-}> = ({ row, onPay, onDelete }) => (
-  <div className="flex items-center gap-2">
-    <Button
-      variant="secondary"
-      size="icon"
-      className="h-8 w-8"
-      onClick={() => onPay(row)}
-      title="Pay now"
-    >
-      <DollarSign className="h-4 w-4" />
-    </Button>
-    <Button
-      variant="secondary"
-      size="icon"
-      className="h-8 w-8"
-      onClick={() => onDelete(row)}
-      title="Delete booking"
-    >
-      <Trash2 className="h-4 w-4" />
-    </Button>
-  </div>
-);
-
-/* ==== columns (thêm cột checkbox select) ==== */
-const useColumns = (
-  onPay: (r: BookingRow) => void,
-  onDelete: (r: BookingRow) => void,
-): ColumnDef<BookingRow>[] =>
-  useMemo<ColumnDef<BookingRow>[]>(
-    () => [
-      {
-        id: 'select',
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected()
-                ? true
-                : table.getIsSomePageRowsSelected()
-                ? 'indeterminate'
-                : false
-            }
-            onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(v) => row.toggleSelected(!!v)}
-            aria-label="Select row"
-          />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-        size: 32,
-      },
-      {
-        accessorKey: 'tourName',
-        header: () => <div>Tour Name</div>,
-        cell: ({ row }) => {
-          const v = row.original;
-          return v.tourUrl ? (
-            <Link to={v.tourUrl} className="text-primary hover:underline">
-              {v.tourName}
-            </Link>
-          ) : (
-            <span className="text-primary">{v.tourName}</span>
-          );
-        },
-      },
-      {
-        accessorKey: 'travelDate',
-        header: () => <div>Travel Date</div>,
-        cell: ({ getValue }) => <span>{fmtDate(getValue<string>())}</span>,
-      },
-      {
-        accessorKey: 'total',
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === 'asc')
-              }
-            >
-              Total
-              <ArrowUpDown />
-            </Button>
-          );
-        },
-        cell: ({ getValue }) => (
-          <span>{currency.format(getValue<number>())}</span>
-        ),
-      },
-      {
-        accessorKey: 'paymentStatus',
-        header: () => <div>Payment Status</div>,
-        cell: ({ getValue }) => (
-          <PaymentBadge status={getValue<PaymentStatus>()} />
-        ),
-      },
-      {
-        id: 'actions',
-        header: () => <span className="sr-only">Actions</span>,
-        cell: ({ row }) => (
-          <ActionsCell row={row.original} onPay={onPay} onDelete={onDelete} />
-        ),
-        size: 80,
-      },
-    ],
-    [onPay, onDelete],
-  );
-
-/* ==== Filter bar ==== */
 const StatusFilterBar: React.FC<{
-  active: BookingStatus;
-  onChange: (s: BookingStatus) => void;
+  active: BookingStatusFilter;
+  onChange: (s: BookingStatusFilter) => void;
 }> = ({ active, onChange }) => (
   <div className="text-sm">
     {STATUS_ITEMS.map((s, i) => (
@@ -331,23 +52,73 @@ const StatusFilterBar: React.FC<{
 );
 
 const RoomBookingPage: React.FC = () => {
-  const [status, setStatus] = useState<BookingStatus>('all');
+  const [status, setStatus] = useState<BookingStatusFilter>('all');
+  const [pagination, setPagination] = useState<Paginate>({
+    pageIndex: 0,
+    pageSize: 5,
+  });
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
 
-  const onPay = (row: BookingRow) => console.log('Pay for booking:', row.id);
-  const onDelete = (row: BookingRow) => console.log('Delete booking:', row.id);
+  const sortParams: SortParam[] = sorting.map((s) => ({
+    by: s.id,
+    dir: s.desc ? 'desc' : 'asc',
+  }));
 
-  const fullArray = useMemo(() => {
-    const base = mockData.data; // 👈 lấy mảng
-    return status === 'all' ? base : base.filter((d) => d.status === status);
-  }, [status]);
+  const { data, isFetching } = useMyBookings({
+    pageIndex: pagination.pageIndex,
+    pageSize: pagination.pageSize,
+    q: globalFilter || undefined,
+    status: status !== 'all' ? status : undefined,
+    sort: sortParams,
+  });
+
+  const navigate = useNavigate();
+
+  const onPay = (row: Booking) => {
+    navigate(`/dashboard/room-bookings/${row._id}`);
+  };
+  const onDelete = (row: Booking) =>
+    console.log('Delete room booking:', row._id);
 
   const columns = useColumns(onPay, onDelete);
+  const emptyData = {
+    data: [] as Booking[],
+    meta: {
+      pageIndex: pagination.pageIndex,
+      pageSize: pagination.pageSize,
+      total: 0,
+      pageCount: 0,
+    },
+  };
 
   return (
     <div className="space-y-4">
-      <StatusFilterBar active={status} onChange={setStatus} />
+      <StatusFilterBar
+        active={status}
+        onChange={(s) => {
+          setStatus(s);
+          setPagination((p) => ({ ...p, pageIndex: 0 }));
+        }}
+      />
       <Separator />
-      <DataTable columns={columns} data={fullArray} />
+
+      <DataTable
+        columns={columns}
+        data={data ?? emptyData}
+        tableState={{
+          pagination,
+          setPagination,
+          sorting,
+          setSorting,
+          globalFilter,
+          setGlobalFilter,
+          rowSelection,
+          setRowSelection,
+          isFetching,
+        }}
+      />
     </div>
   );
 };

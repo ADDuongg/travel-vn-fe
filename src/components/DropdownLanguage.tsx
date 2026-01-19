@@ -1,44 +1,55 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
 } from '@/components/ui/select';
-import { useTranslation } from 'react-i18next';
-import { countryFlags } from '@/constants/commons';
-import WorldFlag from 'react-world-flags';
+import { useLanguage } from '@/hooks/useLanguage';
+import { useGetLanguagesQuery } from '@/features/language/hooks';
+
 export const DropdownLanguage = () => {
-  const [language, setLanguage] = useState('vi');
-  const { i18n } = useTranslation();
-  const handleLanguageChange = (value: string) => {
-    setLanguage(value);
-    i18n.changeLanguage(value);
-  };
+  const { language, changeLanguage } = useLanguage();
+  const { data: languages = [], isLoading } = useGetLanguagesQuery();
+
+  const currentLang = languages.find((l) => l.code === language);
+  console.log('languages', languages);
+
+  if (isLoading) return null;
+
   return (
-    <Select value={language} onValueChange={handleLanguageChange}>
+    <Select value={language} onValueChange={changeLanguage}>
       <SelectTrigger className="w-[5rem] flex items-center bg-white">
-        <WorldFlag
-          code={countryFlags[language]?.code}
-          alt={countryFlags[language]?.label}
-          className="w-5 h-5 rounded-full"
-        />
+        {currentLang?.flagUrl ? (
+          <img
+            src={currentLang.flagUrl}
+            alt={currentLang.name}
+            className="w-5 h-5 rounded-full object-cover"
+          />
+        ) : (
+          <span className="text-sm uppercase">{language}</span>
+        )}
       </SelectTrigger>
+
       <SelectContent className="w-auto">
-        {Object.keys(countryFlags).map((key) => (
-          <SelectItem
-            key={key}
-            value={key}
-            className="flex items-center space-x-2"
-          >
-            <WorldFlag
-              code={countryFlags[key as keyof typeof countryFlags].code}
-              alt={countryFlags[key as keyof typeof countryFlags].label}
-              className="w-5 h-5 rounded-full"
-            />
-            <span>{countryFlags[key as keyof typeof countryFlags].label}</span>
-          </SelectItem>
-        ))}
+        {languages
+          .filter((l) => l.isActive)
+          .map((lang, idx) => (
+            <SelectItem
+              key={idx}
+              value={lang.code}
+              className="flex items-center gap-2"
+            >
+              {lang.flagUrl && (
+                <img
+                  src={lang.flagUrl}
+                  alt={lang.name}
+                  className="w-5 h-5 rounded-full object-cover"
+                />
+              )}
+              <span>{lang.name}</span>
+            </SelectItem>
+          ))}
       </SelectContent>
     </Select>
   );

@@ -1,6 +1,7 @@
 import type { EnumRole } from '@/constants/commons';
 import type { RowSelectionState, SortingState } from '@tanstack/react-table';
 import type { RegisterOptions } from 'react-hook-form';
+import type { Paginate } from './api';
 
 export interface RouteConfig {
   index?: boolean;
@@ -51,10 +52,8 @@ export type InputInterface = {
 };
 
 export type TableState = {
-  pagination: { pageIndex: number; pageSize: number };
-  setPagination: React.Dispatch<
-    React.SetStateAction<{ pageIndex: number; pageSize: number }>
-  >;
+  pagination: Paginate;
+  setPagination: React.Dispatch<React.SetStateAction<Paginate>>;
   sorting: SortingState;
   setSorting: React.Dispatch<React.SetStateAction<SortingState>>;
   globalFilter: string;
@@ -62,4 +61,11 @@ export type TableState = {
   rowSelection?: RowSelectionState;
   setRowSelection?: React.Dispatch<React.SetStateAction<RowSelectionState>>;
   isFetching?: boolean;
+};
+
+export type Language = {
+  code: string;
+  name: string;
+  flagUrl?: string;
+  isActive: boolean;
 };

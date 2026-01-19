@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Pagination } from '@/shared/tablekit/Pagination';
+import { Pagination } from '@/shared/table/Pagination';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -17,32 +17,19 @@ import {
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
 import { useServerTable } from '@hooks/useServerTable';
+import type { ApiListResponse } from '@interface/api';
 import type { TableState } from '@interface/commons';
 import type { ColumnDef } from '@tanstack/react-table';
 import { flexRender } from '@tanstack/react-table';
 import { ChevronDown } from 'lucide-react';
 
-type ApiPage<TData> = {
-  data: TData[];
-  meta: {
-    pageIndex: number;
-    pageSize: number;
-    total: number;
-    pageCount: number;
-  };
-};
-
-type DataTableProps<TData extends { id: string | number }> = {
+type DataTableProps<TData> = {
   columns: ColumnDef<TData>[];
-  data: ApiPage<TData>;
+  data: ApiListResponse<TData>;
   tableState: TableState;
 };
-interface TestInterface {
-  [key: string]: any;
-  data: string[] | number[];
-  meta: Record<any, any>;
-}
-function DataTable<TData extends { id: string | number }>({
+
+function DataTable<TData>({
   columns,
   data,
   tableState,
@@ -62,11 +49,11 @@ function DataTable<TData extends { id: string | number }>({
   const { table, selectedRows, pages, start, end } = useServerTable<TData>({
     data: data?.data ?? [],
     columns,
-    meta: {
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-      pageCount: data?.meta.pageCount ?? 0,
-      total: data?.meta.total,
+    meta: data?.meta ?? {
+      pageIndex: 0,
+      pageSize: 0,
+      pageCount: 0,
+      total: 0,
     },
     state: {
       pagination,
@@ -76,7 +63,7 @@ function DataTable<TData extends { id: string | number }>({
       globalFilter,
       setGlobalFilter,
       rowSelection,
-      setRowSelection, // nếu hook hỗ trợ controlled
+      setRowSelection,
       isFetching,
     },
     windowSize: 2,
@@ -200,8 +187,8 @@ function DataTable<TData extends { id: string | number }>({
 
         <Pagination
           table={table}
-          pageCount={data?.meta.pageCount ?? 0}
-          total={data?.meta.total}
+          pageCount={data?.meta?.pageCount ?? 0}
+          total={data?.meta?.total}
           pages={pages}
           start={start}
           end={end}

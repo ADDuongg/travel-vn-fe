@@ -33,6 +33,14 @@ const RoomBookingPage = Loadable(
 const WishlistPage = Loadable(
   () => import('@pages/dashboard/tour/WishlistPage'),
 );
+
+const RoomBookingPaymentPage = Loadable(
+  () => import('@pages/payment/RoomBookingPaymentPage'),
+);
+
+const MyBookingDetailPage = Loadable(
+  () => import('@pages/dashboard/room/RoomBookingDetail'),
+);
 export const routes: RouteConfig[] = [
   {
     path: ROUTES.HOME,
@@ -66,6 +74,11 @@ export const routes: RouteConfig[] = [
       {
         path: ROUTES.DASHBOARD.ROOM_BOOKINGS,
         element: <RoomBookingPage />,
+        handle: { crumb: 'My Bookings' },
+      },
+      {
+        path: ROUTES.DASHBOARD.ROOM_BOOKINGS_DETAIL,
+        element: <MyBookingDetailPage />,
         handle: { crumb: 'My Bookings' },
       },
       {
@@ -116,5 +129,9 @@ export const routes: RouteConfig[] = [
   {
     path: ROUTES.REGISTER,
     element: <RegisterPage />,
+  },
+  {
+    path: ROUTES.BOOKING_PAYMENT,
+    element: <RoomBookingPaymentPage />,
   },
 ];

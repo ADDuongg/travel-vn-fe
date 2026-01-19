@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export const caculateSalePrice = (price: number, salePercent: number) => {
   return price - (price * salePercent) / 100;
 };
@@ -29,4 +31,63 @@ export function compareByKey<T>(a: T, b: T, key: keyof T, desc: boolean) {
   }
 
   return 0;
+}
+
+export function diffInNights(checkIn: Date, checkOut: Date): number {
+  const start = new Date(checkIn);
+  const end = new Date(checkOut);
+
+  start.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
+
+  return Math.floor((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+export function toDateOnly(value?: string | Date) {
+  if (!value) return undefined;
+
+  if (value instanceof Date) {
+    return value.toLocaleDateString('en-CA'); // YYYY-MM-DD
+  }
+
+  return value; // đã là string
+}
+
+export const fmtDate = (iso?: string) =>
+  iso
+    ? new Intl.DateTimeFormat('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      }).format(new Date(iso))
+    : '-';
+export const formatDate = (
+  date?: string | Date,
+  format = 'DD/MM/YYYY',
+): string => {
+  if (!date) return '-';
+  return dayjs(date).format(format);
+};
+export const fmtMoney = (amount: number, currency = 'VND') =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency,
+  }).format(amount);
+
+const PAYMENT_EXPIRE_MINUTES = 60;
+
+export function getPaymentExpireAt(createdAt: string) {
+  return new Date(
+    new Date(createdAt).getTime() + PAYMENT_EXPIRE_MINUTES * 60 * 1000,
+  );
+}
+
+export function getRemainingTime(expireAt: Date) {
+  const diff = expireAt.getTime() - Date.now();
+  if (diff <= 0) return null;
+
+  const minutes = Math.floor(diff / 60000);
+  const seconds = Math.floor((diff % 60000) / 1000);
+
+  return { minutes, seconds };
 }

@@ -57,10 +57,10 @@ export default function ReviewSection({
 
     switch (sortBy) {
       case 'rating_desc':
-        data.sort((a, b) => b.rating - a.rating);
+        data.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
         break;
       case 'rating_asc':
-        data.sort((a, b) => a.rating - b.rating);
+        data.sort((a, b) => (a.rating ?? 0) - (b.rating ?? 0));
         break;
       case 'date_desc':
         data.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));

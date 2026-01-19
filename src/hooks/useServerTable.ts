@@ -1,23 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // shared/tablekit/useServerTable.ts
-import * as React from 'react';
-import {
-  useReactTable,
-  getCoreRowModel,
-  type ColumnDef,
-  type SortingState,
-  type RowSelectionState,
-  type Table,
-} from '@tanstack/react-table';
+import type { PageMeta } from '@interface/api';
 import type { TableState } from '@interface/commons';
+import {
+  getCoreRowModel,
+  useReactTable,
+  type ColumnDef,
+  type RowSelectionState,
+} from '@tanstack/react-table';
+import * as React from 'react';
 
-export type PageMeta = {
-  pageIndex: number;
-  pageSize: number;
-  pageCount: number;
-  total?: number;
-};
-
-export function useServerTable<TData extends { id: string | number }>(opts: {
+export function useServerTable<TData>(opts: {
   data: TData[];
   columns: ColumnDef<TData, any>[];
   meta: PageMeta;
@@ -49,7 +42,7 @@ export function useServerTable<TData extends { id: string | number }>(opts: {
     manualSorting: true,
     pageCount: meta.pageCount,
     autoResetPageIndex: false,
-    getRowId: (row) => String(row.id),
+    getRowId: (row) => String(row),
     getCoreRowModel: getCoreRowModel(),
   });
 

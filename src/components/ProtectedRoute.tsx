@@ -1,33 +1,11 @@
 // ProtectedRoute.tsx
-import { useQuery } from '@tanstack/react-query';
-import React, { useEffect } from 'react';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import api from '@/lib/axios';
+import React from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 interface ProtectedRouteProps {
   rolesAllowed?: string[];
   userRole?: string;
   children: React.ReactElement;
   fallbackPath?: string;
-}
-export function useAuthBootstrap() {
-  const navigate = useNavigate();
-
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['auth-me'],
-    queryFn: () => api.get('/api/v1/auth/me'),
-    retry: false,
-  });
-
-  useEffect(() => {
-    if (isError) {
-      navigate('/login', { replace: true });
-    }
-  }, [isError]);
-
-  return {
-    user: data,
-    isLoading,
-  };
 }
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   rolesAllowed,

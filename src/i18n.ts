@@ -8,17 +8,30 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    fallbackLng: 'vi',
-    debug: false,
+    fallbackLng: 'en',
+    supportedLngs: ['en', 'vi'],
+    nonExplicitSupportedLngs: true,
+
+    detection: {
+      order: ['localStorage', 'navigator'],
+      caches: ['localStorage'],
+    },
+
     interpolation: {
       escapeValue: false,
     },
-    backend: {
-      loadPath: '/locales/{{lng}}/translation.json',
-    },
+
     react: {
       useSuspense: false,
     },
+  })
+  .then(() => {
+    const lng = i18n.language;
+
+    if (lng.includes('-')) {
+      const base = lng.split('-')[0];
+      i18n.changeLanguage(base);
+    }
   });
 
 export default i18n;

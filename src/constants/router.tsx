@@ -24,6 +24,7 @@ export const ROUTES = {
     WISHLIST: '/dashboard/wishlist',
     FAVORITES: '/dashboard/favorites',
     ROOM_BOOKINGS: '/dashboard/room-bookings',
+    ROOM_BOOKINGS_DETAIL: '/dashboard/room-bookings/:id',
     ROOM_INVOICES: '/dashboard/room-invoices',
     ROOM_REVIEWS: '/dashboard/room-reviews',
     ROOM_WISHLIST: '/dashboard/room-wishlist',
@@ -34,4 +35,5 @@ export const ROUTES = {
   },
   LOGIN: '/login',
   REGISTER: '/register',
+  BOOKING_PAYMENT: '/bookings/:id/payment',
 };

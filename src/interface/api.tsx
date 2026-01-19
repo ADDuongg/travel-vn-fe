@@ -1,16 +1,20 @@
-export type ApiPage<T> = {
+export type ApiListResponse<T> = {
   data: T[];
-  meta: {
-    pageIndex: number;
-    pageSize: number;
-    total: number;
-    pageCount: number;
-  };
+  meta: PageMeta;
+};
+
+export type ApiResponse<T> = {
+  data: T;
 };
 
 export type Paginate = {
   pageIndex: number;
   pageSize: number;
+};
+
+export type PageMeta = Paginate & {
+  total: number;
+  pageCount: number;
 };
 
 export type SortParam = { by: string; dir: 'asc' | 'desc' };

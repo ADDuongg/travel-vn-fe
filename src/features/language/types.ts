@@ -48,15 +48,6 @@ export interface Room {
     };
   };
 
-  bookingConfig: {
-    minNights: number;
-    maxNights?: number;
-    allowInstantBooking: boolean;
-  };
-  inventory: {
-    totalRooms: number;
-  };
-
   /* sale */
   sale?: {
     isActive: boolean;
@@ -106,20 +97,4 @@ export interface RoomListResponse {
     total: number;
     totalPages: number;
   };
-}
-
-export interface RoomGuestPayload {
-  adults: number;
-  children?: number;
-}
-
-export interface RoomBookingPayload {
-  roomId: string;
-
-  checkIn: string;
-  checkOut: string;
-
-  userId: string;
-
-  rooms: RoomGuestPayload[];
 }

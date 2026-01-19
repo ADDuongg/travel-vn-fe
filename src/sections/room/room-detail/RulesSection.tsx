@@ -12,6 +12,8 @@ const RulesSection: React.FC<RulesSectionProps> = ({
   rules,
   icon = <MdOutlineDoNotDisturbOn className="text-red-500" size={18} />, // default
 }) => {
+  console.log('rules', rules);
+
   return (
     <section className="mt-10">
       <h2 className="text-xl font-bold mb-4">{title}</h2>

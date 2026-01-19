@@ -8,6 +8,7 @@ import { BsGlobe2 } from 'react-icons/bs';
 import { MdOutlineEmail } from 'react-icons/md';
 import RoomBookingForm from '../components/RoomBookingForm';
 import EnquiryForm from '@/sections/shared/EnquiryForm';
+import type { Room } from '@/features/rooms/types';
 
 const ConfidenceBox = () => (
   <Card className="mt-6 p-6 shadow-sm rounded-2xl shadow-lg">
@@ -43,10 +44,10 @@ const HelpBox = () => (
   </div>
 );
 
-const RoomSidebar: React.FC = () => (
+const RoomSidebar = ({ room }: { room: Room }) => (
   <>
     <BookingCard
-      BookingFormComponent={<RoomBookingForm />}
+      BookingFormComponent={<RoomBookingForm room={room} />}
       EnquiryFormComponent={<EnquiryForm />}
     />
     <ConfidenceBox />

@@ -39,7 +39,6 @@ class AxiosClient {
       (error) => Promise.reject(error),
     );
 
-    /* ================= RESPONSE ================= */
     this.client.interceptors.response.use(
       (res: AxiosResponse) => (res.config.rawResponse ? res : res.data?.data),
       (error) => {

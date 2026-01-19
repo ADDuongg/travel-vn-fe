@@ -1,7 +1,7 @@
 import api from '@/lib/axios';
 import type { BookingStatus } from '../shared/types';
 import type { TourBookingRow } from './types';
-import type { ApiPage, Paginate, SortParam } from '@interface/api';
+import type { ApiListResponse, Paginate, SortParam } from '@interface/api';
 
 export type GetBookingsParams = Paginate & {
   q?: string;
@@ -11,7 +11,7 @@ export type GetBookingsParams = Paginate & {
 
 export async function getBookings(params: GetBookingsParams) {
   const { pageIndex, pageSize, q, status, sort } = params;
-  return api.get<ApiPage<TourBookingRow>>('/test-api/bookings', {
+  return api.get<ApiListResponse<TourBookingRow>>('/test-api/bookings', {
     params: {
       pageIndex,
       pageSize,

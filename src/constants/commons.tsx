@@ -78,7 +78,7 @@ export const HeaderItem: HeaderItemType[] = [
 
 export const countryFlags: Record<string, CountryFlag> = {
   vi: { label: 'VI', code: 'VN' },
-  en: { label: 'ENG', code: 'US' },
+  en: { label: 'ENG', code: 'EN' },
 };
 
 export enum EnumRole {
@@ -92,3 +92,9 @@ export enum EnumDisplayItem {
   GRID = 'grid',
   FLEX = 'flex',
 }
+
+export const EnumLanguage = {
+  VI: 'vi',
+  EN: 'en',
+  DEFAULT: 'en',
+};

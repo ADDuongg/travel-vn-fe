@@ -1,26 +1,29 @@
-import * as React from 'react';
 import { AiOutlineVideoCamera } from 'react-icons/ai';
 import { BsImages } from 'react-icons/bs';
-import destination1 from '/images/destination1.png';
 
-type Item = { id: string; src: string; alt: string };
-
-export function GalleryPreviewDetail() {
-  const images: Item[] = Array(5)
-    .fill(null)
-    .map((_, i) => ({
-      id: `img-${i}`,
-      src: destination1,
-      alt: `Preview ${i + 1}`,
-    }));
-
+export function GalleryPreviewDetail({
+  gallery,
+  thumbnail,
+}: {
+  gallery: {
+    _id: string;
+    url: string;
+    alt?: string;
+    order?: number;
+  }[];
+  thumbnail?: {
+    _id: string;
+    url: string;
+    alt?: string;
+  };
+}) {
   return (
     <div className="grid grid-cols-12 gap-4">
       {/* Ảnh lớn (index 0) */}
       <div className="relative col-span-12 md:col-span-8 rounded-xl overflow-hidden ring-1 ring-border aspect-[16/9]">
         <img
-          src={images[0].src}
-          alt={images[0].alt}
+          src={thumbnail?.url ?? gallery[0].url}
+          alt={thumbnail?.alt ?? gallery[0].alt}
           className="w-full h-full object-cover"
         />
 
@@ -44,13 +47,13 @@ export function GalleryPreviewDetail() {
 
       {/* Ảnh nhỏ (index 1 → 4) */}
       <div className="col-span-12 md:col-span-4 grid grid-cols-2 grid-rows-2 gap-4">
-        {images.slice(1).map((img) => (
+        {gallery.slice(1).map((img) => (
           <div
-            key={img.id}
+            key={img._id}
             className="rounded-xl overflow-hidden ring-1 ring-border"
           >
             <img
-              src={img.src}
+              src={img.url}
               alt={img.alt}
               className="w-full h-full object-cover"
             />

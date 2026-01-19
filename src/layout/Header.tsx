@@ -82,7 +82,6 @@ const UserMenu = ({ userName }: { userName: string }) => {
 
   return (
     <div ref={ref} className="relative cursor-pointer">
-      {/* ===== AVATAR (CLICK) ===== */}
       <div
         className="flex items-center gap-2"
         onClick={() => setOpen((v) => !v)}
@@ -95,7 +94,6 @@ const UserMenu = ({ userName }: { userName: string }) => {
         <span className="text-sm font-medium hidden md:inline">{userName}</span>
       </div>
 
-      {/* ===== DROPDOWN ===== */}
       <div
         className={`
           absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md

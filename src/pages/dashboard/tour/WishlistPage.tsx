@@ -12,7 +12,7 @@ import { Button } from '@components/ui/button';
 import { useBookingsQuery } from '@/features/tours/hooks';
 import type { SortParam } from '@interface/api';
 import type { BookingStatus } from '@/features/shared/types';
-import DataTable from '@/sections/shared/DataTable';
+import DataTable from '@/shared/table/DataTable';
 type WishRow = {
   id: string; // bắt buộc để getRowId/selection
   tourName: string; // chỉ cần trường này để hiển thị

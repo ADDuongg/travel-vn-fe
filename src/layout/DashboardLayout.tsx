@@ -11,13 +11,13 @@ const DashboardLayout = () => {
       <div className="bg-background_paleGray p-8 md:p-16 text-center space-y-3">
         <ResponsiveH1 className="font-dm-serif-display">Dashboard</ResponsiveH1>
       </div>
-      <div className="flex min-h-[60vh]">
+      <div className="lg:flex hidden min-h-[60vh] ">
         {/* Sidebar */}
-        <aside className="hidden lg:block w-[260px] shrink-0 px-6 py-8">
+        <aside className=" w-[260px] shrink-0 px-6 py-8">
           <SidebarDashboard />
         </aside>
 
-        <Separator orientation="vertical" className="hidden lg:block w-px" />
+        <Separator orientation="vertical" className=" w-px" />
 
         <main className="flex-1 px-4 md:px-8 lg:px-12 py-6 lg:py-8 ">
           <div className="flex-1 space-y-6">

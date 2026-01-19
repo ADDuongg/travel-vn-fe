@@ -1,20 +1,11 @@
 // ProfilePage.tsx
-import React, { useRef, useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-  BreadcrumbPage,
-} from '@/components/ui/breadcrumb';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import CustomInput from '@/components/CustomInput';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { H3, P } from '@components/ui/typography';
-import { ROUTES } from '@/constants/router';
+import React, { useRef, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 type FormValues = {
   firstName: string;

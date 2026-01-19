@@ -1,11 +1,12 @@
-import React from 'react';
-import { ResponsiveH6 } from '@components/ui/typography';
+import type { Room } from '@/features/rooms/types';
 import SharedHeader from '@/sections/shared/SharedHeader';
-import { FaBed, FaRulerCombined, FaBuilding } from 'react-icons/fa';
-import { FaUserGroup } from 'react-icons/fa6';
 import { GalleryPreviewDetail } from '@components/GalleryPreviewDetail';
+import { ResponsiveH6 } from '@components/ui/typography';
+import { FaBed, FaRulerCombined } from 'react-icons/fa';
+import { FaUserGroup } from 'react-icons/fa6';
 
-const RoomHeader: React.FC = () => {
+const RoomHeader = ({ room }: { room: Room }) => {
+  const { gallery, thumbnail } = room;
   const detailItems = [
     {
       icon: <FaBed size={24} />,
@@ -13,16 +14,20 @@ const RoomHeader: React.FC = () => {
     },
     {
       icon: <FaUserGroup size={24} />,
-      value: <span>Max: 6 Guests</span>,
+      value: <span>Max: {room.maxGuests} People</span>,
     },
     {
       icon: <FaRulerCombined size={24} />,
-      value: <span>45 sqm</span>,
+      value: <span>Room Size: {room.roomSize}</span>,
     },
-    {
+    /* {
       icon: <FaBuilding size={24} />,
-      value: <span>City View</span>,
-    },
+      value: (
+        <span>
+          adult/children ratio: {room.adults}/{room.children}
+        </span>
+      ),
+    }, */
   ];
 
   return (
@@ -31,7 +36,9 @@ const RoomHeader: React.FC = () => {
       rating={4.8}
       reviewCount={12}
       details={detailItems}
-      GalleryComponent={<GalleryPreviewDetail />}
+      GalleryComponent={
+        <GalleryPreviewDetail gallery={gallery} thumbnail={thumbnail} />
+      }
     />
   );
 };
