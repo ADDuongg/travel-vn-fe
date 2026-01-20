@@ -44,14 +44,24 @@ export interface TourInfo {
   endDate?: string;
 }
 
+export interface RoomCapacity {
+  baseAdults: number;
+  baseChildren: number;
+  maxAdults: number;
+  maxChildren: number;
+  roomSize?: number;
+}
+
 export interface BookedRoom {
   room: {
     _id: string;
     name: string;
     slug: string;
-    thumbnail?: string;
-    roomSize?: number;
-    maxGuests?: number;
+    thumbnail?: {
+      url: string;
+      alt?: string;
+    };
+    capacity: RoomCapacity;
   };
   checkIn: string;
   checkOut: string;

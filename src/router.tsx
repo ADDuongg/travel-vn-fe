@@ -38,6 +38,10 @@ const RoomBookingPaymentPage = Loadable(
   () => import('@pages/payment/RoomBookingPaymentPage'),
 );
 
+const PaymentResultPage = Loadable(
+  () => import('@pages/payment/PaymentResult'),
+);
+
 const MyBookingDetailPage = Loadable(
   () => import('@pages/dashboard/room/RoomBookingDetail'),
 );
@@ -133,5 +137,9 @@ export const routes: RouteConfig[] = [
   {
     path: ROUTES.BOOKING_PAYMENT,
     element: <RoomBookingPaymentPage />,
+  },
+  {
+    path: ROUTES.BOOKING_PAYMENT_RESULT,
+    element: <PaymentResultPage />,
   },
 ];

@@ -36,4 +36,5 @@ export const ROUTES = {
   LOGIN: '/login',
   REGISTER: '/register',
   BOOKING_PAYMENT: '/bookings/:id/payment',
+  BOOKING_PAYMENT_RESULT: '/payment-result',
 };

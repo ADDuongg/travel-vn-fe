@@ -63,12 +63,17 @@ const MyBookingDetailPage: React.FC = () => {
                     {dayjs(r.checkOut).format('DD/MM/YYYY')}
                   </p>
 
-                  <p>Room size: {r.room.roomSize} m²</p>
-                  <p>Max guests: {r.room.maxGuests}</p>
+                  <p>
+                    Room size: {r.room.capacity?.roomSize ?? 'N/A'} m²
+                  </p>
+                  <p>
+                    Max capacity: {r.room.capacity?.maxAdults ?? 0} adults,{' '}
+                    {r.room.capacity?.maxChildren ?? 0} children
+                  </p>
 
                   <p>
-                    Guests: Adult {r.guests.adults} – Children{' '}
-                    {r.guests.children}
+                    Guests: {r.guests.adults} adult(s), {r.guests.children}{' '}
+                    child(ren)
                   </p>
                 </div>
               </div>
@@ -122,7 +127,7 @@ const MyBookingDetailPage: React.FC = () => {
             className="w-full"
             variant="success"
             disabled={booking.paymentStatus !== 'UNPAID'}
-            onClick={() => navigate(`/payment/${booking._id}`)}
+            onClick={() => navigate(`/bookings/${booking._id}/payment`)}
           >
             MAKE AN ONLINE PAYMENT
           </Button>
