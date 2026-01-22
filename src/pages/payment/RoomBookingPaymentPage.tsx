@@ -83,8 +83,8 @@ const RoomBookingPaymentPage = () => {
               clientSecret: paymentIntentData.clientSecret,
             }}
           >
-            <CheckoutForm bookingId={bookingId ?? ''} />
-          </Elements>
+      <CheckoutForm bookingId={bookingId ?? ''} />
+    </Elements>
         </div>
       </Container>
     </MainLayout>

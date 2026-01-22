@@ -69,9 +69,16 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi' }) => {
       {/* Content */}
       <div className="p-4 flex flex-col flex-1 justify-between">
         {/* Title */}
-        <h3 className="font-bold text-lg mb-3">
-          {translation?.name ?? item.code}
-        </h3>
+        <div className="mb-2">
+          {item.roomType && (
+            <span className="text-xs font-semibold text-blue-600 uppercase tracking-wide">
+              {item.roomType}
+            </span>
+          )}
+          <h3 className="font-bold text-lg">
+            {translation?.name ?? item.code}
+          </h3>
+        </div>
 
         {/* Meta Info */}
         <div className="flex items-center gap-6 text-sm text-gray-600 mb-4">

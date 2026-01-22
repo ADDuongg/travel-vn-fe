@@ -20,6 +20,14 @@ const RoomHeader = ({ room }: { room: Room }) => {
       icon: <FaRulerCombined size={24} />,
       value: <span>Room Size: {room.roomSize}</span>,
     },
+    ...(room.roomType
+      ? [
+          {
+            icon: <FaBed size={24} />,
+            value: <span>Type: {room.roomType}</span>,
+          },
+        ]
+      : []),
     /* {
       icon: <FaBuilding size={24} />,
       value: (

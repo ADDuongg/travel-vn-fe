@@ -132,6 +132,12 @@ export const useColumns = (
               )}
 
               <span className="text-xs text-muted-foreground">
+                {room.roomType && (
+                  <span className="font-semibold text-blue-600">
+                    {room.roomType}
+                  </span>
+                )}
+                {room.roomType && (room.roomSize || room.maxGuests) && ' • '}
                 {room.roomSize && `${room.roomSize}m²`}
                 {room.roomSize && room.maxGuests && ' • '}
                 {room.maxGuests && `Max ${room.maxGuests} guests`}

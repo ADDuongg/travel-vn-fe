@@ -62,6 +62,20 @@ export interface BookedRoom {
       alt?: string;
     };
     capacity: RoomCapacity;
+    pricing?: {
+      basePrice: number;
+      currency: string;
+      weekendPrice?: number;
+      extraAdultPrice?: number;
+      extraChildPrice?: number;
+    };
+    sale?: {
+      isActive: boolean;
+      type: 'PERCENT' | 'FIXED';
+      value: number;
+      startDate?: string;
+      endDate?: string;
+    };
   };
   checkIn: string;
   checkOut: string;
