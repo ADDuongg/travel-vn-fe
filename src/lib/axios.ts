@@ -23,6 +23,11 @@ class AxiosClient {
       baseURL,
       timeout: 10000,
       withCredentials: true,
+      // Ensure array params are serialized as ?amenities=wifi&amenities=air_condition
+      // instead of ?amenities[]=wifi&amenities[]=air_condition
+      paramsSerializer: {
+        indexes: null,
+      },
     });
 
     this.client.interceptors.request.use(

@@ -97,6 +97,20 @@ export interface RoomQueryParams {
   maxPrice?: number;
   adults?: number;
   keyword?: string;
+  /** Language for keyword search (en, vi) */
+  lang?: string;
+  /** Check-in date YYYY-MM-DD */
+  checkIn?: string;
+  /** Check-out date YYYY-MM-DD */
+  checkOut?: string;
+  /** Minimum rating (ratingSummary.average >= minRating) */
+  minRating?: number;
+  /** Amenity codes (e.g. wifi, air_condition) */
+  amenities?: string[];
+  /** Room sizes in m² */
+  roomSize?: number[];
+  /** Hotel IDs (destinations) */
+  hotelIds?: string[];
 }
 
 export interface RoomListResponse {

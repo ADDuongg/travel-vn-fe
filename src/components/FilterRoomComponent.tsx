@@ -1,38 +1,20 @@
 import React, { useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
+import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
+import { useAmenitiesQuery } from '@/features/amenities/hooks';
+import { useLanguage } from '@/hooks/useLanguage';
 import CustomInput from './CustomInput';
-import { Ratings } from './ui/rating';
-import { Button } from './ui/button';
 import {
   Accordion,
+  AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  AccordionContent,
 } from './ui/accordion';
-import { FaSlidersH } from 'react-icons/fa';
-import { Label } from './ui/label';
-import {
-  ResponsiveH3,
-  ResponsiveH4,
-  ResponsiveH5,
-  ResponsiveH6,
-} from './ui/typography';
-import { AiOutlinePlus } from 'react-icons/ai';
-import { AiOutlineMinus } from 'react-icons/ai';
-import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
-import { ChevronDownIcon } from 'lucide-react';
+import { Button } from './ui/button';
+import { Ratings } from './ui/rating';
+import { Select, SelectContent, SelectTrigger } from './ui/select';
+import { ResponsiveH5, ResponsiveH6 } from './ui/typography';
 
-const facilities = [
-  { label: 'Air Conditioning', value: 'air_condition' },
-  { label: 'Elevator', value: 'elevator' },
-  { label: 'Parking', value: 'parking' },
-  { label: 'Pool', value: 'pool' },
-  { label: 'Restroom', value: 'restroom' },
-  { label: 'Smoking Area', value: 'smoking_area' },
-  { label: 'WiFi', value: 'wifi' },
-  { label: 'Washroom', value: 'washroom' },
-  { label: 'Wheelchair Accessible', value: 'wheelchair_accessible' },
-];
 const roomSize = [
   { label: '20 m²', value: '20' },
   { label: '25 m²', value: '25' },
@@ -50,9 +32,13 @@ export type FilterValues = {
   minPrice: string;
   maxPrice: string;
   rating: number;
-  facilities: string[];
+  amenities: string[];
   roomSize: string[];
   destinations: string[];
+  check_in?: string;
+  check_out?: string;
+  adults?: number;
+  children?: number;
 };
 
 interface Props {
@@ -61,6 +47,9 @@ interface Props {
 }
 
 const FilterRoomComponent: React.FC<Props> = ({ onFilter, onClear }) => {
+  const { language } = useLanguage();
+  const { data: amenitiesList, isLoading: isLoadingAmenities } =
+    useAmenitiesQuery();
   const [roomCount, setRoomCount] = useState(5);
 
   const handleChange = (val: number) => {
@@ -75,14 +64,52 @@ const FilterRoomComponent: React.FC<Props> = ({ onFilter, onClear }) => {
       minPrice: '',
       maxPrice: '',
       rating: 2,
-      facilities: [],
+      amenities: [],
       roomSize: [],
       destinations: [],
     },
   });
 
-  const handleSubmit = methods.handleSubmit(onFilter || (() => {}));
   const [guests, setGuests] = useState({ adults: 1, children: 0 });
+
+  const handleSubmit = methods.handleSubmit((formValues) => {
+    if (!onFilter) return;
+
+    // Lấy raw values từ form (đảm bảo bắt được đúng cấu trúc nested của RHF)
+    const rawValues = methods.getValues();
+
+    // ===== Amenities: duyệt theo amenitiesList để đọc đúng field name =====
+    const amenitiesArr =
+      amenitiesList
+        ?.map((amenity) => {
+          const key = amenity.code || amenity._id;
+          const nested =
+            (rawValues as any).amenities?.[key] ??
+            (rawValues as any)[`amenities.${key}`];
+          return nested ? key : null;
+        })
+        .filter((v): v is string => !!v) ?? [];
+
+    // ===== Room size: vẫn đọc từ object roomSize.* =====
+    const roomSizeObj =
+      (rawValues.roomSize as Record<string, boolean> | string[] | undefined) ??
+      (formValues.roomSize as Record<string, boolean> | string[] | undefined);
+    const roomSizeArr = Array.isArray(roomSizeObj)
+      ? roomSizeObj
+      : roomSizeObj && typeof roomSizeObj === 'object'
+        ? Object.entries(roomSizeObj)
+            .filter(([, v]) => v === true)
+            .map(([k]) => k)
+        : [];
+
+    onFilter({
+      ...formValues,
+      amenities: amenitiesArr,
+      roomSize: roomSizeArr,
+      adults: guests.adults,
+      children: guests.children,
+    });
+  });
 
   const updateGuests = (key: 'adults' | 'children', value: number) => {
     setGuests((prev) => ({ ...prev, [key]: value }));
@@ -91,6 +118,12 @@ const FilterRoomComponent: React.FC<Props> = ({ onFilter, onClear }) => {
     <FormProvider {...methods}>
       <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
         <ResponsiveH5>Check Availability</ResponsiveH5>
+        <CustomInput
+          name="keyword"
+          type="text"
+          label="Keyword"
+          placeHolder="Room name..."
+        />
         <CustomInput name="check_in" type="date" label="Check in" />
         <CustomInput name="check_out" type="date" label="Check out" />
         <div className="flex gap-2 w-full">
@@ -111,7 +144,7 @@ const FilterRoomComponent: React.FC<Props> = ({ onFilter, onClear }) => {
           name="roomCount"
           type="custom-input"
           label="Room"
-          render={({}) => {
+          render={() => {
             return (
               <Select>
                 <SelectTrigger
@@ -225,30 +258,44 @@ const FilterRoomComponent: React.FC<Props> = ({ onFilter, onClear }) => {
           type="button"
           variant="ghost"
           className="text-blue-500 w-fit"
-          onClick={onClear}
+          onClick={() => {
+            methods.reset();
+            setGuests({ adults: 1, children: 0 });
+            setRoomCount(5);
+            onClear?.();
+          }}
         >
           Clear Filter
         </Button>
         <hr />
-        <Accordion type="single" collapsible defaultValue="tour-age">
-          <AccordionItem value="tour-age">
+        <Accordion type="single" collapsible defaultValue="amenities">
+          <AccordionItem value="amenities">
             <AccordionTrigger
               iconOpen={<AiOutlinePlus />}
               iconClosed={<AiOutlineMinus />}
               className="font-semibold text-base py-2 flex items-center gap-2"
             >
-              <ResponsiveH6>Facilities</ResponsiveH6>
+              <ResponsiveH6>Amenities</ResponsiveH6>
             </AccordionTrigger>
             <AccordionContent>
               <div className="space-y-3 mt-3">
-                {facilities.map((facilitie) => (
-                  <CustomInput
-                    key={facilitie.value}
-                    name={`facilities.${facilitie.value}`}
-                    type="checkbox"
-                    label={facilitie.label}
-                  />
-                ))}
+                {isLoadingAmenities ? (
+                  <span className="text-sm text-gray-500">Loading...</span>
+                ) : (
+                  amenitiesList?.map((amenity) => (
+                    <CustomInput
+                      key={amenity._id}
+                      name={`amenities.${amenity.code || amenity._id}`}
+                      type="checkbox"
+                      label={
+                        amenity.translations[language]?.name ||
+                        amenity.translations.en?.name ||
+                        amenity.code ||
+                        amenity._id
+                      }
+                    />
+                  ))
+                )}
               </div>
             </AccordionContent>
           </AccordionItem>

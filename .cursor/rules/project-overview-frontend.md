@@ -1,191 +1,81 @@
-# Frontend Project Overview (Travel Platform)
+# Frontend Project Overview (Source of Truth)
 
-## 1. Project Purpose
+## Purpose
 
-This frontend project is a travel platform that provides:
-- Hotel room booking
+This frontend is a travel platform SPA:
+
+- Hotel & room booking
 - Tour booking
-- Purchase of travel-related products
-- Display of famous local foods across Vietnamese provinces and cities
+- Travel product purchase
+- Vietnamese local food discovery
 
+Frontend focuses on:
 
-The frontend focuses on:
-- User experience
-- Performance
+- UX & performance
 - Scalability
-- Real-time interaction (booking status, notifications)
+- Realtime updates (booking, payment, notification, ...)
 
----
+Frontend is a consumer only.
+Business logic lives in backend.
 
-## 2. Tech Stack
+## Tech Stack
 
-### Core
-- ReactJS
-- TypeScript & JavaScript
-- Vite
-
-### UI & Styling
+- React (SPA) + Vite
+- TypeScript
 - TailwindCSS
-- shadcn/ui
-- Radix UI
-
-### Forms & Validation
-- React Hook Form (RHF)
-- Zod
-
-### State Management & Data Fetching
-- Zustand (global state)
-- TanStack Query (React Query)
+- shadcn/ui + Radix UI
+- React Hook Form + Zod
+- Zustand
+- TanStack Query V5
 - Axios
-
-### Realtime
 - Socket.IO (client)
 
----
+## Architecture Rules
 
-## 3. High-Level Architecture
-
-- Component-driven architecture
-- Feature-based folder organization
-- Strong separation between:
+- Component-driven
+- Feature-based folders
+- Clear separation:
   - UI components
-  - Business logic
-  - API communication
+  - Hooks
+  - Services (API)
   - Global state
 
-Frontend acts as:
-- Consumer of REST APIs
-- Consumer of WebSocket events
-- Stateless UI (business rules belong to backend)
+No backend logic in frontend.
 
----
+## State Management
 
-## 4. Project Folder Structure
+- Local state: UI-only
+- Zustand: client global state (auth, cart, booking draft)
+- TanStack Query: server state
+- Do NOT duplicate server state in Zustand
 
-```txt
-src/
-├───assets
-├───components
-│   └───ui
-├───constants
-├───features
-│   ├───auth
-│   ├───booking
-│   ├───language
-│   ├───payment
-│   ├───review
-│   ├───rooms
-│   ├───shared
-│   └───tours
-├───hooks
-├───interface
-├───layout
-├───lib
-├───mock
-├───pages
-│   ├───auth
-│   │   ├───login
-│   │   └───register
-│   ├───dashboard
-│   │   ├───my_account
-│   │   ├───room
-│   │   │   └───table
-│   │   └───tour
-│   ├───destination
-│   ├───home
-│   ├───payment
-│   ├───room
-│   └───tour
-├───sections
-│   ├───dashboard
-│   ├───home
-│   ├───room
-│   │   ├───components
-│   │   └───room-detail
-│   ├───shared
-│   └───tour
-│       ├───components
-│       └───tour-detail
-├───shared
-│   └───table
-├───stores
-└───utils
-5. State Management Strategy
-Local state: Component-level UI state
+## API & Data
 
-Zustand:
+- All API calls go through `services/`
+- Axios instance handles auth & error normalization
+- Never trust backend blindly
 
-Auth state
+## Realtime
 
-User profile
+- Socket logic is isolated
+- Explicit subscribe / unsubscribe
+- Socket data is untrusted input
 
-Cart / booking draft
+## UI Principles
 
-TanStack Query:
+- Tailwind utility-first
+- Use shadcn/ui & Radix primitives
+- Accessibility is mandatory
+- Avoid inline styles
 
-Server state
+## Non-goals
 
-Caching
+- No business rules
+- No payment logic
+- No DB logic
 
-Pagination
+## Cursor Instruction
 
-Background refetching
-
-Avoid duplicating server state in Zustand.
-
-6. API & Data Conventions
-All API calls go through services/
-
-Axios instance handles:
-
-Base URL
-
-Auth headers
-
-Error normalization
-
-Use RHF
-
-Validate with Zod
-
-Never trust backend blindly
-
-7. Realtime (Socket.IO)
-Socket used for:
-
-Booking status updates
-
-Payment status
-
-Notifications
-
-Socket logic is isolated inside sockets/
-
-Components subscribe/unsubscribe explicitly
-
-8. UI Principles
-Use shadcn/ui + Radix UI primitives
-
-Prefer composition over customization
-
-Avoid inline styles
-
-Tailwind utility-first approach
-
-Accessibility is mandatory
-
-9. Non-Goals (Frontend)
-No direct business rule implementation
-
-No database logic
-
-No payment logic beyond UI flow
-
-10. Cursor Instructions
-Always follow this file as the source of truth for frontend architecture
-
-Do not introduce new libraries without justification
-
-Respect folder responsibilities
-
-Prefer existing hooks, services, and patterns
+- Always treat this file as frontend source of truth
+- Follow existing patterns & folders
+- Do not add new libraries casually

@@ -2,6 +2,8 @@ import React from 'react';
 import { Card } from '@/components/ui/card';
 import { FaBed, FaUserGroup } from 'react-icons/fa6';
 import type { Room } from '@/features/rooms/types';
+import { Link } from 'react-router-dom';
+import { ROUTES } from '@/constants/router';
 
 interface RoomCardProps {
   item: Room;
@@ -103,9 +105,12 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi' }) => {
         )}
 
         {/* CTA */}
-        <button className="text-sm font-semibold tracking-wide uppercase flex items-center gap-2 hover:gap-3 transition-all">
+        <Link
+          to={ROUTES.ROOM.DETAIL.replace(':id', item._id ?? item.slug)}
+          className="text-sm font-semibold tracking-wide uppercase flex items-center gap-2 hover:gap-3 transition-all text-blue-600 hover:text-blue-700"
+        >
           View Detail <span>→</span>
-        </button>
+        </Link>
       </div>
     </Card>
   );
