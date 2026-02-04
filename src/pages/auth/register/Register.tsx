@@ -84,21 +84,21 @@ const RegisterPage = () => {
 
     {
       name: 'phone',
-      label: 'Phone Number',
-      placeholder: 'Enter phone',
+      label: t('input.field_label.phone'),
+      placeholder: t('input.placeholder.phone'),
       gridClass: 'col-span-12 md:col-span-4',
     },
     {
       name: 'birth',
-      label: 'Birth Date',
-      placeholder: 'Enter ZIP',
+      label: t('input.field_label.birth'),
+      placeholder: t('input.placeholder.birth'),
       type: 'date',
       gridClass: 'col-span-12 md:col-span-8',
     },
     {
       name: 'address',
-      label: 'Address',
-      placeholder: 'Enter address',
+      label: t('input.field_label.address'),
+      placeholder: t('input.placeholder.address'),
       gridClass: 'col-span-12 md:col-span-12',
     },
   ];
@@ -106,14 +106,12 @@ const RegisterPage = () => {
   return (
     <MainLayout>
       <div className="bg-background_paleGray p-32 text-center space-y-3">
-        <ResponsiveH1 className="font-dm-serif-display">Register</ResponsiveH1>
+        <ResponsiveH1 className="font-dm-serif-display">{t('auth.register_title')}</ResponsiveH1>
       </div>
       <Container className="py-20 px-10 max-w-[1000px]">
         <div className="flex flex-col gap-6">
           <ResponsiveH6 className="text-paleGray font-normal">
-            After creating an account, you'll be able to track your payment
-            status, track the confirmation and you can also rate the tour after
-            you finished the tour.
+            {t('auth.register_desc')}
           </ResponsiveH6>
           <FormProvider {...methods}>
             <form
@@ -129,7 +127,7 @@ const RegisterPage = () => {
                       label={input.label}
                       placeHolder={input.placeholder}
                       size={input.size || 'lg'}
-                      rules={{ required: 'Trường này bắt buộc' }}
+                      rules={{ required: t('common.field_required') }}
                     />
                   </div>
                 ))}
@@ -144,7 +142,7 @@ const RegisterPage = () => {
 
         <div className="flex flex-col gap-3 items-center">
           <ResponsiveH5 className="font-dm-serif-display font-bold">
-            Already a member?
+            {t('auth.already_member')}
           </ResponsiveH5>
           <P
             onClick={() => navigate(ROUTES.LOGIN)}

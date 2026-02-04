@@ -1,5 +1,11 @@
 export const ROUTES = {
   HOME: '/',
+  /** List parent - children: rooms, hotels, foods, shop */
+  LIST: '/list',
+  LIST_ROOMS: '/list/rooms',
+  LIST_HOTELS: '/list/hotels',
+  LIST_FOODS: '/list/foods',
+  LIST_SHOP: '/list/shop',
   DESTINATION: {
     INDEX: '/destination',
     SEARCH: '/destination/search',
@@ -13,6 +19,10 @@ export const ROUTES = {
     INDEX: '/room',
     SEARCH: '/room/search',
     DETAIL: '/room/:id',
+  },
+  HOTEL: {
+    INDEX: '/hotel',
+    DETAIL: '/hotel/:id',
   },
   DASHBOARD: {
     INDEX: '/dashboard',
@@ -33,6 +43,12 @@ export const ROUTES = {
     TOUR_REVIEWS: '/dashboard/tour-reviews',
     TOUR_WISHLIST: '/dashboard/tour-wishlist',
   },
+  /** Pages (Header dropdown) */
+  ABOUT_US: '/about-us',
+  CONTACT: '/contact',
+  OUR_SERVICES: '/our-services',
+  TEAM: '/team',
+  GALLERY: '/gallery',
   LOGIN: '/login',
   REGISTER: '/register',
   BOOKING_PAYMENT: '/bookings/:id/payment',

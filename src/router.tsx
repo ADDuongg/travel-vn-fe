@@ -1,8 +1,8 @@
+import { Navigate } from 'react-router-dom';
 import { Loadable } from './lib';
 import { ROUTES } from './constants/router';
 import type { RouteConfig } from './interface/commons';
 import DashboardLayout from './layout/DashboardLayout';
-import RoomListPage from '@pages/room/RoomList';
 
 const HomePage = Loadable(() => import('@/pages/home/Home'));
 const LoginPage = Loadable(() => import('@/pages/auth/login/Login'));
@@ -10,11 +10,13 @@ const DestinationSearchPage = Loadable(
   () => import('@/pages/destination/DestinationSearch'),
 );
 const RegisterPage = Loadable(() => import('@/pages/auth/register/Register'));
-const TourSearchPage = Loadable(() => import('@/pages/tour/TourSearch'));
-const RoomSearchPage = Loadable(() => import('@/pages/room/RoomSearch'));
 const TourPage = Loadable(() => import('@/pages/tour/Tour'));
 const TourDetailPage = Loadable(() => import('@/pages/tour/TourDetail'));
 const RoomDetailPage = Loadable(() => import('@/pages/room/RoomDetail'));
+const ListLayout = Loadable(() => import('@/layout/ListLayout'));
+const RoomListPage = Loadable(() => import('@/pages/list/RoomListPage'));
+const HotelListPage = Loadable(() => import('@/pages/list/HotelListPage'));
+const HotelDetailPage = Loadable(() => import('@/pages/hotel/HotelDetail'));
 const DashboardOverviewPage = Loadable(
   () => import('@pages/dashboard/my_account/DashboardOverviewPage'),
 );
@@ -45,6 +47,12 @@ const PaymentResultPage = Loadable(
 const MyBookingDetailPage = Loadable(
   () => import('@pages/dashboard/room/RoomBookingDetail'),
 );
+const AboutUsPage = Loadable(() => import('@/pages/about/AboutUs'));
+const ContactPage = Loadable(() => import('@/pages/contact/Contact'));
+const OurServicesPage = Loadable(() => import('@/pages/our-services/OurServices'));
+const TeamPage = Loadable(() => import('@/pages/team/Team'));
+const GalleryPage = Loadable(() => import('@/pages/gallery/Gallery'));
+
 export const routes: RouteConfig[] = [
   {
     path: ROUTES.HOME,
@@ -103,12 +111,34 @@ export const routes: RouteConfig[] = [
     element: <DestinationSearchPage />,
   },
   {
-    path: ROUTES.TOUR.INDEX,
-    element: <TourPage />,
+    path: ROUTES.LIST,
+    element: <ListLayout />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to={ROUTES.LIST_ROOMS} replace />,
+      },
+      {
+        path: 'rooms',
+        element: <RoomListPage />,
+      },
+      {
+        path: 'hotels',
+        element: <HotelListPage />,
+      },
+    ],
   },
   {
     path: ROUTES.TOUR.SEARCH,
-    element: <TourSearchPage />,
+    element: <Navigate to={ROUTES.LIST_ROOMS} replace />,
+  },
+  {
+    path: ROUTES.ROOM.SEARCH,
+    element: <Navigate to={ROUTES.LIST_ROOMS} replace />,
+  },
+  {
+    path: ROUTES.TOUR.INDEX,
+    element: <TourPage />,
   },
   {
     path: ROUTES.TOUR.DETAIL,
@@ -116,15 +146,39 @@ export const routes: RouteConfig[] = [
   },
   {
     path: ROUTES.ROOM.INDEX,
-    element: <RoomListPage />,
+    element: <Navigate to={ROUTES.LIST_ROOMS} replace />,
   },
   {
     path: ROUTES.ROOM.DETAIL,
     element: <RoomDetailPage />,
   },
   {
-    path: ROUTES.ROOM.SEARCH,
-    element: <RoomSearchPage />,
+    path: ROUTES.HOTEL.DETAIL,
+    element: <HotelDetailPage />,
+  },
+  {
+    path: ROUTES.HOTEL.INDEX,
+    element: <Navigate to={ROUTES.LIST_HOTELS} replace />,
+  },
+  {
+    path: ROUTES.ABOUT_US,
+    element: <AboutUsPage />,
+  },
+  {
+    path: ROUTES.CONTACT,
+    element: <ContactPage />,
+  },
+  {
+    path: ROUTES.OUR_SERVICES,
+    element: <OurServicesPage />,
+  },
+  {
+    path: ROUTES.TEAM,
+    element: <TeamPage />,
+  },
+  {
+    path: ROUTES.GALLERY,
+    element: <GalleryPage />,
   },
   {
     path: ROUTES.LOGIN,

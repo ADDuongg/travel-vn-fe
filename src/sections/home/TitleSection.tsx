@@ -44,13 +44,13 @@ export const TitleSection = () => {
   };
 
   const roleOptions = [
-    { label: 'Any', value: 'any' },
-    { label: 'Admin', value: 'admin' },
-    { label: 'User', value: 'user' },
-    { label: 'Guest', value: 'guest' },
+    { label: t('home_page.any'), value: 'any' },
+    { label: t('home_page.admin'), value: 'admin' },
+    { label: t('home_page.user'), value: 'user' },
+    { label: t('home_page.guest'), value: 'guest' },
   ];
   const destinationOptions = [
-    { label: 'Any', value: 'any' },
+    { label: t('home_page.any'), value: 'any' },
     { label: 'Vietnam', value: 'vietnam' },
     { label: 'Thailand', value: 'thailand' },
     { label: 'Cambodia', value: 'cambodia' },

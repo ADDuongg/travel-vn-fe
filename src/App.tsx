@@ -23,12 +23,12 @@ function App() {
       <h1 className="text-3xl font-bold underline text-red-400">
         {t('greeting')}
       </h1>
-      <Button onClick={() => i18n.changeLanguage('vi')}>Tiếng Việt</Button>
-      <Button onClick={() => i18n.changeLanguage('en')}>English</Button>
-      <h1>Realtime Room Chat</h1>
+      <Button onClick={() => i18n.changeLanguage('vi')}>{t('buttons.language_vi')}</Button>
+      <Button onClick={() => i18n.changeLanguage('en')}>{t('buttons.language_en')}</Button>
+      <h1>{t('app.realtime_chat')}</h1>
       <select value={roomId} onChange={(e) => setRoomId(e.target.value)}>
-        <option value="room1">Phòng 1</option>
-        <option value="room2">Phòng 2</option>
+        <option value="room1">{t('app.room_1')}</option>
+        <option value="room2">{t('app.room_2')}</option>
       </select>
       <ChatRoom roomId={roomId} />
       <DragLineTwoBox />

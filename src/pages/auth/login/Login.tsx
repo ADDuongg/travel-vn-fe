@@ -21,7 +21,7 @@ const LoginPage = () => {
   return (
     <MainLayout>
       <div className="bg-background_paleGray p-32 text-center space-y-3">
-        <ResponsiveH1 className="font-dm-serif-display">Login</ResponsiveH1>
+        <ResponsiveH1 className="font-dm-serif-display">{t('auth.login_title')}</ResponsiveH1>
       </div>
       <Container className="py-20 px-10 max-w-[1000px]">
         <div className="flex flex-col gap-6">
@@ -55,20 +55,20 @@ const LoginPage = () => {
           </FormProvider>
           <div className="flex justify-end">
             <P className="text-primary text-sm font-bold cursor-pointer">
-              Forget password?
+              {t('auth.forget_password')}
             </P>
           </div>
         </div>
         <Separator className="my-16" />
         <div className="flex flex-col gap-3 items-center">
           <ResponsiveH5 className="font-dm-serif-display font-bold">
-            DO NOT HAVE AN ACCOUNT?
+            {t('auth.no_account')}
           </ResponsiveH5>
           <P
             onClick={() => navigate(ROUTES.REGISTER)}
             className="text-primary text-sm font-bold cursor-pointer"
           >
-            CREATE AN ACCOUNT
+            {t('auth.create_account')}
           </P>
         </div>
       </Container>

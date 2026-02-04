@@ -6,7 +6,7 @@ import type { Paginate } from './api';
 export interface RouteConfig {
   index?: boolean;
   path?: string;
-  element: React.ReactElement;
+  element: React.ReactNode;
   rolesAllowed?: EnumRole[];
   children?: RouteConfig[];
   handle?: {

@@ -45,37 +45,42 @@ const DrawerHeader = () => {
       </DrawerTrigger>
       <DrawerContent data-vaul-drawer-direction={'right'}>
         <DrawerHeaderPrimitive>
-          <DrawerTitle>Menu</DrawerTitle>
-          <DrawerDescription>Choose your options</DrawerDescription>
+          <DrawerTitle>{t('drawer.menu')}</DrawerTitle>
+          <DrawerDescription>{t('drawer.choose_options')}</DrawerDescription>
         </DrawerHeaderPrimitive>
 
         <div className="space-y-4 p-4">
           {HeaderItem.map((item) => {
-            const isActive = location.pathname === item.path;
+            const isActive = item.path
+              ? location.pathname === item.path
+              : !!item.children?.some((c) => c.path && location.pathname === c.path);
             return (
               <div key={item.name}>
-                <Link
-                  to={item.path || ''}
-                  className={`flex items-center justify-between text-sm hover:text-black font-semibold ${
-                    isActive ? 'text-black font-bold' : 'text-paleGray'
-                  }`}
-                  onClick={(e) => {
-                    if (item.children) {
-                      e.preventDefault();
-                      toggleSubmenu(item.name);
-                    }
-                  }}
-                >
-                  <span>{t(item.label)}</span>
-
-                  {item.children && (
+                {item.children ? (
+                  <button
+                    type="button"
+                    className={`flex items-center justify-between w-full text-left text-sm hover:text-black font-semibold ${
+                      isActive ? 'text-black font-bold' : 'text-paleGray'
+                    }`}
+                    onClick={() => toggleSubmenu(item.name)}
+                  >
+                    <span>{t(item.label)}</span>
                     <FiChevronRight
                       className={`ml-2 transition-transform duration-200 ${
                         openItem === item.name ? 'rotate-90' : ''
                       }`}
                     />
-                  )}
-                </Link>
+                  </button>
+                ) : (
+                  <Link
+                    to={item.path || ''}
+                    className={`flex items-center justify-between text-sm hover:text-black font-semibold ${
+                      isActive ? 'text-black font-bold' : 'text-paleGray'
+                    }`}
+                  >
+                    <span>{t(item.label)}</span>
+                  </Link>
+                )}
 
                 {item.children && openItem === item.name && (
                   <ul className="mt-2 space-y-2 pl-4">

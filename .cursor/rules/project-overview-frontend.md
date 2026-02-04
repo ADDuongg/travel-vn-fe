@@ -76,6 +76,12 @@ No backend logic in frontend.
 
 ## Cursor Instruction
 
+## Translation
+
+- Always translation text value
+
+---
+
 - Always treat this file as frontend source of truth
 - Follow existing patterns & folders
 - Do not add new libraries casually

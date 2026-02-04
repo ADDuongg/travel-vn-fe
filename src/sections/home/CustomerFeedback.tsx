@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Ratings } from '@/components/ui/rating';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { feedbacks } from '@/mock';
+import { useTranslation } from 'react-i18next';
 const FeedbackCard = ({
   feedback,
   highlight,
@@ -53,6 +54,7 @@ const FeedbackCard = ({
 );
 
 export const CustomerFeedback: React.FC = () => {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState(1); // center index
   const [direction, setDirection] = useState<'left' | 'right' | null>(null);
   const isPC = useMediaQuery('(min-width: 1280px)');
@@ -108,9 +110,7 @@ export const CustomerFeedback: React.FC = () => {
   return (
     <section className="w-full py-16 px-2 md:px-8 bg-[#F6F6F6]">
       <h2 className="text-center text-3xl md:text-4xl font-dm-serif-display font-bold mb-12 text-[#231942]">
-        What our customers are
-        <br />
-        saying about us
+        {t('home_page.customer_feedback_title')}
       </h2>
       <div className="max-w-[1400px] mx-auto flex flex-col items-center">
         <div

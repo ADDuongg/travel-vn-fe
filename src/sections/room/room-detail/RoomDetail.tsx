@@ -6,6 +6,8 @@ import { useLocalStorage } from 'usehooks-ts';
 
 const RoomDetail = ({ room }: { room: Room }) => {
   const [value] = useLocalStorage('i18nextLng', EnumLanguage.DEFAULT);
+  console.log('room', room);
+
   return (
     <section id="room-detail" className="mt-6">
       {/* Price Section */}

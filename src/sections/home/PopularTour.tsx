@@ -12,7 +12,10 @@ import TourCard from '@components/TourCard';
 import { ButtonNavigate } from '@components/ui/button';
 import { chunkArray } from '@utils/index';
 import { Title } from '@components/ui/typography';
+import { useTranslation } from 'react-i18next';
+
 export const PopularTour = () => {
+  const { t } = useTranslation();
   const isPC = useMediaQuery('(min-width: 1280px)');
   const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1279px)');
 
@@ -23,7 +26,7 @@ export const PopularTour = () => {
     <Container>
       <div className="flex flex-col gap-10 items-center relative z-[2] w-full text-center">
         <Title>
-          Popular <span className="text-primary">Tours</span>
+          {t('home_page.popular_tours_prefix', 'Popular ')}<span className="text-primary">{t('home_page.popular_tours_highlight', 'Tours')}</span>
         </Title>
         <Carousel
           className="h-[400px] md:h-[500px]"
@@ -52,7 +55,7 @@ export const PopularTour = () => {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-        <ButtonNavigate label="All Destinations" />
+        <ButtonNavigate label={t('buttons.all_destinations')} />
       </div>
     </Container>
   );

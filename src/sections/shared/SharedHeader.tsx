@@ -9,6 +9,7 @@ interface DetailItem {
 
 interface SharedHeaderProps {
   title: string | React.ReactNode;
+  subtitle?: string | React.ReactNode;
   rating?: number;
   reviewCount?: number;
   details?: DetailItem[];
@@ -17,6 +18,7 @@ interface SharedHeaderProps {
 
 const SharedHeader: React.FC<SharedHeaderProps> = ({
   title,
+  subtitle,
   rating,
   reviewCount,
   details = [],
@@ -26,7 +28,9 @@ const SharedHeader: React.FC<SharedHeaderProps> = ({
     <section className="mt-20">
       <div className="grid gap-5 mb-6">
         <ResponsiveH1 className="font-dm-serif-display">{title}</ResponsiveH1>
-
+        {subtitle && (
+          <p className="text-muted-foreground text-sm">{subtitle}</p>
+        )}
         {(rating || reviewCount) && (
           <div className="flex items-center gap-2 mb-1">
             {rating && (

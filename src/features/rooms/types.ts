@@ -1,3 +1,22 @@
+/** Province ref (populated in hotelId) */
+export interface ProvinceRef {
+  _id: string;
+  name: { vi: string; en: string };
+  code: string;
+  slug: string;
+  fullName?: { vi: string; en: string };
+}
+
+/** Hotel ref (populated in room response) */
+export interface HotelRef {
+  _id: string;
+  slug: string;
+  translations: Record<string, { name?: string; [key: string]: unknown }>;
+  provinceId: string | ProvinceRef;
+  contact?: { phone?: string; email?: string; website?: string };
+  location?: { lat?: number; lng?: number };
+}
+
 export interface Room {
   _id: string;
 
@@ -73,6 +92,9 @@ export interface Room {
     total: number;
   };
 
+  /** Hotel (populated object) - room.hotelId.translations[lang].name, room.hotelId.provinceId.name[lang] */
+  hotelId?: string | HotelRef;
+
   /* amenities */
   amenities: {
     translations: {
@@ -96,6 +118,7 @@ export interface RoomQueryParams {
   minPrice?: number;
   maxPrice?: number;
   adults?: number;
+  children?: number;
   keyword?: string;
   /** Language for keyword search (en, vi) */
   lang?: string;
@@ -109,6 +132,8 @@ export interface RoomQueryParams {
   amenities?: string[];
   /** Room sizes in m² */
   roomSize?: number[];
+  /** Filter by province (via hotel) */
+  provinceId?: string;
   /** Hotel IDs (destinations) */
   hotelIds?: string[];
 }

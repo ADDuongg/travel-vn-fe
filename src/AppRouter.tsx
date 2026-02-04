@@ -22,8 +22,9 @@ const transformRoutes = (
   configs: RouteConfig[],
   userRole: EnumRole | undefined,
 ): RouteObject[] => {
-  return configs.map(({ path, element, rolesAllowed, children }) => ({
-    path,
+  return configs.map(({ path, index, element, rolesAllowed, children }) => ({
+    ...(index !== undefined && { index }),
+    ...(path !== undefined && { path }),
     element: (
       <ErrorBoundary>
         <ProtectedRoute rolesAllowed={rolesAllowed} userRole={userRole}>
