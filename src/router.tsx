@@ -52,6 +52,7 @@ const ContactPage = Loadable(() => import('@/pages/contact/Contact'));
 const OurServicesPage = Loadable(() => import('@/pages/our-services/OurServices'));
 const TeamPage = Loadable(() => import('@/pages/team/Team'));
 const GalleryPage = Loadable(() => import('@/pages/gallery/Gallery'));
+const FoodDetailPage = Loadable(() => import('@/pages/food/FoodDetail'));
 
 export const routes: RouteConfig[] = [
   {
@@ -179,6 +180,10 @@ export const routes: RouteConfig[] = [
   {
     path: ROUTES.GALLERY,
     element: <GalleryPage />,
+  },
+  {
+    path: ROUTES.FOOD.DETAIL,
+    element: <FoodDetailPage />,
   },
   {
     path: ROUTES.LOGIN,

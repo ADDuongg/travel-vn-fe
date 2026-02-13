@@ -48,6 +48,11 @@ export const HeaderItem: HeaderItemType[] = [
     label: 'list',
     children: [
       {
+        name: 'tour_list',
+        label: 'tour_list',
+        path: ROUTES.TOUR.INDEX,
+      },
+      {
         name: 'room_list',
         label: 'room_list',
         path: ROUTES.LIST_ROOMS,

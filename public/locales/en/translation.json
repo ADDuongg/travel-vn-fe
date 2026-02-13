@@ -25,7 +25,10 @@
   "common": {
     "loading": "Loading...",
     "error": "Error loading rooms",
-    "field_required": "This field is required"
+    "field_required": "This field is required",
+    "all": "All",
+    "previous": "Previous",
+    "next": "Next"
   },
   "input": {
     "field_label": {
@@ -192,6 +195,50 @@
     "search": {
       "results": "{{count}} Hotels Found",
       "noResults": "No hotels found"
+    }
+  },
+  "tour": {
+    "page": {
+      "title": "Explore Tours",
+      "subtitle": "Discover unforgettable experiences across Vietnam"
+    },
+    "search": {
+      "results": "{{count}} tours found",
+      "noResults": "No tours found"
+    },
+    "pagination": { "page": "Page" },
+    "filter": {
+      "title": "Filter Tours",
+      "search": "Search",
+      "search_placeholder": "Tour name or code...",
+      "destination": "Destination",
+      "select_destination": "Select destination",
+      "departure": "Departure",
+      "select_departure": "Select departure",
+      "tour_type": "Tour Type",
+      "difficulty": "Difficulty",
+      "min_price": "Min Price (VND)",
+      "max_price": "Max Price (VND)",
+      "min_days": "Min Days",
+      "max_days": "Max Days",
+      "all_types": "All types",
+      "domestic": "Domestic",
+      "international": "International",
+      "daily": "Daily",
+      "any_difficulty": "Any",
+      "easy": "Easy",
+      "moderate": "Moderate",
+      "challenging": "Challenging",
+      "difficult": "Difficult"
+    },
+    "sort": {
+      "label": "Sort By",
+      "newest": "Newest",
+      "price_asc": "Price: Low to High",
+      "price_desc": "Price: High to Low",
+      "duration_asc": "Duration: Shortest",
+      "duration_desc": "Duration: Longest",
+      "rating": "Rating"
     }
   },
   "room": {

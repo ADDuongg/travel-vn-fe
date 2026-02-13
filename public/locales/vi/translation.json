@@ -25,7 +25,10 @@
   "common": {
     "loading": "Đang tải...",
     "error": "Lỗi tải phòng",
-    "field_required": "Trường này bắt buộc"
+    "field_required": "Trường này bắt buộc",
+    "all": "Tất cả",
+    "previous": "Trước",
+    "next": "Sau"
   },
   "input": {
     "field_label": {
@@ -191,6 +194,50 @@
     "search": {
       "results": "Tìm thấy {{count}} khách sạn",
       "noResults": "Không tìm thấy khách sạn"
+    }
+  },
+  "tour": {
+    "page": {
+      "title": "Khám phá Tour",
+      "subtitle": "Trải nghiệm tuyệt vời trên khắp Việt Nam"
+    },
+    "search": {
+      "results": "Tìm thấy {{count}} tour",
+      "noResults": "Không tìm thấy tour"
+    },
+    "pagination": { "page": "Trang" },
+    "filter": {
+      "title": "Lọc Tour",
+      "search": "Tìm kiếm",
+      "search_placeholder": "Tên hoặc mã tour...",
+      "destination": "Điểm đến",
+      "select_destination": "Chọn điểm đến",
+      "departure": "Khởi hành",
+      "select_departure": "Chọn nơi khởi hành",
+      "tour_type": "Loại tour",
+      "difficulty": "Độ khó",
+      "min_price": "Giá tối thiểu (VND)",
+      "max_price": "Giá tối đa (VND)",
+      "min_days": "Số ngày tối thiểu",
+      "max_days": "Số ngày tối đa",
+      "all_types": "Tất cả",
+      "domestic": "Trong nước",
+      "international": "Quốc tế",
+      "daily": "Tour ngày",
+      "any_difficulty": "Bất kỳ",
+      "easy": "Dễ",
+      "moderate": "Trung bình",
+      "challenging": "Khó",
+      "difficult": "Rất khó"
+    },
+    "sort": {
+      "label": "Sắp xếp",
+      "newest": "Mới nhất",
+      "price_asc": "Giá: Thấp đến cao",
+      "price_desc": "Giá: Cao đến thấp",
+      "duration_asc": "Thời lượng: Ngắn nhất",
+      "duration_desc": "Thời lượng: Dài nhất",
+      "rating": "Đánh giá"
     }
   },
   "room": {

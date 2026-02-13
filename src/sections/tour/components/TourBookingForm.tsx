@@ -4,13 +4,14 @@ import CustomInput from '@/components/CustomInput';
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { FaUserGroup } from 'react-icons/fa6';
 import { BsLightningFill } from 'react-icons/bs';
+import type { Tour } from '@/features/tours/catalog-types';
 
 type BookingFormValues = {
   date: string;
   people: string;
 };
 
-const TourBookingForm = () => {
+const TourBookingForm = ({ tour: _tour }: { tour?: Tour | null }) => {
   const methods = useForm<BookingFormValues>({
     defaultValues: {
       date: '',
@@ -76,7 +77,7 @@ const TourBookingForm = () => {
           </div>
         </div>
 
-        {/* Button row */}
+        {/* Button row - Explore Vietnam yellow CTA */}
         <div className="grid grid-cols-[32px_1fr] gap-3 items-center">
           <IconWithLine icon={<BsLightningFill size={24} />} />
           <div className="pl-3">

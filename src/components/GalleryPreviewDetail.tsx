@@ -4,6 +4,7 @@ import { BsImages } from 'react-icons/bs';
 export function GalleryPreviewDetail({
   gallery,
   thumbnail,
+  overlayLabel,
 }: {
   gallery: {
     _id: string;
@@ -16,18 +17,25 @@ export function GalleryPreviewDetail({
     url: string;
     alt?: string;
   };
+  /** e.g. "View all 24 photos" */
+  overlayLabel?: string;
 }) {
   return (
     <div className="grid grid-cols-12 gap-4">
-      {/* Ảnh lớn (index 0) */}
+      {/* Main image (left) - Explore Vietnam style */}
       <div className="relative col-span-12 md:col-span-8 rounded-xl overflow-hidden ring-1 ring-border aspect-[16/9]">
         <img
-          src={thumbnail?.url ?? gallery[0].url}
-          alt={thumbnail?.alt ?? gallery[0].alt}
+          src={thumbnail?.url ?? gallery[0]?.url}
+          alt={thumbnail?.alt ?? gallery[0]?.alt}
           className="w-full h-full object-cover"
         />
+        {overlayLabel && (
+          <div className="absolute bottom-4 left-4 bg-black/50 text-white text-sm font-medium px-3 py-2 rounded-md">
+            {overlayLabel}
+          </div>
+        )}
 
-        <div className="absolute bottom-4 left-4 flex gap-2">
+        <div className="absolute bottom-4 right-4 flex gap-2">
           <button
             type="button"
             className="inline-flex items-center gap-2 rounded-md border border-input px-3 py-2 text-sm font-medium bg-background shadow-sm hover:bg-accent hover:text-accent-foreground"

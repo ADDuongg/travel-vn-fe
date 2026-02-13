@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card } from '@/components/ui/card';
 import {
   Accordion,
   AccordionItem,
@@ -10,9 +11,9 @@ import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 const TourFAQ: React.FC = () => {
   return (
     <section id="faq" className="mt-10">
-      <h2 className="text-xl font-bold mb-4">FAQ</h2>
-
-      <Accordion type="single" collapsible className="w-full">
+      <Card className="p-6 rounded-2xl">
+        <h2 className="text-xl font-bold mb-4">FAQ</h2>
+        <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="faq-1" className="">
           <AccordionTrigger
             className="font-semibold text-base"
@@ -85,6 +86,7 @@ const TourFAQ: React.FC = () => {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
+      </Card>
     </section>
   );
 };

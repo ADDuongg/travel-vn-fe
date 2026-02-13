@@ -1,7 +1,7 @@
 import type { Hotel } from '@/features/hotels/types';
-import SharedHeader from '@/sections/shared/SharedHeader';
 import { useLanguage } from '@/hooks/useLanguage';
 import { FaStar, FaLocationDot } from 'react-icons/fa6';
+import { ResponsiveH1 } from '@/components/ui/typography';
 
 function getProvinceName(hotel: Hotel, lang: string): string | null {
   const province = hotel.provinceId;
@@ -23,6 +23,7 @@ const HotelHeader = ({ hotel }: { hotel: Hotel }) => {
     hotel.translations?.vi?.address ??
     hotel.translations?.en?.address;
   const provinceName = getProvinceName(hotel, lang);
+  const locationLine = [address, provinceName].filter(Boolean).join(', ') || null;
 
   const gallery = hotel.gallery ?? [];
   const thumbnail = hotel.thumbnail;
@@ -38,68 +39,76 @@ const HotelHeader = ({ hotel }: { hotel: Hotel }) => {
         alt: g.alt,
       }));
 
-  const detailItems = [
-    ...(hotel.starRating
-      ? [
-          {
-            icon: <FaStar size={20} className="text-amber-500 fill-amber-500" />,
-            value: <span>{hotel.starRating} Star Hotel</span>,
-          },
-        ]
-      : []),
-    ...(provinceName || address
-      ? [
-          {
-            icon: <FaLocationDot size={20} />,
-            value: (
-              <span>
-                {[address, provinceName].filter(Boolean).join(', ')}
-              </span>
-            ),
-          },
-        ]
-      : []),
-  ];
-
   return (
-    <SharedHeader
-      title={name}
-      subtitle={provinceName ?? undefined}
-      rating={undefined}
-      reviewCount={undefined}
-      details={detailItems}
-      GalleryComponent={
-        images.length > 0 ? (
-          <div className="grid grid-cols-12 gap-4 mt-4">
-            <div className="col-span-12 md:col-span-8 rounded-xl overflow-hidden ring-1 ring-border aspect-[16/9]">
-              <img
-                src={images[0].url}
-                alt={images[0].alt ?? name}
-                className="w-full h-full object-cover"
-              />
+    <section className="mt-20">
+      {/* Hero: badge, title, address */}
+      <section className="mb-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              {hotel.starRating != null && hotel.starRating > 0 && (
+                <span className="bg-primary/20 text-primary px-4 py-1.5 rounded-full text-sm font-semibold flex items-center gap-1.5">
+                  <FaStar className="size-[18px] fill-current" />
+                  {hotel.starRating} Star Hotel
+                </span>
+              )}
             </div>
-            <div className="col-span-12 md:col-span-4 grid grid-cols-2 gap-4">
-              {images.slice(1, 5).map((img) => (
-                <div
-                  key={img._id}
-                  className="rounded-xl overflow-hidden ring-1 ring-border aspect-square"
-                >
+            <ResponsiveH1 className="font-bold tracking-tight text-foreground mb-2">
+              {name}
+            </ResponsiveH1>
+            {locationLine && (
+              <p className="text-lg text-muted-foreground flex items-center gap-2">
+                <FaLocationDot className="size-5 text-primary shrink-0" />
+                {locationLine}
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Image gallery (bento: main + 2x2 grid) */}
+      {images.length > 0 && (
+        <section className="grid grid-cols-12 gap-4 mb-16 min-h-[320px] md:h-[500px]">
+          <div className="col-span-12 md:col-span-8 h-full min-h-[240px] md:min-h-0">
+            <img
+              src={images[0].url}
+              alt={images[0].alt ?? name}
+              className="w-full h-full object-cover rounded-xl shadow-sm border border-border"
+            />
+          </div>
+          <div className="col-span-12 md:col-span-4 grid grid-cols-2 grid-rows-2 gap-4 h-full min-h-[240px] md:min-h-0">
+            {images.slice(1, 5).map((img, idx) => (
+              <div key={img._id} className="relative overflow-hidden rounded-xl border border-border">
+                {idx === 3 && images.length > 5 ? (
+                  <>
+                    <img
+                      src={img.url}
+                      alt={img.alt ?? ''}
+                      className="w-full h-full object-cover min-h-[120px]"
+                    />
+                    <div className="absolute inset-0 bg-black/40 rounded-xl flex items-center justify-center text-white font-semibold text-sm">
+                      +{images.length - 5} Photos
+                    </div>
+                  </>
+                ) : (
                   <img
                     src={img.url}
                     alt={img.alt ?? ''}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover min-h-[120px]"
                   />
-                </div>
-              ))}
-            </div>
+                )}
+              </div>
+            ))}
           </div>
-        ) : (
-          <div className="mt-4 aspect-[16/9] rounded-xl bg-slate-200 flex items-center justify-center">
-            <span className="text-gray-500">No images</span>
-          </div>
-        )
-      }
-    />
+        </section>
+      )}
+
+      {images.length === 0 && (
+        <div className="mb-16 aspect-[16/9] rounded-xl bg-muted flex items-center justify-center">
+          <span className="text-muted-foreground">No images</span>
+        </div>
+      )}
+    </section>
   );
 };
 

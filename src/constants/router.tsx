@@ -13,7 +13,7 @@ export const ROUTES = {
   TOUR: {
     INDEX: '/tour',
     SEARCH: '/tour/search',
-    DETAIL: '/tour/:id',
+    DETAIL: '/tour/:slug',
   },
   ROOM: {
     INDEX: '/room',
@@ -23,6 +23,10 @@ export const ROUTES = {
   HOTEL: {
     INDEX: '/hotel',
     DETAIL: '/hotel/:id',
+  },
+  FOOD: {
+    INDEX: '/food',
+    DETAIL: '/food/:slug',
   },
   DASHBOARD: {
     INDEX: '/dashboard',
