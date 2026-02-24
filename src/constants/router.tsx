@@ -14,6 +14,8 @@ export const ROUTES = {
     INDEX: '/tour',
     SEARCH: '/tour/search',
     DETAIL: '/tour/:slug',
+    /** Tra cứu đơn theo mã (public) */
+    BOOKING_LOOKUP: '/tour/booking/lookup',
   },
   ROOM: {
     INDEX: '/room',
@@ -43,6 +45,8 @@ export const ROUTES = {
     ROOM_REVIEWS: '/dashboard/room-reviews',
     ROOM_WISHLIST: '/dashboard/room-wishlist',
     TOUR_BOOKINGS: '/dashboard/tour-bookings',
+    /** Chi tiết 1 đơn tour (theo mã) */
+    TOUR_BOOKINGS_DETAIL: '/dashboard/tour-bookings/:code',
     TOUR_INVOICES: '/dashboard/tour-invoices',
     TOUR_REVIEWS: '/dashboard/tour-reviews',
     TOUR_WISHLIST: '/dashboard/tour-wishlist',

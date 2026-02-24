@@ -29,6 +29,12 @@ const ChangePasswordPage = Loadable(
 const TourBookingPage = Loadable(
   () => import('@pages/dashboard/tour/TourBookingPage'),
 );
+const TourBookingDetailPage = Loadable(
+  () => import('@pages/dashboard/tour/TourBookingDetailPage'),
+);
+const TourBookingLookupPage = Loadable(
+  () => import('@pages/tour/TourBookingLookup'),
+);
 const RoomBookingPage = Loadable(
   () => import('@pages/dashboard/room/RoomBookingPage'),
 );
@@ -82,7 +88,12 @@ export const routes: RouteConfig[] = [
       {
         path: ROUTES.DASHBOARD.TOUR_BOOKINGS,
         element: <TourBookingPage />,
-        handle: { crumb: 'My Bookings' },
+        handle: { crumb: 'My Tour Bookings' },
+      },
+      {
+        path: ROUTES.DASHBOARD.TOUR_BOOKINGS_DETAIL,
+        element: <TourBookingDetailPage />,
+        handle: { crumb: 'Tour Booking Detail' },
       },
       {
         path: ROUTES.DASHBOARD.ROOM_BOOKINGS,
@@ -144,6 +155,10 @@ export const routes: RouteConfig[] = [
   {
     path: ROUTES.TOUR.DETAIL,
     element: <TourDetailPage />,
+  },
+  {
+    path: ROUTES.TOUR.BOOKING_LOOKUP,
+    element: <TourBookingLookupPage />,
   },
   {
     path: ROUTES.ROOM.INDEX,

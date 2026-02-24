@@ -24,3 +24,8 @@ export async function getMyBookings(params: {
 export async function getBookingById(id: string) {
   return api.get<Booking>(`/api/v1/bookings/me/${id}`);
 }
+
+/** PATCH /api/v1/bookings/:id/cancel – User/Admin, Bearer required */
+export async function cancelBooking(id: string) {
+  return api.patch<Booking>(`/api/v1/bookings/${id}/cancel`);
+}

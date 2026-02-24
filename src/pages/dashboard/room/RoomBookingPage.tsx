@@ -4,9 +4,9 @@ import type { Booking } from '@/features/shared/types';
 import DataTable from '@/shared/table/DataTable';
 import type { Paginate, SortParam } from '@interface/api';
 import type { RowSelectionState, SortingState } from '@tanstack/react-table';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useColumns } from './table/room-booking-columns';
-import { useNavigate } from 'react-router';
 
 type BookingStatusFilter =
   | 'all'
@@ -16,34 +16,35 @@ type BookingStatusFilter =
   | 'CANCELLED'
   | 'COMPLETED';
 
-const STATUS_ITEMS: { key: BookingStatusFilter; label: string }[] = [
-  { key: 'all', label: 'All' },
-  { key: 'PENDING', label: 'Pending' },
-  { key: 'APPROVED', label: 'Approved' },
-  { key: 'COMPLETED', label: 'Completed' },
-  { key: 'REJECTED', label: 'Rejected' },
-  { key: 'CANCELLED', label: 'Cancelled' },
+const STATUS_KEYS: BookingStatusFilter[] = [
+  'all',
+  'PENDING',
+  'APPROVED',
+  'COMPLETED',
+  'REJECTED',
+  'CANCELLED',
 ];
 
 const StatusFilterBar: React.FC<{
   active: BookingStatusFilter;
   onChange: (s: BookingStatusFilter) => void;
-}> = ({ active, onChange }) => (
+  labels: Record<BookingStatusFilter, string>;
+}> = ({ active, onChange, labels }) => (
   <div className="text-sm">
-    {STATUS_ITEMS.map((s, i) => (
-      <React.Fragment key={s.key}>
+    {STATUS_KEYS.map((s, i) => (
+      <React.Fragment key={s}>
         <button
           type="button"
-          onClick={() => onChange(s.key)}
+          onClick={() => onChange(s)}
           className={
-            active === s.key
+            active === s
               ? 'text-primary underline underline-offset-4'
               : 'text-muted-foreground hover:text-foreground'
           }
         >
-          {s.label}
+          {labels[s]}
         </button>
-        {i < STATUS_ITEMS.length - 1 && (
+        {i < STATUS_KEYS.length - 1 && (
           <span className="mx-2 text-muted-foreground">|</span>
         )}
       </React.Fragment>
@@ -52,6 +53,19 @@ const StatusFilterBar: React.FC<{
 );
 
 const RoomBookingPage: React.FC = () => {
+  const { t } = useTranslation();
+  const statusLabels = useMemo(
+    (): Record<BookingStatusFilter, string> => ({
+      all: t('bookings.status_all'),
+      PENDING: t('bookings.status_pending'),
+      APPROVED: t('bookings.status_approved'),
+      REJECTED: t('bookings.status_rejected'),
+      CANCELLED: t('bookings.status_cancelled'),
+      COMPLETED: t('bookings.status_completed'),
+    }),
+    [t],
+  );
+
   const [status, setStatus] = useState<BookingStatusFilter>('all');
   const [pagination, setPagination] = useState<Paginate>({
     pageIndex: 0,
@@ -74,15 +88,7 @@ const RoomBookingPage: React.FC = () => {
     sort: sortParams,
   });
 
-  const navigate = useNavigate();
-
-  const onPay = (row: Booking) => {
-    navigate(`/dashboard/room-bookings/${row._id}`);
-  };
-  const onDelete = (row: Booking) =>
-    console.log('Delete room booking:', row._id);
-
-  const columns = useColumns(onPay, onDelete);
+  const columns = useColumns();
   const emptyData = {
     data: [] as Booking[],
     meta: {
@@ -95,12 +101,14 @@ const RoomBookingPage: React.FC = () => {
 
   return (
     <div className="space-y-4">
+      <h2 className="text-lg font-semibold">{t('bookings.my_room_bookings')}</h2>
       <StatusFilterBar
         active={status}
         onChange={(s) => {
           setStatus(s);
           setPagination((p) => ({ ...p, pageIndex: 0 }));
         }}
+        labels={statusLabels}
       />
       <Separator />
 

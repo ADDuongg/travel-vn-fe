@@ -1,10 +1,9 @@
 import { useMemo } from 'react';
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, DollarSign, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { Booking } from '@/features/shared/types';
 import {
   Popover,
@@ -13,20 +12,46 @@ import {
 } from '@components/ui/popover';
 import { fmtDate, fmtMoney, getPaymentExpireAt } from '@utils/index';
 import { useCountdown } from '@hooks/useCountdown';
+import { ROUTES } from '@/constants/router';
 
-const MultiRoomPopover: React.FC<{
-  rooms: Booking['rooms'];
-}> = ({ rooms }) => {
+const STATUS_KEYS: Record<Booking['status'], string> = {
+  PENDING: 'pending',
+  APPROVED: 'approved',
+  REJECTED: 'rejected',
+  CANCELLED: 'cancelled',
+  COMPLETED: 'completed',
+};
+
+const StatusBadge: React.FC<{
+  status: Booking['status'];
+  label: string;
+}> = ({ status, label }) => (
+  <Badge
+    variant="outline"
+    className={
+      status === 'CANCELLED' || status === 'REJECTED'
+        ? 'border-rose-300 text-rose-700'
+        : status === 'APPROVED' || status === 'COMPLETED'
+          ? 'border-emerald-300 text-emerald-700'
+          : 'border-amber-300 text-amber-700'
+    }
+  >
+    {label}
+  </Badge>
+);
+
+const MultiRoomPopover: React.FC<{ rooms: Booking['rooms'] }> = ({ rooms }) => {
+  const { t } = useTranslation();
   return (
     <Popover>
       <PopoverTrigger asChild>
         <button className="text-xs text-primary hover:underline">
-          +{rooms.length - 1} more room{rooms.length > 2 ? 's' : ''}
+          +{rooms.length - 1} {t('bookings.more_rooms')}
         </button>
       </PopoverTrigger>
 
       <PopoverContent className="w-80 space-y-3">
-        <div className="font-medium">Booked rooms</div>
+        <div className="font-medium">{t('bookings.booked_rooms')}</div>
 
         {rooms.map((r, i) => (
           <div key={i} className="rounded border p-2 text-sm space-y-1">
@@ -37,8 +62,10 @@ const MultiRoomPopover: React.FC<{
             </div>
 
             <div className="text-xs">
-              {r.guests.adults} adult
-              {r.guests.children ? `, ${r.guests.children} child` : ''}
+              {r.guests.adults} {t('bookings.adults_label')}
+              {r.guests.children
+                ? `, ${r.guests.children} ${t('bookings.children_label')}`
+                : ''}
             </div>
           </div>
         ))}
@@ -48,20 +75,21 @@ const MultiRoomPopover: React.FC<{
 };
 
 const PaymentCountdown: React.FC<{ createdAt: string }> = ({ createdAt }) => {
+  const { t } = useTranslation();
   const expireAt = getPaymentExpireAt(createdAt);
   const remaining = useCountdown(expireAt);
 
   if (!remaining) {
     return (
       <Badge variant="destructive" className="mt-1">
-        Payment expired
+        {t('bookings.payment_expired_desc')}
       </Badge>
     );
   }
 
   return (
     <div className="text-xs text-muted-foreground mt-1">
-      Pay within{' '}
+      {t('bookings.pay_within')}{' '}
       <span className="font-medium text-amber-600">
         {remaining.minutes}:{remaining.seconds.toString().padStart(2, '0')}
       </span>
@@ -69,54 +97,36 @@ const PaymentCountdown: React.FC<{ createdAt: string }> = ({ createdAt }) => {
   );
 };
 
-export const useColumns = (
-  onPay: (b: Booking) => void,
-  onDelete: (b: Booking) => void,
-): ColumnDef<Booking>[] =>
-  useMemo(
+export const useColumns = (): ColumnDef<Booking>[] => {
+  const { t } = useTranslation();
+  const statusLabels = useMemo(
+    () =>
+      (Object.keys(STATUS_KEYS) as Booking['status'][]).reduce(
+        (acc, status) => {
+          acc[status] =
+            t(`bookings.status_${STATUS_KEYS[status]}`) || status;
+          return acc;
+        },
+        {} as Record<Booking['status'], string>,
+      ),
+    [t],
+  );
+
+  return useMemo(
     () => [
       {
-        id: 'select',
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected()
-                ? true
-                : table.getIsSomePageRowsSelected()
-                ? 'indeterminate'
-                : false
-            }
-            onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(v) => row.toggleSelected(!!v)}
-          />
-        ),
-        enableSorting: false,
-        size: 32,
-      },
-
-      {
         id: 'room',
-        header: ({ column }) => (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Room
-            <ArrowUpDown className="ml-1 h-4 w-4" />
-          </Button>
-        ),
+        header: () => t('bookings.table_room'),
         accessorFn: (b) => b.rooms?.[0]?.room?.name,
         cell: ({ row }) => {
           const rooms = row.original.rooms;
-          if (!rooms?.length) return <span>-</span>;
+          if (!rooms?.length) return <span>—</span>;
 
           const first = rooms[0];
           const room = first.room;
+          const capacity = room?.capacity;
+          const roomSize = capacity?.roomSize;
+          const maxAdults = capacity?.maxAdults;
 
           return (
             <div className="flex flex-col gap-1">
@@ -137,10 +147,11 @@ export const useColumns = (
                     {room.roomType}
                   </span>
                 )}
-                {room.roomType && (room.roomSize || room.maxGuests) && ' • '}
-                {room.roomSize && `${room.roomSize}m²`}
-                {room.roomSize && room.maxGuests && ' • '}
-                {room.maxGuests && `Max ${room.maxGuests} guests`}
+                {room.roomType && (roomSize || maxAdults) && ' • '}
+                {roomSize && `${roomSize}m²`}
+                {roomSize && maxAdults && ' • '}
+                {maxAdults != null &&
+                  t('bookings.max_guests', { count: maxAdults })}
               </span>
 
               {rooms.length > 1 && <MultiRoomPopover rooms={rooms} />}
@@ -151,10 +162,10 @@ export const useColumns = (
 
       {
         id: 'stay',
-        header: () => <span>Stay</span>,
+        header: () => t('bookings.table_stay'),
         cell: ({ row }) => {
           const r = row.original.rooms?.[0];
-          if (!r) return <span>-</span>;
+          if (!r) return <span>—</span>;
 
           return (
             <div className="text-sm">
@@ -169,15 +180,15 @@ export const useColumns = (
 
       {
         id: 'guests',
-        header: () => <span>Guests</span>,
+        header: () => t('bookings.table_guests'),
         cell: ({ row }) => {
           const g = row.original.rooms?.[0]?.guests;
-          if (!g) return <span>-</span>;
+          if (!g) return <span>—</span>;
 
           return (
             <span>
-              {g.adults} adult
-              {g.children ? `, ${g.children} child` : ''}
+              {g.adults} {t('bookings.adults_label')}
+              {g.children ? `, ${g.children} ${t('bookings.children_label')}` : ''}
             </span>
           );
         },
@@ -185,15 +196,7 @@ export const useColumns = (
 
       {
         accessorKey: 'amount',
-        header: ({ column }) => (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Total
-            <ArrowUpDown className="ml-1 h-4 w-4" />
-          </Button>
-        ),
+        header: () => t('bookings.table_total'),
         cell: ({ row }) => (
           <span className="font-medium">
             {fmtMoney(row.original.amount, row.original.currency)}
@@ -203,29 +206,44 @@ export const useColumns = (
 
       {
         accessorKey: 'status',
-        header: () => <span>Status</span>,
-        cell: ({ getValue }) => (
-          <Badge variant="outline">{getValue<Booking['status']>()}</Badge>
-        ),
+        header: () => t('bookings.table_status'),
+        cell: ({ getValue }) => {
+          const status = getValue<Booking['status']>();
+          return (
+            <StatusBadge
+              status={status}
+              label={statusLabels[status] ?? status}
+            />
+          );
+        },
       },
 
       {
         accessorKey: 'paymentStatus',
-        header: () => <span>Payment</span>,
+        header: () => t('bookings.table_payment'),
         cell: ({ row }) => {
           const booking = row.original;
           const status = booking.paymentStatus;
 
           if (status === 'PAID') {
-            return <Badge className="bg-emerald-500">Paid</Badge>;
+            return (
+              <Badge
+                variant="outline"
+                className="border-emerald-300 text-emerald-700"
+              >
+                {t('bookings.payment_paid')}
+              </Badge>
+            );
           }
 
           if (status === 'EXPIRED') {
             return (
               <div>
-                <Badge variant="destructive">Expired</Badge>
+                <Badge variant="destructive">
+                  {t('bookings.payment_expired')}
+                </Badge>
                 <div className="text-xs text-muted-foreground mt-1">
-                  Payment time expired
+                  {t('bookings.payment_expired_desc')}
                 </div>
               </div>
             );
@@ -234,48 +252,39 @@ export const useColumns = (
           if (status === 'UNPAID') {
             return (
               <div>
-                <Badge variant="outline" className="text-amber-600">
-                  Unpaid
+                <Badge
+                  variant="outline"
+                  className="border-amber-300 text-amber-700"
+                >
+                  {t('bookings.payment_unpaid')}
                 </Badge>
-
                 <PaymentCountdown createdAt={booking.createdAt} />
               </div>
             );
           }
 
-          return <Badge>{status}</Badge>;
+          return <Badge variant="outline">{status}</Badge>;
         },
       },
 
       {
         id: 'actions',
-        header: () => <span className="sr-only">Actions</span>,
+        header: () => <span className="sr-only">{t('bookings.table_actions')}</span>,
         cell: ({ row }) => (
-          <div className="flex items-center gap-2">
-            <Button
-              variant="secondary"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => onPay(row.original)}
-              disabled={row.original.paymentStatus !== 'UNPAID'}
-              title="Pay now"
+          <Button variant="ghost" size="sm" asChild>
+            <Link
+              to={ROUTES.DASHBOARD.ROOM_BOOKINGS_DETAIL.replace(
+                ':id',
+                row.original._id,
+              )}
             >
-              <DollarSign className="h-4 w-4" />
-            </Button>
-
-            <Button
-              variant="secondary"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => onDelete(row.original)}
-              title="Delete booking"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </div>
+              {t('bookings.table_detail')}
+            </Link>
+          </Button>
         ),
-        size: 90,
+        size: 80,
       },
     ],
-    [onPay, onDelete],
+    [t, statusLabels],
   );
+};

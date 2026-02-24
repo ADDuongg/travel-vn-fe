@@ -1,91 +1,344 @@
 import { useForm, FormProvider } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import CustomInput from '@/components/CustomInput';
-import { AiOutlineCalendar } from 'react-icons/ai';
-import { FaUserGroup } from 'react-icons/fa6';
 import { BsLightningFill } from 'react-icons/bs';
+import { HiOutlineLockClosed } from 'react-icons/hi2';
 import type { Tour } from '@/features/tours/catalog-types';
+import {
+  useTourAvailabilityQuery,
+  useCreateTourBookingMutation,
+} from '@/features/tours/booking-hooks';
+import { useTourDetail } from '@/sections/tour/tour-detail/TourDetailContext';
+import { useCallback, useState } from 'react';
+import { fmtMoney } from '@/utils';
+import { Link } from 'react-router-dom';
+import { ROUTES } from '@/constants/router';
+import { useAuthStore } from '@/stores/useAuthStore';
 
 type BookingFormValues = {
-  date: string;
-  people: string;
+  departureDate: string;
+  adults: string;
+  children: string;
+  infants: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  note: string;
 };
 
-const TourBookingForm = ({ tour: _tour }: { tour?: Tour | null }) => {
+const currentMonth = () => new Date().toISOString().slice(0, 7); // YYYY-MM
+
+const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
+  const tourFromContext = useTourDetail();
+  const tour = tourProp ?? tourFromContext;
+  const authUser = useAuthStore((s) => s.authUser);
+
+  const [month, setMonth] = useState(currentMonth());
+  const [bookingSuccess, setBookingSuccess] = useState<{
+    bookingCode: string;
+  } | null>(null);
+
+  const { data: availability = [], isLoading: loadingAvailability } =
+    useTourAvailabilityQuery(tour?._id, month, { enabled: !!tour?._id });
+
+  const createBooking = useCreateTourBookingMutation();
+
   const methods = useForm<BookingFormValues>({
     defaultValues: {
-      date: '',
-      people: '',
+      departureDate: '',
+      adults: '1',
+      children: '0',
+      infants: '0',
+      fullName: '',
+      email: '',
+      phone: '',
+      note: '',
     },
   });
 
   const {
     handleSubmit,
     formState: { isSubmitting },
+    setError,
   } = methods;
 
-  const onSubmit = (data: BookingFormValues) => {
-    console.log('Booking form submitted:', data);
+  const selectableDates = availability.filter(
+    (d) =>
+      d.status !== 'FULL' && d.status !== 'CANCELLED' && d.availableSlots > 0,
+  );
+
+  const dateOptions = selectableDates.map((d) => ({
+    label: `${d.departureDate} — ${d.availableSlots} chỗ • ${d.specialPrice != null ? fmtMoney(d.specialPrice) : 'Giá gốc'}`,
+    value: d.departureDate,
+  }));
+
+  const maxGuests = tour?.capacity?.maxGuests ?? 20;
+  const adultOptions = Array.from({ length: maxGuests }, (_, i) => ({
+    label: String(i + 1),
+    value: String(i + 1),
+  }));
+  const childOptions = Array.from({ length: 11 }, (_, i) => ({
+    label: String(i),
+    value: String(i),
+  }));
+
+  const onSubmit = useCallback(
+    async (data: BookingFormValues) => {
+      if (!tour?._id || !authUser?._id) return;
+      setBookingSuccess(null);
+      try {
+        const result = await createBooking.mutateAsync({
+          tourId: tour._id,
+          departureDate: data.departureDate,
+          guest: {
+            fullName: data.fullName,
+            email: data.email,
+            phone: data.phone || undefined,
+            note: data.note || undefined,
+          },
+          adults: parseInt(data.adults, 10),
+          children: parseInt(data.children, 10) || 0,
+          infants: parseInt(data.infants, 10) || 0,
+          userId: authUser._id,
+        });
+        setBookingSuccess({ bookingCode: result.bookingCode });
+      } catch (err: unknown) {
+        const message =
+          (err as { message?: string })?.message ?? 'Đặt tour thất bại';
+        setError('root', { type: 'manual', message });
+      }
+    },
+    [tour?._id, authUser?._id, createBooking, setError],
+  );
+
+  const prevMonth = () => {
+    const d = new Date(month + '-01');
+    d.setMonth(d.getMonth() - 1);
+    setMonth(d.toISOString().slice(0, 7));
+  };
+  const nextMonth = () => {
+    const d = new Date(month + '-01');
+    d.setMonth(d.getMonth() + 1);
+    setMonth(d.toISOString().slice(0, 7));
   };
 
-  // component nhỏ để tái sử dụng cho icon + line
-  const IconWithLine = ({ icon }: { icon: React.ReactNode }) => (
-    <div className="relative flex justify-center text-blue-500">
-      {/* line chạy từ trên xuống icon */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-[10px] bg-gray-300" />
-      <div className="relative z-10 bg-white">{icon}</div>
-    </div>
-  );
+  // Yêu cầu đăng nhập mới cho đặt tour
+  if (!authUser) {
+    return (
+      <div className="rounded-xl border border-amber-200 bg-amber-50/80 dark:border-amber-800 dark:bg-amber-950/30 p-5 space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/50">
+            <HiOutlineLockClosed className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-foreground">
+              Đăng nhập để đặt tour
+            </h3>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              Bạn cần đăng nhập để đặt tour và quản lý đơn của mình.
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Button
+            asChild
+            className="w-full rounded-lg h-11 font-medium"
+            size="lg"
+          >
+            <Link to={ROUTES.LOGIN}>Đăng nhập</Link>
+          </Button>
+          <Button
+            asChild
+            variant="outline"
+            className="w-full rounded-lg h-11"
+            size="lg"
+          >
+            <Link to={ROUTES.REGISTER}>Tạo tài khoản</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (bookingSuccess) {
+    return (
+      <div className="rounded-xl border border-emerald-200 bg-emerald-50/80 dark:border-emerald-800 dark:bg-emerald-950/30 p-5 space-y-4">
+        <p className="font-semibold text-emerald-800 dark:text-emerald-200">
+          Đặt tour thành công
+        </p>
+        <p className="text-sm text-emerald-700 dark:text-emerald-300">
+          Mã đặt chỗ:{' '}
+          <strong className="font-mono">{bookingSuccess.bookingCode}</strong>
+        </p>
+        <p className="text-sm text-muted-foreground">
+          Bạn có thể tra cứu đơn bằng mã này.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <Button asChild size="sm" className="rounded-lg font-medium">
+            <Link
+              to={`${ROUTES.TOUR.BOOKING_LOOKUP}?code=${encodeURIComponent(bookingSuccess.bookingCode)}`}
+            >
+              Tra cứu đơn
+            </Link>
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="rounded-lg"
+            onClick={() => setBookingSuccess(null)}
+          >
+            Đặt thêm
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-        {/* Date row */}
-        <div className="grid grid-cols-[32px_1fr] gap-3 items-start">
-          <IconWithLine icon={<AiOutlineCalendar size={24} />} />
-          <div className="pl-3">
-            <p className="text-gray-800 font-medium">February 1, 2030</p>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        {/* Tháng & Ngày khởi hành */}
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-muted-foreground">
+            Ngày khởi hành
+          </p>
+          <div className="flex items-center gap-2 rounded-lg border border-border bg-muted/30 px-3 py-2">
+            <button
+              type="button"
+              onClick={prevMonth}
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-background hover:text-foreground transition-colors"
+              aria-label="Tháng trước"
+            >
+              ‹
+            </button>
+            <span className="flex-1 text-center text-sm font-medium tabular-nums">
+              {month}
+            </span>
+            <button
+              type="button"
+              onClick={nextMonth}
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-background hover:text-foreground transition-colors"
+              aria-label="Tháng sau"
+            >
+              ›
+            </button>
           </div>
+          <div className="[&_.flex]:!flex-col [&_.flex] gap-2">
+            <CustomInput
+              name="departureDate"
+              type="select"
+              className="w-full rounded-lg border-border bg-background h-11"
+              size="lg"
+              placeHolder={
+                loadingAvailability ? 'Đang tải...' : 'Chọn ngày khởi hành'
+              }
+              label=""
+              options={dateOptions}
+              rules={{ required: 'Vui lòng chọn ngày khởi hành' }}
+            />
+          </div>
+          {!loadingAvailability && selectableDates.length === 0 && (
+            <p className="text-xs text-muted-foreground">
+              Không có ngày khởi hành trong tháng này.
+            </p>
+          )}
         </div>
 
-        <div className="grid grid-cols-[32px_1fr] gap-3 items-center">
-          <div className="flex flex-col items-center text-blue-500"></div>
-          <div className="pl-3">
-            <p className="text-xs text-gray-400">Available: 0 seats</p>
-          </div>
-        </div>
-        {/* People row */}
-        <div className="grid grid-cols-[32px_1fr] gap-3 items-center">
-          <IconWithLine icon={<FaUserGroup size={24} />} />
-          <div className="pl-3">
+        {/* Số khách */}
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-muted-foreground">Số khách</p>
+          <div className="grid grid-cols-3 gap-2">
             <CustomInput
-              name="people"
+              name="adults"
               type="select"
-              className="w-full"
-              size={'lg'}
-              placeHolder="Select number of people"
-              label=""
-              options={[
-                { label: '1', value: '1' },
-                { label: '2', value: '2' },
-                { label: '3', value: '3' },
-                { label: '4', value: '4' },
-                { label: '5', value: '5' },
-              ]}
-              rules={{ required: 'Please select number of people' }}
+              className="w-full [&_button]:rounded-lg [&_button]:h-11 [&_button]:border-border"
+              size="lg"
+              placeHolder="NL"
+              label="Người lớn"
+              options={adultOptions}
+              rules={{ required: 'Bắt buộc' }}
+            />
+            <CustomInput
+              name="children"
+              type="select"
+              className="w-full [&_button]:rounded-lg [&_button]:h-11 [&_button]:border-border"
+              size="lg"
+              placeHolder="TE"
+              label="Trẻ em"
+              options={childOptions}
+            />
+            <CustomInput
+              name="infants"
+              type="select"
+              className="w-full [&_button]:rounded-lg [&_button]:h-11 [&_button]:border-border"
+              size="lg"
+              placeHolder="EB"
+              label="Em bé"
+              options={childOptions}
             />
           </div>
         </div>
 
-        {/* Button row - Explore Vietnam yellow CTA */}
-        <div className="grid grid-cols-[32px_1fr] gap-3 items-center">
-          <IconWithLine icon={<BsLightningFill size={24} />} />
-          <div className="pl-3">
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : 'Proceed Booking'}
-            </Button>
+        {/* Thông tin liên hệ */}
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-muted-foreground">
+            Thông tin liên hệ
+          </p>
+          <div className="space-y-3">
+            <CustomInput
+              name="fullName"
+              type="text"
+              label="Họ tên"
+              placeHolder="Nguyễn Văn A"
+              className="[&_input]:rounded-lg [&_input]:h-11 [&_input]:border-border"
+              rules={{ required: 'Vui lòng nhập họ tên' }}
+            />
+            <CustomInput
+              name="email"
+              type="text"
+              label="Email"
+              placeHolder="email@example.com"
+              className="[&_input]:rounded-lg [&_input]:h-11 [&_input]:border-border"
+              rules={{ required: 'Vui lòng nhập email' }}
+            />
+            <CustomInput
+              name="phone"
+              type="text"
+              label="Số điện thoại"
+              placeHolder="0901234567"
+              className="[&_input]:rounded-lg [&_input]:h-11 [&_input]:border-border"
+            />
+            <CustomInput
+              name="note"
+              type="text"
+              label="Ghi chú"
+              placeHolder="Ăn chay, yêu cầu đặc biệt..."
+              className="[&_input]:rounded-lg [&_input]:h-11 [&_input]:border-border"
+            />
           </div>
         </div>
+
+        {methods.formState.errors.root && (
+          <p className="text-sm text-destructive rounded-lg bg-destructive/10 px-3 py-2">
+            {(methods.formState.errors.root as { message?: string }).message}
+          </p>
+        )}
+
+        <Button
+          type="submit"
+          className="w-full rounded-lg h-12 text-base font-semibold shadow-sm"
+          disabled={
+            isSubmitting ||
+            createBooking.isPending ||
+            selectableDates.length === 0
+          }
+        >
+          <BsLightningFill className="mr-2 h-4 w-4" />
+          {isSubmitting || createBooking.isPending
+            ? 'Đang xử lý...'
+            : 'Đặt tour'}
+        </Button>
       </form>
     </FormProvider>
   );

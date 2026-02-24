@@ -1,10 +1,10 @@
 // features/bookings/hooks/useMyBookings.ts
-import { useQuery } from '@tanstack/react-query';
-import { getBookingById, getMyBookings } from '../booking/api';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getBookingById, getMyBookings, cancelBooking } from '../booking/api';
 import type { ApiListResponse, SortParam } from '@interface/api';
 import type { Booking } from '../shared/types';
 
-const bookingKeys = {
+export const bookingKeys = {
   all: ['bookings'] as const,
   list: (filters: unknown) => [...bookingKeys.all, 'list', filters] as const,
   detail: (id: string) => [...bookingKeys.all, 'detail', id] as const,
@@ -53,5 +53,16 @@ export function useGetBookingById(id?: string) {
     queryKey: id ? bookingKeys.detail(id) : [],
     queryFn: () => getBookingById(id!),
     enabled: !!id,
+  });
+}
+
+/** PATCH bookings/:id/cancel – invalidates list & detail */
+export function useCancelRoomBookingMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => cancelBooking(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: bookingKeys.all });
+    },
   });
 }

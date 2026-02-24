@@ -13,9 +13,10 @@ import { useAuthStore } from '@/stores/useAuthStore';
 
 export const reviewKeys = {
   all: ['reviews'] as const,
-  me: ['me'] as const,
+  me: (params: { entityType: ReviewEntityType; entityId: string }) =>
+    [...reviewKeys.all, 'me', params] as const,
   list: (params: { entityType: ReviewEntityType; entityId: string }) =>
-    [...reviewKeys.all, params] as const,
+    [...reviewKeys.all, 'list', params] as const,
 };
 
 export function useReviewsQuery(params: {
@@ -37,11 +38,19 @@ export function useMyReviewQuery(params: {
   const authUser = useAuthStore((s) => s.authUser);
 
   return useQuery<Review | null>({
-    queryKey: reviewKeys.me,
+    queryKey: reviewKeys.me(params),
     queryFn: () => getMyReviews(params),
-    enabled: !!authUser,
+    enabled: !!authUser && !!params.entityId,
     staleTime: 1000 * 60,
   });
+}
+
+function invalidateEntityReviews(
+  qc: ReturnType<typeof useQueryClient>,
+  params: { entityType: ReviewEntityType; entityId: string },
+) {
+  qc.invalidateQueries({ queryKey: reviewKeys.list(params) });
+  qc.invalidateQueries({ queryKey: reviewKeys.me(params) });
 }
 
 export function useSubmitReview() {
@@ -50,11 +59,9 @@ export function useSubmitReview() {
   const mutation = useMutation({
     mutationFn: submitReview,
     onSuccess: (_, variables) => {
-      qc.invalidateQueries({
-        queryKey: reviewKeys.list({
-          entityType: variables.entityType,
-          entityId: variables.entityId,
-        }),
+      invalidateEntityReviews(qc, {
+        entityType: variables.entityType,
+        entityId: variables.entityId,
       });
     },
   });
@@ -71,11 +78,9 @@ export function useDeleteReview() {
   const mutation = useMutation({
     mutationFn: deleteReview,
     onSuccess: (_, variables) => {
-      qc.invalidateQueries({
-        queryKey: reviewKeys.list({
-          entityType: variables.entityType,
-          entityId: variables.entityId,
-        }),
+      invalidateEntityReviews(qc, {
+        entityType: variables.entityType,
+        entityId: variables.entityId,
       });
     },
   });
@@ -92,11 +97,9 @@ export function useEditReview() {
   const mutation = useMutation({
     mutationFn: updateReview,
     onSuccess: (_, variables) => {
-      qc.invalidateQueries({
-        queryKey: reviewKeys.list({
-          entityType: variables.entityType,
-          entityId: variables.entityId,
-        }),
+      invalidateEntityReviews(qc, {
+        entityType: variables.entityType,
+        entityId: variables.entityId,
       });
     },
   });

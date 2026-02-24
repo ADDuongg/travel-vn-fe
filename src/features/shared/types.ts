@@ -57,6 +57,7 @@ export interface BookedRoom {
     _id: string;
     name: string;
     slug: string;
+    roomType?: string;
     thumbnail?: {
       url: string;
       alt?: string;
@@ -99,4 +100,7 @@ export interface Booking {
 
   createdAt: string;
   updatedAt: string;
+  /** Set when status is CANCELLED (from PATCH cancel) */
+  cancelledAt?: string;
+  cancelReason?: string;
 }

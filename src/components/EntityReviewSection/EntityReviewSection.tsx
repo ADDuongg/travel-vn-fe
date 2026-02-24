@@ -4,12 +4,20 @@ import { ReviewEntityType } from '@/features/review/types';
 import { useAuthStore } from '@/stores/useAuthStore';
 import ReviewSection from './ReviewSection';
 
+import type { RatingSummary } from './ReviewSection';
+
 interface Props {
   entityType: ReviewEntityType;
   entityId: string;
+  /** Optional: from entity API (e.g. tour.ratingSummary) for header */
+  ratingSummary?: RatingSummary | null;
 }
 
-export default function EntityReviewSection({ entityType, entityId }: Props) {
+export default function EntityReviewSection({
+  entityType,
+  entityId,
+  ratingSummary,
+}: Props) {
   const authUser = useAuthStore((s) => s.authUser);
 
   const { data: reviews = [], isLoading } = useReviewsQuery({
@@ -21,7 +29,6 @@ export default function EntityReviewSection({ entityType, entityId }: Props) {
     entityType,
     entityId,
   });
-  console.log('reviews', reviews);
 
   const mergedReviews = useMemo(() => {
     if (!myReview) return reviews;
@@ -37,6 +44,7 @@ export default function EntityReviewSection({ entityType, entityId }: Props) {
       canReview={!!authUser}
       entityId={entityId}
       entityType={entityType}
+      ratingSummary={ratingSummary}
     />
   );
 }

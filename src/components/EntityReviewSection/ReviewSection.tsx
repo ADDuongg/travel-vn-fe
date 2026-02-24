@@ -7,11 +7,18 @@ import ReviewForm from './ReviewForm';
 import { ReviewEntityType, type Review } from '@/features/review/types';
 import { useAuthStore } from '@/stores/useAuthStore';
 
+export interface RatingSummary {
+  average: number;
+  total: number;
+}
+
 interface Props {
   reviews: Review[];
   canReview: boolean;
   entityId: string;
   entityType: ReviewEntityType;
+  /** Optional: from entity (tour/room) API – used for header display */
+  ratingSummary?: RatingSummary | null;
 }
 
 const sortOptions = [
@@ -35,8 +42,12 @@ export default function ReviewSection({
   canReview,
   entityId,
   entityType,
+  ratingSummary,
 }: Props) {
   const currentUserId = useAuthStore((s) => s.authUser?._id);
+
+  const displayRating = ratingSummary?.average ?? (reviews.length ? (reviews.reduce((s, r) => s + (r.rating ?? 0), 0) / reviews.length) : 0);
+  const displayCount = ratingSummary?.total ?? reviews.length;
 
   const methods = useForm({
     defaultValues: {
@@ -79,9 +90,9 @@ export default function ReviewSection({
       <FormProvider {...methods}>
         <div className="flex flex-wrap items-center justify-between border-b pb-3 mb-6">
           <div className="flex items-center gap-2 text-sm font-medium">
-            <Ratings rating={4.8} readOnly size={16} variant="yellow" />
+            <Ratings rating={displayRating} readOnly size={16} variant="yellow" />
             <span className="text-gray-500">
-              {sortedReviews.length} Reviews
+              {displayCount} Reviews
             </span>
           </div>
 

@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import { Button } from '@/components/ui/button';
-import { useGetBookingById } from '@/features/booking/hooks';
+import { useGetBookingById, useCancelRoomBookingMutation } from '@/features/booking/hooks';
+import { ROUTES } from '@/constants/router';
 
 type SaleInfo = {
   isActive: boolean;
@@ -52,9 +54,25 @@ const applySale = (base: number, sale?: SaleInfo) => {
 const MyBookingDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [, setOpenReceiptModal] = useState(false);
 
   const { data: booking, isLoading } = useGetBookingById(id);
+  const cancelMutation = useCancelRoomBookingMutation();
+
+  const canCancel =
+    booking &&
+    (booking.status === 'PENDING' || booking.status === 'APPROVED');
+
+  const handleCancel = async () => {
+    if (!booking?._id || !window.confirm(t('bookings.confirm_cancel'))) return;
+    try {
+      await cancelMutation.mutateAsync(booking._id);
+      navigate(ROUTES.DASHBOARD.ROOM_BOOKINGS);
+    } catch {
+      // error already handled by mutation
+    }
+  };
 
   const summary = useMemo(() => {
     if (!booking) return null;
@@ -138,9 +156,9 @@ const MyBookingDetailPage: React.FC = () => {
   if (!booking) {
     return (
       <div className="p-6">
-        <p className="text-sm text-slate-500">Booking not found.</p>
+        <p className="text-sm text-slate-500">{t('bookings.booking_not_found')}</p>
         <Button className="mt-4" variant="outline" onClick={() => navigate(-1)}>
-          Go back
+          {t('bookings.go_back')}
         </Button>
       </div>
     );
@@ -148,29 +166,37 @@ const MyBookingDetailPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      <div className="mb-4">
+        <Link
+          to={ROUTES.DASHBOARD.ROOM_BOOKINGS}
+          className="text-sm text-muted-foreground hover:text-foreground"
+        >
+          {t('bookings.back_to_my_bookings')}
+        </Link>
+      </div>
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-xs uppercase text-slate-500 tracking-wide">
-            Booking Detail
+            {t('bookings.detail_title')}
           </p>
           <h2 className="text-2xl font-semibold text-slate-900">
             {summary?.id}
           </h2>
           <p className="text-sm text-slate-500">
-            Created {summary?.createdAt}
-            {summary?.nights ? ` · ${summary.nights} night stay` : ''}
+            {t('bookings.created_at')} {summary?.createdAt}
+            {summary?.nights ? ` · ${summary.nights} ${t('bookings.nights')}` : ''}
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => navigate(-1)}>
-            Back to list
+          <Button variant="outline" asChild>
+            <Link to={ROUTES.DASHBOARD.ROOM_BOOKINGS}>{t('bookings.back_to_list')}</Link>
           </Button>
           <Button
             variant="default"
             disabled={booking.paymentStatus !== 'UNPAID'}
             onClick={() => navigate(`/bookings/${booking._id}/payment`)}
           >
-            Pay online
+            {t('bookings.pay_online')}
           </Button>
         </div>
       </div>
@@ -183,13 +209,13 @@ const MyBookingDetailPage: React.FC = () => {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-xs font-medium text-slate-500">
-                  Order summary
+                  {t('bookings.order_summary')}
                 </p>
                 <p className="text-lg font-semibold text-slate-900">
                   {summary?.id}
                 </p>
                 <p className="text-sm text-slate-500">
-                  Booked on {summary?.createdAt}
+                  {t('bookings.created_at')} {summary?.createdAt}
                 </p>
               </div>
               <div
@@ -201,7 +227,7 @@ const MyBookingDetailPage: React.FC = () => {
 
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
               <div className="rounded-lg bg-slate-50 p-3">
-                <p className="text-slate-500">Payment</p>
+                <p className="text-slate-500">{t('bookings.payment')}</p>
                 <p
                   className={`mt-1 inline-flex rounded-full px-2 py-1 text-xs font-semibold ${paymentStyle[booking.paymentStatus] || 'bg-slate-200 text-slate-700'}`}
                 >
@@ -209,13 +235,13 @@ const MyBookingDetailPage: React.FC = () => {
                 </p>
               </div>
               <div className="rounded-lg bg-slate-50 p-3">
-                <p className="text-slate-500">Total amount</p>
+                <p className="text-slate-500">{t('bookings.total_amount')}</p>
                 <p className="mt-1 text-base font-semibold text-slate-900">
                   {computedAmount.toLocaleString()} {booking.currency}
                 </p>
               </div>
               <div className="rounded-lg bg-slate-50 p-3">
-                <p className="text-slate-500">Contact</p>
+                <p className="text-slate-500">{t('bookings.contact')}</p>
                 <p className="mt-1 text-slate-900">
                   {(booking as any)?.contactName ||
                     (booking as any)?.contact?.name ||
@@ -228,16 +254,33 @@ const MyBookingDetailPage: React.FC = () => {
                 </p>
               </div>
             </div>
+            {booking.cancelledAt && (
+              <div className="mt-4 text-sm text-muted-foreground">
+                {t('bookings.cancelled_at')}: {dayjs(booking.cancelledAt).format('DD/MM/YYYY HH:mm')}
+                {booking.cancelReason && ` — ${booking.cancelReason}`}
+              </div>
+            )}
+            {canCancel && (
+              <div className="mt-4 pt-4 border-t">
+                <Button
+                  variant="destructive"
+                  onClick={handleCancel}
+                  disabled={cancelMutation.isPending}
+                >
+                  {cancelMutation.isPending ? t('bookings.cancelling') : t('bookings.cancel_booking')}
+                </Button>
+              </div>
+            )}
           </section>
 
           {/* ROOMS */}
           <section className="rounded-xl border bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-slate-900">
-                Rooms & stay
+                {t('bookings.rooms_and_stay')}
               </h3>
               <p className="text-xs text-slate-500">
-                {booking.rooms.length} room{booking.rooms.length > 1 ? 's' : ''}
+                {t('bookings.room_count', { count: booking.rooms.length })}
               </p>
             </div>
 
@@ -308,7 +351,7 @@ const MyBookingDetailPage: React.FC = () => {
           <section className="rounded-xl border bg-white p-5 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-slate-900">
-                Price breakdown
+                {t('bookings.price_breakdown')}
               </h3>
               <p className="text-xs text-slate-500">
                 Currency: {booking.currency}

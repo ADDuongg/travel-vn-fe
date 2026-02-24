@@ -1,296 +1,203 @@
-// TourBookingPage.tsx
+/**
+ * Đơn tour của tôi (dashboard) – GET /api/v1/tour-bookings/my-bookings
+ * docs/FE-API-TOUR-PHASE2.md
+ */
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
-import type {
-  ColumnDef,
-  RowSelectionState,
-  SortingState,
-} from '@tanstack/react-table';
-import { ArrowUpDown, DollarSign, Trash2 } from 'lucide-react';
+import type { ColumnDef } from '@tanstack/react-table';
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import DataTable from '../../../shared/table/DataTable';
-import api from '@/lib/axios'; // axios client của bạn
-import { useBookingsQuery } from '@/features/tours/hooks';
-import type { SortParam } from '@interface/api';
-type BookingStatus =
-  | 'all'
-  | 'pending'
-  | 'approved'
-  | 'receipt_submitted'
-  | 'online_paid'
-  | 'deposit_paid'
-  | 'departed'
-  | 'rejected'
-  | 'wait_for_approval';
-type PaymentStatus = 'pending' | 'paid' | 'refunded';
+import { useTranslation } from 'react-i18next';
+import DataTable from '@/shared/table/DataTable';
+import { useMyTourBookingsQuery } from '@/features/tours/booking-hooks';
+import type { TourBookingListItem, TourBookingTourRef } from '@/features/tours/booking-types';
+import type { RowSelectionState, SortingState } from '@tanstack/react-table';
+import type { Paginate } from '@interface/api';
+import { ROUTES } from '@/constants/router';
+import { fmtMoney, fmtDate } from '@/utils';
 
-type BookingRow = {
-  id: string;
-  tourName: string;
-  tourUrl?: string;
-  travelDate: string;
-  total: number;
-  status: BookingStatus;
-  paymentStatus: PaymentStatus;
+function getTourName(tourId: TourBookingListItem['tourId']): string {
+  if (!tourId) return '—';
+  if (typeof tourId === 'string') return '—';
+  const tr = (tourId as TourBookingTourRef).translations;
+  if (tr?.vi?.name) return tr.vi.name;
+  if (tr?.en?.name) return tr.en.name;
+  return (tourId as TourBookingTourRef).code ?? '—';
+}
+
+function getTourSlug(tourId: TourBookingListItem['tourId']): string | null {
+  if (!tourId || typeof tourId === 'string') return null;
+  return (tourId as TourBookingTourRef).slug ?? null;
+}
+
+const TOUR_STATUS_KEYS: Record<string, string> = {
+  PENDING: 'pending',
+  CONFIRMED: 'confirmed',
+  PAID: 'paid',
+  CANCELLED: 'cancelled',
+  COMPLETED: 'completed',
 };
 
-type ApiListResponse<T> = {
-  data: T[];
-  meta: {
-    pageIndex: number;
-    pageSize: number;
-    total: number;
-    pageCount: number;
-  };
-};
-
-const STATUS_ITEMS: { key: BookingStatus; label: string }[] = [
-  { key: 'all', label: 'All' },
-  { key: 'pending', label: 'Pending' },
-  { key: 'approved', label: 'Approved' },
-  { key: 'receipt_submitted', label: 'Receipt Submitted' },
-  { key: 'online_paid', label: 'Online Paid' },
-  { key: 'deposit_paid', label: 'Deposit Paid' },
-  { key: 'departed', label: 'Departed' },
-  { key: 'rejected', label: 'Rejected' },
-  { key: 'wait_for_approval', label: 'Wait For Approval' },
-];
-
-const currency = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
-const fmtDate = (iso: string) =>
-  new Intl.DateTimeFormat('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  }).format(new Date(iso));
-
-const PaymentBadge: React.FC<{ status: PaymentStatus }> = ({ status }) => {
-  switch (status) {
-    case 'paid':
-      return (
-        <Badge className="bg-emerald-500 hover:bg-emerald-600">Paid</Badge>
-      );
-    case 'pending':
-      return (
-        <Badge
-          variant="outline"
-          className="text-emerald-600 border-emerald-200"
-        >
-          Pending
-        </Badge>
-      );
-    case 'refunded':
-      return <Badge className="bg-gray-500 hover:bg-gray-600">Refunded</Badge>;
-  }
-};
-
-const ActionsCell: React.FC<{
-  row: BookingRow;
-  onPay: (row: BookingRow) => void;
-  onDelete: (row: BookingRow) => void;
-}> = ({ row, onPay, onDelete }) => (
-  <div className="flex items-center gap-2">
-    <Button
-      variant="secondary"
-      size="icon"
-      className="h-8 w-8"
-      onClick={() => onPay(row)}
-      title="Pay now"
-    >
-      <DollarSign className="h-4 w-4" />
-    </Button>
-    <Button
-      variant="secondary"
-      size="icon"
-      className="h-8 w-8"
-      onClick={() => onDelete(row)}
-      title="Delete booking"
-    >
-      <Trash2 className="h-4 w-4" />
-    </Button>
-  </div>
+const StatusBadge: React.FC<{ status: string; label: string }> = ({ status, label }) => (
+  <Badge
+    variant="outline"
+    className={
+      status === 'CANCELLED'
+        ? 'border-rose-300 text-rose-700'
+        : status === 'PAID' || status === 'COMPLETED'
+          ? 'border-emerald-300 text-emerald-700'
+          : 'border-amber-300 text-amber-700'
+    }
+  >
+    {label}
+  </Badge>
 );
 
-/* columns giữ nguyên ý tưởng hiện tại :contentReference[oaicite:2]{index=2} */
-const useColumns = (
-  onPay: (r: BookingRow) => void,
-  onDelete: (r: BookingRow) => void,
-): ColumnDef<BookingRow>[] =>
-  useMemo<ColumnDef<BookingRow>[]>(
+const useColumns = (): ColumnDef<TourBookingListItem>[] => {
+  const { t } = useTranslation();
+  const statusLabels = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(TOUR_STATUS_KEYS).map(([k, v]) => [
+          k,
+          t(`bookings.status_${v}`),
+        ]),
+      ) as Record<string, string>,
+    [t],
+  );
+
+  return useMemo(
     () => [
       {
-        id: 'select',
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected()
-                ? true
-                : table.getIsSomePageRowsSelected()
-                ? 'indeterminate'
-                : false
-            }
-            onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(v) => row.toggleSelected(!!v)}
-            aria-label="Select row"
-          />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-        size: 32,
-      },
-      {
-        accessorKey: 'tourName',
-        header: ({ column }) => (
-          <Button
-            variant="ghost"
-            onClick={() =>
-              // column.toggleSorting(column.getIsSorted() === 'asc', true)
-              column.toggleSorting(column.getIsSorted() === 'asc')
-            }
-          >
-            Tour Name
-            <ArrowUpDown />
-          </Button>
-        ),
+        accessorKey: 'bookingCode',
+        header: () => t('bookings.table_booking_code'),
         cell: ({ row }) => {
-          const v = row.original;
-          return v.tourUrl ? (
-            <Link to={v.tourUrl} className="text-primary hover:underline">
-              {v.tourName}
+          const item = row.original;
+          return (
+            <Link
+              to={ROUTES.DASHBOARD.TOUR_BOOKINGS_DETAIL.replace(':code', item.bookingCode)}
+              className="font-mono font-medium text-primary hover:underline"
+            >
+              {item.bookingCode}
             </Link>
-          ) : (
-            <span className="text-primary">{v.tourName}</span>
           );
         },
       },
       {
-        accessorKey: 'travelDate',
-        header: () => <div>Travel Date</div>,
-        cell: ({ getValue }) => <span>{fmtDate(getValue<string>())}</span>,
+        id: 'tourName',
+        header: () => t('bookings.table_tour'),
+        cell: ({ row }) => {
+          const item = row.original;
+          const name = getTourName(item.tourId);
+          const slug = getTourSlug(item.tourId);
+          if (slug) {
+            return (
+              <Link
+                to={ROUTES.TOUR.DETAIL.replace(':slug', slug)}
+                className="text-primary hover:underline"
+              >
+                {name}
+              </Link>
+            );
+          }
+          return <span>{name}</span>;
+        },
       },
       {
-        accessorKey: 'total',
-        header: ({ column }) => (
-          <Button
-            variant="ghost"
-            onClick={() =>
-              // column.toggleSorting(column.getIsSorted() === 'asc', true)
-              column.toggleSorting(column.getIsSorted() === 'asc')
-            }
-          >
-            Total
-            <ArrowUpDown />
-          </Button>
-        ),
+        accessorKey: 'departureDate',
+        header: () => t('bookings.table_departure_date'),
         cell: ({ getValue }) => (
-          <span>{currency.format(getValue<number>())}</span>
+          <span>{fmtDate(getValue<string>())}</span>
         ),
       },
       {
-        accessorKey: 'paymentStatus',
-        header: () => <div>Payment Status</div>,
-        cell: ({ getValue }) => (
-          <PaymentBadge status={getValue<PaymentStatus>()} />
+        accessorKey: 'totalAmount',
+        header: () => t('bookings.table_total'),
+        cell: ({ row }) => (
+          <span>{fmtMoney(row.original.totalAmount, 'VND')}</span>
         ),
+      },
+      {
+        accessorKey: 'status',
+        header: () => t('bookings.table_status'),
+        cell: ({ getValue }) => {
+          const status = getValue<string>();
+          return (
+            <StatusBadge
+              status={status}
+              label={statusLabels[status] ?? status}
+            />
+          );
+        },
       },
       {
         id: 'actions',
-        header: () => <span className="sr-only">Actions</span>,
+        header: () => <span className="sr-only">{t('bookings.table_actions')}</span>,
         cell: ({ row }) => (
-          <ActionsCell row={row.original} onPay={onPay} onDelete={onDelete} />
+          <Button variant="ghost" size="sm" asChild>
+            <Link
+              to={ROUTES.DASHBOARD.TOUR_BOOKINGS_DETAIL.replace(':code', row.original.bookingCode)}
+            >
+              {t('bookings.table_detail')}
+            </Link>
+          </Button>
         ),
         size: 80,
       },
     ],
-    [onPay, onDelete],
+    [t, statusLabels],
   );
-
-const StatusFilterBar: React.FC<{
-  active: BookingStatus;
-  onChange: (s: BookingStatus) => void;
-}> = ({ active, onChange }) => (
-  <div className="text-sm">
-    {STATUS_ITEMS.map((s, i) => (
-      <React.Fragment key={s.key}>
-        <button
-          type="button"
-          onClick={() => onChange(s.key)}
-          className={
-            active === s.key
-              ? 'text-primary underline underline-offset-4'
-              : 'text-muted-foreground hover:text-foreground'
-          }
-        >
-          {s.label}
-        </button>
-        {i < STATUS_ITEMS.length - 1 && (
-          <span className="mx-2 text-muted-foreground">|</span>
-        )}
-      </React.Fragment>
-    ))}
-  </div>
-);
+};
 
 const TourBookingPage: React.FC = () => {
-  const [status, setStatus] = useState<BookingStatus>('all');
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
-  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+  const { t } = useTranslation();
+  const [pagination, setPagination] = useState<Paginate>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
-  const sortParams: SortParam[] = sorting.map((s) => ({
-    by: s.id,
-    dir: s.desc ? 'desc' : 'asc',
-  }));
-  const { data, isFetching } = useBookingsQuery({
-    pageIndex: pagination.pageIndex,
-    pageSize: pagination.pageSize,
-    q: globalFilter || undefined,
-    status: status !== 'all' ? status : undefined,
-    sort: sortParams,
+
+  const { data: apiData, isFetching } = useMyTourBookingsQuery({
+    page: pagination.pageIndex + 1,
+    limit: pagination.pageSize,
   });
 
-  const onPay = (row: BookingRow) => console.log('Pay for booking:', row.id);
-  const onDelete = (row: BookingRow) => console.log('Delete booking:', row.id);
+  const tableData = useMemo(() => {
+    if (!apiData) {
+      return {
+        data: [] as TourBookingListItem[],
+        meta: {
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
+          total: 0,
+          pageCount: 0,
+        },
+      };
+    }
+    return {
+      data: apiData.items,
+      meta: {
+        pageIndex: apiData.pagination.page - 1,
+        pageSize: apiData.pagination.limit,
+        total: apiData.pagination.total,
+        pageCount: apiData.pagination.totalPages,
+      },
+    };
+  }, [apiData, pagination.pageIndex, pagination.pageSize]);
 
-  const columns = useColumns(onPay, onDelete);
+  const columns = useColumns();
 
   return (
     <div className="space-y-4">
-      <StatusFilterBar
-        active={status}
-        onChange={(s) => {
-          setStatus(s);
-          setPagination((p) => ({ ...p, pageIndex: 0 }));
-        }}
-      />
+      <h2 className="text-lg font-semibold">{t('bookings.my_tour_bookings')}</h2>
       <Separator />
 
       <DataTable
         columns={columns}
-        data={
-          data ?? {
-            data: [],
-            meta: {
-              pageIndex: 0,
-              pageSize: pagination.pageSize,
-              total: 0,
-              pageCount: 0,
-            },
-          }
-        }
+        data={tableData}
         tableState={{
           pagination,
           setPagination,
