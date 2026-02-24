@@ -61,4 +61,7 @@ export const ROUTES = {
   REGISTER: '/register',
   BOOKING_PAYMENT: '/bookings/:id/payment',
   BOOKING_PAYMENT_RESULT: '/payment-result',
+  /** Tour: thanh toán đơn tour (Stripe) */
+  TOUR_BOOKING_PAYMENT: '/tour-bookings/:id/payment',
+  TOUR_PAYMENT_RESULT: '/tour-payment-result',
 };

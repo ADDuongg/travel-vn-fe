@@ -1,3 +1,7 @@
+/**
+ * Trang kết quả thanh toán tour – GET payments/status/tour/:tourBookingId
+ * Hiển thị SUCCEEDED / FAILED / PENDING, link chi tiết đơn (theo code).
+ */
 import { useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -6,42 +10,43 @@ import Container from '@/components/Container';
 import { Button } from '@/components/ui/button';
 import { ResponsiveH1, P } from '@/components/ui/typography';
 import { ROUTES } from '@/constants/router';
-import { usePaymentStatus } from '@/features/payment/hooks';
-import { useGetBookingById } from '@/features/booking/hooks';
+import { useTourPaymentStatus } from '@/features/payment/hooks';
+import { useTourBookingByIdQuery } from '@/features/tours/booking-hooks';
 import { CheckCircle2, XCircle, Loader2 } from 'lucide-react';
+import { fmtMoney } from '@/utils';
 
-const PaymentResult = () => {
+const TourPaymentResult = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const bookingId = searchParams.get('bookingId');
-  const status = searchParams.get('status');
+  const tourBookingId = searchParams.get('tourBookingId');
+  const statusParam = searchParams.get('status');
 
-  const { data: paymentStatus, isLoading: isLoadingPayment } = usePaymentStatus(
-    bookingId || undefined,
-  );
-  const { data: booking, isLoading: isLoadingBooking } = useGetBookingById(
-    bookingId || undefined,
-  );
+  const { data: paymentStatus, isLoading: isLoadingPayment } =
+    useTourPaymentStatus(tourBookingId || undefined);
+  const { data: booking, isLoading: isLoadingBooking } =
+    useTourBookingByIdQuery(tourBookingId || undefined);
 
   useEffect(() => {
-    // If no bookingId in URL, redirect to bookings
-    if (!bookingId) {
-      navigate(ROUTES.DASHBOARD.ROOM_BOOKINGS);
+    if (!tourBookingId) {
+      navigate(ROUTES.DASHBOARD.TOUR_BOOKINGS);
     }
-  }, [bookingId, navigate]);
+  }, [tourBookingId, navigate]);
 
   const isLoading = isLoadingPayment || isLoadingBooking;
 
-  // Determine payment status
   const isSuccess =
-    status === 'success' ||
+    statusParam === 'success' ||
     paymentStatus?.status === 'SUCCEEDED' ||
+    booking?.status === 'PAID' ||
     booking?.paymentStatus === 'PAID';
   const isFailed =
     paymentStatus?.status === 'FAILED' ||
     paymentStatus?.status === 'CANCELLED';
-  const isPending = paymentStatus?.status === 'PENDING';
+  const isPending =
+    !isSuccess &&
+    !isFailed &&
+    (paymentStatus?.status === 'PENDING' || paymentStatus?.exists === false);
 
   if (isLoading) {
     return (
@@ -67,33 +72,40 @@ const PaymentResult = () => {
                 {t('payment_result.success_title')}
               </ResponsiveH1>
               <P className="text-muted-foreground">
-                {t('payment_result.success_message')}
+                {t('payment_result.tour_success_message')}
               </P>
               {booking && (
                 <div className="bg-muted/50 rounded-xl p-4 text-left space-y-2">
                   <p>
-                    <span className="font-medium">Booking ID:</span> #
-                    {booking._id.slice(-6)}
+                    <span className="font-medium">{t('bookings.table_booking_code')}:</span>{' '}
+                    <span className="font-mono">{booking.bookingCode}</span>
                   </p>
                   <p>
-                    <span className="font-medium">{t('bookings.total_amount')}:</span>{' '}
-                    {booking.amount.toLocaleString()} {booking.currency}
+                    <span className="font-medium">{t('bookings.total')}:</span>{' '}
+                    {fmtMoney(booking.totalAmount, booking.currency)}
                   </p>
                 </div>
               )}
               <div className="flex flex-wrap gap-4 justify-center">
-                <Button
-                  onClick={() =>
-                    navigate(`${ROUTES.DASHBOARD.ROOM_BOOKINGS_DETAIL.replace(':id', bookingId!)}`)
-                  }
-                >
-                  {t('payment_result.view_booking_details')}
-                </Button>
+                {booking?.bookingCode && (
+                  <Button
+                    onClick={() =>
+                      navigate(
+                        ROUTES.DASHBOARD.TOUR_BOOKINGS_DETAIL.replace(
+                          ':code',
+                          booking.bookingCode,
+                        ),
+                      )
+                    }
+                  >
+                    {t('payment_result.view_booking_details')}
+                  </Button>
+                )}
                 <Button
                   variant="outline"
-                  onClick={() => navigate(ROUTES.DASHBOARD.ROOM_BOOKINGS)}
+                  onClick={() => navigate(ROUTES.DASHBOARD.TOUR_BOOKINGS)}
                 >
-                  {t('payment_result.my_bookings')}
+                  {t('payment_result.my_tour_bookings')}
                 </Button>
               </div>
             </>
@@ -106,21 +118,23 @@ const PaymentResult = () => {
                 {t('payment_result.failed_title')}
               </ResponsiveH1>
               <P className="text-muted-foreground">
-                {t('payment_result.failed_message')}
+                {t('payment_result.tour_failed_message')}
               </P>
               <div className="flex flex-wrap gap-4 justify-center">
                 <Button
                   onClick={() =>
-                    navigate(`${ROUTES.BOOKING_PAYMENT.replace(':id', bookingId!)}`)
+                    navigate(
+                      ROUTES.TOUR_BOOKING_PAYMENT.replace(':id', tourBookingId!),
+                    )
                   }
                 >
                   {t('payment_result.try_again')}
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => navigate(ROUTES.DASHBOARD.ROOM_BOOKINGS)}
+                  onClick={() => navigate(ROUTES.DASHBOARD.TOUR_BOOKINGS)}
                 >
-                  {t('payment_page.back_to_bookings')}
+                  {t('payment_page.back_to_tour_bookings')}
                 </Button>
               </div>
             </>
@@ -136,18 +150,26 @@ const PaymentResult = () => {
                 {t('payment_result.processing_message')}
               </P>
               <div className="flex flex-wrap gap-4 justify-center">
-                <Button
-                  onClick={() =>
-                    navigate(`${ROUTES.DASHBOARD.ROOM_BOOKINGS_DETAIL.replace(':id', bookingId!)}`)
-                  }
-                >
-                  {t('payment_result.view_booking')}
-                </Button>
+                {booking?.bookingCode && (
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      navigate(
+                        ROUTES.DASHBOARD.TOUR_BOOKINGS_DETAIL.replace(
+                          ':code',
+                          booking.bookingCode,
+                        ),
+                      )
+                    }
+                  >
+                    {t('payment_result.view_booking')}
+                  </Button>
+                )}
                 <Button
                   variant="outline"
-                  onClick={() => navigate(ROUTES.DASHBOARD.ROOM_BOOKINGS)}
+                  onClick={() => navigate(ROUTES.DASHBOARD.TOUR_BOOKINGS)}
                 >
-                  {t('payment_result.my_bookings')}
+                  {t('payment_result.my_tour_bookings')}
                 </Button>
               </div>
             </>
@@ -158,4 +180,4 @@ const PaymentResult = () => {
   );
 };
 
-export default PaymentResult;
+export default TourPaymentResult;

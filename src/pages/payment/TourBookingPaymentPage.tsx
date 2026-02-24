@@ -1,18 +1,22 @@
+/**
+ * Trang thanh toán đơn tour (Stripe) – tương tự RoomBookingPaymentPage
+ * POST /api/v1/payments/create-intent/tour
+ */
 import { Elements } from '@stripe/react-stripe-js';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import CheckoutForm from './CheckoutForm';
 import { stripePromise } from '@/stripe';
-import { useCreatePaymentIntent } from '@/features/payment/hooks';
+import { useCreateTourPaymentIntent } from '@/features/payment/hooks';
 import { LoadingScreen } from '@/components/LoadingScreen';
 import { Button } from '@/components/ui/button';
 import { ROUTES } from '@/constants/router';
 import Container from '@/components/Container';
 import { MainLayout } from '@/layout';
 
-const RoomBookingPaymentPage = () => {
-  const { id: bookingId } = useParams<{ id: string }>();
+const TourBookingPaymentPage = () => {
+  const { id: tourBookingId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const {
@@ -21,13 +25,13 @@ const RoomBookingPaymentPage = () => {
     isPending,
     isError,
     error,
-  } = useCreatePaymentIntent();
+  } = useCreateTourPaymentIntent();
 
   useEffect(() => {
-    if (bookingId) {
-      createIntent({ bookingId });
+    if (tourBookingId) {
+      createIntent({ tourBookingId });
     }
-  }, [bookingId, createIntent]);
+  }, [tourBookingId, createIntent]);
 
   if (isPending) {
     return (
@@ -50,8 +54,8 @@ const RoomBookingPaymentPage = () => {
             <p className="text-muted-foreground">
               {error?.message || t('payment_page.error_message')}
             </p>
-            <Button onClick={() => navigate(ROUTES.DASHBOARD.ROOM_BOOKINGS)}>
-              {t('payment_page.back_to_bookings')}
+            <Button onClick={() => navigate(ROUTES.DASHBOARD.TOUR_BOOKINGS)}>
+              {t('payment_page.back_to_tour_bookings')}
             </Button>
           </div>
         </Container>
@@ -70,8 +74,8 @@ const RoomBookingPaymentPage = () => {
             <p className="text-muted-foreground">
               {t('payment_page.no_intent_message')}
             </p>
-            <Button onClick={() => navigate(ROUTES.DASHBOARD.ROOM_BOOKINGS)}>
-              {t('payment_page.back_to_bookings')}
+            <Button onClick={() => navigate(ROUTES.DASHBOARD.TOUR_BOOKINGS)}>
+              {t('payment_page.back_to_tour_bookings')}
             </Button>
           </div>
         </Container>
@@ -89,12 +93,12 @@ const RoomBookingPaymentPage = () => {
               clientSecret: paymentIntentData.clientSecret,
             }}
           >
-      <CheckoutForm bookingId={bookingId ?? ''} />
-    </Elements>
+            <CheckoutForm bookingId={tourBookingId ?? ''} type="tour" />
+          </Elements>
         </div>
       </Container>
     </MainLayout>
   );
 };
 
-export default RoomBookingPaymentPage;
+export default TourBookingPaymentPage;

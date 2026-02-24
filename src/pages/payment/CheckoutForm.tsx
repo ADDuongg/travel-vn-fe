@@ -5,20 +5,40 @@ import {
   useElements,
 } from '@stripe/react-stripe-js';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { ROUTES } from '@/constants/router';
 import { ResponsiveH1, P } from '@/components/ui/typography';
 
+export type CheckoutFormType = 'room' | 'tour';
+
 interface CheckoutFormProps {
+  /** Room: bookingId. Tour: tourBookingId (MongoDB _id of TourBooking) */
   bookingId: string;
+  type?: CheckoutFormType;
 }
 
-export default function CheckoutForm({ bookingId }: CheckoutFormProps) {
+export default function CheckoutForm({
+  bookingId,
+  type = 'room',
+}: CheckoutFormProps) {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const isTour = type === 'tour';
+  const returnUrl = isTour
+    ? `${window.location.origin}${ROUTES.TOUR_PAYMENT_RESULT}?tourBookingId=${bookingId}`
+    : `${window.location.origin}${ROUTES.BOOKING_PAYMENT_RESULT}?bookingId=${bookingId}`;
+  const cancelPath = isTour
+    ? ROUTES.DASHBOARD.TOUR_BOOKINGS
+    : ROUTES.DASHBOARD.ROOM_BOOKINGS;
+  const successRedirect = isTour
+    ? `${ROUTES.TOUR_PAYMENT_RESULT}?tourBookingId=${bookingId}&status=success`
+    : `${ROUTES.BOOKING_PAYMENT_RESULT}?bookingId=${bookingId}&status=success`;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,16 +53,16 @@ export default function CheckoutForm({ bookingId }: CheckoutFormProps) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}${ROUTES.BOOKING_PAYMENT_RESULT}?bookingId=${bookingId}`,
+        return_url: returnUrl,
       },
       redirect: 'if_required',
     });
 
     if (error) {
-      setErrorMessage(error.message || 'An error occurred during payment');
+      setErrorMessage(error.message || t('payment_page.error_default'));
       setIsProcessing(false);
     } else {
-      navigate(`${ROUTES.BOOKING_PAYMENT_RESULT}?bookingId=${bookingId}&status=success`);
+      navigate(successRedirect);
     }
   };
 
@@ -50,15 +70,15 @@ export default function CheckoutForm({ bookingId }: CheckoutFormProps) {
     <div className="space-y-6">
       <div>
         <ResponsiveH1 className="font-dm-serif-display mb-2">
-          Complete Your Payment
+          {t('payment_page.title')}
         </ResponsiveH1>
-        <P className="text-gray-600">
-          Please enter your payment details below to complete your booking.
+        <P className="text-muted-foreground">
+          {t('payment_page.subtitle')}
         </P>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="border rounded-lg p-6 bg-white">
+        <div className="border rounded-lg p-6 bg-card">
           <PaymentElement
             options={{
               layout: 'tabs',
@@ -67,8 +87,8 @@ export default function CheckoutForm({ bookingId }: CheckoutFormProps) {
         </div>
 
         {errorMessage && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-600 text-sm">{errorMessage}</p>
+          <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
+            <p className="text-destructive text-sm">{errorMessage}</p>
           </div>
         )}
 
@@ -76,11 +96,11 @@ export default function CheckoutForm({ bookingId }: CheckoutFormProps) {
           <Button
             type="button"
             variant="outline"
-            onClick={() => navigate(ROUTES.DASHBOARD.ROOM_BOOKINGS)}
+            onClick={() => navigate(cancelPath)}
             disabled={isProcessing}
             className="flex-1"
           >
-            Cancel
+            {t('payment_page.cancel')}
           </Button>
           <Button
             type="submit"
@@ -88,7 +108,7 @@ export default function CheckoutForm({ bookingId }: CheckoutFormProps) {
             loading={isProcessing}
             className="flex-1"
           >
-            {isProcessing ? 'Processing...' : 'Pay Now'}
+            {isProcessing ? t('payment_page.processing') : t('payment_page.pay_now')}
           </Button>
         </div>
       </form>

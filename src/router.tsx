@@ -50,6 +50,14 @@ const PaymentResultPage = Loadable(
   () => import('@pages/payment/PaymentResult'),
 );
 
+const TourBookingPaymentPage = Loadable(
+  () => import('@pages/payment/TourBookingPaymentPage'),
+);
+
+const TourPaymentResultPage = Loadable(
+  () => import('@pages/payment/TourPaymentResult'),
+);
+
 const MyBookingDetailPage = Loadable(
   () => import('@pages/dashboard/room/RoomBookingDetail'),
 );
@@ -215,5 +223,13 @@ export const routes: RouteConfig[] = [
   {
     path: ROUTES.BOOKING_PAYMENT_RESULT,
     element: <PaymentResultPage />,
+  },
+  {
+    path: ROUTES.TOUR_BOOKING_PAYMENT,
+    element: <TourBookingPaymentPage />,
+  },
+  {
+    path: ROUTES.TOUR_PAYMENT_RESULT,
+    element: <TourPaymentResultPage />,
   },
 ];

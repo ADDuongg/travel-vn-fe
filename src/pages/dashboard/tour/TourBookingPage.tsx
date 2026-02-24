@@ -15,7 +15,8 @@ import type { TourBookingListItem, TourBookingTourRef } from '@/features/tours/b
 import type { RowSelectionState, SortingState } from '@tanstack/react-table';
 import type { Paginate } from '@interface/api';
 import { ROUTES } from '@/constants/router';
-import { fmtMoney, fmtDate } from '@/utils';
+import { fmtMoney, fmtDate, getPaymentExpireAt } from '@/utils';
+import { useCountdown } from '@/hooks/useCountdown';
 
 function getTourName(tourId: TourBookingListItem['tourId']): string {
   if (!tourId) return '—';
@@ -53,6 +54,76 @@ const StatusBadge: React.FC<{ status: string; label: string }> = ({ status, labe
     {label}
   </Badge>
 );
+
+/** Nút Detail + Pay online; ẩn Pay online khi đã hết hạn (1h) hoặc paymentStatus EXPIRED */
+const TourActionsCell: React.FC<{ item: TourBookingListItem }> = ({ item }) => {
+  const { t } = useTranslation();
+  const paymentStatus = item.paymentStatus ?? (item.status === 'PAID' ? 'PAID' : 'UNPAID');
+  const expireAt = getPaymentExpireAt(item.createdAt);
+  const remaining = useCountdown(expireAt);
+  const isExpired =
+    paymentStatus === 'EXPIRED' || (paymentStatus === 'UNPAID' && !remaining);
+  const canPay =
+    (item.status === 'PENDING' || item.status === 'CONFIRMED') &&
+    item._id &&
+    !isExpired;
+
+  return (
+    <div className="flex items-center gap-2">
+      <Button variant="ghost" size="sm" asChild>
+        <Link
+          to={ROUTES.DASHBOARD.TOUR_BOOKINGS_DETAIL.replace(':code', item.bookingCode)}
+        >
+          {t('bookings.table_detail')}
+        </Link>
+      </Button>
+      {canPay && (
+        <Button variant="default" size="sm" asChild>
+          <Link to={ROUTES.TOUR_BOOKING_PAYMENT.replace(':id', item._id)}>
+            {t('bookings.pay_online')}
+          </Link>
+        </Button>
+      )}
+    </div>
+  );
+};
+
+/** Giống room: UNPAID thì hoặc "Unpaid + Pay within MM:SS" hoặc chỉ "Expired" (không show cả hai) */
+const TourPaymentCell: React.FC<{ item: TourBookingListItem }> = ({ item }) => {
+  const { t } = useTranslation();
+  const expireAt = getPaymentExpireAt(item.createdAt);
+  const remaining = useCountdown(expireAt);
+
+  if (!remaining) {
+    return (
+      <div>
+        <Badge variant="destructive">
+          {t('bookings.payment_expired')}
+        </Badge>
+        <div className="text-xs text-muted-foreground mt-1">
+          {t('bookings.payment_expired_desc')}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <Badge
+        variant="outline"
+        className="border-amber-300 text-amber-700"
+      >
+        {t('bookings.payment_unpaid')}
+      </Badge>
+      <div className="text-xs text-muted-foreground mt-1">
+        {t('bookings.pay_within')}{' '}
+        <span className="font-medium text-amber-600">
+          {remaining.minutes}:{remaining.seconds.toString().padStart(2, '0')}
+        </span>
+      </div>
+    </div>
+  );
+};
 
 const useColumns = (): ColumnDef<TourBookingListItem>[] => {
   const { t } = useTranslation();
@@ -115,7 +186,9 @@ const useColumns = (): ColumnDef<TourBookingListItem>[] => {
         accessorKey: 'totalAmount',
         header: () => t('bookings.table_total'),
         cell: ({ row }) => (
-          <span>{fmtMoney(row.original.totalAmount, 'VND')}</span>
+          <span className="font-medium">
+            {fmtMoney(row.original.totalAmount, 'VND')}
+          </span>
         ),
       },
       {
@@ -132,18 +205,53 @@ const useColumns = (): ColumnDef<TourBookingListItem>[] => {
         },
       },
       {
+        accessorKey: 'paymentStatus',
+        header: () => t('bookings.table_payment'),
+        cell: ({ row }) => {
+          const item = row.original;
+          const status = item.paymentStatus ?? (item.status === 'PAID' ? 'PAID' : 'UNPAID');
+
+          if (status === 'PAID') {
+            return (
+              <Badge
+                variant="outline"
+                className="border-emerald-300 text-emerald-700"
+              >
+                {t('bookings.payment_paid')}
+              </Badge>
+            );
+          }
+
+          if (status === 'EXPIRED') {
+            return (
+              <div>
+                <Badge variant="destructive">
+                  {t('bookings.payment_expired')}
+                </Badge>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {t('bookings.payment_expired_desc')}
+                </div>
+              </div>
+            );
+          }
+
+          if (status === 'UNPAID') {
+            return <TourPaymentCell item={item} />;
+          }
+
+          return <Badge variant="outline">{status}</Badge>;
+        },
+      },
+      {
         id: 'actions',
         header: () => <span className="sr-only">{t('bookings.table_actions')}</span>,
-        cell: ({ row }) => (
-          <Button variant="ghost" size="sm" asChild>
-            <Link
-              to={ROUTES.DASHBOARD.TOUR_BOOKINGS_DETAIL.replace(':code', row.original.bookingCode)}
-            >
-              {t('bookings.table_detail')}
-            </Link>
-          </Button>
-        ),
-        size: 80,
+        cell: ({ row }) => {
+          const item = row.original;
+          return (
+            <TourActionsCell item={item} />
+          );
+        },
+        size: 140,
       },
     ],
     [t, statusLabels],

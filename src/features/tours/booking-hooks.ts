@@ -14,6 +14,7 @@ import {
   getMyTourBookingByCode,
   getTourBookingById,
   cancelTourBooking,
+  uploadTourBookingReceipt,
 } from './booking-api';
 import type { CreateTourBookingPayload, CancelTourBookingBody } from './booking-types';
 
@@ -113,6 +114,18 @@ export function useCancelTourBookingMutation() {
       id: string;
       body?: CancelTourBookingBody;
     }) => cancelTourBooking(id, body),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: tourBookingKeys.all });
+    },
+  });
+}
+
+/** POST tour-bookings/:id/receipt – 3.10.1 Upload ảnh chuyển khoản */
+export function useUploadTourBookingReceiptMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, file }: { id: string; file: File }) =>
+      uploadTourBookingReceipt(id, file),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: tourBookingKeys.all });
     },

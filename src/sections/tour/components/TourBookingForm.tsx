@@ -14,6 +14,7 @@ import { fmtMoney } from '@/utils';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/router';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useTranslation } from 'react-i18next';
 
 type BookingFormValues = {
   departureDate: string;
@@ -32,10 +33,12 @@ const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
   const tourFromContext = useTourDetail();
   const tour = tourProp ?? tourFromContext;
   const authUser = useAuthStore((s) => s.authUser);
+  const { t } = useTranslation();
 
   const [month, setMonth] = useState(currentMonth());
   const [bookingSuccess, setBookingSuccess] = useState<{
     bookingCode: string;
+    bookingId: string;
   } | null>(null);
 
   const { data: availability = [], isLoading: loadingAvailability } =
@@ -101,7 +104,10 @@ const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
           infants: parseInt(data.infants, 10) || 0,
           userId: authUser._id,
         });
-        setBookingSuccess({ bookingCode: result.bookingCode });
+        setBookingSuccess({
+          bookingCode: result.bookingCode,
+          bookingId: result._id,
+        });
       } catch (err: unknown) {
         const message =
           (err as { message?: string })?.message ?? 'Đặt tour thất bại';
@@ -164,21 +170,30 @@ const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
     return (
       <div className="rounded-xl border border-emerald-200 bg-emerald-50/80 dark:border-emerald-800 dark:bg-emerald-950/30 p-5 space-y-4">
         <p className="font-semibold text-emerald-800 dark:text-emerald-200">
-          Đặt tour thành công
+          {t('tour_booking_form.booking_success_title')}
         </p>
         <p className="text-sm text-emerald-700 dark:text-emerald-300">
-          Mã đặt chỗ:{' '}
+          {t('tour_booking_form.booking_success_code')}:{' '}
           <strong className="font-mono">{bookingSuccess.bookingCode}</strong>
         </p>
         <p className="text-sm text-muted-foreground">
-          Bạn có thể tra cứu đơn bằng mã này.
+          {t('tour_booking_form.booking_success_lookup')}
         </p>
         <div className="flex flex-wrap gap-2">
-          <Button asChild size="sm" className="rounded-lg font-medium">
+          {bookingSuccess.bookingId && (
+            <Button asChild size="sm" className="rounded-lg font-medium">
+              <Link
+                to={ROUTES.TOUR_BOOKING_PAYMENT.replace(':id', bookingSuccess.bookingId)}
+              >
+                {t('tour_booking_form.pay_now')}
+              </Link>
+            </Button>
+          )}
+          <Button asChild size="sm" className="rounded-lg font-medium" variant="outline">
             <Link
               to={`${ROUTES.TOUR.BOOKING_LOOKUP}?code=${encodeURIComponent(bookingSuccess.bookingCode)}`}
             >
-              Tra cứu đơn
+              {t('tour_booking_form.lookup_booking')}
             </Link>
           </Button>
           <Button
@@ -188,7 +203,7 @@ const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
             className="rounded-lg"
             onClick={() => setBookingSuccess(null)}
           >
-            Đặt thêm
+            {t('tour_booking_form.book_another')}
           </Button>
         </div>
       </div>

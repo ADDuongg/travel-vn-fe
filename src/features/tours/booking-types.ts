@@ -40,6 +40,14 @@ export type TourBookingStatus =
   | 'CANCELLED'
   | 'COMPLETED';
 
+/** Payment status (Stripe / bank verify / admin) – FE-API-TOUR-PHASE2 */
+export type TourPaymentStatus =
+  | 'UNPAID'
+  | 'PAID'
+  | 'FAILED'
+  | 'REFUNDED'
+  | 'EXPIRED';
+
 /** Populated refs in booking detail (minimal shape) */
 export interface TourBookingTourRef {
   _id: string;
@@ -48,6 +56,7 @@ export interface TourBookingTourRef {
   translations?: Record<string, { name?: string }>;
   duration?: { days: number; nights: number };
   pricing?: { basePrice: number; currency: string };
+  thumbnail?: { url: string; publicId?: string; alt?: string };
 }
 
 /** Tour booking detail (POST response, GET by-code/:code, GET :id) */
@@ -66,11 +75,18 @@ export interface TourBookingDetail {
   depositAmount: number;
   paidAmount: number;
   status: TourBookingStatus;
+  paymentStatus?: TourPaymentStatus;
   createdAt: string;
   updatedAt: string;
   cancelledAt?: string;
   cancelReason?: string;
   paidAt?: string;
+  /** Bank receipt (ảnh chuyển khoản) – 3.10 FE-API-TOUR-PHASE2 */
+  bankReceipt?: {
+    url: string;
+    uploadedAt?: string;
+    verified?: boolean;
+  };
 }
 
 /** Item in GET my-bookings list */
@@ -81,6 +97,7 @@ export interface TourBookingListItem {
   departureDate: string;
   totalAmount: number;
   status: TourBookingStatus;
+  paymentStatus?: TourPaymentStatus;
   createdAt: string;
 }
 

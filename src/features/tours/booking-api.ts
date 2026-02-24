@@ -65,3 +65,20 @@ export function cancelTourBooking(
 ): Promise<TourBookingDetail> {
   return api.patch<TourBookingDetail>(`${BOOKINGS_BASE}/${id}/cancel`, body ?? {});
 }
+
+/** 3.10.1 POST tour-bookings/:id/receipt – Upload ảnh chuyển khoản (multipart/form-data, field `file`) */
+export interface UploadReceiptResponse {
+  message: string;
+  receipt: { url: string; uploadedAt: string; verified: boolean };
+}
+
+export function uploadTourBookingReceipt(
+  id: string,
+  file: File,
+): Promise<UploadReceiptResponse> {
+  const formData = new FormData();
+  formData.append('file', file);
+  return api.post<UploadReceiptResponse>(`${BOOKINGS_BASE}/${id}/receipt`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+}

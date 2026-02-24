@@ -54,10 +54,51 @@ export async function createPaymentIntent(
 }
 
 /**
- * Get payment status by booking ID
+ * Get payment status by booking ID (room)
  */
 export async function getPaymentStatus(
   bookingId: string,
 ): Promise<PaymentStatusResponse> {
   return api.get<PaymentStatusResponse>(`/payments/status/${bookingId}`);
+}
+
+// --- Tour payment (Phase 2) ---
+
+export interface CreateTourPaymentIntentDto {
+  tourBookingId: string;
+}
+
+/**
+ * Create Stripe payment intent for tour booking
+ * POST /api/v1/payments/create-intent/tour
+ */
+export async function createTourPaymentIntent(
+  tourBookingId: string,
+  idempotencyKey: string,
+): Promise<CreatePaymentIntentResponse> {
+  return api.post<CreatePaymentIntentResponse>(
+    '/payments/create-intent/tour',
+    { tourBookingId },
+    {
+      headers: {
+        'Idempotency-Key': idempotencyKey,
+      },
+    },
+  );
+}
+
+/**
+ * Get payment status for tour booking
+ * GET /api/v1/payments/status/tour/:tourBookingId
+ */
+export async function getTourPaymentStatus(
+  tourBookingId: string,
+): Promise<PaymentStatusResponse> {
+  return api.get<PaymentStatusResponse>(
+    `/payments/status/tour/${tourBookingId}`,
+  );
+}
+
+export function generateTourIdempotencyKey(tourBookingId: string): string {
+  return `tour-payment-${tourBookingId}-${Date.now()}`;
 }

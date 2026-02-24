@@ -5,7 +5,9 @@ import { ResponsiveH3 } from '@/components/ui/typography';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useToursQuery } from '@/features/tours/catalog-hooks';
-import TourCard, { TourCardSkeleton } from '@/sections/tour/components/TourCard';
+import TourCard, {
+  TourCardSkeleton,
+} from '@/sections/tour/components/TourCard';
 import TourFilter from '@/sections/tour/components/TourFilter';
 import DisplayItemType from '@/sections/tour/components/DisplayItemType';
 import DisplayContainer from '@/components/DisplayContainer';
@@ -40,7 +42,10 @@ const TourPage: React.FC = () => {
             {t('tour.page.title', 'Explore Tours')}
           </ResponsiveH3>
           <p className="text-lg text-white/90 max-w-2xl mx-auto">
-            {t('tour.page.subtitle', 'Discover unforgettable experiences across Vietnam')}
+            {t(
+              'tour.page.subtitle',
+              'Discover unforgettable experiences across Vietnam',
+            )}
           </p>
         </div>
       </div>
@@ -108,7 +113,7 @@ const TourPage: React.FC = () => {
                     <div className="flex justify-center gap-2 mt-8">
                       <Button
                         variant="outline"
-                        disabled={queryParams.page <= 1}
+                        disabled={(queryParams.page ?? 1) <= 1}
                         onClick={() =>
                           setQueryParams((p) => ({
                             ...p,
@@ -120,7 +125,7 @@ const TourPage: React.FC = () => {
                       </Button>
                       <span className="flex items-center px-4">
                         {t('tour.pagination.page', 'Page')}{' '}
-                        {(queryParams.page ?? 1)} / {pagination.totalPages}
+                        {queryParams.page ?? 1} / {pagination.totalPages}
                       </span>
                       <Button
                         variant="outline"
