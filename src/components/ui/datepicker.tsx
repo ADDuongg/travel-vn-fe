@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { cva } from 'class-variance-authority';
-import type { ComponentSize } from '@interface/commons';
+import * as I from '@/interface/commons';
 
 export interface DatePickerProps {
   value?: Date | undefined;
@@ -20,7 +20,7 @@ export interface DatePickerProps {
   placeholder?: string;
   className?: string;
   disabled?: (date: Date) => boolean;
-  size?: ComponentSize;
+  size?: I.ComponentSize;
 }
 const datePickerVariants = cva('', {
   variants: {

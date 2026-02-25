@@ -1,86 +1,133 @@
-// ProfilePage.tsx
 import CustomInput from '@/components/CustomInput';
+import { LoadingOverlay } from '@/components/LoadingOverlay';
+import { StatusAlert } from '@/components/StatusAlert';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { H3, P } from '@components/ui/typography';
-import React, { useRef, useState } from 'react';
+import { useMe } from '@/features/auth/hooks';
+import {
+  useProvinceSelectOptions,
+  useWardSelectOptions,
+} from '@/hooks/useAddressSelectOptions';
+import { useStatusAlert } from '@/hooks/useStatusAlert';
+import { H3, P } from '@/components/ui/typography';
+import * as I from '@/interface/auth';
+import type { ProfileFormValues } from '@/pages/dashboard/my_account/types';
+import { ADDRESS_NONE } from '@/utils/addressOptions';
+import {
+  DEFAULT_PROFILE_FORM_VALUES,
+  DOB_DAYS,
+  DOB_MONTHS,
+  DOB_YEARS,
+  mapUserToForm,
+} from '@/utils/profileForm';
+import type { Province } from '@/features/provinces/types';
+import React, { useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-
-type FormValues = {
-  firstName: string;
-  lastName: string;
-  gender: string;
-  dobDay: string;
-  dobMonth: string;
-  dobYear: string;
-  email: string;
-  phone: string;
-  country: string;
-  address: string;
-};
-
-const days = Array.from({ length: 31 }, (_, i) => ({
-  label: String(i + 1),
-  value: String(i + 1),
-}));
-const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-].map((m) => ({ label: m, value: m }));
-const years = Array.from({ length: 90 }, (_, i) => 2025 - i).map((y) => ({
-  label: String(y),
-  value: String(y),
-}));
-const countries = [
-  { label: 'United States of America (USA)', value: 'USA' },
-  { label: 'Viet Nam', value: 'VNM' },
-  { label: 'Japan', value: 'JPN' },
-  { label: 'Korea (South)', value: 'KOR' },
-];
+import { useUpdateProfile } from '@/features/user/hooks';
 
 const ProfilePage: React.FC = () => {
-  const methods = useForm<FormValues>({
-    defaultValues: {
-      firstName: 'nguyen',
-      lastName: 'duong',
-      gender: '',
-      dobDay: '8',
-      dobMonth: 'May',
-      dobYear: '2002',
-      email: 'monbedehp1@gmail.com',
-      phone: '0312569666',
-      country: 'USA',
-      address: '',
-    },
+  const { data: me } = useMe();
+  if (!me) {
+    return (
+      <div className="flex justify-center items-center min-h-[200px] text-muted-foreground">
+        Đang tải...
+      </div>
+    );
+  }
+  return <ProfileFormContent key={String(me._id ?? me.id ?? 'me')} me={me} />;
+};
+
+interface ProfileFormContentProps {
+  me: I.UserProfile;
+}
+
+const ProfileFormContent: React.FC<ProfileFormContentProps> = ({ me }) => {
+  const {
+    showSuccess,
+    showError,
+    alertState,
+    clear: clearAlert,
+  } = useStatusAlert({ position: 'top-right' });
+  const { submitProfileForm, isPending } = useUpdateProfile();
+  const { provinceOptions, provincesList } = useProvinceSelectOptions();
+  const methods = useForm<ProfileFormValues>({
+    defaultValues: { ...DEFAULT_PROFILE_FORM_VALUES, ...mapUserToForm(me) },
   });
+  const provinceIdWatcher = methods.watch('provinceId');
+  const { wardOptions, wards } = useWardSelectOptions(provinceIdWatcher);
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [preview, setPreview] = useState<string>('');
+  const [preview, setPreview] = useState<string>(me.avatar?.url ?? '');
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    setPreview(me.avatar?.url ?? '');
+  }, [me.avatar?.url]);
+
+  useEffect(() => {
+    if (!provinceIdWatcher || provinceIdWatcher === ADDRESS_NONE) {
+      methods.setValue('wardCode', ADDRESS_NONE);
+      return;
+    }
+    const currentWardCode = methods.getValues('wardCode');
+    const stillValid =
+      currentWardCode !== ADDRESS_NONE &&
+      wards.some((w) => String(w.code) === String(currentWardCode));
+    if (!stillValid) {
+      methods.setValue('wardCode', ADDRESS_NONE);
+    }
+  }, [provinceIdWatcher, wards, methods]);
+
+  useEffect(() => {
+    if (!provincesList?.length || !me?.address?.provinceId) return;
+    const pid = String(me.address.provinceId);
+    const exists = provincesList.some((p: Province) => String(p._id) === pid);
+    if (exists) {
+      methods.setValue('provinceId', pid);
+      if (me.address.wardCode) {
+        methods.setValue('wardCode', String(me.address.wardCode));
+      }
+    }
+  }, [provincesList, me?.address?.provinceId, me?.address?.wardCode, methods]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setPreview(url);
-    }
+    if (!file) return;
+    if (!file.type.startsWith('image/')) return;
+    setAvatarFile(file);
+    setPreview(URL.createObjectURL(file));
   };
-  const onSubmit = (data: FormValues) => {
-    // TODO: call API update
-    console.log(data);
+
+  const onSubmit = async (data: ProfileFormValues) => {
+    await submitProfileForm(data, {
+      avatarFile: avatarFile ?? undefined,
+      clearPassword: () => methods.setValue('password', ''),
+      onSuccess: () =>
+        showSuccess('Thành công', 'Cập nhật profile thành công.'),
+      onError: (error) =>
+        showError(
+          'Lỗi',
+          error.message ?? 'Không thể cập nhật profile. Vui lòng thử lại.',
+        ),
+    });
+    if (avatarFile && preview.startsWith('blob:')) URL.revokeObjectURL(preview);
+    setAvatarFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   return (
     <FormProvider {...methods}>
+      <LoadingOverlay visible={isPending} />
+      {alertState && (
+        <StatusAlert
+          variant={alertState.variant}
+          title={alertState.title}
+          description={alertState.description}
+          position={alertState.position}
+          onDismiss={clearAlert}
+        />
+      )}
       <form
         onSubmit={methods.handleSubmit(onSubmit)}
         className="space-y-6 mx-auto"
@@ -93,14 +140,12 @@ const ProfilePage: React.FC = () => {
           </CardHeader>
 
           <CardContent className="space-y-8">
-            {/* Avatar + nút đổi ảnh */}
             <div className="flex items-center gap-6">
               <Avatar className="h-20 w-20">
                 <AvatarImage src={preview} alt="Avatar" />
                 <AvatarFallback>DN</AvatarFallback>
               </Avatar>
-
-              <div>
+              <div className="flex flex-col gap-2">
                 <input
                   type="file"
                   accept="image/*"
@@ -110,20 +155,24 @@ const ProfilePage: React.FC = () => {
                 />
                 <Button
                   type="button"
+                  variant="outline"
                   className="px-5"
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  Change Profile Picture
+                  Chọn ảnh đại diện
                 </Button>
+                <span className="text-xs text-muted-foreground">
+                  JPG, PNG hoặc GIF. Ảnh sẽ gửi kèm khi bấm &quot;Cập nhật
+                  profile&quot;.
+                </span>
               </div>
             </div>
 
-            {/* Hàng form: label trái – input phải */}
             <div className="space-y-5">
               <Row label="First Name *">
                 <CustomInput
                   name="firstName"
-                  labelPosition="horizontal" // hỗ trợ bởi CustomInput
+                  labelPosition="horizontal"
                   className="w-full"
                   rules={{ required: 'Vui lòng nhập First Name' }}
                 />
@@ -138,48 +187,12 @@ const ProfilePage: React.FC = () => {
                 />
               </Row>
 
-              <Row label="Gender">
+              <Row label="Username">
                 <CustomInput
-                  name="gender"
-                  type="select"
+                  name="username"
                   labelPosition="horizontal"
-                  className="w-56"
-                  placeHolder="Chọn giới tính"
-                  options={[
-                    { label: 'Male', value: 'male' },
-                    { label: 'Female', value: 'female' },
-                    { label: 'Other', value: 'other' },
-                  ]}
+                  className="w-full"
                 />
-              </Row>
-
-              <Row label="Birth Date *">
-                <div className="flex items-center gap-4">
-                  <CustomInput
-                    name="dobDay"
-                    type="select"
-                    labelPosition="horizontal"
-                    className="w-24"
-                    options={days}
-                    rules={{ required: 'Chọn ngày' }}
-                  />
-                  <CustomInput
-                    name="dobMonth"
-                    type="select"
-                    labelPosition="horizontal"
-                    className="w-36"
-                    options={months}
-                    rules={{ required: 'Chọn tháng' }}
-                  />
-                  <CustomInput
-                    name="dobYear"
-                    type="select"
-                    labelPosition="horizontal"
-                    className="w-28"
-                    options={years}
-                    rules={{ required: 'Chọn năm' }}
-                  />
-                </div>
               </Row>
 
               <Row label="Email *">
@@ -191,6 +204,56 @@ const ProfilePage: React.FC = () => {
                 />
               </Row>
 
+              <Row label="Mật khẩu mới">
+                <CustomInput
+                  name="password"
+                  type="password"
+                  labelPosition="horizontal"
+                  className="w-full max-w-md"
+                  placeHolder="Để trống nếu không đổi mật khẩu"
+                />
+              </Row>
+
+              <Row label="Gender">
+                <CustomInput
+                  name="gender"
+                  type="select"
+                  labelPosition="horizontal"
+                  className="w-56"
+                  placeHolder="Chọn giới tính"
+                  options={I.GENDER_OPTIONS}
+                />
+              </Row>
+
+              <Row label="Birth Date *">
+                <div className="flex items-center gap-4">
+                  <CustomInput
+                    name="dobDay"
+                    type="select"
+                    labelPosition="horizontal"
+                    className="w-24"
+                    options={DOB_DAYS}
+                    rules={{ required: 'Chọn ngày' }}
+                  />
+                  <CustomInput
+                    name="dobMonth"
+                    type="select"
+                    labelPosition="horizontal"
+                    className="w-36"
+                    options={DOB_MONTHS}
+                    rules={{ required: 'Chọn tháng' }}
+                  />
+                  <CustomInput
+                    name="dobYear"
+                    type="select"
+                    labelPosition="horizontal"
+                    className="w-28"
+                    options={DOB_YEARS}
+                    rules={{ required: 'Chọn năm' }}
+                  />
+                </div>
+              </Row>
+
               <Row label="Phone *">
                 <CustomInput
                   name="phone"
@@ -200,30 +263,44 @@ const ProfilePage: React.FC = () => {
                 />
               </Row>
 
-              <Row label="Country *">
+              <Row label="Tỉnh/Thành phố">
                 <CustomInput
-                  name="country"
+                  name="provinceId"
                   type="select"
                   labelPosition="horizontal"
-                  className="w-full max-w-lg"
-                  options={countries}
-                  rules={{ required: 'Chọn quốc gia' }}
+                  className="w-full max-w-md"
+                  placeHolder="Chọn tỉnh/thành phố"
+                  options={provinceOptions}
                 />
               </Row>
 
-              <Row label="Contact Address">
+              <Row label="Phường/Xã">
                 <CustomInput
-                  name="address"
+                  name="wardCode"
+                  type="select"
+                  labelPosition="horizontal"
+                  className="w-full max-w-md"
+                  placeHolder={
+                    wardOptions.length > 1
+                      ? 'Chọn phường/xã'
+                      : 'Chọn tỉnh trước'
+                  }
+                  options={wardOptions}
+                />
+              </Row>
+
+              <Row label="Địa chỉ chi tiết">
+                <CustomInput
+                  name="detail"
                   labelPosition="horizontal"
                   className="w-full"
                 />
               </Row>
             </div>
 
-            {/* Submit */}
-            <div className="flex justify-center pt-2">
-              <Button type="submit" className="px-6">
-                Update Profile
+            <div className="flex flex-col items-center gap-3 pt-2">
+              <Button type="submit" className="px-6" disabled={isPending}>
+                {isPending ? 'Đang cập nhật...' : 'Update Profile'}
               </Button>
             </div>
           </CardContent>
@@ -233,10 +310,10 @@ const ProfilePage: React.FC = () => {
   );
 };
 
-const Row: React.FC<{ label: React.ReactNode; children: React.ReactNode }> = ({
-  label,
-  children,
-}) => (
+const Row: React.FC<{
+  label: React.ReactNode;
+  children: React.ReactNode;
+}> = ({ label, children }) => (
   <div className="flex items-start gap-6">
     <div className="w-40 shrink-0 text-sm text-muted-foreground pt-2">
       {label}

@@ -1,16 +1,16 @@
 // features/bookings/booking/api.ts
 import api from '@/lib/axios';
 import type { Booking } from '../shared/types';
-import type { ApiListResponse, SortParam } from '@interface/api';
+import * as I from '@/interface/api';
 
 export async function getMyBookings(params: {
   pageIndex: number;
   pageSize: number;
   q?: string;
   status?: string;
-  sort?: SortParam[];
+  sort?: I.SortParam[];
 }) {
-  return api.get<ApiListResponse<Booking>>('/api/v1/bookings/me', {
+  return api.get<I.ApiListResponse<Booking>>('/api/v1/bookings/me', {
     params: {
       page: params.pageIndex + 1,
       limit: params.pageSize,

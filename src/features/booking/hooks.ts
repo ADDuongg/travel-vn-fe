@@ -1,7 +1,7 @@
 // features/bookings/hooks/useMyBookings.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getBookingById, getMyBookings, cancelBooking } from '../booking/api';
-import type { ApiListResponse, SortParam } from '@interface/api';
+import * as I from '@/interface/api';
 import type { Booking } from '../shared/types';
 
 export const bookingKeys = {
@@ -21,9 +21,9 @@ export function useMyBookings({
   pageSize: number;
   q?: string;
   status?: string;
-  sort?: SortParam[];
+  sort?: I.SortParam[];
 }) {
-  return useQuery<ApiListResponse<Booking>>({
+  return useQuery<I.ApiListResponse<Booking>>({
     queryKey: bookingKeys.list({ pageIndex, pageSize, q, status, sort }),
     queryFn: async () => {
       const res = await getMyBookings({

@@ -13,7 +13,7 @@ import DataTable from '@/shared/table/DataTable';
 import { useMyTourBookingsQuery } from '@/features/tours/booking-hooks';
 import type { TourBookingListItem, TourBookingTourRef } from '@/features/tours/booking-types';
 import type { RowSelectionState, SortingState } from '@tanstack/react-table';
-import type { Paginate } from '@interface/api';
+import * as I from '@/interface/api';
 import { ROUTES } from '@/constants/router';
 import { fmtMoney, fmtDate, getPaymentExpireAt } from '@/utils';
 import { useCountdown } from '@/hooks/useCountdown';
@@ -260,7 +260,7 @@ const useColumns = (): ColumnDef<TourBookingListItem>[] => {
 
 const TourBookingPage: React.FC = () => {
   const { t } = useTranslation();
-  const [pagination, setPagination] = useState<Paginate>({
+  const [pagination, setPagination] = useState<I.Paginate>({
     pageIndex: 0,
     pageSize: 10,
   });

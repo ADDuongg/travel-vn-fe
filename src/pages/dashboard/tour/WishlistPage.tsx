@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { Trash2 } from 'lucide-react';
 import { Button } from '@components/ui/button';
 import { useBookingsQuery } from '@/features/tours/hooks';
-import type { SortParam } from '@interface/api';
+import * as I from '@/interface/api';
 import type { BookingStatus } from '@/features/shared/types';
 import DataTable from '@/shared/table/DataTable';
 type WishRow = {
@@ -25,7 +25,7 @@ const WishListPage: React.FC = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
   const [globalFilter, setGlobalFilter] = useState('');
-  const sortParams: SortParam[] = sorting.map((s) => ({
+  const sortParams: I.SortParam[] = sorting.map((s) => ({
     by: s.id,
     dir: s.desc ? 'desc' : 'asc',
   }));

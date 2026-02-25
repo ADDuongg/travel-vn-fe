@@ -6,7 +6,7 @@ import CustomInput from '@components/CustomInput';
 import { Button } from '@components/ui/button';
 import { Separator } from '@components/ui/separator';
 import { P, ResponsiveH1, ResponsiveH5 } from '@components/ui/typography';
-import type { LoginFormValues } from '@interface/auth';
+import * as I from '@/interface/auth';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
@@ -14,10 +14,10 @@ import { useNavigate } from 'react-router';
 const LoginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const methods = useForm<LoginFormValues>();
+  const methods = useForm<I.LoginFormValues>();
   const { login, isPending } = useLogin();
 
-  const handleSubmit = (data: LoginFormValues) => login(data);
+  const handleSubmit = (data: I.LoginFormValues) => login(data);
   return (
     <MainLayout>
       <div className="bg-background_paleGray p-32 text-center space-y-3">

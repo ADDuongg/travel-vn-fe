@@ -12,6 +12,7 @@ export interface Province {
   slug: string;
   name: { vi: string; en: string };
   fullName?: { vi: string; en: string };
-  /** Districts/wards tương ứng (khi API hỗ trợ) */
+  /** Quận/huyện, phường/xã – API có thể trả về `wards` (DB) hoặc `districts` */
   districts?: DistrictOrWard[];
+  wards?: DistrictOrWard[];
 }

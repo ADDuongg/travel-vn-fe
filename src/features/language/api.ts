@@ -1,6 +1,6 @@
 import api from '@/lib/axios';
-import type { Language } from '@interface/commons';
+import * as I from '@/interface/commons';
 
 export function getLanguages() {
-  return api.get<Language[]>('/api/v1/languages');
+  return api.get<I.Language[]>('/api/v1/languages');
 }

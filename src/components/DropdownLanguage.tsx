@@ -7,15 +7,22 @@ import {
 } from '@/components/ui/select';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useGetLanguagesQuery } from '@/features/language/hooks';
+import * as I from '@/interface/commons';
 
 export const DropdownLanguage = () => {
   const { language, changeLanguage } = useLanguage();
-  const { data: languages = [], isLoading } = useGetLanguagesQuery();
+  const { data: languages = [] } = useGetLanguagesQuery();
 
-  const currentLang = languages.find((l) => l.code === language);
-  console.log('languages', languages);
+  const fallbackLanguages: I.Language[] = [
+    { code: 'vi', name: 'Tiếng Việt', isActive: true },
+    { code: 'en', name: 'English', isActive: true },
+  ];
 
-  if (isLoading) return null;
+  const languageOptions =
+    Array.isArray(languages) && languages.length > 0 ? languages : fallbackLanguages;
+
+  const currentLang =
+    languageOptions.find((l) => l.code === language) ?? languageOptions[0];
 
   return (
     <Select value={language} onValueChange={changeLanguage}>
@@ -32,7 +39,7 @@ export const DropdownLanguage = () => {
       </SelectTrigger>
 
       <SelectContent className="w-auto">
-        {languages
+        {languageOptions
           .filter((l) => l.isActive)
           .map((lang, idx) => (
             <SelectItem

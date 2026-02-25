@@ -5,7 +5,7 @@ export function login(data: I.LoginFormValues) {
   return api.post<I.LoginPayload>('/api/v1/auth/login', data);
 }
 
-export function register(data: I.LoginFormValues) {
+export function register(data: I.RegisterFormValues) {
   return api.post<I.LoginPayload>('/api/v1/auth/register', data);
 }
 
@@ -14,7 +14,7 @@ export function logout() {
 }
 
 export function getMe() {
-  return api.get<I.LoginPayload>('/api/v1/auth/me');
+  return api.get<I.UserProfile>('/api/v1/auth/me');
 }
 
 export function refresh() {

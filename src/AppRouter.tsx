@@ -8,7 +8,7 @@ import {
   type NonIndexRouteObject,
 } from 'react-router-dom';
 import { useInitAuth } from '@hooks/useInitAuth';
-import type { RouteConfig } from '@interface/commons';
+import * as I from '@/interface/commons';
 import ErrorBoundary from '@lib/ErrorBoundary';
 import ProtectedRoute from './components/ProtectedRoute';
 import type { EnumRole } from './constants/commons';
@@ -34,7 +34,7 @@ const wrap = (
 );
 
 const transformRoutes = (
-  configs: RouteConfig[],
+  configs: I.RouteConfig[],
   userRoles: string[] | undefined,
 ): RouteObject[] => {
   return configs.map<RouteObject>((cfg) => {

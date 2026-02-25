@@ -17,4 +17,8 @@ export type PageMeta = Paginate & {
   pageCount: number;
 };
 
-export type SortParam = { by: string; dir: 'asc' | 'desc' };
+/** Hướng sắp xếp */
+export const SortDir = { Asc: 'asc', Desc: 'desc' } as const;
+export type SortDir = (typeof SortDir)[keyof typeof SortDir];
+
+export type SortParam = { by: string; dir: SortDir };

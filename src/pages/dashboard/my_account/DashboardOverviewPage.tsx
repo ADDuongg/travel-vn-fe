@@ -1,8 +1,33 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useMe } from '@/features/auth/hooks';
 import React from 'react';
 
+const formatDate = (value?: string) => {
+  if (!value) return '-';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '-';
+  return date.toLocaleDateString();
+};
+
 const DashboardOverviewPage: React.FC = () => {
+  const { data: me, isLoading } = useMe();
+
+  const name = me?.fullName || me?.username || '-';
+  const email = me?.email || '-';
+  const phone = me?.phone || '-';
+  const birthDate = formatDate(me?.dateOfBirth);
+  const addressText =
+    me?.address &&
+    (me.address.province || me.address.district || me.address.detail)
+      ? [me.address.detail, me.address.district, me.address.province]
+          .filter(Boolean)
+          .join(', ')
+      : '-';
+  const gender = (me as any)?.gender ?? '-';
+  const avatarUrl =
+    me?.avatar?.url || 'https://via.placeholder.com/80x80?text=%F0%9F%91%A4';
+
   return (
     <div className="flex-1 space-y-6">
       {/* Profile Card */}
@@ -24,7 +49,7 @@ const DashboardOverviewPage: React.FC = () => {
             {/* Avatar */}
             <div className="flex-shrink-0">
               <img
-                src="https://via.placeholder.com/80x80?text=👤"
+                src={avatarUrl}
                 alt="Avatar"
                 className="w-20 h-20 rounded-full border border-gray-200"
               />
@@ -34,30 +59,33 @@ const DashboardOverviewPage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm w-full">
               <div className="space-y-6">
                 <p>
-                  <span className="font-semibold ">Name:</span> nguyen duong
+                  <span className="font-semibold ">Name:</span>{' '}
+                  {isLoading ? 'Loading...' : name}
                 </p>
                 <p>
-                  <span className="font-semibold ">Birth Date:</span> May 8,
-                  2002
+                  <span className="font-semibold ">Birth Date:</span>{' '}
+                  {isLoading ? 'Loading...' : birthDate}
                 </p>
                 <p>
                   <span className="font-semibold ">Email:</span>{' '}
-                  monbedehp1@gmail.com
+                  {isLoading ? 'Loading...' : email}
                 </p>
                 <p>
-                  <span className="font-semibold ">Contact Address:</span> -
+                  <span className="font-semibold ">Contact Address:</span>{' '}
+                  {isLoading ? 'Loading...' : addressText}
                 </p>
               </div>
               <div className="space-y-6">
                 <p>
-                  <span className="font-semibold ">Gender:</span> -
+                  <span className="font-semibold ">Gender:</span>{' '}
+                  {isLoading ? 'Loading...' : gender}
                 </p>
                 <p>
-                  <span className="font-semibold ">Country:</span> United States
-                  of America (USA)
+                  <span className="font-semibold ">Country:</span> -
                 </p>
                 <p>
-                  <span className="font-semibold ">Phone:</span> 0312569666
+                  <span className="font-semibold ">Phone:</span>{' '}
+                  {isLoading ? 'Loading...' : phone}
                 </p>
               </div>
             </div>

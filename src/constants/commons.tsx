@@ -1,7 +1,7 @@
-import type { CountryFlag, HeaderItemType } from '@/interface/commons';
+import * as I from '@/interface/commons';
 import { ROUTES } from './router';
 
-export const HeaderItem: HeaderItemType[] = [
+export const HeaderItem: I.HeaderItemType[] = [
   {
     name: 'home',
     label: 'home',
@@ -71,7 +71,7 @@ export const HeaderItem: HeaderItemType[] = [
   },
 ];
 
-export const countryFlags: Record<string, CountryFlag> = {
+export const countryFlags: Record<string, I.CountryFlag> = {
   vi: { label: 'VI', code: 'VN' },
   en: { label: 'ENG', code: 'EN' },
 };

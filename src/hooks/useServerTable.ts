@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // shared/tablekit/useServerTable.ts
-import type { PageMeta } from '@interface/api';
-import type { TableState } from '@interface/commons';
+import * as I from '@/interface/api';
+import * as IC from '@/interface/commons';
 import {
   getCoreRowModel,
   useReactTable,
@@ -13,8 +13,8 @@ import * as React from 'react';
 export function useServerTable<TData>(opts: {
   data: TData[];
   columns: ColumnDef<TData, any>[];
-  meta: PageMeta;
-  state: TableState;
+  meta: I.PageMeta;
+  state: IC.TableState;
   windowSize?: number;
   onSelectionChange?: (rows: TData[]) => void;
 }) {

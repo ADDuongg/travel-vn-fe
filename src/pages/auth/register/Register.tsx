@@ -1,4 +1,5 @@
 import { ROUTES } from '@/constants/router';
+import { useRegister } from '@/features/auth/hooks';
 import { MainLayout } from '@/layout';
 import Container from '@components/Container';
 import CustomInput from '@components/CustomInput';
@@ -11,20 +12,38 @@ import {
   ResponsiveH6,
   SubTitle,
 } from '@components/ui/typography';
-import type { InputInterface } from '@interface/commons';
+import * as I from '@/interface/auth';
+import * as IC from '@/interface/commons';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
   const { t } = useTranslation();
-  const methods = useForm();
+  const methods = useForm<I.RegisterFormValues>();
   const navigate = useNavigate();
-  const handleSubmit = (data: any) => {
-    alert(`Subscribed: ${data.email}`);
+  const { register: registerMutation, isPending } = useRegister();
+
+  const handleSubmit = (data: I.RegisterFormValues) => {
+    const payload: I.RegisterFormValues = {
+      username: data.username,
+      email: data.email,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+      fullName: data.fullName,
+      phone: data.phone,
+      dateOfBirth: data.dateOfBirth,
+      address: data.address,
+    };
+
+    registerMutation(payload, {
+      onSuccess: () => {
+        navigate(ROUTES.DASHBOARD.INDEX);
+      },
+    });
   };
 
-  const inputs: InputInterface[] = [
+  const inputs: IC.InputInterface[] = [
     {
       name: 'username',
       label: t('input.field_label.username', {
@@ -46,22 +65,12 @@ const RegisterPage = () => {
       gridClass: 'col-span-12 md:col-span-6',
     },
     {
-      name: 'firstName',
-      label: t('input.field_label.first_name', {
-        defaultValue: 'First Name',
+      name: 'fullName',
+      label: t('input.field_label.full_name', {
+        defaultValue: 'Full Name',
       }),
-      placeholder: t('input.placeholder.first_name', {
-        defaultValue: 'Enter First Name',
-      }),
-      gridClass: 'col-span-12 md:col-span-6',
-    },
-    {
-      name: 'lastName',
-      label: t('input.field_label.last_name', {
-        defaultValue: 'Last Name',
-      }),
-      placeholder: t('input.placeholder.last_name', {
-        defaultValue: 'Enter Last Name',
+      placeholder: t('input.placeholder.full_name', {
+        defaultValue: 'Enter Full Name',
       }),
       gridClass: 'col-span-12 md:col-span-6',
     },
@@ -89,7 +98,7 @@ const RegisterPage = () => {
       gridClass: 'col-span-12 md:col-span-4',
     },
     {
-      name: 'birth',
+      name: 'dateOfBirth',
       label: t('input.field_label.birth'),
       placeholder: t('input.placeholder.birth'),
       type: 'date',
@@ -133,7 +142,9 @@ const RegisterPage = () => {
                 ))}
               </div>
 
-              <Button size="lg">{t('buttons.register')}</Button>
+              <Button size="lg" disabled={isPending}>
+                {t('buttons.register')}
+              </Button>
             </form>
           </FormProvider>
         </div>

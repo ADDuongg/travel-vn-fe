@@ -2,7 +2,7 @@ import { Separator } from '@/components/ui/separator';
 import { useMyBookings } from '@/features/booking/hooks';
 import type { Booking } from '@/features/shared/types';
 import DataTable from '@/shared/table/DataTable';
-import type { Paginate, SortParam } from '@interface/api';
+import * as I from '@/interface/api';
 import type { RowSelectionState, SortingState } from '@tanstack/react-table';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -67,7 +67,7 @@ const RoomBookingPage: React.FC = () => {
   );
 
   const [status, setStatus] = useState<BookingStatusFilter>('all');
-  const [pagination, setPagination] = useState<Paginate>({
+  const [pagination, setPagination] = useState<I.Paginate>({
     pageIndex: 0,
     pageSize: 5,
   });
@@ -75,7 +75,7 @@ const RoomBookingPage: React.FC = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
 
-  const sortParams: SortParam[] = sorting.map((s) => ({
+  const sortParams: I.SortParam[] = sorting.map((s) => ({
     by: s.id,
     dir: s.desc ? 'desc' : 'asc',
   }));

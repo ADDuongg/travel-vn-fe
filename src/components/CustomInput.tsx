@@ -16,11 +16,11 @@ import {
 } from '@/components/ui/select';
 import { Label } from './ui/label';
 import { DatePicker } from './ui/datepicker';
-import type { InputType } from '@interface/commons';
+import * as I from '@/interface/commons';
 
 interface CustomInputProps {
   name: string;
-  type?: InputType;
+  type?: I.InputType;
   label?: string | React.ReactNode;
   options?: { label: string; value: string }[];
   render?: (field: any) => React.ReactNode;

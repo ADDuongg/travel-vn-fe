@@ -17,16 +17,16 @@ import {
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
 import { useServerTable } from '@hooks/useServerTable';
-import type { ApiListResponse } from '@interface/api';
-import type { TableState } from '@interface/commons';
+import * as I from '@/interface/api';
+import * as IC from '@/interface/commons';
 import type { ColumnDef } from '@tanstack/react-table';
 import { flexRender } from '@tanstack/react-table';
 import { ChevronDown } from 'lucide-react';
 
 type DataTableProps<TData> = {
   columns: ColumnDef<TData>[];
-  data: ApiListResponse<TData>;
-  tableState: TableState;
+  data: I.ApiListResponse<TData>;
+  tableState: IC.TableState;
 };
 
 function DataTable<TData>({

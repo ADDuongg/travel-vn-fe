@@ -6,14 +6,14 @@ import {
   type GetBookingsParams,
 } from './api';
 import type { TourBookingRow } from './types';
-import type { ApiListResponse } from '@interface/api';
+import * as I from '@/interface/api';
 export const bookingKeys = {
   all: ['bookings'] as const,
   list: (filters: unknown) => [...bookingKeys.all, 'list', filters] as const,
   detail: (id: string) => [...bookingKeys.all, 'detail', id] as const,
 };
 export function useBookingsQuery(params: GetBookingsParams) {
-  return useQuery<ApiListResponse<TourBookingRow>>({
+  return useQuery<I.ApiListResponse<TourBookingRow>>({
     queryKey: bookingKeys.list(params),
     queryFn: () => getBookings(params),
     // keepPreviousData: true,

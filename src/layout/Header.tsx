@@ -1,6 +1,6 @@
 import { HeaderItem } from '@/constants/commons';
 import { ROUTES } from '@/constants/router';
-import { useLogout } from '@/features/auth/hooks';
+import { useLogout, useMe } from '@/features/auth/hooks';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { DropdownLanguage } from '@components/DropdownLanguage';
 import { Button } from '@components/ui/button';
@@ -83,7 +83,13 @@ const HeaderList = () => {
   );
 };
 
-const UserMenu = ({ userName }: { userName: string }) => {
+const UserMenu = ({
+  userName,
+  avatarUrl,
+}: {
+  userName: string;
+  avatarUrl?: string;
+}) => {
   const { t } = useTranslation();
   const { logout } = useLogout();
   const [open, setOpen] = useState(false);
@@ -107,7 +113,7 @@ const UserMenu = ({ userName }: { userName: string }) => {
         onClick={() => setOpen((v) => !v)}
       >
         <img
-          src="https://picsum.photos/400/250?random=6"
+          src={avatarUrl || 'https://picsum.photos/400/250?random=6'}
           alt="avatar"
           className="w-8 h-8 rounded-full"
         />
@@ -130,7 +136,7 @@ const UserMenu = ({ userName }: { userName: string }) => {
         </Link>
 
         <Link
-          to="/profile/edit"
+          to={ROUTES.DASHBOARD.PROFILE}
           className="block px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
           onClick={() => setOpen(false)}
         >
@@ -175,8 +181,11 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // const { data: me } = useMe();
+  const { data: me } = useMe();
   const { authUser } = useAuthStore();
+
+  const displayName = me?.fullName || authUser?.username || 'User';
+  const avatarUrl = me?.avatar?.url;
 
   return (
     <div
@@ -205,7 +214,7 @@ const Header = () => {
                 {t('buttons.login')}
               </Button>
             ) : (
-              <UserMenu userName={authUser?.username} />
+              <UserMenu userName={displayName} avatarUrl={avatarUrl} />
             )}
           </div>
         </>
@@ -220,7 +229,7 @@ const Header = () => {
               {t('buttons.login')}
             </Button>
           ) : (
-            <UserMenu userName="nguyen duong" />
+            <UserMenu userName={displayName} avatarUrl={avatarUrl} />
           )}
         </div>
       )}
