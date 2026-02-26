@@ -1,0 +1,111 @@
+/** Province ref (populated) – từ GET /api/v1/provinces */
+export interface ProvinceRef {
+  _id: string;
+  name: { vi: string; en: string };
+  code?: string;
+  slug?: string;
+  fullName?: { vi: string; en: string };
+}
+
+export interface TourGuideTranslation {
+  bio?: string;
+  shortBio?: string;
+  specialties?: string;
+  /** Mảng chuyên môn theo ngôn ngữ (cùng thứ tự giữa các lang) */
+  specialtyItems?: string[];
+}
+
+/** User info populated trên guide (public) */
+export interface TourGuideUserRef {
+  _id: string;
+  fullName?: string;
+  avatar?: { url: string; publicId?: string };
+}
+
+export type TourGuideSortBy = 'rating' | 'experience' | 'newest';
+
+export interface TourGuideRatingSummary {
+  average: number;
+  total: number;
+}
+
+/** TourGuide – list item (GET /api/v1/tour-guides) */
+export interface TourGuideListItem {
+  _id: string;
+  userId: string;
+  user?: TourGuideUserRef;
+  translations: Record<string, TourGuideTranslation>;
+  languages: string[];
+  specializedProvinces: string[] | ProvinceRef[];
+  certifications: string[];
+  licenseNumber?: string;
+  yearsOfExperience?: number;
+  gallery?: Array<{ url: string; publicId?: string; alt?: string }>;
+  ratingSummary: TourGuideRatingSummary;
+  /** Tỷ lệ phản hồi (0–100) */
+  responseRate?: number;
+  /** Số chuyến đi hoàn tất */
+  completedTripsCount?: number;
+  /** Tỷ lệ khách quay lại (0–100) */
+  returningCustomerRate?: number;
+  isAvailable: boolean;
+  isActive: boolean;
+  isVerified: boolean;
+  dailyRate?: number;
+  currency: string;
+  contactMethods: string[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+/** TourGuide – full detail (GET /api/v1/tour-guides/:id) */
+export interface TourGuide extends TourGuideListItem {
+  cv?: {
+    url: string;
+    publicId?: string;
+    filename?: string;
+  };
+  verifiedAt?: string;
+}
+
+export interface TourGuidePagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+export interface TourGuidePaginatedResponse {
+  items: TourGuideListItem[];
+  pagination: TourGuidePagination;
+}
+
+export interface TourGuideQueryParams {
+  page?: number;
+  limit?: number;
+  provinceId?: string;
+  language?: string;
+  isVerified?: boolean;
+  isAvailable?: boolean;
+  minRating?: number;
+  search?: string;
+  sort?: TourGuideSortBy;
+}
+
+/** Review item – GET /api/v1/tour-guides/:id/reviews */
+export interface TourGuideReview {
+  _id: string;
+  entityType: 'GUIDE';
+  entityId: string;
+  rating: number;
+  comment?: string;
+  userId?: string | null;
+  isAnonymous: boolean;
+  isApproved: boolean;
+  createdAt: string;
+}
+
+export interface TourGuideReviewsResponse {
+  items: TourGuideReview[];
+  pagination: TourGuidePagination;
+}

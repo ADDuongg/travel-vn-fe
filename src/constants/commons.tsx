@@ -53,6 +53,11 @@ export const HeaderItem: I.HeaderItemType[] = [
         path: ROUTES.TOUR.INDEX,
       },
       {
+        name: 'tour_guide_list',
+        label: 'tour_guide_list',
+        path: ROUTES.TOUR_GUIDE.INDEX,
+      },
+      {
         name: 'room_list',
         label: 'room_list',
         path: ROUTES.LIST_ROOMS,

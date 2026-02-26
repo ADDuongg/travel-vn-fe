@@ -26,7 +26,6 @@ export default function ReviewItem({
 
   const { editReview, isPending } = useEditReview();
   const { deleteReview } = useDeleteReview();
-  console.log('review', review?._id);
 
   return (
     <div className="border-b pb-6 relative">

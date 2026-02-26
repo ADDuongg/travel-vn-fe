@@ -17,6 +17,11 @@ export const ROUTES = {
     /** Tra cứu đơn theo mã (public) */
     BOOKING_LOOKUP: '/tour/booking/lookup',
   },
+  /** Hướng dẫn viên (public list + detail) */
+  TOUR_GUIDE: {
+    INDEX: '/tour-guides',
+    DETAIL: '/tour-guides/:id',
+  },
   ROOM: {
     INDEX: '/room',
     SEARCH: '/room/search',

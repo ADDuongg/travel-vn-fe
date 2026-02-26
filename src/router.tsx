@@ -67,6 +67,12 @@ const OurServicesPage = Loadable(() => import('@/pages/our-services/OurServices'
 const TeamPage = Loadable(() => import('@/pages/team/Team'));
 const GalleryPage = Loadable(() => import('@/pages/gallery/Gallery'));
 const FoodDetailPage = Loadable(() => import('@/pages/food/FoodDetail'));
+const TourGuideListPage = Loadable(
+  () => import('@/pages/tour-guide/TourGuideListPage'),
+);
+const TourGuideDetailPage = Loadable(
+  () => import('@/pages/tour-guide/TourGuideDetailPage'),
+);
 
 export const routes: RouteConfig[] = [
   {
@@ -207,6 +213,14 @@ export const routes: RouteConfig[] = [
   {
     path: ROUTES.FOOD.DETAIL,
     element: <FoodDetailPage />,
+  },
+  {
+    path: ROUTES.TOUR_GUIDE.INDEX,
+    element: <TourGuideListPage />,
+  },
+  {
+    path: ROUTES.TOUR_GUIDE.DETAIL,
+    element: <TourGuideDetailPage />,
   },
   {
     path: ROUTES.LOGIN,
