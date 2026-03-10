@@ -6,12 +6,20 @@ import { useLanguage } from '@/hooks/useLanguage';
 import CustomInput from '@/components/CustomInput';
 import { Button } from '@/components/ui/button';
 import { ResponsiveH5 } from '@/components/ui/typography';
-import type { TourQueryParams, TourType, Difficulty, TourSortBy } from '@/features/tours/catalog-types';
+import type {
+  TourQueryParams,
+  TourType,
+  Difficulty,
+  TourSortBy,
+} from '@/features/tours/catalog-types';
 import type { Province } from '@/features/provinces/types';
 
 const ALL_VALUE = '__all__';
 
-export type TourFilterValues = Omit<Partial<TourQueryParams>, 'tourType' | 'difficulty'> & {
+export type TourFilterValues = Omit<
+  Partial<TourQueryParams>,
+  'tourType' | 'difficulty'
+> & {
   destinationId?: string;
   departureProvinceId?: string;
   tourType?: string;
@@ -77,7 +85,10 @@ const TourFilter: React.FC<TourFilterProps> = ({ onFilter, onClear }) => {
     if (values.destinationId && values.destinationId !== ALL_VALUE) {
       params.destinationId = values.destinationId;
     }
-    if (values.departureProvinceId && values.departureProvinceId !== ALL_VALUE) {
+    if (
+      values.departureProvinceId &&
+      values.departureProvinceId !== ALL_VALUE
+    ) {
       params.departureProvinceId = values.departureProvinceId;
     }
     if (values.tourType && values.tourType !== ALL_VALUE) {
@@ -128,14 +139,20 @@ const TourFilter: React.FC<TourFilterProps> = ({ onFilter, onClear }) => {
           name="search"
           type="text"
           label={t('tour.filter.search', 'Search')}
-          placeHolder={t('tour.filter.search_placeholder', 'Tour name or code...')}
+          placeHolder={t(
+            'tour.filter.search_placeholder',
+            'Tour name or code...',
+          )}
         />
 
         <CustomInput
           name="destinationId"
           type="select"
           label={t('tour.filter.destination', 'Destination')}
-          placeHolder={t('tour.filter.select_destination', 'Select destination')}
+          placeHolder={t(
+            'tour.filter.select_destination',
+            'Select destination',
+          )}
           options={[
             { label: t('common.all'), value: ALL_VALUE },
             ...(provincesList ?? []).map((p: Province) => ({
@@ -190,33 +207,33 @@ const TourFilter: React.FC<TourFilterProps> = ({ onFilter, onClear }) => {
         />
 
         <div className="flex gap-2">
-        <CustomInput
-          name="minPrice"
-          type="text"
-          label={t('tour.filter.min_price', 'Min Price (VND)')}
-          placeHolder="0"
-        />
-        <CustomInput
-          name="maxPrice"
-          type="text"
-          label={t('tour.filter.max_price', 'Max Price (VND)')}
-          placeHolder="0"
-        />
+          <CustomInput
+            name="minPrice"
+            type="text"
+            label={t('tour.filter.min_price', 'Min Price (VND)')}
+            placeHolder="0"
+          />
+          <CustomInput
+            name="maxPrice"
+            type="text"
+            label={t('tour.filter.max_price', 'Max Price (VND)')}
+            placeHolder="0"
+          />
         </div>
 
         <div className="flex gap-2">
-        <CustomInput
-          name="minDays"
-          type="text"
-          label={t('tour.filter.min_days', 'Min Days')}
-          placeHolder="0"
-        />
-        <CustomInput
-          name="maxDays"
-          type="text"
-          label={t('tour.filter.max_days', 'Max Days')}
-          placeHolder="0"
-        />
+          <CustomInput
+            name="minDays"
+            type="text"
+            label={t('tour.filter.min_days', 'Min Days')}
+            placeHolder="0"
+          />
+          <CustomInput
+            name="maxDays"
+            type="text"
+            label={t('tour.filter.max_days', 'Max Days')}
+            placeHolder="0"
+          />
         </div>
 
         <Button

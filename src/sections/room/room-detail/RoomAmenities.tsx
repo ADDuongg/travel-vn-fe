@@ -2,10 +2,10 @@
 
 import { EnumLanguage } from '@/constants/commons';
 import type { Room } from '@/features/rooms/types';
-import { useLocalStorage } from 'usehooks-ts';
+import { useI18nStorage } from '@/hooks/useI18nStorage';
 
 const RoomAmenities = ({ room }: { room: Room }) => {
-  const [value] = useLocalStorage('i18nextLng', EnumLanguage.DEFAULT);
+  const [value] = useI18nStorage(EnumLanguage.DEFAULT);
   return (
     <section className="mt-10 space-y-10">
       {room?.amenities?.map((section, idx) => (

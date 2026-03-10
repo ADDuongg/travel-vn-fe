@@ -1,9 +1,9 @@
 import api from '@/lib/axios';
 import type {
   TourGuide,
-  TourGuideListItem,
   TourGuidePaginatedResponse,
   TourGuideQueryParams,
+  TourGuideRegisterPayload,
   TourGuideReviewsResponse,
 } from './types';
 
@@ -24,4 +24,8 @@ export function getTourGuideReviews(
   return api.get<TourGuideReviewsResponse>(`${BASE}/${guideId}/reviews`, {
     params,
   });
+}
+
+export function registerTourGuide(payload: TourGuideRegisterPayload) {
+  return api.post<TourGuide>(`${BASE}/register`, payload);
 }

@@ -17,6 +17,11 @@ export const HeaderItem: I.HeaderItemType[] = [
         path: ROUTES.DESTINATION.SEARCH,
       },
       {
+        name: 'provinces',
+        label: 'nav.provinces',
+        path: ROUTES.PROVINCE.INDEX,
+      },
+      {
         name: 'about-us',
         label: 'nav.about_us',
         path: ROUTES.ABOUT_US,

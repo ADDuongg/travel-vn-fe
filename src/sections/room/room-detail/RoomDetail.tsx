@@ -2,10 +2,10 @@ import React from 'react';
 import { Separator } from '@components/ui/separator';
 import type { Room } from '@/features/rooms/types';
 import { EnumLanguage } from '@/constants/commons';
-import { useLocalStorage } from 'usehooks-ts';
+import { useI18nStorage } from '@/hooks/useI18nStorage';
 
 const RoomDetail = ({ room }: { room: Room }) => {
-  const [value] = useLocalStorage('i18nextLng', EnumLanguage.DEFAULT);
+  const [value] = useI18nStorage(EnumLanguage.DEFAULT);
   console.log('room', room);
 
   return (

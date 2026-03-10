@@ -35,7 +35,7 @@ const FilterListComponent: React.FC<Props> = ({ onFilter, onClear }) => {
 
   const provinceId = methods.watch('provinceId') ?? PROVINCE_ALL_VALUE;
   const selectedProvince = provincesList?.find((p) => p._id === provinceId);
-  const wards = selectedProvince?.districts ?? [];
+  const wards = selectedProvince?.wards ?? [];
 
   React.useEffect(() => {
     methods.setValue('wardId', WARD_ALL_VALUE);
@@ -83,7 +83,7 @@ const FilterListComponent: React.FC<Props> = ({ onFilter, onClear }) => {
             placeHolder={t('input.placeholder.ward', 'Chọn quận/huyện')}
             options={[
               { label: t('list_page.all_wards', 'Tất cả'), value: WARD_ALL_VALUE },
-              ...wards.map((w) => ({
+              ...wards.map((w: DistrictOrWard) => ({
                 label: getDistrictName(w),
                 value: (w as { _id?: string })._id ?? w.code,
               })),

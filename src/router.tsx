@@ -32,6 +32,9 @@ const TourBookingPage = Loadable(
 const TourBookingDetailPage = Loadable(
   () => import('@pages/dashboard/tour/TourBookingDetailPage'),
 );
+const TourGuideRegisterPage = Loadable(
+  () => import('@pages/dashboard/tour-guide/TourGuideRegisterPage'),
+);
 const TourBookingLookupPage = Loadable(
   () => import('@pages/tour/TourBookingLookup'),
 );
@@ -73,6 +76,12 @@ const TourGuideListPage = Loadable(
 const TourGuideDetailPage = Loadable(
   () => import('@/pages/tour-guide/TourGuideDetailPage'),
 );
+const ProvinceListPage = Loadable(
+  () => import('@/pages/province/ProvinceListPage'),
+);
+const ProvinceDetailPage = Loadable(
+  () => import('@/pages/province/ProvinceDetailPage'),
+);
 
 export const routes: RouteConfig[] = [
   {
@@ -108,6 +117,11 @@ export const routes: RouteConfig[] = [
         path: ROUTES.DASHBOARD.TOUR_BOOKINGS_DETAIL,
         element: <TourBookingDetailPage />,
         handle: { crumb: 'Tour Booking Detail' },
+      },
+      {
+        path: ROUTES.DASHBOARD.TOUR_GUIDE_REGISTER,
+        element: <TourGuideRegisterPage />,
+        handle: { crumb: 'Tour Guide Profile' },
       },
       {
         path: ROUTES.DASHBOARD.ROOM_BOOKINGS,
@@ -221,6 +235,14 @@ export const routes: RouteConfig[] = [
   {
     path: ROUTES.TOUR_GUIDE.DETAIL,
     element: <TourGuideDetailPage />,
+  },
+  {
+    path: ROUTES.PROVINCE.INDEX,
+    element: <ProvinceListPage />,
+  },
+  {
+    path: ROUTES.PROVINCE.DETAIL,
+    element: <ProvinceDetailPage />,
   },
   {
     path: ROUTES.LOGIN,

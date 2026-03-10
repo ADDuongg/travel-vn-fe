@@ -12,12 +12,12 @@ import RoomSidebar from '@/sections/room/room-detail/RoomSidebar';
 import { AnimatedTabs } from '@components/AnimatedTabs';
 import Container from '@components/Container';
 import EntityReviewSection from '@components/EntityReviewSection/EntityReviewSection';
+import { useI18nStorage } from '@/hooks/useI18nStorage';
 import { useParams } from 'react-router';
-import { useLocalStorage } from 'usehooks-ts';
 
 const RoomDetailPage = () => {
   const { id } = useParams<{ id: string }>();
-  const [value] = useLocalStorage('i18nextLng', EnumLanguage.DEFAULT);
+  const [value] = useI18nStorage(EnumLanguage.DEFAULT);
   const { data: room, isLoading } = useRoomDetailQuery(id!);
 
   if (isLoading || !room) return null;

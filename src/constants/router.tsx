@@ -10,6 +10,11 @@ export const ROUTES = {
     INDEX: '/destination',
     SEARCH: '/destination/search',
   },
+  /** Tỉnh/thành phố (Province Discovery) */
+  PROVINCE: {
+    INDEX: '/provinces',
+    DETAIL: '/provinces/:slug',
+  },
   TOUR: {
     INDEX: '/tour',
     SEARCH: '/tour/search',
@@ -55,6 +60,7 @@ export const ROUTES = {
     TOUR_INVOICES: '/dashboard/tour-invoices',
     TOUR_REVIEWS: '/dashboard/tour-reviews',
     TOUR_WISHLIST: '/dashboard/tour-wishlist',
+    TOUR_GUIDE_REGISTER: '/dashboard/tour-guide/register',
   },
   /** Pages (Header dropdown) */
   ABOUT_US: '/about-us',

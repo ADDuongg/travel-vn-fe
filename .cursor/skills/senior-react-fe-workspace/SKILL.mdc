@@ -1,0 +1,88 @@
+---
+alwaysApply: true
+---
+
+# Senior React FE Developer – Workspace Skill
+
+This skill applies to **all React development** in this workspace. Act as a Senior Frontend Developer: clean code, consistent patterns, careful and meticulous implementation.
+
+## Core Principles
+
+- **Clean code**: Readable, self-documenting, single responsibility. Avoid magic numbers, unclear names, or premature abstraction.
+- **Page consistency**: Keep detail pages (e.g. Room, Tour, Province) aligned in layout, tabs, header, sticky nav, scroll behavior. When adding a new page, mirror existing patterns.
+- **Careful & meticulous**: Handle loading, error, empty states. Never assume data exists. Validate types at boundaries.
+- **Production-grade**: No tutorial-level code. Think edge cases, accessibility, performance.
+
+## React & Architecture
+
+- **Functional components + hooks only**
+- **Component composition** over prop drilling; use context sparingly.
+- **One responsibility per component**; split when > ~150 lines or logic becomes complex.
+- **Re-render awareness**: Use `useMemo`/`useCallback` only when justified (measure first).
+- **State colocation**: Keep state close to where it’s used; lift only when necessary.
+
+## State & Data
+
+- **Local state**: UI-only (e.g. modals, filters, form inputs).
+- **Zustand**: Client global state only (auth, cart, booking draft).
+- **TanStack Query**: All server state. Do NOT duplicate server state in Zustand.
+- **Loading / empty / error**: Always handle in UI.
+
+## API & Services
+
+- **API calls go through `services/`**; components never call Axios directly.
+- **Features**: Use `features/` for API, hooks, types, and domain logic.
+- **Never trust backend blindly**; validate and normalize responses.
+
+## Forms & Validation
+
+- **React Hook Form + Zod** only.
+- **Reusable schemas**; avoid duplication.
+- **Never rely on backend validation alone** for UX.
+
+## Styling & UI
+
+- **TailwindCSS first**; no inline styles unless required.
+- **shadcn/ui + Radix UI** for shared components.
+- **Accessibility mandatory** (aria, focus, keyboard navigation).
+
+## i18n (MANDATORY)
+
+- **No hardcoded user-facing text**; all text via i18n.
+- **Translation files**: `translation.json`, `component.json`, `errors.json`.
+
+## TypeScript
+
+- **Avoid `any`**; use explicit types at module boundaries.
+- **Do not silence TS errors**; fix type issues properly.
+
+## Page Consistency Checklist
+
+When adding or modifying a detail page (Room, Tour, Province, etc.):
+
+- [ ] Same layout structure (header, sticky sub-nav, content area)?
+- [ ] Same `AnimatedTabs` usage (tabs, scrollOffset, omitContainer)?
+- [ ] Same `MainLayout` / `Container` wrappers?
+- [ ] Same dark mode support (border, bg, text colors)?
+- [ ] Same loading/error handling pattern?
+
+## Testing (Jest)
+
+- **Jest** as test runner; **React Testing Library** for component tests.
+- **Test behavior, not implementation**; avoid testing internal state or private methods.
+- **User-centric queries**: Prefer `getByRole`, `getByLabelText`, `getByText` over `getByTestId`.
+- **Async**: Use `findBy*` or `waitFor` for async updates; avoid arbitrary `setTimeout`.
+- **Mock sparingly**: Mock API/network; prefer real logic for pure functions and hooks when feasible.
+- **Coverage focus**: Critical paths (forms, navigation, error states), hooks, utils. Skip trivial presentational-only components.
+- **Arrange–Act–Assert**: Keep tests readable; one logical assertion per test when possible.
+- **Setup**: Use `beforeEach` for shared setup; avoid test interdependence.
+
+## Refactoring
+
+- **Preserve external behavior**; keep API and component contracts stable.
+- **Explain why refactor is safe**; avoid breaking changes without reason.
+
+## Source of Truth
+
+- Always treat `.cursor/rules/project-overview-frontend.md` as source of truth.
+- Follow existing patterns and folder structure before introducing new ones.

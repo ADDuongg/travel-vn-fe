@@ -1,15 +1,12 @@
 import { EnumLanguage } from '@/constants/commons';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
-import { useLocalStorage } from 'usehooks-ts';
+import { useI18nStorage } from './useI18nStorage';
 
 export function useLanguage() {
   const { i18n } = useTranslation();
 
-  const [language, setLanguage] = useLocalStorage(
-    'i18nextLng',
-    EnumLanguage.DEFAULT,
-  );
+  const [language, setLanguage] = useI18nStorage(EnumLanguage.DEFAULT);
 
   useEffect(() => {
     const detected = i18n.resolvedLanguage || i18n.language;

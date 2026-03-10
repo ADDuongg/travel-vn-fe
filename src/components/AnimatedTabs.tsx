@@ -2,12 +2,12 @@ import { useEffect, useRef, useState, type JSX } from 'react';
 import { cn } from '@/lib/utils';
 import Container from './Container';
 
-type Tab = {
+export type Tab = {
   id: string;
   label: string;
 };
 
-const tabs: Tab[] = [
+const DEFAULT_TABS: Tab[] = [
   { id: 'detail', label: 'Detail' },
   { id: 'itinerary', label: 'Itinerary' },
   { id: 'map', label: 'Map' },
@@ -15,8 +15,21 @@ const tabs: Tab[] = [
   { id: 'reviews', label: 'Reviews' },
 ];
 
-export function AnimatedTabs(): JSX.Element {
-  const [active, setActive] = useState<string>('detail');
+export type AnimatedTabsProps = {
+  tabs?: Tab[];
+  defaultActiveId?: string;
+  omitContainer?: boolean;
+  scrollOffset?: number;
+};
+
+export function AnimatedTabs({
+  tabs = DEFAULT_TABS,
+  defaultActiveId,
+  omitContainer = false,
+  scrollOffset = 150,
+}: AnimatedTabsProps): JSX.Element {
+  const initialActive = defaultActiveId ?? tabs[0]?.id ?? '';
+  const [active, setActive] = useState<string>(initialActive);
   const [hovered, setHovered] = useState<string | null>(null);
   const [indicatorStyle, setIndicatorStyle] = useState<{
     left?: number;
@@ -46,7 +59,7 @@ export function AnimatedTabs(): JSX.Element {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [tabs]);
 
   // update indicator khi active hoặc hovered đổi
   useEffect(() => {
@@ -65,14 +78,13 @@ export function AnimatedTabs(): JSX.Element {
     setActive(id);
     const section = document.getElementById(id);
     if (section) {
-      const y = section.getBoundingClientRect().top + window.scrollY - 150;
+      const y = section.getBoundingClientRect().top + window.scrollY - scrollOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 
-  return (
-    <Container>
-      <div ref={containerRef} className="relative flex gap-8 py-4">
+  const content = (
+    <div ref={containerRef} className="relative flex gap-8 py-4">
         {tabs.map((t) => (
           <button
             key={t.id}
@@ -91,11 +103,13 @@ export function AnimatedTabs(): JSX.Element {
           </button>
         ))}
 
-        <span
-          className="absolute bottom-0 h-[2px] bg-primary transition-all duration-300 ease-in-out"
-          style={indicatorStyle}
-        />
-      </div>
-    </Container>
+      <span
+        className="absolute bottom-0 h-[2px] bg-primary transition-all duration-300 ease-in-out"
+        style={indicatorStyle}
+      />
+    </div>
   );
+
+  if (omitContainer) return content;
+  return <Container>{content}</Container>;
 }

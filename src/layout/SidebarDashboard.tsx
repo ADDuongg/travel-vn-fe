@@ -6,6 +6,7 @@ import {
   FaRegHeart,
   FaTachometerAlt,
   FaUserEdit,
+  FaUserTie,
 } from 'react-icons/fa';
 import { MdReviews } from 'react-icons/md';
 import { FiBookOpen, FiLogOut } from 'react-icons/fi';
@@ -33,6 +34,12 @@ const SidebarDashboard = () => {
           </NavLink>
           <NavLink to={ROUTES.DASHBOARD.PROFILE} className={linkClasses}>
             <FaUserEdit /> Edit Profile
+          </NavLink>
+          <NavLink
+            to={ROUTES.DASHBOARD.TOUR_GUIDE_REGISTER}
+            className={linkClasses}
+          >
+            <FaUserTie /> Tour Guide Profile
           </NavLink>
           <NavLink
             to={ROUTES.DASHBOARD.CHANGE_PASSWORD}

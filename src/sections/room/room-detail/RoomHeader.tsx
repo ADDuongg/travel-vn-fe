@@ -6,7 +6,10 @@ import { FaBed, FaRulerCombined } from 'react-icons/fa';
 import { FaUserGroup } from 'react-icons/fa6';
 import { useLanguage } from '@/hooks/useLanguage';
 
-function getHotelDisplay(hotel: string | HotelRef | undefined, lang: string): string | null {
+function getHotelDisplay(
+  hotel: string | HotelRef | undefined,
+  lang: string,
+): string | null {
   if (!hotel || typeof hotel === 'string') return null;
   const name =
     hotel.translations?.[lang]?.name ??
@@ -15,7 +18,10 @@ function getHotelDisplay(hotel: string | HotelRef | undefined, lang: string): st
   return name ?? null;
 }
 
-function getProvinceDisplay(hotel: string | HotelRef | undefined, lang: string): string | null {
+function getProvinceDisplay(
+  hotel: string | HotelRef | undefined,
+  lang: string,
+): string | null {
   if (!hotel || typeof hotel === 'string') return null;
   const province = hotel.provinceId;
   if (!province || typeof province === 'string') return null;

@@ -75,21 +75,52 @@ export interface TourGuidePagination {
   totalPages: number;
 }
 
+/** Payload when registering a new tour guide (POST /api/v1/tour-guides/register) */
+export interface TourGuideRegisterPayload {
+  translations: Record<string, TourGuideTranslation>;
+  languages: string[];
+  specializedProvinces: string[];
+  certifications?: string[];
+  licenseNumber?: string;
+  yearsOfExperience?: number;
+  gallery?: Array<{ url: string; publicId?: string; alt?: string }>;
+  /** Tỷ lệ phản hồi (0–100) – optional, thường do hệ thống tính */
+  responseRate?: number;
+  /** Số chuyến đi hoàn tất – optional, thường do hệ thống tính */
+  completedTripsCount?: number;
+  /** Tỷ lệ khách quay lại (0–100) – optional, thường do hệ thống tính */
+  returningCustomerRate?: number;
+  isAvailable?: boolean;
+  dailyRate?: number;
+  currency?: string;
+  contactMethods?: string[];
+}
+
 export interface TourGuidePaginatedResponse {
   items: TourGuideListItem[];
   pagination: TourGuidePagination;
 }
 
 export interface TourGuideQueryParams {
+  /** Pagination */
   page?: number;
   limit?: number;
+  /** Filter by province */
   provinceId?: string;
+  /** Filter by language code (vi, en, ...) */
   language?: string;
+  /** Filter by verification status */
   isVerified?: boolean;
+  /** Filter by availability */
   isAvailable?: boolean;
+  /** Minimum rating filter */
   minRating?: number;
+  /** Keyword search (guide name, etc.) */
   search?: string;
+  /** Sort key */
   sort?: TourGuideSortBy;
+  /** (Internal) Filter by owner user id – used for my-profile dashboard */
+  userId?: string;
 }
 
 /** Review item – GET /api/v1/tour-guides/:id/reviews */

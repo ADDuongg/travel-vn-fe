@@ -43,7 +43,7 @@ export function useWardSelectOptions(provinceId: string | undefined): {
   );
 
   const wards = useMemo(
-    () => selectedProvince?.wards ?? selectedProvince?.districts ?? [],
+    () => selectedProvince?.wards ?? [],
     [selectedProvince],
   );
 
