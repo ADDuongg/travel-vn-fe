@@ -308,10 +308,10 @@ const NotificationBell = () => {
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-800 line-clamp-1">
-                          {item.title}
+                          {t(item.title)}
                         </p>
                         <p className="mt-1 text-gray-500 line-clamp-2">
-                          {item.message}
+                          {t(item.message)}
                         </p>
                         <p className="mt-1 text-[10px] text-gray-400">
                           {item.createdAt

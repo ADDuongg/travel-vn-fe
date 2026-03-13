@@ -1,0 +1,8 @@
+{
+  "notification.guide_registration_pending.title": "Đơn đăng ký HDV mới",
+  "notification.guide_registration_pending.message": "Có một đơn đăng ký hướng dẫn viên mới cần được admin xem và duyệt.",
+  "notification.guide_verified.title": "Hồ sơ HDV đã được duyệt",
+  "notification.guide_verified.message": "Hồ sơ hướng dẫn viên của bạn đã được admin duyệt. Bạn có thể bắt đầu nhận tour.",
+  "notification.guide_rejected.title": "Hồ sơ HDV chưa được duyệt",
+  "notification.guide_rejected.message": "Hồ sơ hướng dẫn viên của bạn chưa được duyệt. Vui lòng kiểm tra lại thông tin hoặc liên hệ admin."
+}

@@ -1,0 +1,8 @@
+{
+  "notification.guide_registration_pending.title": "New tour guide registration",
+  "notification.guide_registration_pending.message": "There is a new tour guide registration that needs admin review.",
+  "notification.guide_verified.title": "Guide profile approved",
+  "notification.guide_verified.message": "Your tour guide profile has been approved. You can now receive tours.",
+  "notification.guide_rejected.title": "Guide profile not approved",
+  "notification.guide_rejected.message": "Your tour guide profile was not approved. Please review your information or contact the admin."
+}
