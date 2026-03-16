@@ -70,6 +70,8 @@ export const ROUTES = {
   GALLERY: '/gallery',
   LOGIN: '/login',
   REGISTER: '/register',
+  FORGOT_PASSWORD_REQUEST: '/forgot-password',
+  FORGOT_PASSWORD_CONFIRM: '/forgot-password/confirm',
   BOOKING_PAYMENT: '/bookings/:id/payment',
   BOOKING_PAYMENT_RESULT: '/payment-result',
   /** Tour: thanh toán đơn tour (Stripe) */

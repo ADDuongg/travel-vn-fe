@@ -6,6 +6,12 @@ import DashboardLayout from './layout/DashboardLayout';
 
 const HomePage = Loadable(() => import('@/pages/home/Home'));
 const LoginPage = Loadable(() => import('@/pages/auth/login/Login'));
+const ForgotPasswordRequestPage = Loadable(
+  () => import('@/pages/auth/forgot-password/ForgotPasswordRequest'),
+);
+const ForgotPasswordConfirmPage = Loadable(
+  () => import('@/pages/auth/forgot-password/ForgotPasswordConfirm'),
+);
 const DestinationSearchPage = Loadable(
   () => import('@/pages/destination/DestinationSearch'),
 );
@@ -251,6 +257,14 @@ export const routes: RouteConfig[] = [
   {
     path: ROUTES.REGISTER,
     element: <RegisterPage />,
+  },
+  {
+    path: ROUTES.FORGOT_PASSWORD_REQUEST,
+    element: <ForgotPasswordRequestPage />,
+  },
+  {
+    path: ROUTES.FORGOT_PASSWORD_CONFIRM,
+    element: <ForgotPasswordConfirmPage />,
   },
   {
     path: ROUTES.BOOKING_PAYMENT,

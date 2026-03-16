@@ -93,7 +93,9 @@
       "province": "Tỉnh/Thành phố",
       "hotels": "Khách sạn",
       "all_provinces": "Tất cả tỉnh thành",
-      "ward": "Quận / Huyện"
+      "ward": "Quận / Huyện",
+      "otp_code": "Mã OTP",
+      "new_password": "Mật khẩu mới"
     },
     "placeholder": {
       "keyword": "Nhập từ khóa",
@@ -123,7 +125,9 @@
       "address": "Nhập địa chỉ",
       "room_name": "Tên phòng...",
       "province": "Chọn tỉnh/thành phố",
-      "ward": "Chọn quận/huyện"
+      "ward": "Chọn quận/huyện",
+      "otp_code": "Nhập mã OTP 6 số",
+      "new_password": "Nhập mật khẩu mới"
     }
   },
   "buttons": {
@@ -202,7 +206,25 @@
     "create_account": "TẠO TÀI KHOẢN",
     "register_title": "Đăng ký",
     "register_desc": "Sau khi tạo tài khoản, bạn có thể theo dõi trạng thái thanh toán, xác nhận và đánh giá tour sau khi hoàn thành.",
-    "already_member": "Đã có tài khoản?"
+    "already_member": "Đã có tài khoản?",
+    "forgot_password_title": "Quên mật khẩu",
+    "forgot_password_desc": "Nhập tên đăng nhập, email hoặc số điện thoại của bạn. Nếu tài khoản tồn tại, chúng tôi sẽ gửi email kèm link đặt lại mật khẩu.",
+    "forgot_password_submit": "Gửi email đặt lại mật khẩu",
+    "forgot_password_request_success": "Nếu tài khoản tồn tại, chúng tôi đã gửi email hướng dẫn đặt lại mật khẩu.",
+    "forgot_password_hint": "Vì lý do bảo mật, hệ thống sẽ không cho biết email hoặc tài khoản có tồn tại hay không.",
+    "forgot_password_confirm_title": "Đặt lại mật khẩu",
+    "forgot_password_confirm_desc": "Nhập mật khẩu mới bạn muốn sử dụng. Token đặt lại mật khẩu được lấy từ link trong email.",
+    "forgot_password_confirm_submit": "Đặt lại mật khẩu",
+    "forgot_password_confirm_success": "Mật khẩu đã được đặt lại thành công. Vui lòng đăng nhập lại bằng mật khẩu mới.",
+    "forgot_password_back_to_login": "Đã nhớ mật khẩu hoặc vừa đặt lại?",
+    "forgot_password_new_too_short": "Mật khẩu mới phải có ít nhất 6 ký tự.",
+    "forgot_password_confirm_mismatch": "Mật khẩu xác nhận không trùng với mật khẩu mới.",
+    "forgot_password_token_label": "Token đặt lại mật khẩu",
+    "forgot_password_token_placeholder": "Token trong link email đặt lại mật khẩu",
+    "verify_email_send_otp": "Gửi mã xác minh",
+    "verify_email_otp_sent": "Chúng tôi đã gửi mã xác minh tới email của bạn.",
+    "verify_email_verify_button": "Xác minh mã",
+    "verify_email_success": "Email đã được xác minh. Bạn có thể hoàn tất đăng ký."
   },
   "app": {
     "realtime_chat": "Chat phòng theo thời gian thực",

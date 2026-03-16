@@ -93,7 +93,9 @@
       "province": "Province",
       "hotels": "Hotels",
       "all_provinces": "All provinces",
-      "ward": "District / Ward"
+      "ward": "District / Ward",
+      "otp_code": "OTP code",
+      "new_password": "New password"
     },
     "placeholder": {
       "keyword": "Enter keyword",
@@ -123,7 +125,9 @@
       "address": "Enter address",
       "room_name": "Room name...",
       "province": "Select province",
-      "ward": "Select district/ward"
+      "ward": "Select district/ward",
+      "otp_code": "Enter the 6-digit OTP code",
+      "new_password": "Enter new password"
     }
   },
   "buttons": {
@@ -202,7 +206,25 @@
     "create_account": "CREATE AN ACCOUNT",
     "register_title": "Register",
     "register_desc": "After creating an account, you'll be able to track your payment status, track the confirmation and you can also rate the tour after you finished the tour.",
-    "already_member": "Already a member?"
+    "already_member": "Already a member?",
+    "forgot_password_title": "Forgot password",
+    "forgot_password_desc": "Enter your username, email or phone number. If the account exists, we will send an email with a reset link.",
+    "forgot_password_submit": "Send reset email",
+    "forgot_password_request_success": "If the account exists, we have sent an email with instructions to reset your password.",
+    "forgot_password_hint": "For security reasons, we do not indicate whether an email or account exists in the system.",
+    "forgot_password_confirm_title": "Reset password",
+    "forgot_password_confirm_desc": "Enter the new password you want to use. The reset token is taken from the link in your email.",
+    "forgot_password_confirm_submit": "Reset password",
+    "forgot_password_confirm_success": "Password has been reset successfully. Please log in again with your new password.",
+    "forgot_password_back_to_login": "Remembered your password or already reset?",
+    "forgot_password_new_too_short": "New password must be at least 6 characters.",
+    "forgot_password_confirm_mismatch": "Confirmation password does not match the new password.",
+    "forgot_password_token_label": "Reset token",
+    "forgot_password_token_placeholder": "Token from reset email link",
+    "verify_email_send_otp": "Send verification code",
+    "verify_email_otp_sent": "We have sent a verification code to your email.",
+    "verify_email_verify_button": "Verify code",
+    "verify_email_success": "Email verified successfully. You can now complete registration."
   },
   "app": {
     "realtime_chat": "Realtime Room Chat",

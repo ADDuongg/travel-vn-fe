@@ -6,7 +6,17 @@ import * as I from '@/interface/auth';
 import { authUtils } from '@lib/auth-token';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-import { getMe, login, logout, refresh, register } from './api';
+import {
+  forgotPasswordConfirm,
+  forgotPasswordRequest,
+  getMe,
+  login,
+  logout,
+  refresh,
+  register,
+  sendOtpVerifyEmail,
+  verifyOtpEmail,
+} from './api';
 import { authKeyQuery } from './key';
 
 export function useLogin() {
@@ -103,5 +113,57 @@ export function useRefresh() {
   return {
     refresh: mutation.mutate,
     // isPending: mutation.isPending,
+  };
+}
+
+export function useForgotPasswordRequest() {
+  const mutation = useMutation({
+    mutationFn: forgotPasswordRequest,
+  });
+
+  return {
+    forgotPasswordRequest: mutation.mutate,
+    isPending: mutation.isPending,
+    error: mutation.error as Error | null,
+    isSuccess: mutation.isSuccess,
+  };
+}
+
+export function useForgotPasswordConfirm() {
+  const mutation = useMutation({
+    mutationFn: forgotPasswordConfirm,
+  });
+
+  return {
+    forgotPasswordConfirm: mutation.mutate,
+    isPending: mutation.isPending,
+    error: mutation.error as Error | null,
+    isSuccess: mutation.isSuccess,
+  };
+}
+
+export function useSendOtpVerifyEmail() {
+  const mutation = useMutation({
+    mutationFn: sendOtpVerifyEmail,
+  });
+
+  return {
+    sendOtpVerifyEmail: mutation.mutate,
+    isPending: mutation.isPending,
+    error: mutation.error as Error | null,
+    isSuccess: mutation.isSuccess,
+  };
+}
+
+export function useVerifyOtpEmail() {
+  const mutation = useMutation({
+    mutationFn: verifyOtpEmail,
+  });
+
+  return {
+    verifyOtpEmail: mutation.mutate,
+    isPending: mutation.isPending,
+    error: mutation.error as Error | null,
+    isSuccess: mutation.isSuccess,
   };
 }
