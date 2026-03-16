@@ -621,5 +621,19 @@
     "register_error_desc": "Không thể gửi đăng ký. Vui lòng thử lại sau.",
     "register_already_title": "Đã có hồ sơ HDV",
     "register_already_desc": "Tài khoản của bạn đã có hồ sơ hướng dẫn viên. Vui lòng liên hệ admin nếu cần cập nhật thông tin."
+  },
+  "chatbot": {
+    "title": "Trợ lý du lịch",
+    "online": "Trực tuyến",
+    "typing": "Đang nhập...",
+    "welcome_title": "Xin chào! Tôi là trợ lý du lịch của bạn",
+    "welcome_subtitle": "Hỏi tôi về khách sạn, tour, hoặc ẩm thực Việt Nam",
+    "input_placeholder": "Nhập tin nhắn...",
+    "error": "Đã xảy ra lỗi. Vui lòng thử lại.",
+    "error_connection": "Không kết nối được trợ lý. Dịch vụ có thể đang tạm ngưng.",
+    "retry": "Thử lại",
+    "searching_hotels": "Đang tìm khách sạn...",
+    "searching_tours": "Đang tìm tour...",
+    "searching_food": "Đang tìm món ăn..."
   }
 }

@@ -620,5 +620,19 @@
     "register_error_desc": "Could not submit registration. Please try again later.",
     "register_already_title": "Already registered",
     "register_already_desc": "Your account already has a tour guide profile. Please contact admin if you need to update information."
+  },
+  "chatbot": {
+    "title": "Travel Assistant",
+    "online": "Online",
+    "typing": "Typing...",
+    "welcome_title": "Hi! I'm your travel assistant",
+    "welcome_subtitle": "Ask me about hotels, tours, or Vietnamese cuisine",
+    "input_placeholder": "Type a message...",
+    "error": "Something went wrong. Please try again.",
+    "error_connection": "Cannot connect to the assistant. The service may be temporarily unavailable.",
+    "retry": "Retry",
+    "searching_hotels": "Searching hotels...",
+    "searching_tours": "Searching tours...",
+    "searching_food": "Searching food..."
   }
 }

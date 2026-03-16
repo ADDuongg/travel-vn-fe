@@ -29,6 +29,7 @@
     "@stripe/react-stripe-js": "^5.4.1",
     "@stripe/stripe-js": "^8.6.1",
     "@tailwindcss/vite": "^4.1.11",
+    "@tanstack/ai-react": "^0.7.1",
     "@tanstack/react-query": "^5.87.4",
     "@tanstack/react-table": "^8.21.3",
     "@types/node": "^24.0.0",
