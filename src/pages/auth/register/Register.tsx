@@ -1,5 +1,5 @@
 import { ROUTES } from '@/constants/router';
-import { useRegister } from '@/features/auth/hooks';
+import { useRegister, useSendOtpVerifyEmail, useVerifyOtpEmail } from '@/features/auth/hooks';
 import { MainLayout } from '@/layout';
 import Container from '@components/Container';
 import CustomInput from '@components/CustomInput';
@@ -23,6 +23,14 @@ const RegisterPage = () => {
   const methods = useForm<I.RegisterFormValues>();
   const navigate = useNavigate();
   const { register: registerMutation, isPending } = useRegister();
+  const { sendOtpVerifyEmail, isPending: isSendingOtp, isSuccess: isOtpSent } =
+    useSendOtpVerifyEmail();
+  const {
+    verifyOtpEmail,
+    isPending: isVerifyingOtp,
+    isSuccess: isOtpVerified,
+    error: verifyOtpError,
+  } = useVerifyOtpEmail();
 
   const handleSubmit = (data: I.RegisterFormValues) => {
     const payload: I.RegisterFormValues = {
@@ -142,7 +150,82 @@ const RegisterPage = () => {
                 ))}
               </div>
 
-              <Button size="lg" disabled={isPending}>
+              <div className="flex flex-col gap-3">
+                <div className="flex gap-2 items-end">
+                  <div className="flex-1">
+                    <CustomInput
+                      name="email"
+                      type="email"
+                      label={t('input.field_label.email')}
+                      placeHolder={t('input.placeholder.email')}
+                      size="lg"
+                      rules={{ required: t('common.field_required') }}
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    loading={isSendingOtp}
+                    onClick={() => {
+                      const email = methods.getValues('email');
+                      if (!email) {
+                        methods.setError('email', {
+                          type: 'required',
+                          message: t('common.field_required'),
+                        });
+                        return;
+                      }
+                      sendOtpVerifyEmail({ target: email });
+                    }}
+                  >
+                    {t('auth.verify_email_send_otp')}
+                  </Button>
+                </div>
+                {isOtpSent && (
+                  <P className="text-xs text-emerald-600">
+                    {t('auth.verify_email_otp_sent')}
+                  </P>
+                )}
+                <div className="flex gap-2 items-end">
+                  <div className="flex-1">
+                    <CustomInput
+                      name="emailOtp"
+                      type="text"
+                      label={t('input.field_label.otp_code')}
+                      placeHolder={t('input.placeholder.otp_code')}
+                      size="lg"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    loading={isVerifyingOtp}
+                    onClick={() => {
+                      const email = methods.getValues('email');
+                      const code = (methods.getValues() as any).emailOtp;
+                      if (!email || !code) {
+                        return;
+                      }
+                      verifyOtpEmail({ target: email, code });
+                    }}
+                  >
+                    {t('auth.verify_email_verify_button')}
+                  </Button>
+                </div>
+                {verifyOtpError && (
+                  <P className="text-xs text-destructive">
+                    {verifyOtpError.message || t('common.error')}
+                  </P>
+                )}
+                {isOtpVerified && (
+                  <P className="text-xs text-emerald-600">
+                    {t('auth.verify_email_success')}
+                  </P>
+                )}
+              </div>
+
+              <Button size="lg" disabled={isPending || !isOtpVerified}>
                 {t('buttons.register')}
               </Button>
             </form>

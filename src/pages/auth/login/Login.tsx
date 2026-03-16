@@ -54,7 +54,10 @@ const LoginPage = () => {
             </form>
           </FormProvider>
           <div className="flex justify-end">
-            <P className="text-primary text-sm font-bold cursor-pointer">
+            <P
+              className="text-primary text-sm font-bold cursor-pointer"
+              onClick={() => navigate(ROUTES.FORGOT_PASSWORD_REQUEST)}
+            >
               {t('auth.forget_password')}
             </P>
           </div>
