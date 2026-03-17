@@ -13,6 +13,7 @@ function ChatBotWidget() {
   const { isOpen, toggleChat, closeChat } = useChatStore();
   const { messages, sendMessage, stop, isLoading, clear, error } = useChatBot();
   const [errorDismissed, setErrorDismissed] = useState(false);
+  console.log('messages from BE', messages);
 
   const showError = Boolean(error && !errorDismissed);
 
@@ -100,11 +101,7 @@ function ChatBotWidget() {
         <ChatBotMessages messages={messages} isLoading={isLoading} />
 
         {/* Input */}
-        <ChatBotInput
-          onSend={handleSend}
-          onStop={stop}
-          isLoading={isLoading}
-        />
+        <ChatBotInput onSend={handleSend} onStop={stop} isLoading={isLoading} />
       </div>
 
       {/* Toggle button */}

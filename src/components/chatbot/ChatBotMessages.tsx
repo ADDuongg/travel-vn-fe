@@ -5,7 +5,16 @@ import { cn } from '@/lib/utils';
 import ChatBotToolResult from './ChatBotToolResult';
 
 interface ChatBotMessagesProps {
-  messages: UIMessage[];
+  // `useChat` returns simple { id, role, content } messages,
+  // but we also support UIMessage with parts from TanStack AI.
+  messages: Array<
+    | UIMessage
+    | {
+        id: string;
+        role: 'user' | 'assistant' | 'system';
+        content: string;
+      }
+  >;
   isLoading: boolean;
 }
 
@@ -45,8 +54,77 @@ function ChatBotMessages({ messages, isLoading }: ChatBotMessagesProps) {
   );
 }
 
-function MessageBubble({ message }: { message: UIMessage }) {
+function MessageBubble({
+  message,
+}: {
+  message:
+    | UIMessage
+    | {
+        id: string;
+        role: 'user' | 'assistant' | 'system';
+        content: string;
+      };
+}) {
   const isUser = message.role === 'user';
+
+  // Normalize message text:
+  // - If UIMessage with parts → join text parts
+  // - Else fall back to plain `content` string
+  const renderContent = () => {
+    if ('parts' in message && Array.isArray(message.parts)) {
+      return message.parts.map((part, idx) => {
+        if (part.type === 'text') {
+          return (
+            <span key={idx} className="whitespace-pre-wrap">
+              {part.content}
+            </span>
+          );
+        }
+
+        if (part.type === 'thinking') {
+          return (
+            <div
+              key={idx}
+              className="mb-1.5 border-l-2 border-muted-foreground/30 pl-2 text-xs italic text-muted-foreground"
+            >
+              {part.content}
+            </div>
+          );
+        }
+
+        if (part.type === 'tool-call' && part.output) {
+          return (
+            <ChatBotToolResult
+              key={idx}
+              name={part.name}
+              output={part.output}
+            />
+          );
+        }
+
+        if (part.type === 'tool-call' && part.state !== 'input-complete') {
+          return (
+            <div
+              key={idx}
+              className="flex items-center gap-1.5 text-xs text-muted-foreground"
+            >
+              <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
+              {part.name}...
+            </div>
+          );
+        }
+
+        return null;
+      });
+    }
+
+    // Plain text message from `useChat`
+    return (
+      <span className="whitespace-pre-wrap">
+        {'content' in message ? message.content : ''}
+      </span>
+    );
+  };
 
   return (
     <div className={cn('flex', isUser ? 'justify-end' : 'justify-start')}>
@@ -58,41 +136,7 @@ function MessageBubble({ message }: { message: UIMessage }) {
             : 'bg-muted text-foreground rounded-bl-md',
         )}
       >
-        {message.parts.map((part, idx) => {
-          if (part.type === 'text') {
-            return (
-              <span key={idx} className="whitespace-pre-wrap">
-                {part.content}
-              </span>
-            );
-          }
-
-          if (part.type === 'thinking') {
-            return (
-              <div
-                key={idx}
-                className="mb-1.5 border-l-2 border-muted-foreground/30 pl-2 text-xs italic text-muted-foreground"
-              >
-                {part.content}
-              </div>
-            );
-          }
-
-          if (part.type === 'tool-call' && part.output) {
-            return <ChatBotToolResult key={idx} name={part.name} output={part.output} />;
-          }
-
-          if (part.type === 'tool-call' && part.state !== 'input-complete') {
-            return (
-              <div key={idx} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                {part.name}...
-              </div>
-            );
-          }
-
-          return null;
-        })}
+        {renderContent()}
       </div>
     </div>
   );
