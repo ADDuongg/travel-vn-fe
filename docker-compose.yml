@@ -1,0 +1,67 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL}
+        VITE_SOCKET_URL: ${VITE_SOCKET_URL}
+        VITE_APP_API_URL: ${VITE_APP_API_URL}
+        VITE_STRIPE_PUBLIC_KEY: ${VITE_STRIPE_PUBLIC_KEY}
+        VITE_DROP_CONSOLE: ${VITE_DROP_CONSOLE:-true}
+    container_name: react-vite-web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN=${DOMAIN}
+    volumes:
+      - certbot-conf:/etc/letsencrypt:ro
+      - certbot-www:/var/www/certbot:ro
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  # ---------------------------------------------------------------
+  # Backend: replace the image/build below with your actual backend.
+  #
+  # Option A — build from local source:
+  #   build:
+  #     context: ../nest-api        # <-- path to your NestJS project
+  #     dockerfile: Dockerfile
+  #
+  # Option B — use a pre-built image:
+  #   image: your-registry/nest-api:latest
+  # ---------------------------------------------------------------
+  backend:
+    image: node:20-alpine
+    container_name: react-vite-backend
+    restart: unless-stopped
+    working_dir: /app
+    # volumes:
+    #   - ../nest-api:/app
+    # command: ["node", "dist/main.js"]
+    expose:
+      - "9001"
+    env_file:
+      - .env.production
+    networks:
+      - app-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: react-vite-certbot
+    volumes:
+      - certbot-conf:/etc/letsencrypt
+      - certbot-www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+volumes:
+  certbot-conf:
+  certbot-www:
+
+networks:
+  app-network:
+    driver: bridge
