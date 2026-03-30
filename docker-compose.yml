@@ -12,8 +12,8 @@ services:
     container_name: react-vite-web
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     environment:
       - DOMAIN=${DOMAIN}
     volumes:
@@ -25,18 +25,13 @@ services:
       - app-network
 
   # ---------------------------------------------------------------
-  # Backend: replace the image/build below with your actual backend.
+  # Backend: set BACKEND_IMAGE in .env.production (loaded by deploy.sh).
+  # Example: BACKEND_IMAGE=youruser/nest-api:latest
   #
-  # Option A — build from local source:
-  #   build:
-  #     context: ../nest-api        # <-- path to your NestJS project
-  #     dockerfile: Dockerfile
-  #
-  # Option B — use a pre-built image:
-  #   image: your-registry/nest-api:latest
+  # Nginx proxies /api/ and /socket.io/ to this service on port 9001.
   # ---------------------------------------------------------------
   backend:
-    image: node:20-alpine
+    image: ${BACKEND_IMAGE:-node:20-alpine}
     container_name: react-vite-backend
     restart: unless-stopped
     working_dir: /app
@@ -44,7 +39,7 @@ services:
     #   - ../nest-api:/app
     # command: ["node", "dist/main.js"]
     expose:
-      - "9001"
+      - '9001'
     env_file:
       - .env.production
     networks:
