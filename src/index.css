@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @custom-variant dark (&:is(.dark *));
@@ -114,6 +114,12 @@ body {
   --color-paleGray-100: var(--paleGray-100);
   --color-background_paleGray: var(--background_paleGray);
   --font-dm-serif-display: 'DM Serif Display', serif;
+  --font-dashboard-sans: 'Fira Sans', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* UI UX Pro Max / dashboard: readable sans per design kit */
+.font-dashboard-sans {
+  font-family: var(--font-dashboard-sans);
 }
 
 .dark {
@@ -181,4 +187,33 @@ body {
 
 .card-name {
   @apply xl:text-lg md:text-md text-sm  font-semibold  font-dm-serif-display;
+}
+
+@layer utilities {
+  .animate-slide-in-right {
+    animation: slideInRight 0.5s;
+  }
+  .animate-slide-in-left {
+    animation: slideInLeft 0.5s;
+  }
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(60px) translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0) translateY(0);
+    }
+  }
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-60px) translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0) translateY(0);
+    }
+  }
 }

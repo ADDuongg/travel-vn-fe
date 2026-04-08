@@ -4,7 +4,6 @@
  */
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import type { ColumnDef } from '@tanstack/react-table';
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -69,8 +68,13 @@ const TourActionsCell: React.FC<{ item: TourBookingListItem }> = ({ item }) => {
     !isExpired;
 
   return (
-    <div className="flex items-center gap-2">
-      <Button variant="ghost" size="sm" asChild>
+    <div className="flex flex-wrap items-center gap-2">
+      <Button
+        variant="outline"
+        size="sm"
+        className="cursor-pointer border-[#1E3A8A]/25 font-medium text-[#1E3A8A] transition-colors hover:bg-[#1E3A8A]/5"
+        asChild
+      >
         <Link
           to={ROUTES.DASHBOARD.TOUR_BOOKINGS_DETAIL.replace(':code', item.bookingCode)}
         >
@@ -78,7 +82,12 @@ const TourActionsCell: React.FC<{ item: TourBookingListItem }> = ({ item }) => {
         </Link>
       </Button>
       {canPay && (
-        <Button variant="default" size="sm" asChild>
+        <Button
+          variant="default"
+          size="sm"
+          className="cursor-pointer bg-[#CA8A04] font-medium text-white shadow-sm transition-colors hover:bg-[#B45309]"
+          asChild
+        >
           <Link to={ROUTES.TOUR_BOOKING_PAYMENT.replace(':id', item._id)}>
             {t('bookings.pay_online')}
           </Link>
@@ -148,7 +157,7 @@ const useColumns = (): ColumnDef<TourBookingListItem>[] => {
           return (
             <Link
               to={ROUTES.DASHBOARD.TOUR_BOOKINGS_DETAIL.replace(':code', item.bookingCode)}
-              className="font-mono font-medium text-primary hover:underline"
+              className="cursor-pointer font-mono text-sm font-semibold text-[#2563EB] underline-offset-2 hover:text-[#1D4ED8] hover:underline"
             >
               {item.bookingCode}
             </Link>
@@ -166,27 +175,29 @@ const useColumns = (): ColumnDef<TourBookingListItem>[] => {
             return (
               <Link
                 to={ROUTES.TOUR.DETAIL.replace(':slug', slug)}
-                className="text-primary hover:underline"
+                className="cursor-pointer font-medium text-[#2563EB] underline-offset-2 hover:text-[#1D4ED8] hover:underline"
               >
                 {name}
               </Link>
             );
           }
-          return <span>{name}</span>;
+          return <span className="font-medium text-slate-800">{name}</span>;
         },
       },
       {
         accessorKey: 'departureDate',
         header: () => t('bookings.table_departure_date'),
         cell: ({ getValue }) => (
-          <span>{fmtDate(getValue<string>())}</span>
+          <span className="tabular-nums text-slate-800">
+            {fmtDate(getValue<string>())}
+          </span>
         ),
       },
       {
         accessorKey: 'totalAmount',
         header: () => t('bookings.table_total'),
         cell: ({ row }) => (
-          <span className="font-medium">
+          <span className="font-semibold tabular-nums text-[#1E40AF]">
             {fmtMoney(row.original.totalAmount, 'VND')}
           </span>
         ),
@@ -299,25 +310,36 @@ const TourBookingPage: React.FC = () => {
   const columns = useColumns();
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-semibold">{t('bookings.my_tour_bookings')}</h2>
-      <Separator />
+    <div className="space-y-5">
+      <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm sm:p-6">
+        <div>
+          <h2 className="text-lg font-semibold tracking-tight text-[#1E3A8A] sm:text-xl">
+            {t('bookings.my_tour_bookings')}
+          </h2>
+          <p className="mt-1 max-w-2xl text-sm text-slate-600">
+            {t('bookings.table_section_tour_sub')}
+          </p>
+        </div>
 
-      <DataTable
-        columns={columns}
-        data={tableData}
-        tableState={{
-          pagination,
-          setPagination,
-          sorting,
-          setSorting,
-          globalFilter,
-          setGlobalFilter,
-          rowSelection,
-          setRowSelection,
-          isFetching,
-        }}
-      />
+        <div className="mt-6">
+          <DataTable
+            columns={columns}
+            data={tableData}
+            searchPlaceholder={t('bookings.table_search_tour')}
+            tableState={{
+              pagination,
+              setPagination,
+              sorting,
+              setSorting,
+              globalFilter,
+              setGlobalFilter,
+              rowSelection,
+              setRowSelection,
+              isFetching,
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 };

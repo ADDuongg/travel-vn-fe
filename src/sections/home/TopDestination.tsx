@@ -10,8 +10,9 @@ export const TopDestination = () => {
   return (
     <Container>
       <div className="flex flex-col gap-10 items-center relative z-[2] w-full text-center">
-        <Title className="text-[#1e1e1e]">
-          {t('home_page.top_destinations_prefix')}<span className="text-primary">{t('home_page.top_destinations_highlight')}</span>
+        <Title className="text-foreground">
+          {t('home_page.top_destinations_prefix')}
+          <span className="text-primary">{t('home_page.top_destinations_highlight')}</span>
         </Title>
         <SubTitle>
           {t('home_page.top_destinations_subtitle')}

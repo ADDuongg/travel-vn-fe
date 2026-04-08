@@ -12,33 +12,34 @@ import {
 const HomePage = () => {
   return (
     <MainLayout>
+      {/* Title section (hero) — keep as-is per request */}
       <div className="bg-background_paleGray">
         <TitleSection />
       </div>
 
-      <div className="">
+      <section className="bg-background py-20 md:py-28">
         <TopDestination />
-      </div>
+      </section>
 
-      <div className="mt-32">
+      <section className="border-t border-border/40 bg-background_paleGray py-20 md:py-28">
         <PopularTour />
-      </div>
+      </section>
 
-      <div className="mt-20">
+      <section className="border-t border-border/40 bg-background py-20 md:py-28">
         <FreshlyAdded />
-      </div>
+      </section>
 
-      <div>
+      <section className="border-t border-border/40 bg-background_paleGray py-20 md:py-28">
         <DiscoverDeal />
-      </div>
+      </section>
 
-      <div className="mt-10">
+      <section className="border-t border-border/40 bg-background py-20 md:py-28">
         <CustomerFeedback />
-      </div>
+      </section>
 
-      <div>
+      <section className="border-t border-border/40 bg-background py-16 md:py-20">
         <OurService />
-      </div>
+      </section>
     </MainLayout>
   );
 };

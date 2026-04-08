@@ -17,25 +17,25 @@ const FeedbackCard = ({
   animation?: string;
 }) => (
   <div
-    className={`bg-white rounded-2xl shadow-md p-8 flex flex-col items-start gap-4 transition-all duration-500 mx-auto cursor-pointer ${
+    className={`mx-auto flex max-w-[420px] min-h-[260px] cursor-pointer flex-col items-start gap-4 rounded-2xl border border-border/60 bg-card p-8 shadow-sm transition-all duration-500 ${
       highlight
-        ? 'scale-105 z-10 opacity-100'
+        ? 'scale-105 z-10 opacity-100 shadow-md'
         : faded
         ? 'opacity-40'
         : 'opacity-70'
     } ${animation}`}
-    style={{ maxWidth: 420, minHeight: 260 }}
     onClick={onClick}
   >
     <div className="flex items-center gap-4 mb-2">
       <img
         src={feedback.avatar}
         alt={feedback.name}
-        className="w-12 h-12 rounded-full object-cover"
+        className="h-12 w-12 rounded-full object-cover"
+        loading="lazy"
       />
       <div>
-        <div className="font-bold text-base text-gray-900">{feedback.name}</div>
-        <div className="text-gray-400 text-sm">{feedback.role}</div>
+        <div className="text-base font-semibold text-foreground">{feedback.name}</div>
+        <div className="text-sm text-muted-foreground">{feedback.role}</div>
       </div>
       <div className="ml-auto flex items-center gap-1">
         <Ratings
@@ -47,7 +47,7 @@ const FeedbackCard = ({
         />
       </div>
     </div>
-    <div className="text-gray-600 text-base leading-relaxed">
+    <div className="text-base leading-relaxed text-muted-foreground">
       {feedback.feedback}
     </div>
   </div>
@@ -108,11 +108,11 @@ export const CustomerFeedback: React.FC = () => {
   };
 
   return (
-    <section className="w-full py-16 px-2 md:px-8 bg-[#F6F6F6]">
-      <h2 className="text-center text-3xl md:text-4xl font-dm-serif-display font-bold mb-12 text-[#231942]">
-        {t('home_page.customer_feedback_title')}
-      </h2>
-      <div className="max-w-[1400px] mx-auto flex flex-col items-center">
+    <section className="w-full">
+      <div className="mx-auto max-w-[1400px] px-5 lg:px-16">
+        <h2 className="mb-12 text-center font-dm-serif-display text-3xl font-bold text-foreground md:text-4xl">
+          {t('home_page.customer_feedback_title')}
+        </h2>
         <div
           className={`flex gap-4 md:gap-8 w-full justify-center mb-8 ${
             visible.length === 1 ? 'justify-center' : ''
@@ -146,22 +146,6 @@ export const CustomerFeedback: React.FC = () => {
           ))}
         </div>
       </div>
-      <style>{`
-        .animate-slide-in-right {
-          animation: slideInRight 0.5s;
-        }
-        .animate-slide-in-left {
-          animation: slideInLeft 0.5s;
-        }
-        @keyframes slideInRight {
-          from { opacity: 0; transform: translateX(60px) translateY(20px); }
-          to { opacity: 1; transform: translateX(0) translateY(0); }
-        }
-        @keyframes slideInLeft {
-          from { opacity: 0; transform: translateX(-60px) translateY(20px); }
-          to { opacity: 1; transform: translateX(0) translateY(0); }
-        }
-      `}</style>
     </section>
   );
 };

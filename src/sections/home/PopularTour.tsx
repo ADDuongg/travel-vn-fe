@@ -26,7 +26,10 @@ export const PopularTour = () => {
     <Container>
       <div className="flex flex-col gap-10 items-center relative z-[2] w-full text-center">
         <Title>
-          {t('home_page.popular_tours_prefix', 'Popular ')}<span className="text-primary">{t('home_page.popular_tours_highlight', 'Tours')}</span>
+          {t('home_page.popular_tours_prefix', 'Popular ')}
+          <span className="text-primary">
+            {t('home_page.popular_tours_highlight', 'Tours')}
+          </span>
         </Title>
         <Carousel
           className="h-[400px] md:h-[500px]"
@@ -41,8 +44,8 @@ export const PopularTour = () => {
                     isPC
                       ? 'grid-cols-3'
                       : isTablet
-                      ? 'grid-cols-2'
-                      : 'grid-cols-1'
+                        ? 'grid-cols-2'
+                        : 'grid-cols-1'
                   }`}
                 >
                   {group.map((item) => (

@@ -23,6 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
+# Python (UI UX Pro Max skill search scripts)
+__pycache__/
+*.py[cod]
+
 # dotenv environment variable files
 .env
 .env.development.local

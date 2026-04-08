@@ -1,0 +1,145 @@
+---
+alwaysApply: true
+---
+
+# UIUX Promax Instruction (Travel Platform)
+
+## Context
+
+This is a travel platform SPA:
+
+- Hotel booking
+- Tour booking
+- Travel product purchase
+- Vietnamese food discovery
+
+Tech stack:
+
+- React + TypeScript + Vite
+- TailwindCSS
+- shadcn/ui + Radix UI
+- Zustand + TanStack Query
+
+---
+
+## Design Direction
+
+Modern Travel SaaS + Consumer App Hybrid
+
+Inspired by:
+
+- Airbnb (visual, spacing)
+- Booking.com (data clarity)
+- Stripe / Notion (clean SaaS structure)
+
+Tone:
+
+- Clean
+- Calm
+- Trustworthy
+- Easy to scan
+
+---
+
+## Color Rules
+
+- Always reuse existing project colors
+- Do NOT introduce new color palette
+- Use:
+  - Primary → main brand color
+  - Accent → CTA (booking, action)
+  - Neutral → text, border, background
+
+---
+
+## UI Principles
+
+- Use TailwindCSS (utility-first)
+- Use shadcn/ui components when possible
+- Avoid inline styles
+- Accessibility is required
+
+---
+
+## Layout Rules
+
+- Use 8px spacing system
+- Page padding: 24–40px
+- Section spacing: 24–32px
+- Card padding: 16–24px
+
+---
+
+## Component Style
+
+### Card
+
+- Rounded (12–16px)
+- Light border
+- Soft shadow (or no shadow)
+- Clean spacing
+
+### Button
+
+- Primary → main action
+- Accent → important CTA (booking)
+- Clear hover & focus state
+
+### Input
+
+- Rounded
+- Clear focus state
+- Consistent spacing
+
+---
+
+## UX Rules
+
+- Optimize for scanning (price, title, CTA visible)
+- Reduce visual clutter
+- Add:
+  - Loading skeleton
+  - Empty state
+  - Error state
+- Clear section hierarchy
+
+---
+
+## Code Rules
+
+- Do NOT change business logic
+- Refactor UI only
+- Extract reusable components:
+  - Card
+  - Section
+  - List item
+- Keep code clean & readable
+
+---
+
+## When modifying UI
+
+Always:
+
+1. Improve spacing & layout
+2. Improve visual hierarchy
+3. Improve readability
+4. Keep consistency with existing design
+5. Keep responsiveness
+
+---
+
+## Instruction for Cursor
+
+When I ask to:
+
+- "refactor UI"
+- "improve design"
+- "update layout"
+
+You MUST:
+
+- Follow this UIUX Promax guideline
+- Use existing project styles & colors
+- Keep logic unchanged
+- Return clean, production-ready code

@@ -1,108 +1,177 @@
-// src/pages/dashboard/Sidebar.tsx
-import { NavLink } from 'react-router-dom';
-import {
-  FaFileInvoice,
-  FaKey,
-  FaRegHeart,
-  FaTachometerAlt,
-  FaUserEdit,
-  FaUserTie,
-} from 'react-icons/fa';
-import { MdReviews } from 'react-icons/md';
-import { FiBookOpen, FiLogOut } from 'react-icons/fi';
+import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { ROUTES } from '@/constants/router';
+import { useLogout } from '@/features/auth/hooks';
+import { cn } from '@/lib/utils';
+import {
+  BookOpen,
+  FileText,
+  Heart,
+  KeyRound,
+  LayoutDashboard,
+  LogOut,
+  MessageSquareText,
+  UserPen,
+  UserRound,
+} from 'lucide-react';
+import type { ReactNode } from 'react';
+import { NavLink } from 'react-router-dom';
 
-const baseClasses =
-  'flex items-center gap-2 px-5 py-3 rounded-xl w-fit transition-colors';
-const linkClasses = ({ isActive }: { isActive: boolean }) =>
-  `${baseClasses} ${
-    isActive
-      ? 'bg-primary text-white'
-      : 'text-gray-700 hover:bg-primary hover:text-white'
-  }`;
+const dashActive =
+  'bg-[#1E3A8A] text-white shadow-md shadow-[#1E3A8A]/15 ring-1 ring-[#1E3A8A]/20';
+const dashIdle =
+  'bg-transparent text-slate-700 hover:bg-slate-100 active:bg-slate-100/90';
 
-const SidebarDashboard = () => {
+const linkBase =
+  'flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none';
+
+const NavItem = ({
+  to,
+  end,
+  children,
+  onNavigate,
+}: {
+  to: string;
+  end?: boolean;
+  children: ReactNode;
+  onNavigate?: () => void;
+}) => (
+  <NavLink
+    to={to}
+    end={end}
+    onClick={() => onNavigate?.()}
+    className={({ isActive }) =>
+      cn(linkBase, isActive ? dashActive : dashIdle)
+    }
+  >
+    {children}
+  </NavLink>
+);
+
+const SectionLabel = ({ children }: { children: ReactNode }) => (
+  <p className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+    {children}
+  </p>
+);
+
+export type SidebarDashboardProps = {
+  /** Close mobile drawer after navigation */
+  onNavigate?: () => void;
+  layout?: 'desktop' | 'mobile';
+};
+
+const SidebarDashboard = ({
+  onNavigate,
+  layout = 'desktop',
+}: SidebarDashboardProps) => {
+  const { logout, isPending } = useLogout();
+
   return (
-    <div className="space-y-6 text-sm">
-      {/* My Account */}
+    <nav
+      className={cn(
+        'text-sm',
+        layout === 'mobile' ? 'space-y-5' : 'space-y-6',
+      )}
+      aria-label="Dashboard navigation"
+    >
       <div>
-        <h2 className="text-lg font-semibold mb-4">My Account</h2>
-        <div className="space-y-2">
-          <NavLink to={ROUTES.DASHBOARD.INDEX} end className={linkClasses}>
-            <FaTachometerAlt /> Dashboard
-          </NavLink>
-          <NavLink to={ROUTES.DASHBOARD.PROFILE} className={linkClasses}>
-            <FaUserEdit /> Edit Profile
-          </NavLink>
-          <NavLink
+        <SectionLabel>Tài khoản</SectionLabel>
+        <div className="space-y-1">
+          <NavItem to={ROUTES.DASHBOARD.INDEX} end onNavigate={onNavigate}>
+            <LayoutDashboard className="size-4 shrink-0 opacity-90" aria-hidden />
+            Tổng quan
+          </NavItem>
+          <NavItem to={ROUTES.DASHBOARD.PROFILE} onNavigate={onNavigate}>
+            <UserPen className="size-4 shrink-0 opacity-90" aria-hidden />
+            Chỉnh sửa hồ sơ
+          </NavItem>
+          <NavItem
             to={ROUTES.DASHBOARD.TOUR_GUIDE_REGISTER}
-            className={linkClasses}
+            onNavigate={onNavigate}
           >
-            <FaUserTie /> Tour Guide Profile
-          </NavLink>
-          <NavLink
+            <UserRound className="size-4 shrink-0 opacity-90" aria-hidden />
+            Hồ sơ hướng dẫn viên
+          </NavItem>
+          <NavItem
             to={ROUTES.DASHBOARD.CHANGE_PASSWORD}
-            className={linkClasses}
+            onNavigate={onNavigate}
           >
-            <FaKey /> Change Password
-          </NavLink>
+            <KeyRound className="size-4 shrink-0 opacity-90" aria-hidden />
+            Đổi mật khẩu
+          </NavItem>
         </div>
       </div>
 
-      {/* Tour Booking */}
       <div>
-        <h2 className="text-lg font-semibold mb-4">Tour Booking</h2>
-        <div className="space-y-2">
-          <NavLink to={ROUTES.DASHBOARD.TOUR_BOOKINGS} className={linkClasses}>
-            <FiBookOpen /> My Bookings
-          </NavLink>
-          <NavLink to={ROUTES.DASHBOARD.INVOICES} className={linkClasses}>
-            <FaFileInvoice /> Invoices
-          </NavLink>
-          <NavLink to={ROUTES.DASHBOARD.REVIEWS} className={linkClasses}>
-            <MdReviews /> Reviews
-          </NavLink>
-          <NavLink to={ROUTES.DASHBOARD.WISHLIST} className={linkClasses}>
-            <FaRegHeart /> Wish List
-          </NavLink>
+        <SectionLabel>Đặt tour</SectionLabel>
+        <div className="space-y-1">
+          <NavItem to={ROUTES.DASHBOARD.TOUR_BOOKINGS} onNavigate={onNavigate}>
+            <BookOpen className="size-4 shrink-0 opacity-90" aria-hidden />
+            Đơn tour của tôi
+          </NavItem>
+          <NavItem to={ROUTES.DASHBOARD.INVOICES} onNavigate={onNavigate}>
+            <FileText className="size-4 shrink-0 opacity-90" aria-hidden />
+            Hóa đơn tour
+          </NavItem>
+          <NavItem to={ROUTES.DASHBOARD.REVIEWS} onNavigate={onNavigate}>
+            <MessageSquareText className="size-4 shrink-0 opacity-90" aria-hidden />
+            Đánh giá tour
+          </NavItem>
+          <NavItem to={ROUTES.DASHBOARD.WISHLIST} onNavigate={onNavigate}>
+            <Heart className="size-4 shrink-0 opacity-90" aria-hidden />
+            Yêu thích
+          </NavItem>
         </div>
       </div>
 
-      {/* Room Booking */}
       <div>
-        <h2 className="text-lg font-semibold mb-4">Room Booking</h2>
-        <div className="space-y-2">
-          <NavLink to={ROUTES.DASHBOARD.ROOM_BOOKINGS} className={linkClasses}>
-            <FiBookOpen /> My Bookings
-          </NavLink>
-          <NavLink to={ROUTES.DASHBOARD.ROOM_INVOICES} className={linkClasses}>
-            <FaFileInvoice /> Invoices
-          </NavLink>
-          <NavLink to={ROUTES.DASHBOARD.ROOM_REVIEWS} className={linkClasses}>
-            <MdReviews /> Reviews
-          </NavLink>
+        <SectionLabel>Đặt phòng</SectionLabel>
+        <div className="space-y-1">
+          <NavItem to={ROUTES.DASHBOARD.ROOM_BOOKINGS} onNavigate={onNavigate}>
+            <BookOpen className="size-4 shrink-0 opacity-90" aria-hidden />
+            Đơn phòng của tôi
+          </NavItem>
+          <NavItem to={ROUTES.DASHBOARD.ROOM_INVOICES} onNavigate={onNavigate}>
+            <FileText className="size-4 shrink-0 opacity-90" aria-hidden />
+            Hóa đơn phòng
+          </NavItem>
+          <NavItem to={ROUTES.DASHBOARD.ROOM_REVIEWS} onNavigate={onNavigate}>
+            <MessageSquareText className="size-4 shrink-0 opacity-90" aria-hidden />
+            Đánh giá phòng
+          </NavItem>
         </div>
       </div>
 
-      <Separator />
+      <Separator className="bg-slate-200" />
 
-      {/* Sign out */}
-      <button
-        className={`${baseClasses} text-gray-700 hover:bg-primary hover:text-white`}
+      <Button
+        type="button"
+        variant="outline"
+        disabled={isPending}
+        onClick={() => {
+          logout();
+          onNavigate?.();
+        }}
+        className={cn(
+          linkBase,
+          'h-auto justify-start border-slate-200 font-medium text-slate-700 hover:bg-red-50 hover:text-red-700 hover:border-red-200',
+        )}
       >
-        <FiLogOut /> Sign Out
-      </button>
+        <LogOut className="size-4 shrink-0" aria-hidden />
+        {isPending ? 'Đang đăng xuất…' : 'Đăng xuất'}
+      </Button>
 
-      {/* Help */}
-      <div className="pt-6 text-sm">
-        <p className="font-semibold">Need Help?</p>
-        <p className="text-gray-600">1.828.456.345</p>
-        <a href="mailto:help@traveltourwp.com" className="text-blue-600">
+      <div className="rounded-xl border border-slate-200/90 bg-[#F8FAFC] p-4">
+        <p className="font-semibold text-[#1E3A8A]">Cần hỗ trợ?</p>
+        <p className="mt-1 text-slate-600">1.828.456.345</p>
+        <a
+          href="mailto:help@traveltourwp.com"
+          className="mt-1 inline-flex text-sm font-medium text-[#2563EB] underline-offset-4 transition-colors hover:text-[#1D4ED8] hover:underline"
+        >
           help@traveltourwp.com
         </a>
       </div>
-    </div>
+    </nav>
   );
 };
 

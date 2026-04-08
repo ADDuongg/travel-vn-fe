@@ -1,76 +1,91 @@
 import React from 'react';
-import CustomInput from '@/components/CustomInput';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Button } from '@components/ui/button';
+import { Input } from '@components/ui/input';
 import { AiOutlineSend } from 'react-icons/ai';
 import Container from '@components/Container';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { ROUTES } from '@/constants/router';
 
 export const DiscoverDeal: React.FC = () => {
   const { t } = useTranslation();
-  const methods = useForm();
+  const { register, handleSubmit } = useForm<{ email: string }>();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: { email: string }) => {
     // handle subscribe logic here
     alert(`Subscribed: ${data.email}`);
   };
 
   return (
     <Container>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-        {/* Left: Special Deals */}
-        <div className="relative rounded-xl overflow-hidden flex flex-col justify-center min-h-[320px] bg-gray-100">
+      <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-2 md:gap-8">
+        {/* Special deals — image + gradient, visual weight balanced with right card */}
+        <div className="relative flex min-h-[300px] flex-col justify-end overflow-hidden rounded-2xl border border-border/60 shadow-md sm:min-h-[340px] md:justify-center">
           <img
             src="/images/destination5.png"
-            alt="Special Deals"
-            className="absolute inset-0 w-full h-full object-cover z-0"
-            style={{ filter: 'brightness(0.7)' }}
+            alt=""
+            className="absolute inset-0 z-0 h-full w-full object-cover"
+            loading="lazy"
           />
-          <div className="relative z-10 py-8 px-12 flex flex-col items-start justify-center h-full text-center">
-            <h2 className="font-dm-serif-display text-white text-3xl md:text-4xl font-bold mb-4">
+          <div
+            className="absolute inset-0 z-[1] bg-gradient-to-t from-black/75 via-black/45 to-black/35 sm:bg-gradient-to-r sm:from-black/70 sm:via-black/40 sm:to-black/30"
+            aria-hidden
+          />
+          <div className="relative z-10 flex flex-col items-start p-8 sm:p-10">
+            <h2 className="mb-3 font-dm-serif-display text-3xl font-bold leading-tight text-white md:text-4xl">
               {t('home_page.discover_special_deals')}
             </h2>
-            <p className="text-white text-lg mb-6">
+            <p className="mb-6 max-w-lg text-base leading-relaxed text-white/90 sm:text-lg">
               {t('home_page.discover_special_deals_desc')}
             </p>
-            <Button className=" text-white font-semibold px-6 py-2 shadow transition">
-              {t('buttons.see_tours')}
+            <Button asChild size="lg" className="rounded-xl shadow-sm">
+              <Link to={ROUTES.TOUR.INDEX}>{t('buttons.see_tours')}</Link>
             </Button>
           </div>
         </div>
-        {/* Right: Newsletter */}
-        <div className="bg-gray-100 rounded-xl flex flex-col justify-center p-8 min-h-[320px]">
-          <h2 className="font-dm-serif-display text-gray-900 text-2xl md:text-3xl font-bold mb-4">
+
+        {/* Newsletter — no overlapping controls: input row + full-width CTA on small, inline on md+ */}
+        <div className="flex min-h-[300px] flex-col justify-center rounded-2xl border border-border/60 bg-card p-8 shadow-sm sm:min-h-[340px] sm:p-10">
+          <h2 className="mb-3 font-dm-serif-display text-2xl font-bold leading-tight text-foreground md:text-3xl">
             {t('home_page.dont_miss')}
           </h2>
-          <p className="text-gray-600 mb-2">
+          <p className="mb-6 text-sm leading-relaxed text-muted-foreground sm:text-base">
             {t('home_page.newsletter_desc')}
           </p>
-          <FormProvider {...methods}>
-            <form
-              onSubmit={methods.handleSubmit(onSubmit)}
-              className="flex flex-col gap-4 mt-4"
-            >
-              <div className="flex items-center bg-white rounded-full pl-4 pr-0 py-0 h-[50px] shadow w-full">
-                <span className="text-gray-400 flex items-center justify-center mr-2">
-                  <AiOutlineSend className="cursor-pointer" />
-                </span>
-                <CustomInput
-                  name="email"
-                  type="text"
-                  placeholder={t('home_page.your_email')}
-                  className="flex-1 border-none justify-center shadow-none bg-transparent p-0 text-base focus:ring-0 focus:outline-none"
-                  style={{ minWidth: 0 }}
-                />
-                <Button
-                  type="submit"
-                  className=" text-white px-8 py-2 h-full rounded-full transition text-[12px]"
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-3"
+          >
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
+              <label className="sr-only" htmlFor="discover-deal-email">
+                {t('home_page.your_email')}
+              </label>
+              <div className="flex min-h-12 min-w-0 flex-1 items-center gap-3 rounded-xl border border-input bg-background px-4 shadow-sm focus-within:ring-2 focus-within:ring-ring/50">
+                <span
+                  className="flex shrink-0 text-muted-foreground"
+                  aria-hidden
                 >
-                  {t('buttons.subscribe')}
-                </Button>
+                  <AiOutlineSend className="size-5" />
+                </span>
+                <Input
+                  id="discover-deal-email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder={t('home_page.your_email')}
+                  className="min-h-12 min-w-0 flex-1 border-0 bg-transparent px-0 py-0 text-base shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                  {...register('email')}
+                />
               </div>
-            </form>
-          </FormProvider>
+              <Button
+                type="submit"
+                size="lg"
+                className="h-12 shrink-0 rounded-xl px-6 sm:w-auto sm:min-w-[140px]"
+              >
+                {t('buttons.subscribe')}
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
     </Container>

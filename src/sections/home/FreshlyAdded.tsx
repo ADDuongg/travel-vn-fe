@@ -16,7 +16,10 @@ export const FreshlyAdded: React.FC = () => {
       <CardCarousel<FreshlyTourItem>
         title={
           <Title className="text-center text-4xl font-dm-serif-display font-bold mb-12">
-            {t('home_page.freshly_added_prefix', 'Freshly ')}<span className="text-blue-500">{t('home_page.freshly_added_highlight', 'Added')}</span>
+            {t('home_page.freshly_added_prefix', 'Freshly ')}
+            <span className="text-primary">
+              {t('home_page.freshly_added_highlight', 'Added')}
+            </span>
           </Title>
         }
         items={freshlyTours}

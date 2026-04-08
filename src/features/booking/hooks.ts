@@ -45,6 +45,7 @@ export function useMyBookings({
           pageCount: 0,
         },
       },
+    retry: 1,
   });
 }
 

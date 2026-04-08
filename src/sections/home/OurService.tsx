@@ -8,27 +8,28 @@ const serviceKeys = ['destinations', 'best_price', 'support'] as const;
 export const OurService: React.FC = () => {
   const { t } = useTranslation();
   return (
-    <section className="w-full py-12 bg-white">
+    <section className="w-full">
       <Container>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           {services.map((s, idx) => (
             <div
               key={idx}
-              className="flex flex-col md:flex-row items-center gap-4 md:gap-6"
+              className="flex flex-col items-center rounded-2xl border border-border/60 bg-card px-6 py-8 text-center shadow-sm sm:px-8 sm:py-10"
             >
-              <img
-                src={s.icon}
-                alt={t(`services.${serviceKeys[idx]}_title`)}
-                className="w-16 h-16 object-contain mb-2 md:mb-0"
-              />
-              <div>
-                <h3 className="font-dm-serif-display text-lg md:text-xl font-bold text-gray-900 mb-2">
-                  {t(`services.${serviceKeys[idx]}_title`)}
-                </h3>
-                <p className="text-gray-500 text-base md:text-[17px] leading-relaxed">
-                  {t(`services.${serviceKeys[idx]}_desc`)}
-                </p>
+              <div className="mb-5 flex size-16 items-center justify-center rounded-2xl bg-primary/10 sm:size-[4.5rem]">
+                <img
+                  src={s.icon}
+                  alt=""
+                  className="h-12 w-12 object-contain sm:h-14 sm:w-14"
+                  loading="lazy"
+                />
               </div>
+              <h3 className="mb-2 text-pretty font-dm-serif-display text-xl font-bold leading-snug text-foreground sm:text-2xl">
+                {t(`services.${serviceKeys[idx]}_title`)}
+              </h3>
+              <p className="max-w-md text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base">
+                {t(`services.${serviceKeys[idx]}_desc`)}
+              </p>
             </div>
           ))}
         </div>

@@ -4,7 +4,7 @@ dist
 .gitignore
 .env
 .env.*
-!.env.production
+!.env.example
 
 *.md
 LICENSE
@@ -15,6 +15,7 @@ LICENSE
 __mocks__
 plans
 docs
+deploy
 
 coverage
 *.log

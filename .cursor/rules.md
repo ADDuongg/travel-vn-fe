@@ -95,4 +95,10 @@ The backend lives in a separate repository and is opened in another Cursor works
 
 ---
 
+## CRITICAL
+
+## UIUX Promax
+
+@include ./rules/ui-ux-pro-max.mdc
+
 Always treat './project-overview-frontend.md' as source of truth.

@@ -1,4 +1,4 @@
-import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
 import { useMyBookings } from '@/features/booking/hooks';
 import type { Booking } from '@/features/shared/types';
 import DataTable from '@/shared/table/DataTable';
@@ -30,25 +30,32 @@ const StatusFilterBar: React.FC<{
   onChange: (s: BookingStatusFilter) => void;
   labels: Record<BookingStatusFilter, string>;
 }> = ({ active, onChange, labels }) => (
-  <div className="text-sm">
-    {STATUS_KEYS.map((s, i) => (
-      <React.Fragment key={s}>
+  <div
+    className="-mx-1 flex snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:flex-wrap sm:overflow-visible [&::-webkit-scrollbar]:hidden"
+    role="tablist"
+    aria-label="Booking status"
+  >
+    {STATUS_KEYS.map((s) => {
+      const isActive = active === s;
+      return (
         <button
+          key={s}
           type="button"
+          role="tab"
+          aria-selected={isActive}
           onClick={() => onChange(s)}
-          className={
-            active === s
-              ? 'text-primary underline underline-offset-4'
-              : 'text-muted-foreground hover:text-foreground'
-          }
+          className={cn(
+            'shrink-0 snap-start rounded-full border px-3 py-1.5 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none',
+            'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3B82F6]/40 focus-visible:ring-offset-2',
+            isActive
+              ? 'border-[#1E3A8A] bg-[#1E3A8A] text-white shadow-sm'
+              : 'border-slate-200 bg-white text-slate-600 hover:border-[#3B82F6]/35 hover:bg-slate-50',
+          )}
         >
           {labels[s]}
         </button>
-        {i < STATUS_KEYS.length - 1 && (
-          <span className="mx-2 text-muted-foreground">|</span>
-        )}
-      </React.Fragment>
-    ))}
+      );
+    })}
   </div>
 );
 
@@ -100,33 +107,52 @@ const RoomBookingPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-semibold">{t('bookings.my_room_bookings')}</h2>
-      <StatusFilterBar
-        active={status}
-        onChange={(s) => {
-          setStatus(s);
-          setPagination((p) => ({ ...p, pageIndex: 0 }));
-        }}
-        labels={statusLabels}
-      />
-      <Separator />
+    <div className="space-y-5">
+      <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm sm:p-6">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="text-lg font-semibold tracking-tight text-[#1E3A8A] sm:text-xl">
+              {t('bookings.my_room_bookings')}
+            </h2>
+            <p className="mt-1 max-w-2xl text-sm text-slate-600">
+              {t('bookings.table_section_room_sub')}
+            </p>
+          </div>
+        </div>
 
-      <DataTable
-        columns={columns}
-        data={data ?? emptyData}
-        tableState={{
-          pagination,
-          setPagination,
-          sorting,
-          setSorting,
-          globalFilter,
-          setGlobalFilter,
-          rowSelection,
-          setRowSelection,
-          isFetching,
-        }}
-      />
+        <div className="mt-5">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            {t('bookings.table_filter_status')}
+          </p>
+          <StatusFilterBar
+            active={status}
+            onChange={(s) => {
+              setStatus(s);
+              setPagination((p) => ({ ...p, pageIndex: 0 }));
+            }}
+            labels={statusLabels}
+          />
+        </div>
+
+        <div className="mt-6">
+          <DataTable
+            columns={columns}
+            data={data ?? emptyData}
+            searchPlaceholder={t('bookings.table_search_room')}
+            tableState={{
+              pagination,
+              setPagination,
+              sorting,
+              setSorting,
+              globalFilter,
+              setGlobalFilter,
+              rowSelection,
+              setRowSelection,
+              isFetching,
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 };

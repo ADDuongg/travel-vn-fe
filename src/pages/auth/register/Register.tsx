@@ -4,13 +4,13 @@ import { MainLayout } from '@/layout';
 import Container from '@components/Container';
 import CustomInput from '@components/CustomInput';
 import { Button } from '@components/ui/button';
+import { Card, CardContent } from '@components/ui/card';
 import { Separator } from '@components/ui/separator';
 import {
   P,
   ResponsiveH1,
   ResponsiveH5,
   ResponsiveH6,
-  SubTitle,
 } from '@components/ui/typography';
 import * as I from '@/interface/auth';
 import * as IC from '@/interface/commons';
@@ -59,16 +59,6 @@ const RegisterPage = () => {
       }),
       placeholder: t('input.placeholder.username', {
         defaultValue: 'Enter Username',
-      }),
-      gridClass: 'col-span-12 md:col-span-6',
-    },
-    {
-      name: 'email',
-      label: t('input.field_label.email', {
-        defaultValue: 'Email',
-      }),
-      placeholder: t('input.placeholder.email', {
-        defaultValue: 'Enter Email',
       }),
       gridClass: 'col-span-12 md:col-span-6',
     },
@@ -122,130 +112,160 @@ const RegisterPage = () => {
 
   return (
     <MainLayout>
-      <div className="bg-background_paleGray p-32 text-center space-y-3">
-        <ResponsiveH1 className="font-dm-serif-display">{t('auth.register_title')}</ResponsiveH1>
-      </div>
-      <Container className="py-20 px-10 max-w-[1000px]">
-        <div className="flex flex-col gap-6">
-          <ResponsiveH6 className="text-paleGray font-normal">
-            {t('auth.register_desc')}
-          </ResponsiveH6>
-          <FormProvider {...methods}>
-            <form
-              className="w-full flex flex-col gap-6"
-              onSubmit={methods.handleSubmit(handleSubmit)}
-            >
-              <div className="grid grid-cols-12 gap-7">
-                {inputs.map((input) => (
-                  <div key={input.name} className={input.gridClass}>
-                    <CustomInput
-                      name={input.name}
-                      type={input.type || 'text'}
-                      label={input.label}
-                      placeHolder={input.placeholder}
-                      size={input.size || 'lg'}
-                      rules={{ required: t('common.field_required') }}
-                    />
+      <section className="bg-background_paleGray">
+        <Container className="py-14 md:py-20">
+          <div className="mx-auto grid max-w-5xl items-start gap-10 lg:grid-cols-5">
+            <div className="text-center lg:col-span-2 lg:text-left">
+              <ResponsiveH1 className="font-dm-serif-display text-foreground">
+                {t('auth.register_title')}
+              </ResponsiveH1>
+              <ResponsiveH6 className="mt-3 font-normal text-muted-foreground">
+                {t('auth.register_desc')}
+              </ResponsiveH6>
+            </div>
+
+            <div className="lg:col-span-3">
+              <Card className="rounded-2xl border-border/60 bg-card py-0 shadow-sm">
+                <CardContent className="p-6 sm:p-8">
+                  <FormProvider {...methods}>
+                    <form
+                      className="flex w-full flex-col gap-6"
+                      onSubmit={methods.handleSubmit(handleSubmit)}
+                    >
+                      <div className="grid grid-cols-12 gap-5 sm:gap-6">
+                        {inputs.map((input) => (
+                          <div key={input.name} className={input.gridClass}>
+                            <CustomInput
+                              name={input.name}
+                              type={input.type || 'text'}
+                              label={input.label}
+                              placeHolder={input.placeholder}
+                              size={input.size || 'lg'}
+                              rules={{ required: t('common.field_required') }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Email verification — grouped for clarity */}
+                      <div className="rounded-2xl border border-border/60 bg-background p-5 shadow-sm sm:p-6">
+                        <ResponsiveH6 className="mb-4 font-semibold text-foreground">
+                          {t('auth.verify_email_title', { defaultValue: 'Verify your email' })}
+                        </ResponsiveH6>
+
+                        <div className="grid gap-4">
+                          <div className="grid gap-3 sm:grid-cols-5 sm:items-end">
+                            <div className="sm:col-span-3">
+                              <CustomInput
+                                name="email"
+                                type="email"
+                                label={t('input.field_label.email')}
+                                placeHolder={t('input.placeholder.email')}
+                                size="lg"
+                                rules={{ required: t('common.field_required') }}
+                              />
+                            </div>
+                            <div className="sm:col-span-2">
+                              <Button
+                                type="button"
+                                size="lg"
+                                loading={isSendingOtp}
+                                className="w-full rounded-xl"
+                                onClick={() => {
+                                  const email = methods.getValues('email');
+                                  if (!email) {
+                                    methods.setError('email', {
+                                      type: 'required',
+                                      message: t('common.field_required'),
+                                    });
+                                    return;
+                                  }
+                                  sendOtpVerifyEmail({ target: email });
+                                }}
+                              >
+                                {t('auth.verify_email_send_otp')}
+                              </Button>
+                            </div>
+                          </div>
+
+                          {isOtpSent && (
+                            <P className="text-xs text-emerald-600">
+                              {t('auth.verify_email_otp_sent')}
+                            </P>
+                          )}
+
+                          <div className="grid gap-3 sm:grid-cols-5 sm:items-end">
+                            <div className="sm:col-span-3">
+                              <CustomInput
+                                name="emailOtp"
+                                type="text"
+                                label={t('input.field_label.otp_code')}
+                                placeHolder={t('input.placeholder.otp_code')}
+                                size="lg"
+                              />
+                            </div>
+                            <div className="sm:col-span-2">
+                              <Button
+                                type="button"
+                                size="lg"
+                                variant="outline"
+                                loading={isVerifyingOtp}
+                                className="w-full rounded-xl"
+                                onClick={() => {
+                                  const email = methods.getValues('email');
+                                  const code = (methods.getValues() as any).emailOtp;
+                                  if (!email || !code) return;
+                                  verifyOtpEmail({ target: email, code });
+                                }}
+                              >
+                                {t('auth.verify_email_verify_button')}
+                              </Button>
+                            </div>
+                          </div>
+
+                          {verifyOtpError && (
+                            <P className="text-xs text-destructive">
+                              {verifyOtpError.message || t('common.error')}
+                            </P>
+                          )}
+                          {isOtpVerified && (
+                            <P className="text-xs text-emerald-600">
+                              {t('auth.verify_email_success')}
+                            </P>
+                          )}
+                        </div>
+                      </div>
+
+                      <Button
+                        size="lg"
+                        disabled={isPending || !isOtpVerified}
+                        className="w-full rounded-xl"
+                      >
+                        {t('buttons.register')}
+                      </Button>
+                    </form>
+                  </FormProvider>
+
+                  <Separator className="my-8" />
+
+                  <div className="flex flex-col items-center gap-2 text-center">
+                    <ResponsiveH5 className="font-dm-serif-display font-bold text-foreground">
+                      {t('auth.already_member')}
+                    </ResponsiveH5>
+                    <button
+                      type="button"
+                      onClick={() => navigate(ROUTES.LOGIN)}
+                      className="text-sm font-semibold text-primary hover:underline"
+                    >
+                      {t('buttons.login')}
+                    </button>
                   </div>
-                ))}
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <div className="flex gap-2 items-end">
-                  <div className="flex-1">
-                    <CustomInput
-                      name="email"
-                      type="email"
-                      label={t('input.field_label.email')}
-                      placeHolder={t('input.placeholder.email')}
-                      size="lg"
-                      rules={{ required: t('common.field_required') }}
-                    />
-                  </div>
-                  <Button
-                    type="button"
-                    size="sm"
-                    loading={isSendingOtp}
-                    onClick={() => {
-                      const email = methods.getValues('email');
-                      if (!email) {
-                        methods.setError('email', {
-                          type: 'required',
-                          message: t('common.field_required'),
-                        });
-                        return;
-                      }
-                      sendOtpVerifyEmail({ target: email });
-                    }}
-                  >
-                    {t('auth.verify_email_send_otp')}
-                  </Button>
-                </div>
-                {isOtpSent && (
-                  <P className="text-xs text-emerald-600">
-                    {t('auth.verify_email_otp_sent')}
-                  </P>
-                )}
-                <div className="flex gap-2 items-end">
-                  <div className="flex-1">
-                    <CustomInput
-                      name="emailOtp"
-                      type="text"
-                      label={t('input.field_label.otp_code')}
-                      placeHolder={t('input.placeholder.otp_code')}
-                      size="lg"
-                    />
-                  </div>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="outline"
-                    loading={isVerifyingOtp}
-                    onClick={() => {
-                      const email = methods.getValues('email');
-                      const code = (methods.getValues() as any).emailOtp;
-                      if (!email || !code) {
-                        return;
-                      }
-                      verifyOtpEmail({ target: email, code });
-                    }}
-                  >
-                    {t('auth.verify_email_verify_button')}
-                  </Button>
-                </div>
-                {verifyOtpError && (
-                  <P className="text-xs text-destructive">
-                    {verifyOtpError.message || t('common.error')}
-                  </P>
-                )}
-                {isOtpVerified && (
-                  <P className="text-xs text-emerald-600">
-                    {t('auth.verify_email_success')}
-                  </P>
-                )}
-              </div>
-
-              <Button size="lg" disabled={isPending || !isOtpVerified}>
-                {t('buttons.register')}
-              </Button>
-            </form>
-          </FormProvider>
-        </div>
-
-        <Separator className="my-16" />
-
-        <div className="flex flex-col gap-3 items-center">
-          <ResponsiveH5 className="font-dm-serif-display font-bold">
-            {t('auth.already_member')}
-          </ResponsiveH5>
-          <P
-            onClick={() => navigate(ROUTES.LOGIN)}
-            className="text-primary text-sm font-bold cursor-pointer"
-          >
-            {t('buttons.login')}
-          </P>
-        </div>
-      </Container>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </Container>
+      </section>
     </MainLayout>
   );
 };

@@ -13,6 +13,8 @@ import { useBookingsQuery } from '@/features/tours/hooks';
 import * as I from '@/interface/api';
 import type { BookingStatus } from '@/features/shared/types';
 import DataTable from '@/shared/table/DataTable';
+import { useTranslation } from 'react-i18next';
+
 type WishRow = {
   id: string; // bắt buộc để getRowId/selection
   tourName: string; // chỉ cần trường này để hiển thị
@@ -20,10 +22,11 @@ type WishRow = {
 };
 
 const WishListPage: React.FC = () => {
-  const [status, setStatus] = useState<BookingStatus>('all');
+  const { t } = useTranslation();
+  const [status] = useState<BookingStatus>('all');
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [globalFilter, setGlobalFilter] = useState('');
   const sortParams: I.SortParam[] = sorting.map((s) => ({
     by: s.id,
@@ -36,79 +39,82 @@ const WishListPage: React.FC = () => {
     status: status !== 'all' ? status : undefined,
     sort: sortParams,
   });
-  const ActionsCell: React.FC<{
-    row: any;
-    onDelete: (row: any) => void;
-  }> = ({ row, onDelete }) => (
-    <div className="flex items-center justify-center gap-2">
-      <Button
-        variant="secondary"
-        size="icon"
-        className="h-8 w-8"
-        onClick={() => onDelete(row)}
-        title="Delete booking"
-      >
-        <Trash2 className="h-4 w-4" />
-      </Button>
-    </div>
-  );
-  const onDelete = (row: WishRow) => {
-    console.log('Delete booking:', row.id);
-  };
-  const useColumns = (): ColumnDef<WishRow>[] =>
-    useMemo<ColumnDef<WishRow>[]>(
-      () => [
-        {
-          id: 'select',
-          header: ({ table }) => (
-            <Checkbox
-              checked={
-                table.getIsAllPageRowsSelected()
-                  ? true
-                  : table.getIsSomePageRowsSelected()
+  const columns = useMemo<ColumnDef<WishRow>[]>(() => {
+    const ActionsCell: React.FC<{
+      row: WishRow;
+      onDelete: (row: WishRow) => void;
+    }> = ({ row, onDelete }) => (
+      <div className="flex items-center justify-center gap-2">
+        <Button
+          variant="secondary"
+          size="icon"
+          className="h-8 w-8 cursor-pointer"
+          onClick={() => onDelete(row)}
+          title="Delete booking"
+          type="button"
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </div>
+    );
+
+    const onDelete = (row: WishRow) => {
+      console.log('Delete booking:', row.id);
+    };
+
+    return [
+      {
+        id: 'select',
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected()
+                ? true
+                : table.getIsSomePageRowsSelected()
                   ? 'indeterminate'
                   : false
-              }
-              onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
-              aria-label="Select all"
-            />
-          ),
-          cell: ({ row }) => (
-            <Checkbox
-              checked={row.getIsSelected()}
-              onCheckedChange={(v) => row.toggleSelected(!!v)}
-              aria-label="Select row"
-            />
-          ),
-          enableSorting: false,
-          enableHiding: false,
-          size: 32,
+            }
+            onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(v) => row.toggleSelected(!!v)}
+            aria-label="Select row"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+        size: 32,
+      },
+      {
+        accessorKey: 'tourName',
+        cell: ({ row }) => {
+          const v = row.original;
+          return v.tourUrl ? (
+            <Link
+              to={v.tourUrl}
+              className="font-medium text-[#2563EB] underline-offset-2 hover:text-[#1D4ED8] hover:underline"
+            >
+              {v.tourName}
+            </Link>
+          ) : (
+            <span className="font-medium text-slate-800">{v.tourName}</span>
+          );
         },
-        {
-          accessorKey: 'tourName',
-          cell: ({ row }) => {
-            const v = row.original;
-            return v.tourUrl ? (
-              <Link to={v.tourUrl} className="text-primary hover:underline">
-                {v.tourName}
-              </Link>
-            ) : (
-              <span className="text-primary">{v.tourName}</span>
-            );
-          },
-        },
-        {
-          id: 'actions',
-          header: () => <span className="sr-only">Actions</span>,
-          cell: ({ row }) => (
-            <ActionsCell row={row.original} onDelete={onDelete} />
-          ),
-          size: 80,
-        },
-      ],
-      [onDelete],
-    );
-  const columns = useColumns();
+      },
+      {
+        id: 'actions',
+        header: () => <span className="sr-only">Actions</span>,
+        cell: ({ row }) => (
+          <ActionsCell row={row.original} onDelete={onDelete} />
+        ),
+        size: 80,
+      },
+    ];
+  }, []);
 
   return (
     <div className="space-y-4">
@@ -116,6 +122,7 @@ const WishListPage: React.FC = () => {
 
       <DataTable
         columns={columns}
+        searchPlaceholder={t('bookings.table_search')}
         data={
           data ?? {
             data: [],
@@ -134,8 +141,8 @@ const WishListPage: React.FC = () => {
           setSorting,
           globalFilter,
           setGlobalFilter,
-          // rowSelection,
-          // setRowSelection,
+          rowSelection,
+          setRowSelection,
           isFetching,
         }}
       />

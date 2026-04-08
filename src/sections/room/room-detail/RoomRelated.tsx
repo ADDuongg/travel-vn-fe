@@ -41,7 +41,7 @@ const RoomRelated: React.FC = () => {
       renderItem={(item) => <RoomCard key={item._id} item={item} />}
       seeMoreButton={<ButtonNavigate label="See More" />}
       classNameContainer="w-full flex flex-col"
-      itemsPerView={{ base: 3, sm: 2, lg: 3 }}
+      itemsPerView={{ base: 1, md: 2, lg: 3 }}
     />
   );
 };

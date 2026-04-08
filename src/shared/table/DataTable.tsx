@@ -1,4 +1,4 @@
-// DataTable.tsx
+// DataTable.tsx — TanStack Table core unchanged; UI styled (dashboard / UI UX Pro Max kit)
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -19,21 +19,26 @@ import {
 import { useServerTable } from '@hooks/useServerTable';
 import * as I from '@/interface/api';
 import * as IC from '@/interface/commons';
+import { cn } from '@/lib/utils';
 import type { ColumnDef } from '@tanstack/react-table';
 import { flexRender } from '@tanstack/react-table';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Inbox, Loader2, Search } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 type DataTableProps<TData> = {
   columns: ColumnDef<TData>[];
   data: I.ApiListResponse<TData>;
   tableState: IC.TableState;
+  searchPlaceholder?: string;
 };
 
 function DataTable<TData>({
   columns,
   data,
   tableState,
+  searchPlaceholder,
 }: DataTableProps<TData>) {
+  const { t } = useTranslation();
   const {
     pagination,
     setPagination,
@@ -69,86 +74,127 @@ function DataTable<TData>({
     windowSize: 2,
   });
 
+  const placeholder =
+    searchPlaceholder ?? t('bookings.table_search');
+  const hasSelectableRows = columns.some(
+    (c) => 'id' in c && c.id === 'select',
+  );
+
   return (
-    <div className="space-y-3">
+    <div className="space-y-0 overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-sm">
       {/* Toolbar */}
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <Input
-            placeholder="Search tour name..."
-            value={globalFilter}
-            onChange={(e) => table.setGlobalFilter(e.target.value)}
-            className="max-w-xs"
-          />
+      <div className="flex flex-col gap-3 border-b border-slate-100 bg-gradient-to-b from-[#F8FAFC] to-white px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:px-4 sm:py-4">
+        <div className="flex min-w-0 flex-1 flex-col gap-2 sm:max-w-md sm:flex-row sm:items-center">
+          <div className="relative w-full">
+            <Search
+              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+              aria-hidden
+            />
+            <Input
+              placeholder={placeholder}
+              value={globalFilter}
+              onChange={(e) => table.setGlobalFilter(e.target.value)}
+              className="h-10 border-slate-200 bg-white pl-9 text-sm text-[#1E40AF] placeholder:text-slate-400 transition-colors duration-200 focus-visible:border-[#3B82F6] focus-visible:ring-[#3B82F6]/20"
+              aria-label={placeholder}
+            />
+          </div>
           {isFetching && (
-            <span className="text-xs text-muted-foreground">Loading…</span>
+            <span
+              className="flex items-center gap-1.5 text-xs font-medium text-[#2563EB] sm:ml-1 sm:shrink-0"
+              aria-live="polite"
+            >
+              <Loader2 className="size-3.5 shrink-0 animate-spin" aria-hidden />
+              <span className="whitespace-nowrap">
+                {t('bookings.table_loading')}
+              </span>
+            </span>
           )}
         </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((c) => c.getCanHide())
-              .map((column) => (
-                <DropdownMenuCheckboxItem
-                  key={column.id}
-                  className="capitalize"
-                  checked={column.getIsVisible()}
-                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                >
-                  {column.id}
-                </DropdownMenuCheckboxItem>
-              ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-9 cursor-pointer border-slate-200 bg-white text-sm font-medium text-[#1E3A8A] shadow-sm transition-colors duration-200 hover:bg-slate-50"
+              >
+                {t('bookings.table_columns')}
+                <ChevronDown className="ml-1 size-4 opacity-70" aria-hidden />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-[12rem]">
+              {table
+                .getAllColumns()
+                .filter((c) => c.getCanHide())
+                .map((column) => (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="cursor-pointer capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-muted-foreground">
-            {selectedRows.length} selected
-          </span>
-          <Button
-            variant="outline"
-            size="md"
-            disabled={!selectedRows.length}
-            onClick={() =>
-              console.log(
-                'Bulk pay:',
-                selectedRows.map((r) => r.id),
-              )
-            }
-          >
-            Pay selected
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            disabled={!selectedRows.length}
-            onClick={() =>
-              console.log(
-                'Bulk delete:',
-                selectedRows.map((r) => r.id),
-              )
-            }
-          >
-            Delete selected
-          </Button>
+          {hasSelectableRows && (
+            <div className="flex w-full flex-wrap items-center gap-2 border-t border-slate-100 pt-3 sm:w-auto sm:border-t-0 sm:pt-0">
+              <span className="text-xs font-medium text-slate-600 sm:text-sm">
+                {t('bookings.table_selected', { count: selectedRows.length })}
+              </span>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-9 cursor-pointer border-[#CA8A04]/40 text-[#92400E] transition-colors hover:bg-amber-50"
+                disabled={!selectedRows.length}
+                onClick={() =>
+                  console.log(
+                    'Bulk pay:',
+                    selectedRows.map((r) => (r as { id?: string }).id ?? r),
+                  )
+                }
+              >
+                {t('bookings.table_pay_selected')}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-9 cursor-pointer border-rose-200 text-rose-700 transition-colors hover:bg-rose-50"
+                disabled={!selectedRows.length}
+                onClick={() =>
+                  console.log(
+                    'Bulk delete:',
+                    selectedRows.map((r) => (r as { id?: string }).id ?? r),
+                  )
+                }
+              >
+                {t('bookings.table_delete_selected')}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Table */}
-      <div className="rounded-md border">
-        <Table /* className="[&_td]:text-center [&_th]:text-center" */>
-          <TableHeader>
+      <div className="overflow-x-auto">
+        <Table className="min-w-[640px]">
+          <TableHeader className="sticky top-0 z-[1] border-b border-slate-200 bg-[#F8FAFC] shadow-[0_1px_0_0_rgb(226_232_240)]">
             {table.getHeaderGroups().map((hg) => (
-              <TableRow key={hg.id}>
+              <TableRow
+                key={hg.id}
+                className="border-b-slate-200 hover:bg-transparent"
+              >
                 {hg.headers.map((h) => (
-                  <TableHead key={h.id} className="text-muted-foreground">
+                  <TableHead
+                    key={h.id}
+                    className="h-11 whitespace-nowrap px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-[#1E3A8A] sm:px-4"
+                  >
                     {h.isPlaceholder
                       ? null
                       : flexRender(h.column.columnDef.header, h.getContext())}
@@ -164,36 +210,53 @@ function DataTable<TData>({
                 <TableRow
                   key={r.id}
                   data-state={r.getIsSelected() && 'selected'}
+                  className={cn(
+                    'border-slate-100 transition-colors duration-150',
+                    'hover:bg-[#F8FAFC]/80',
+                    'data-[state=selected]:bg-[#EFF6FF]',
+                  )}
                 >
                   {r.getVisibleCells().map((c) => (
-                    <TableCell key={c.id}>
+                    <TableCell
+                      key={c.id}
+                      className="align-top whitespace-normal px-3 py-3 text-sm leading-relaxed text-slate-800 sm:px-4"
+                    >
                       {flexRender(c.column.columnDef.cell, c.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
-              <TableRow>
+              <TableRow className="hover:bg-transparent">
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-32 px-4 py-10 text-center text-slate-500"
                 >
-                  No results.
+                  <div className="flex flex-col items-center gap-2">
+                    <Inbox
+                      className="size-10 text-slate-300"
+                      strokeWidth={1.25}
+                      aria-hidden
+                    />
+                    <span className="text-sm font-medium text-slate-600">
+                      {t('bookings.table_empty')}
+                    </span>
+                  </div>
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
-
-        <Pagination
-          table={table}
-          pageCount={data?.meta?.pageCount ?? 0}
-          total={data?.meta?.total}
-          pages={pages}
-          start={start}
-          end={end}
-        />
       </div>
+
+      <Pagination
+        table={table}
+        pageCount={data?.meta?.pageCount ?? 0}
+        total={data?.meta?.total}
+        pages={pages}
+        start={start}
+        end={end}
+      />
     </div>
   );
 }
