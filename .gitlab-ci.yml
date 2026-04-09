@@ -1,0 +1,357 @@
+# =============================================================================
+# GITLAB CI/CD PIPELINE -- React Vite SPA
+# =============================================================================
+#
+# Pipeline nay tu dong: lint, test, build Docker image, deploy len VPS.
+#
+# 4 STAGES:
+#   1. validate  -- Lint code + TypeScript type check (chay tren MOI branch)
+#   2. test      -- Unit tests (chay tren MOI branch)
+#   3. build     -- Build Docker image + push len GitLab Container Registry
+#                   (chi branch staging hoac production)
+#   4. deploy    -- SSH vao VPS, pull image, restart container
+#                   (chi branch staging hoac production)
+#
+# BRANCH STRATEGY:
+#   - Branch "staging"    → build + deploy len staging  (VPS port 8080)
+#   - Branch "production" → build + deploy len production (VPS port 80)
+#   - Cac branch khac     → chi chay validate + test (khong deploy)
+#
+# GITLAB CI VARIABLES CAN THIET (cau hinh trong Settings > CI/CD > Variables):
+#   - VPS_HOST          : IP hoac domain cua VPS
+#   - VPS_USER          : SSH username tren VPS
+#   - SSH_PRIVATE_KEY   : SSH private key (type: File, Protected, Masked)
+#   - VITE_API_BASE_URL : API endpoint (scoped theo environment)
+#   - VITE_SOCKET_URL   : Socket endpoint (scoped theo environment)
+#   - VITE_APP_API_URL  : App API URL (scoped theo environment)
+#   - VITE_STRIPE_PUBLIC_KEY : Stripe public key (scoped theo environment)
+#   - VITE_DROP_CONSOLE : true/false (scoped theo environment)
+#
+# =============================================================================
+
+
+# ---------------------------------------------------------------------------
+# STAGES -- Dinh nghia thu tu chay cua pipeline
+# ---------------------------------------------------------------------------
+# Moi stage chay tuan tu (validate xong moi chay test, test xong moi build, ...)
+# Trong cung 1 stage, cac job chay song song (VD: build:staging va build:production)
+stages:
+  - validate
+  - test
+  - build
+  - deploy
+
+
+# ---------------------------------------------------------------------------
+# GLOBAL VARIABLES -- Bien dung chung cho tat ca jobs
+# ---------------------------------------------------------------------------
+variables:
+  # Node.js version dung trong CI (khop voi Dockerfile)
+  NODE_IMAGE: node:22-alpine
+
+  # Docker image name trong GitLab Container Registry
+  # CI_REGISTRY_IMAGE la bien co san cua GitLab = registry.gitlab.com/<group>/<project>
+  # Khong can tu dinh nghia, GitLab tu set.
+  DOCKER_TLS_CERTDIR: "/certs"
+
+
+# ---------------------------------------------------------------------------
+# GLOBAL CACHE -- Cache node_modules giua cac job (tiet kiem thoi gian install)
+# ---------------------------------------------------------------------------
+# Key dua tren yarn.lock: khi lockfile thay doi, cache duoc lam moi.
+# Policy pull-push: job dau tien push cache, cac job sau pull tu cache.
+cache:
+  key:
+    files:
+      - yarn.lock
+  paths:
+    - node_modules/
+  policy: pull
+
+
+# ===========================================================================
+# STAGE 1: VALIDATE -- Lint + TypeScript type check
+# ===========================================================================
+
+
+# ---------------------------------------------------------------------------
+# Job: lint
+# ---------------------------------------------------------------------------
+# Chay ESLint de kiem tra code style, best practices, potential bugs.
+# Chay tren MOI branch (khong gioi han).
+# Neu lint fail -> pipeline dung, khong chay tiep.
+lint:
+  stage: validate
+  image: $NODE_IMAGE
+  cache:
+    key:
+      files:
+        - yarn.lock
+    paths:
+      - node_modules/
+    policy: pull-push    # Job nay push cache cho cac job sau dung
+  script:
+    - yarn install --frozen-lockfile
+    - yarn lint
+  tags:
+    - docker
+
+
+# ---------------------------------------------------------------------------
+# Job: typecheck
+# ---------------------------------------------------------------------------
+# Chay TypeScript compiler de kiem tra type errors.
+# --noEmit: chi check, khong tao output files.
+# Chay song song voi lint (cung stage validate).
+typecheck:
+  stage: validate
+  image: $NODE_IMAGE
+  script:
+    - yarn install --frozen-lockfile
+    - npx tsc -b --noEmit
+  tags:
+    - docker
+
+
+# ===========================================================================
+# STAGE 2: TEST -- Unit tests
+# ===========================================================================
+
+
+# ---------------------------------------------------------------------------
+# Job: test
+# ---------------------------------------------------------------------------
+# Chay Jest unit tests voi coverage report.
+# Chi chay sau khi validate stage thanh cong.
+# Coverage report duoc luu lai de xem tren GitLab UI.
+test:
+  stage: test
+  image: $NODE_IMAGE
+  script:
+    - yarn install --frozen-lockfile
+    - yarn test --coverage --passWithNoTests
+  # Luu coverage report de xem tren GitLab merge request
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+  artifacts:
+    when: always
+    paths:
+      - coverage/
+    expire_in: 7 days
+  tags:
+    - docker
+
+
+# ===========================================================================
+# STAGE 3: BUILD -- Docker build + push to registry
+# ===========================================================================
+
+
+# ---------------------------------------------------------------------------
+# Job: build:staging
+# ---------------------------------------------------------------------------
+# Build Docker image cho STAGING environment.
+# Chi chay khi push/merge vao branch "staging".
+#
+# Su dung Docker-in-Docker (dind) de build image ben trong CI runner.
+# Image duoc tag voi: staging-<commit-sha> (de trace) va staging-latest (de pull nhanh).
+# Sau khi build, push len GitLab Container Registry.
+build:staging:
+  stage: build
+  image: docker:27
+  services:
+    # Docker-in-Docker: cho phep chay docker commands trong CI job
+    # TLS duoc bat de bao mat giao tiep giua Docker client va daemon
+    - docker:27-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    # Login vao GitLab Container Registry
+    # CI_REGISTRY, CI_REGISTRY_USER, CI_REGISTRY_PASSWORD la bien co san cua GitLab
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    # Build image voi staging env vars (truyen qua --build-arg)
+    # Cac bien VITE_* lay tu GitLab CI Variables (scope: staging)
+    - >
+      docker build
+      --build-arg VITE_API_BASE_URL=$VITE_API_BASE_URL
+      --build-arg VITE_SOCKET_URL=$VITE_SOCKET_URL
+      --build-arg VITE_APP_API_URL=$VITE_APP_API_URL
+      --build-arg VITE_STRIPE_PUBLIC_KEY=$VITE_STRIPE_PUBLIC_KEY
+      --build-arg VITE_DROP_CONSOLE=$VITE_DROP_CONSOLE
+      -t $CI_REGISTRY_IMAGE:staging-$CI_COMMIT_SHORT_SHA
+      -t $CI_REGISTRY_IMAGE:staging-latest
+      .
+    # Push ca 2 tags len registry
+    - docker push $CI_REGISTRY_IMAGE:staging-$CI_COMMIT_SHORT_SHA
+    - docker push $CI_REGISTRY_IMAGE:staging-latest
+  # Chi chay tren branch staging
+  rules:
+    - if: $CI_COMMIT_BRANCH == "staging"
+  environment:
+    name: staging
+  tags:
+    - docker
+
+
+# ---------------------------------------------------------------------------
+# Job: build:production
+# ---------------------------------------------------------------------------
+# Build Docker image cho PRODUCTION environment.
+# Chi chay khi push/merge vao branch "production".
+# Tuong tu build:staging nhung dung production env vars.
+build:production:
+  stage: build
+  image: docker:27
+  services:
+    - docker:27-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - >
+      docker build
+      --build-arg VITE_API_BASE_URL=$VITE_API_BASE_URL
+      --build-arg VITE_SOCKET_URL=$VITE_SOCKET_URL
+      --build-arg VITE_APP_API_URL=$VITE_APP_API_URL
+      --build-arg VITE_STRIPE_PUBLIC_KEY=$VITE_STRIPE_PUBLIC_KEY
+      --build-arg VITE_DROP_CONSOLE=$VITE_DROP_CONSOLE
+      -t $CI_REGISTRY_IMAGE:prod-$CI_COMMIT_SHORT_SHA
+      -t $CI_REGISTRY_IMAGE:prod-latest
+      .
+    - docker push $CI_REGISTRY_IMAGE:prod-$CI_COMMIT_SHORT_SHA
+    - docker push $CI_REGISTRY_IMAGE:prod-latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == "production"
+  environment:
+    name: production
+  tags:
+    - docker
+
+
+# ===========================================================================
+# STAGE 4: DEPLOY -- SSH vao VPS, pull image, restart container
+# ===========================================================================
+# Khong dung script file. Chay cac lenh Docker truc tiep tren VPS qua SSH.
+# Flow:
+#   1. CI runner cai SSH client (alpine khong co san)
+#   2. Setup SSH key tu GitLab Variable
+#   3. SSH vao VPS
+#   4. Login vao GitLab Registry (tren VPS)
+#   5. Set bien IMAGE_TAG va CI_REGISTRY_IMAGE
+#   6. Pull image moi
+#   7. Restart container (force-recreate de dung image moi)
+#   8. Doi 10 giay cho container khoi dong
+#   9. Health check bang curl
+# ===========================================================================
+
+
+# ---------------------------------------------------------------------------
+# Job: deploy:staging
+# ---------------------------------------------------------------------------
+# Deploy image staging len VPS (port 8080).
+# Chi chay khi push/merge vao branch "staging".
+deploy:staging:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    # Cai openssh-client de co lenh ssh va ssh-keyscan
+    # Alpine linux khong co san SSH, phai cai them
+    - apk add --no-cache openssh-client
+
+    # Khoi dong SSH agent -- quan ly SSH keys trong memory
+    - eval $(ssh-agent -s)
+
+    # Them private key vao SSH agent
+    # SSH_PRIVATE_KEY la GitLab CI Variable (Protected + Masked)
+    # tr -d '\r' xoa ky tu carriage return (windows line ending) neu co
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+
+    # Tao thu muc .ssh voi quyen chi owner doc/ghi
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+
+    # Them VPS vao known_hosts -- tranh SSH hoi "Are you sure?" lan dau ket noi
+    # ssh-keyscan lay public key cua VPS va luu vao known_hosts
+    - ssh-keyscan -H $VPS_HOST >> ~/.ssh/known_hosts 2>/dev/null
+  script:
+    # SSH vao VPS va chay cac lenh tuan tu:
+    - >
+      ssh $VPS_USER@$VPS_HOST "
+        cd /opt/frontend &&
+
+        echo '[1/5] Login vao GitLab Registry...' &&
+        docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY &&
+
+        echo '[2/5] Set image tag...' &&
+        export CI_REGISTRY_IMAGE=$CI_REGISTRY_IMAGE &&
+        export IMAGE_TAG=staging-$CI_COMMIT_SHORT_SHA &&
+
+        echo '[3/5] Pull image moi...' &&
+        docker compose -f docker-compose.staging.yml pull &&
+
+        echo '[4/5] Restart container...' &&
+        docker compose -f docker-compose.staging.yml up -d --force-recreate &&
+
+        echo '[5/5] Health check...' &&
+        sleep 10 &&
+        curl -sf --max-time 5 http://127.0.0.1:8080/health &&
+        echo '' &&
+        echo 'Deploy staging THANH CONG!'
+      "
+  rules:
+    - if: $CI_COMMIT_BRANCH == "staging"
+  environment:
+    name: staging
+    url: https://staging.yourdomain.com
+  tags:
+    - docker
+
+
+# ---------------------------------------------------------------------------
+# Job: deploy:production
+# ---------------------------------------------------------------------------
+# Deploy image production len VPS (port 80).
+# Chi chay khi push/merge vao branch "production".
+# Tuong tu deploy:staging nhung dung production compose file va image tag.
+deploy:production:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -H $VPS_HOST >> ~/.ssh/known_hosts 2>/dev/null
+  script:
+    - >
+      ssh $VPS_USER@$VPS_HOST "
+        cd /opt/frontend &&
+
+        echo '[1/5] Login vao GitLab Registry...' &&
+        docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY &&
+
+        echo '[2/5] Set image tag...' &&
+        export CI_REGISTRY_IMAGE=$CI_REGISTRY_IMAGE &&
+        export IMAGE_TAG=prod-$CI_COMMIT_SHORT_SHA &&
+
+        echo '[3/5] Pull image moi...' &&
+        docker compose -f docker-compose.production.yml pull &&
+
+        echo '[4/5] Restart container...' &&
+        docker compose -f docker-compose.production.yml up -d --force-recreate &&
+
+        echo '[5/5] Health check...' &&
+        sleep 10 &&
+        curl -sf --max-time 5 http://127.0.0.1:80/health &&
+        echo '' &&
+        echo 'Deploy production THANH CONG!'
+      "
+  rules:
+    - if: $CI_COMMIT_BRANCH == "production"
+  environment:
+    name: production
+    url: https://yourdomain.com
+  tags:
+    - docker

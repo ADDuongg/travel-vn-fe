@@ -1,22 +1,55 @@
+# =============================================================================
+# DOCKERIGNORE -- Loai bo cac file khong can thiet khoi Docker build context
+# =============================================================================
+# Docker build context la tat ca file trong thu muc hien tai.
+# File nao match pattern o day se KHONG duoc gui vao Docker daemon khi build.
+# Giam kich thuoc context = build nhanh hon + image an toan hon (khong lo leak file).
+# =============================================================================
+
+# -- Dependencies & build output --
+# node_modules se duoc install lai trong Docker (stage deps)
+# dist se duoc build lai trong Docker (stage builder)
 node_modules
 dist
+
+# -- Git --
 .git
 .gitignore
+
+# -- Environment files --
+# Env files chua config nhay cam, KHONG can trong image.
+# Cac bien VITE_* duoc inject qua --build-arg, khong doc tu .env file.
 .env
 .env.*
 !.env.example
 
+# -- Documentation --
 *.md
 LICENSE
 
+# -- IDE & editor --
 .vscode
 .cursor
 .agents
+
+# -- Test & mock --
 __mocks__
+coverage
+jest.config.js
+jest.setup.ts
+
+# -- Project docs & plans --
 plans
 docs
 deploy
 
-coverage
+# -- CI/CD & deployment files (khong can trong image) --
+.gitlab-ci.yml
+docker-compose*.yml
+Dockerfile
+
+# -- System & logs --
 *.log
 .DS_Store
+.cache
+.vite

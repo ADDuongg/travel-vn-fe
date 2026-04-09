@@ -1,0 +1,79 @@
+# =============================================================================
+# DOCKER COMPOSE -- PRODUCTION ENVIRONMENT
+# =============================================================================
+#
+# File nay dinh nghia container cho moi truong PRODUCTION.
+# Production la moi truong user cuoi truy cap -- can on dinh va nhanh.
+#
+# Cach chay:
+#   docker compose -f docker-compose.production.yml up -d
+#
+# Cach dung:
+#   docker compose -f docker-compose.production.yml down
+#
+# Xem log:
+#   docker compose -f docker-compose.production.yml logs -f
+#
+# Luu y:
+#   - Image duoc build boi GitLab CI va push len GitLab Container Registry.
+#   - Tren VPS, file nay chi pull image tu registry, KHONG build local.
+#   - Production duoc cap nhieu resources hon staging.
+#
+# =============================================================================
+
+services:
+  web-production:
+    # -- IMAGE --
+    # Image duoc pull tu GitLab Container Registry.
+    # ${CI_REGISTRY_IMAGE} la dia chi registry (VD: registry.gitlab.com/group/project)
+    # ${IMAGE_TAG} la tag cua image (VD: prod-abc1234)
+    # Neu khong set, mac dinh dung tag "prod-latest"
+    image: ${CI_REGISTRY_IMAGE:-registry.gitlab.com/your-group/your-project}:${IMAGE_TAG:-prod-latest}
+
+    # -- CONTAINER NAME --
+    # Dat ten co dinh de de quan ly
+    container_name: frontend-production
+
+    # -- PORT MAPPING --
+    # Map host port 80 → container port 80 (nginx ben trong listen 80)
+    # User truy cap production qua: http://vps-ip hoac yourdomain.com
+    # Neu dung host Nginx reverse proxy + SSL, host port co the doi thanh 3000
+    # va host Nginx proxy_pass vao 3000.
+    ports:
+      - "80:80"
+
+    # -- RESTART POLICY --
+    # unless-stopped: tu dong restart khi crash hoac VPS reboot.
+    # Quan trong cho production -- dam bao uptime.
+    restart: unless-stopped
+
+    # -- RESOURCE LIMITS --
+    # Production duoc cap nhieu resources hon staging.
+    # Nginx serve static files khong ton nhieu RAM/CPU, nhung de du room.
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"       # Toi da 1 CPU core
+          memory: 256M      # Toi da 256MB RAM
+        reservations:
+          cpus: "0.25"      # Dam bao toi thieu 25% CPU
+          memory: 64M       # Dam bao toi thieu 64MB RAM
+
+    # -- HEALTH CHECK --
+    # Giong staging nhung start_period ngan hon (production image da duoc test tren staging).
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1/health"]
+      interval: 30s
+      timeout: 3s
+      start_period: 5s
+      retries: 3
+
+    # -- LOGGING --
+    # Production log nhieu hon, cho phep file lon hon.
+    # max-size 50m: moi file log toi da 50MB
+    # max-file 5: giu toi da 5 file log (tong 250MB)
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
