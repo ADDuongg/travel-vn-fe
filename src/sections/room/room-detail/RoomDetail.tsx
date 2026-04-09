@@ -1,4 +1,3 @@
-import React from 'react';
 import { Separator } from '@components/ui/separator';
 import type { Room } from '@/features/rooms/types';
 import { EnumLanguage } from '@/constants/commons';

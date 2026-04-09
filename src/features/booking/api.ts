@@ -1,7 +1,7 @@
 // features/bookings/booking/api.ts
 import api from '@/lib/axios';
 import type { Booking } from '../shared/types';
-import * as I from '@/interface/api';
+import * as I from '@/types/api';
 
 export async function getMyBookings(params: {
   pageIndex: number;

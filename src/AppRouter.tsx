@@ -8,7 +8,7 @@ import {
   type NonIndexRouteObject,
 } from 'react-router-dom';
 import { useInitAuth } from '@hooks/useInitAuth';
-import * as I from '@/interface/commons';
+import * as I from '@/types/commons';
 import ErrorBoundary from '@lib/ErrorBoundary';
 import ProtectedRoute from './components/ProtectedRoute';
 import type { EnumRole } from './constants/commons';

@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import { useMyBookings } from '@/features/booking/hooks';
 import type { Booking } from '@/features/shared/types';
 import DataTable from '@/shared/table/DataTable';
-import * as I from '@/interface/api';
+import * as I from '@/types/api';
 import type { RowSelectionState, SortingState } from '@tanstack/react-table';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';

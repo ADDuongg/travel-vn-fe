@@ -1,7 +1,7 @@
 // features/bookings/hooks/useMyBookings.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getBookingById, getMyBookings, cancelBooking } from '../booking/api';
-import * as I from '@/interface/api';
+import * as I from '@/types/api';
 import type { Booking } from '../shared/types';
 
 export const bookingKeys = {

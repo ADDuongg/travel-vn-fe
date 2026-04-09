@@ -6,7 +6,7 @@ import {
   type GetBookingsParams,
 } from './api';
 import type { TourBookingRow } from './types';
-import * as I from '@/interface/api';
+import * as I from '@/types/api';
 export const bookingKeys = {
   all: ['bookings'] as const,
   list: (filters: unknown) => [...bookingKeys.all, 'list', filters] as const,

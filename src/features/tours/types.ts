@@ -1,4 +1,4 @@
-import type { BookingStatus, PaymentStatus } from '../shared/types';
+import type { BookingPaymentStatus, BookingStatus } from '../shared/types';
 
 export type TourBookingRow = {
   id: string;
@@ -7,5 +7,5 @@ export type TourBookingRow = {
   travelDate: string;
   total: number;
   status: BookingStatus;
-  paymentStatus: PaymentStatus;
+  paymentStatus: BookingPaymentStatus;
 };

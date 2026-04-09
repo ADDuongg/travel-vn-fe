@@ -30,7 +30,6 @@ export default {
     '^@pages/(.*)$': '<rootDir>/src/pages/$1',
     '^@styles/(.*)$': '<rootDir>/src/styles/$1',
     '^@assets/(.*)$': '<rootDir>/src/assets/$1',
-    '^@interface/(.*)$': '<rootDir>/src/interface/$1',
     '^@store/(.*)$': '<rootDir>/src/store/$1',
     '^/images/(.*)$': '<rootDir>/__mocks__/fileMock.js',
   },

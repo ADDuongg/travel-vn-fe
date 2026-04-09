@@ -1,3 +1,8 @@
+---
+description: Travel frontend — stack, architecture, boundaries. Skills/agents hold deep playbooks.
+alwaysApply: true
+---
+
 # Frontend Project Overview (Source of Truth)
 
 ## Purpose
@@ -51,7 +56,7 @@ No backend logic in frontend.
 
 ## API & Data
 
-- All API calls go through `services/`
+- API modules live under `src/features/<domain>/api.ts` (and shared clients/utilities as the codebase does today)
 - Axios instance handles auth & error normalization
 - Never trust backend blindly
 
@@ -74,7 +79,13 @@ No backend logic in frontend.
 - No payment logic
 - No DB logic
 
-## Cursor Instruction
+## Cursor: rules vs skills vs agents
+
+- **Rules** (this folder, `.mdc`): short constraints the model should treat as always-on for this repo.
+- **Skills** (`.cursor/skills/<name>/SKILL.md`): deeper playbooks — load when the task matches (e.g. `frontend-patterns`, `docker-patterns`, `deployment-patterns`; `ui-ux-pro-max` includes scripts and the full design dataset).
+- **Agents** (`.cursor/agents/*.md`): specialized personas/workflows (e.g. planner, architect, code-reviewer) — use when you want that mode of work, not as a substitute for project rules.
+
+Rule `ui-ux-pro-max.mdc` here is the **trimmed always-apply UI summary**; the skill `ui-ux-pro-max` is the **full guide + tooling**.
 
 ## Translation
 

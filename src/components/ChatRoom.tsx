@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import useSocket from '../hooks/useSocket';
 import socketService from '../lib/socket';
 
 type Message = {

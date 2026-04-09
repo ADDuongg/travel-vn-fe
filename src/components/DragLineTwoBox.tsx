@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  useState,
-  RefObject,
-  useEffect,
-  useCallback,
-} from 'react';
+import React, { useRef, useState, useCallback, type RefObject } from 'react';
 
 // Kiểu dữ liệu cho item và match
 type MatchItem = { id: string; label: string };
@@ -34,10 +28,10 @@ const correctAnswer: MatchPair[] = [
 
 const DragLineTwoBox: React.FC = () => {
   // Ref tới từng div của A/B và svg overlay
-  const refsA = useRef<RefObject<HTMLDivElement>[]>(
+  const refsA = useRef<RefObject<HTMLDivElement | null>[]>(
     itemsA.map(() => React.createRef<HTMLDivElement>()),
   );
-  const refsB = useRef<RefObject<HTMLDivElement>[]>(
+  const refsB = useRef<RefObject<HTMLDivElement | null>[]>(
     itemsB.map(() => React.createRef<HTMLDivElement>()),
   );
   const svgRef = useRef<SVGSVGElement>(null);
@@ -52,7 +46,7 @@ const DragLineTwoBox: React.FC = () => {
     ]);
   }, []); */
   // Lấy toạ độ bên phải của box A (vào viền phải)
-  function getRightCenter(ref: RefObject<HTMLDivElement>) {
+  function getRightCenter(ref: RefObject<HTMLDivElement | null>) {
     if (!ref.current || !svgRef.current) return { x: 0, y: 0 };
     const rect = ref.current.getBoundingClientRect();
     const svgRect = svgRef.current.getBoundingClientRect();
@@ -62,7 +56,7 @@ const DragLineTwoBox: React.FC = () => {
     };
   }
   // Lấy toạ độ bên trái của box B (vào viền trái)
-  function getLeftCenter(ref: RefObject<HTMLDivElement>) {
+  function getLeftCenter(ref: RefObject<HTMLDivElement | null>) {
     if (!ref.current || !svgRef.current) return { x: 0, y: 0 };
     const rect = ref.current.getBoundingClientRect();
     const svgRect = svgRef.current.getBoundingClientRect();
@@ -72,7 +66,7 @@ const DragLineTwoBox: React.FC = () => {
     };
   }
   // Lấy center của box (dùng cho drag start)
-  function getCenter(ref: RefObject<HTMLDivElement>) {
+  function getCenter(ref: RefObject<HTMLDivElement | null>) {
     if (!ref.current || !svgRef.current) return { x: 0, y: 0 };
     const rect = ref.current.getBoundingClientRect();
     const svgRect = svgRef.current.getBoundingClientRect();
@@ -112,7 +106,7 @@ const DragLineTwoBox: React.FC = () => {
 
       if (!dragging) return;
       const { from, idx } = dragging;
-      let refs: RefObject<HTMLDivElement>[];
+      let refs: RefObject<HTMLDivElement | null>[];
       if (from === 'a') refs = refsB.current;
       else refs = refsA.current;
 
@@ -219,7 +213,6 @@ const DragLineTwoBox: React.FC = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div>
           {itemsA.map((item, idx) => {
-            const match = matches.find((m) => m.b === item.id);
             return (
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div

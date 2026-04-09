@@ -1,4 +1,3 @@
-import React from 'react';
 import BookingCard from '@/sections/shared/BookingCard';
 import { Card } from '@components/ui/card';
 import { MdThumbUp } from 'react-icons/md';

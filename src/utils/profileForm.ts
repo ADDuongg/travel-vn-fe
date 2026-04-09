@@ -1,4 +1,4 @@
-import * as I from '@/interface/auth';
+import * as I from '@/types/auth';
 import type { ProfileFormValues } from '@/pages/dashboard/my_account/types';
 import { ADDRESS_NONE } from './addressOptions';
 

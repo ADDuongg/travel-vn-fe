@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { Loadable } from './lib';
 import { ROUTES } from './constants/router';
-import type { RouteConfig } from './interface/commons';
+import type { RouteConfig } from './types/commons';
 import DashboardLayout from './layout/DashboardLayout';
 
 const HomePage = Loadable(() => import('@/pages/home/Home'));

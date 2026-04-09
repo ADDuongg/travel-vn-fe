@@ -1,5 +1,5 @@
 import api from '@/lib/axios';
-import * as I from '@/interface/auth';
+import * as I from '@/types/auth';
 
 /**
  * Cập nhật profile. Nếu có avatarFile thì gửi multipart (form + file), không thì gửi JSON.

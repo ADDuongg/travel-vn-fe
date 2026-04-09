@@ -1,7 +1,7 @@
 import api from '@/lib/axios';
 import type { BookingStatus } from '../shared/types';
 import type { TourBookingRow } from './types';
-import * as I from '@/interface/api';
+import * as I from '@/types/api';
 
 export type GetBookingsParams = I.Paginate & {
   q?: string;

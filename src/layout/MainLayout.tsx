@@ -2,8 +2,6 @@
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import Container from '../components/Container';
-import { ResponsiveH1, ResponsiveH6 } from '@components/ui/typography';
 import { ChatBotWidget } from '@components/chatbot';
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {

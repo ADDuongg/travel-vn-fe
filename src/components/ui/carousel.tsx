@@ -53,6 +53,7 @@ function Carousel({
   children,
   ...props
 }: React.ComponentProps<'div'> & CarouselProps) {
+  void isChunk;
   const emblaOpts = {
     ...opts,
     axis: orientation === 'horizontal' ? ('x' as const) : ('y' as const),

@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 // shared/tablekit/useServerTable.ts
-import * as I from '@/interface/api';
-import * as IC from '@/interface/commons';
+import * as I from '@/types/api';
+import * as IC from '@/types/commons';
 import {
   getCoreRowModel,
   useReactTable,
@@ -18,7 +17,7 @@ export function useServerTable<TData>(opts: {
   windowSize?: number;
   onSelectionChange?: (rows: TData[]) => void;
 }) {
-  const { data, columns, meta, state, windowSize = 2 } = opts;
+  const { meta, state, windowSize = 2 } = opts;
   const [internalRowSelection, setInternalRowSelection] =
     React.useState<RowSelectionState>({});
 

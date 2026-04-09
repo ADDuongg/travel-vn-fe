@@ -10,7 +10,7 @@ const CardSearchingFlex: React.FC<{
   item: any;
   displayType?: EnumDisplayItem;
   className?: string;
-}> = ({ item, displayType = EnumDisplayItem.FLEX, className }) => {
+}> = ({ item, className }) => {
   return (
     <div
       className={clsx(

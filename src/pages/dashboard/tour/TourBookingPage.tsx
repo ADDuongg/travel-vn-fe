@@ -12,7 +12,7 @@ import DataTable from '@/shared/table/DataTable';
 import { useMyTourBookingsQuery } from '@/features/tours/booking-hooks';
 import type { TourBookingListItem, TourBookingTourRef } from '@/features/tours/booking-types';
 import type { RowSelectionState, SortingState } from '@tanstack/react-table';
-import * as I from '@/interface/api';
+import * as I from '@/types/api';
 import { ROUTES } from '@/constants/router';
 import { fmtMoney, fmtDate, getPaymentExpireAt } from '@/utils';
 import { useCountdown } from '@/hooks/useCountdown';

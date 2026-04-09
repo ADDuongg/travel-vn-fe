@@ -2,6 +2,7 @@ import type { EnumRole } from '@/constants/commons';
 import type { RowSelectionState, SortingState } from '@tanstack/react-table';
 import type { RegisterOptions } from 'react-hook-form';
 import type { Paginate } from './api';
+import type * as React from 'react';
 
 export interface RouteConfig {
   index?: boolean;
@@ -28,6 +29,7 @@ export type CountryFlag = {
 
 export type InputType =
   | 'text'
+  | 'email'
   | 'password'
   | 'select'
   | 'autocomplete'

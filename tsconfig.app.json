@@ -32,7 +32,6 @@
       "@pages/*": ["./src/pages/*"],
       "@styles/*": ["./src/styles/*"],
       "@assets/*": ["./src/assets/*"],
-      "@interface/*": ["./src/interface/*"],
       "@store/*": ["./src/store/*"],
       "@/*": [
         "./src/*"

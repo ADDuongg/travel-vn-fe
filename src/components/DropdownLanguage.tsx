@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Select,
   SelectContent,
@@ -7,7 +6,7 @@ import {
 } from '@/components/ui/select';
 import { useLanguage } from '@/hooks/useLanguage';
 import { useGetLanguagesQuery } from '@/features/language/hooks';
-import * as I from '@/interface/commons';
+import * as I from '@/types/commons';
 
 export const DropdownLanguage = () => {
   const { language, changeLanguage } = useLanguage();

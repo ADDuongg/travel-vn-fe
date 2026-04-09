@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { Trash2 } from 'lucide-react';
 import { Button } from '@components/ui/button';
 import { useBookingsQuery } from '@/features/tours/hooks';
-import * as I from '@/interface/api';
+import * as I from '@/types/api';
 import type { BookingStatus } from '@/features/shared/types';
 import DataTable from '@/shared/table/DataTable';
 import { useTranslation } from 'react-i18next';

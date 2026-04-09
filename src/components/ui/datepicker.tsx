@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import { AiFillCalendar } from 'react-icons/ai';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
@@ -12,7 +11,7 @@ import {
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { cva } from 'class-variance-authority';
-import * as I from '@/interface/commons';
+import * as I from '@/types/commons';
 
 export interface DatePickerProps {
   value?: Date | undefined;

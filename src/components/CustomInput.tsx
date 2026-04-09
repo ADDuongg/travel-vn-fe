@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/select';
 import { Label } from './ui/label';
 import { DatePicker } from './ui/datepicker';
-import * as I from '@/interface/commons';
+import * as I from '@/types/commons';
 
 interface CustomInputProps {
   name: string;

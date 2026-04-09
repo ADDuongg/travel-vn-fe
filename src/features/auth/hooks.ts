@@ -2,7 +2,7 @@
 
 import { ROUTES } from '@/constants/router';
 import { useAuthStore } from '@/stores/useAuthStore';
-import * as I from '@/interface/auth';
+import * as I from '@/types/auth';
 import { authUtils } from '@lib/auth-token';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';

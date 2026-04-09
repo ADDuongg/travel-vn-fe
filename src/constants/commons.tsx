@@ -1,4 +1,4 @@
-import * as I from '@/interface/commons';
+import * as I from '@/types/commons';
 import { ROUTES } from './router';
 
 export const HeaderItem: I.HeaderItemType[] = [

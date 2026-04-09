@@ -12,8 +12,8 @@ import {
   ResponsiveH5,
   ResponsiveH6,
 } from '@components/ui/typography';
-import * as I from '@/interface/auth';
-import * as IC from '@/interface/commons';
+import * as I from '@/types/auth';
+import * as IC from '@/types/commons';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';

@@ -2,7 +2,7 @@
 
 import type { ProfileFormValues } from '@/pages/dashboard/my_account/types';
 import { profileFormValuesToPayload } from '@/utils/profileForm';
-import * as I from '@/interface/auth';
+import * as I from '@/types/auth';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authKeyQuery } from '@/features/auth/key';
 import { updateProfile } from './api';

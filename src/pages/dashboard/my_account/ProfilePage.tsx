@@ -11,7 +11,7 @@ import {
 } from '@/hooks/useAddressSelectOptions';
 import { useStatusAlert } from '@/hooks/useStatusAlert';
 import { H3, P } from '@/components/ui/typography';
-import * as I from '@/interface/auth';
+import * as I from '@/types/auth';
 import type { ProfileFormValues } from '@/pages/dashboard/my_account/types';
 import { ADDRESS_NONE } from '@/utils/addressOptions';
 import {

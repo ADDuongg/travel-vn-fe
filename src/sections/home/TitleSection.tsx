@@ -6,7 +6,6 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { z } from 'zod';
 import heroRight from '/images/heroRight.png';
 import { Separator } from '@/components/ui/separator';
-import { Select } from '@components/ui/select';
 import { SubTitle } from '@components/ui/typography';
 import { Trans, useTranslation } from 'react-i18next';
 type FormData = z.infer<typeof schema>;

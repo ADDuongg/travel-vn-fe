@@ -1,5 +1,5 @@
 import api from '@/lib/axios';
-import * as I from '@/interface/auth';
+import * as I from '@/types/auth';
 
 export function login(data: I.LoginFormValues) {
   return api.post<I.LoginPayload>('/api/v1/auth/login', data);

@@ -9,9 +9,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from './ui/accordion';
-import { FaSlidersH } from 'react-icons/fa';
-import { Label } from './ui/label';
-import { ResponsiveH3, ResponsiveH6 } from './ui/typography';
+import { ResponsiveH6 } from './ui/typography';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { AiOutlineMinus } from 'react-icons/ai';
 

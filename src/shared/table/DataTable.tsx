@@ -17,8 +17,8 @@ import {
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
 import { useServerTable } from '@hooks/useServerTable';
-import * as I from '@/interface/api';
-import * as IC from '@/interface/commons';
+import * as I from '@/types/api';
+import * as IC from '@/types/commons';
 import { cn } from '@/lib/utils';
 import type { ColumnDef } from '@tanstack/react-table';
 import { flexRender } from '@tanstack/react-table';

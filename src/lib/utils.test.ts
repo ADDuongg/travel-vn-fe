@@ -6,7 +6,11 @@ describe('cn', () => {
   });
 
   it('handles conditional classes', () => {
-    expect(cn('base', false && 'hidden', true && 'visible')).toBe('base visible');
+    const hidden = false;
+    const visible = true;
+    expect(cn('base', hidden && 'hidden', visible && 'visible')).toBe(
+      'base visible',
+    );
   });
 
   it('merges tailwind classes with conflicts', () => {

@@ -6,7 +6,6 @@ import {
   ResponsiveH1,
   ResponsiveH2,
   ResponsiveH3,
-  ResponsiveH4,
   ResponsiveH5,
 } from '@components/ui/typography';
 import { ROUTES } from '@/constants/router';

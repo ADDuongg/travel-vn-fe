@@ -74,13 +74,12 @@ function Button({
 function ButtonNavigate({
   className,
   label,
-  ...props
 }: {
   className?: string;
   label: string;
 } & React.ComponentProps<'button'>) {
   return (
-    <div className="w-fit cursor-pointer group duration-300">
+    <div className={cn('w-fit cursor-pointer group duration-300', className)}>
       <div className="flex gap-2">
         {label} <AiOutlineSwapRight size={24} />
       </div>
