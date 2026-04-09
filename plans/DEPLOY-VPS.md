@@ -4,10 +4,13 @@
 > Moi buoc gom: **lenh can chay** + **giai thich lenh do lam gi**.
 > Ban doc tu tren xuong, chay tung lenh theo thu tu.
 
+**Truoc khi deploy:** dien day du cac gia tri trong [PHAN 0: CHECKLIST GIA TRI CAN DIEN](#phan-0-checklist-gia-tri-can-dien) (GitLab Variables, VPS, file `.env*`, registry, runner).
+
 ---
 
 ## Muc luc
 
+- [PHAN 0: CHECKLIST GIA TRI CAN DIEN](#phan-0-checklist-gia-tri-can-dien)
 - [PHAN A: HIEU TONG QUAN](#phan-a-hieu-tong-quan)
 - [PHAN B: SETUP VPS LAN DAU](#phan-b-setup-vps-lan-dau)
 - [PHAN C: SETUP GITLAB CI/CD](#phan-c-setup-gitlab-cicd)
@@ -16,6 +19,123 @@
 - [PHAN F: QUAN LY HANG NGAY](#phan-f-quan-ly-hang-ngay)
 - [PHAN G: ROLLBACK (QUAY LAI VERSION CU)](#phan-g-rollback-quay-lai-version-cu)
 - [PHAN H: TROUBLESHOOTING](#phan-h-troubleshooting)
+
+---
+
+## PHAN 0: CHECKLIST GIA TRI CAN DIEN
+
+> Muc dich: ban **thay placeholder** bang gia tri that cua du an (domain, IP, registry, keys).
+> **Khong** commit secret vao git. GitLab Variables + file `.env*` da co trong `.gitignore` / khong commit.
+
+### 0.1 Bang tong hop -- o dau dien gi
+
+| Gia tri | Bat buoc | O dau dien | Vi du (placeholder) |
+|---------|----------|------------|---------------------|
+| IP hoac hostname VPS | Co | GitLab CI Variable `VPS_HOST` | `<VPS_IP>` hoac `vps.yourdomain.com` |
+| User SSH tren VPS | Co | GitLab CI Variable `VPS_USER` | `root` hoac `<ssh_user>` |
+| Private key SSH (CI deploy) | Co | GitLab CI Variable `SSH_PRIVATE_KEY` | Noi dung file `~/.ssh/id_ed25519` (key pair da add public key len VPS) |
+| Duong dan image GitLab Registry | Co | Tren VPS: bien `CI_REGISTRY_IMAGE`; trong compose: default `registry.gitlab.com/<group>/<project>` | Lay tai GitLab: **Deploy → Container Registry** (copy path, khong co `https://`) |
+| Domain frontend staging | Co | `.env.staging` + GitLab Variables (scope staging) cho `VITE_*` | `https://staging.<DOMAIN>` |
+| Domain frontend production | Co | `.env.production` + GitLab Variables (scope production) | `https://<DOMAIN>` |
+| URL API backend (staging) | Co | `VITE_API_BASE_URL`, `VITE_APP_API_URL` (scope staging) | `https://staging.<DOMAIN>/api` hoac URL API that |
+| URL API backend (production) | Co | Cung ten bien (scope production) | `https://<DOMAIN>/api` hoac URL API that |
+| URL Socket (staging / prod) | Co | `VITE_SOCKET_URL` (2 scope) | Thuong trung origin frontend hoac origin API (tuy backend) |
+| Stripe public key (test) | Neu dung Stripe | Scope **staging** | `pk_test_...` |
+| Stripe public key (live) | Neu dung Stripe | Scope **production** | `pk_live_...` |
+| `VITE_DROP_CONSOLE` | Co | Staging: `false`; Production: `true` | `false` / `true` |
+| Email Certbot (SSL host) | Neu dung certbot tren VPS | `.env.production` | `admin@yourdomain.com` |
+| URL hien thi tren GitLab (deploy job) | Khuyen nghi | [`.gitlab-ci.yml`](../.gitlab-ci.yml) trong job `deploy:staging` / `deploy:production` (`environment: url:`) | Sua `https://staging.yourdomain.com` → URL staging that |
+| Tag GitLab Runner | Co (neu pipeline khong chay) | [`.gitlab-ci.yml`](../.gitlab-ci.yml) -- `tags: - docker` | Doi thanh tag runner that cua project (VD: `gitlab-org-docker`, `shell`, ...) |
+
+**GitLab tu cung cap (khong can tu tao Variable):** `CI_REGISTRY`, `CI_REGISTRY_USER`, `CI_REGISTRY_PASSWORD`, `CI_REGISTRY_IMAGE`, `CI_COMMIT_SHORT_SHA` -- pipeline dung de login registry va tag image.
+
+---
+
+### 0.2 GitLab -- Settings → CI/CD → Variables
+
+Thay `<...>` bang gia tri that. Voi bien `VITE_*`, nen dung **Environment scope** = `staging` hoac `production` de moi truong khac nhau.
+
+**Bien chung (khong scope, hoac scope `All`):**
+
+| Key | Gia tri (mau dien) | Ghi chu |
+|-----|-------------------|---------|
+| `VPS_HOST` | `<VPS_IP>` | IP public hoac hostname SSH |
+| `VPS_USER` | `<SSH_USER>` | User co quyen chay `docker` tren VPS |
+| `SSH_PRIVATE_KEY` | `<PRIVATE_KEY_MULTILINE>` | Type: Variable; Masked + Protected. Noi dung private key (ca dong BEGIN/END) |
+
+**Scope = `staging` (Environment: staging):**
+
+| Key | Gia tri (mau dien) |
+|-----|-------------------|
+| `VITE_API_BASE_URL` | `https://staging.<DOMAIN>/api` |
+| `VITE_SOCKET_URL` | `https://staging.<DOMAIN>` |
+| `VITE_APP_API_URL` | `https://staging.<DOMAIN>/api` |
+| `VITE_STRIPE_PUBLIC_KEY` | `pk_test_<...>` |
+| `VITE_DROP_CONSOLE` | `false` |
+
+**Scope = `production` (Environment: production):**
+
+| Key | Gia tri (mau dien) |
+|-----|-------------------|
+| `VITE_API_BASE_URL` | `https://<DOMAIN>/api` |
+| `VITE_SOCKET_URL` | `https://<DOMAIN>` |
+| `VITE_APP_API_URL` | `https://<DOMAIN>/api` |
+| `VITE_STRIPE_PUBLIC_KEY` | `pk_live_<...>` |
+| `VITE_DROP_CONSOLE` | `true` |
+
+Neu ten bien trung nhau giua staging va production, **bat buoc** dung Environment scope -- neu khong GitLab se lay 1 gia tri va build sai moi truong.
+
+---
+
+### 0.3 File trong repo (local / tham chieu)
+
+| File | Can sua gi |
+|------|------------|
+| [`.env.staging`](../.env.staging) | `DOMAIN`, tat ca `VITE_*` khop staging; dong bo y voi GitLab scope staging |
+| [`.env.production`](../.env.production) | `DOMAIN`, `VITE_*`, `CERTBOT_EMAIL` khop production |
+| [`docker-compose.staging.yml`](../docker-compose.staging.yml) | Dong `image:` -- thay `your-group/your-project` bang path registry that, **hoac** chi dung bien `CI_REGISTRY_IMAGE` tren VPS |
+| [`docker-compose.production.yml`](../docker-compose.production.yml) | Giong staging |
+
+---
+
+### 0.4 Tren VPS (`/opt/frontend` hoac shell truoc khi compose)
+
+Dat bien de `docker compose pull` tim dung image (path project tren GitLab Registry):
+
+```bash
+# Thay bang path that: Deploy → Container Registry trong GitLab
+export CI_REGISTRY_IMAGE=registry.gitlab.com/<group>/<project>
+```
+
+Co the them vao `~/.bashrc` hoac file `/opt/frontend/.env` (Docker Compose doc file `.env` cung thu muc neu co) **tren VPS** -- khong commit file nay vao git neu co secret.
+
+---
+
+### 0.5 GitLab Runner
+
+- Pipeline dung `tags: - docker`. Runner gan cho project phai co **cung tag** `docker`.
+- Neu runner chi co tag khac: sua [`.gitlab-ci.yml`](../.gitlab-ci.yml) -- tim tat ca `tags:` va doi cho khop.
+
+---
+
+### 0.6 Backend / DNS (khong nam trong file frontend nhung bat buoc de app chay dung)
+
+| Kiem tra | Ghi chu |
+|----------|---------|
+| DNS | `A` / `AAAA` record: `<DOMAIN>`, `staging.<DOMAIN>` → IP VPS (neu dung subdomain) |
+| CORS | Backend cho phep origin frontend staging + production |
+| API / Socket | URL trong `VITE_*` trung voi noi backend that lang nghe |
+
+---
+
+### 0.7 Checklist nhanh truoc lan deploy dau
+
+- [ ] `VPS_HOST`, `VPS_USER`, `SSH_PRIVATE_KEY` da set tren GitLab
+- [ ] Du 5 bien `VITE_*` cho **staging** va **production** (scope dung)
+- [ ] Tren VPS: `CI_REGISTRY_IMAGE` dung path registry; `docker login registry.gitlab.com` thanh cong
+- [ ] File `docker-compose.*.yml` nam tai `/opt/frontend` tren VPS (scp hoac git pull)
+- [ ] Runner co tag pipeline yeu cau
+- [ ] `.env.staging` / `.env.production` da dien (build local / tai lieu), khop GitLab
 
 ---
 

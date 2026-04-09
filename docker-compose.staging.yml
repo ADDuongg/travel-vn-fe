@@ -38,7 +38,7 @@ services:
     # Map host port 8080 → container port 80 (nginx ben trong listen 80)
     # User/QA truy cap staging qua: http://vps-ip:8080 hoac staging.yourdomain.com
     ports:
-      - "8080:80"
+      - '8080:80'
 
     # -- RESTART POLICY --
     # unless-stopped: tu dong restart container neu bi crash hoac VPS reboot.
@@ -51,23 +51,35 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.5"       # Toi da 50% cua 1 CPU core
-          memory: 128M      # Toi da 128MB RAM (nginx serve static, khong can nhieu)
+          cpus: '0.5' # Toi da 50% cua 1 CPU core
+          memory: 128M # Toi da 128MB RAM (nginx serve static, khong can nhieu)
         reservations:
-          cpus: "0.1"       # Dam bao toi thieu 10% CPU
-          memory: 32M       # Dam bao toi thieu 32MB RAM
+          cpus: '0.1' # Dam bao toi thieu 10% CPU
+          memory: 32M # Dam bao toi thieu 32MB RAM
 
     # -- HEALTH CHECK --
     # Docker tu dong kiem tra container con hoat dong khong.
     # Goi /health endpoint (dinh nghia trong nginx.conf).
     # Neu fail 3 lan lien tiep -> container duoc danh dau "unhealthy".
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1/health"]
-      interval: 30s       # Kiem tra moi 30 giay
-      timeout: 3s         # Timeout sau 3 giay
-      start_period: 10s   # Cho 10 giay sau khi start truoc khi check
-      retries: 3          # Fail 3 lan lien tiep -> unhealthy
+      test:
+        [
+          'CMD',
+          'wget',
+          '--no-verbose',
+          '--tries=1',
+          '--spider',
+          'http://127.0.0.1/health',
+        ]
+      interval: 30s # Kiem tra moi 30 giay
+      timeout: 3s # Timeout sau 3 giay
+      start_period: 10s # Cho 10 giay sau khi start truoc khi check
+      retries: 3 # Fail 3 lan lien tiep -> unhealthy
 
+    # -- NETWORK --
+    # Use network "staging" defined in docker-compose.yml
+    networks:
+      - travel-vn-dev-network
     # -- LOGGING --
     # Gioi han log size de tranh day disk tren VPS.
     # max-size 10m: moi file log toi da 10MB
@@ -75,5 +87,10 @@ services:
     logging:
       driver: json-file
       options:
-        max-size: "10m"
-        max-file: "3"
+        max-size: '10m'
+        max-file: '3'
+
+networks:
+  travel-vn-dev-network:
+    name: travel-vn-dev-network
+    driver: bridge

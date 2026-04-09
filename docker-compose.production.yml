@@ -40,7 +40,7 @@ services:
     # Neu dung host Nginx reverse proxy + SSL, host port co the doi thanh 3000
     # va host Nginx proxy_pass vao 3000.
     ports:
-      - "80:80"
+      - '80:80'
 
     # -- RESTART POLICY --
     # unless-stopped: tu dong restart khi crash hoac VPS reboot.
@@ -53,20 +53,33 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "1.0"       # Toi da 1 CPU core
-          memory: 256M      # Toi da 256MB RAM
+          cpus: '1.0' # Toi da 1 CPU core
+          memory: 256M # Toi da 256MB RAM
         reservations:
-          cpus: "0.25"      # Dam bao toi thieu 25% CPU
-          memory: 64M       # Dam bao toi thieu 64MB RAM
+          cpus: '0.25' # Dam bao toi thieu 25% CPU
+          memory: 64M # Dam bao toi thieu 64MB RAM
 
     # -- HEALTH CHECK --
     # Giong staging nhung start_period ngan hon (production image da duoc test tren staging).
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1/health"]
+      test:
+        [
+          'CMD',
+          'wget',
+          '--no-verbose',
+          '--tries=1',
+          '--spider',
+          'http://127.0.0.1/health',
+        ]
       interval: 30s
       timeout: 3s
       start_period: 5s
       retries: 3
+
+    # -- NETWORK --
+    # Use network "production" defined in docker-compose.yml
+    networks:
+      - travel-vn-network
 
     # -- LOGGING --
     # Production log nhieu hon, cho phep file lon hon.
@@ -75,5 +88,10 @@ services:
     logging:
       driver: json-file
       options:
-        max-size: "50m"
-        max-file: "5"
+        max-size: '50m'
+        max-file: '5'
+
+networks:
+  travel-vn-network:
+    name: travel-vn-network
+    driver: bridge
