@@ -180,7 +180,7 @@ build:staging:
   environment:
     name: staging
   tags:
-    - docker
+    - travel-staging
 
 # ---------------------------------------------------------------------------
 # Job: build:production
@@ -216,7 +216,7 @@ build:production:
   environment:
     name: production
   tags:
-    - docker
+    - travel-production
 
 # ===========================================================================
 # STAGE 4: DEPLOY -- SSH vao VPS, pull image, restart container
@@ -293,7 +293,7 @@ deploy:staging:
     name: staging
     url: https://staging.yourdomain.com
   tags:
-    - docker
+    - travel-staging
 
 # ---------------------------------------------------------------------------
 # Job: deploy:production
@@ -341,4 +341,4 @@ deploy:production:
     name: production
     url: https://yourdomain.com
   tags:
-    - docker
+    - travel-production
