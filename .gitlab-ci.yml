@@ -89,7 +89,7 @@ lint:
     - yarn install --frozen-lockfile
     - yarn lint
   tags:
-    - docker
+    - travel-staging
 
 # ---------------------------------------------------------------------------
 # Job: typecheck
@@ -104,7 +104,7 @@ typecheck:
     - yarn install --frozen-lockfile
     - npx tsc -b --noEmit
   tags:
-    - docker
+    - travel-staging
 
 # ===========================================================================
 # STAGE 2: TEST -- Unit tests
@@ -130,7 +130,7 @@ test:
       - coverage/
     expire_in: 7 days
   tags:
-    - docker
+    - travel-staging
 
 # ===========================================================================
 # STAGE 3: BUILD -- Docker build + push to registry
