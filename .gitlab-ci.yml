@@ -176,7 +176,7 @@ build:staging:
 
   # Chi chay tren branch staging
   rules:
-    - if: $CI_COMMIT_BRANCH == "staging"
+    - if: '$CI_COMMIT_BRANCH == "staging"'
   environment:
     name: staging
   tags:
@@ -212,7 +212,7 @@ build:production:
       .
 
   rules:
-    - if: $CI_COMMIT_BRANCH == "production"
+    - if: '$CI_COMMIT_BRANCH == "production"'
   environment:
     name: production
   tags:
@@ -288,7 +288,7 @@ deploy:staging:
         echo 'Deploy staging THANH CONG!'
       "
   rules:
-    - if: $CI_COMMIT_BRANCH == "staging"
+    - if: '$CI_COMMIT_BRANCH == "staging"'
   environment:
     name: staging
     url: https://staging.yourdomain.com
@@ -336,7 +336,7 @@ deploy:production:
         echo 'Deploy production THANH CONG!'
       "
   rules:
-    - if: $CI_COMMIT_BRANCH == "production"
+    - if: '$CI_COMMIT_BRANCH == "production"'
   environment:
     name: production
     url: https://yourdomain.com
