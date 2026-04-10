@@ -29,7 +29,6 @@
 #
 # =============================================================================
 
-
 # ---------------------------------------------------------------------------
 # STAGES -- Dinh nghia thu tu chay cua pipeline
 # ---------------------------------------------------------------------------
@@ -41,7 +40,6 @@ stages:
   - build
   - deploy
 
-
 # ---------------------------------------------------------------------------
 # GLOBAL VARIABLES -- Bien dung chung cho tat ca jobs
 # ---------------------------------------------------------------------------
@@ -52,8 +50,7 @@ variables:
   # Docker image name trong GitLab Container Registry
   # CI_REGISTRY_IMAGE la bien co san cua GitLab = registry.gitlab.com/<group>/<project>
   # Khong can tu dinh nghia, GitLab tu set.
-  DOCKER_TLS_CERTDIR: "/certs"
-
+  DOCKER_TLS_CERTDIR: '/certs'
 
 # ---------------------------------------------------------------------------
 # GLOBAL CACHE -- Cache node_modules giua cac job (tiet kiem thoi gian install)
@@ -68,11 +65,9 @@ cache:
     - node_modules/
   policy: pull
 
-
 # ===========================================================================
 # STAGE 1: VALIDATE -- Lint + TypeScript type check
 # ===========================================================================
-
 
 # ---------------------------------------------------------------------------
 # Job: lint
@@ -89,13 +84,12 @@ lint:
         - yarn.lock
     paths:
       - node_modules/
-    policy: pull-push    # Job nay push cache cho cac job sau dung
+    policy: pull-push # Job nay push cache cho cac job sau dung
   script:
     - yarn install --frozen-lockfile
     - yarn lint
   tags:
     - docker
-
 
 # ---------------------------------------------------------------------------
 # Job: typecheck
@@ -112,11 +106,9 @@ typecheck:
   tags:
     - docker
 
-
 # ===========================================================================
 # STAGE 2: TEST -- Unit tests
 # ===========================================================================
-
 
 # ---------------------------------------------------------------------------
 # Job: test
@@ -140,11 +132,9 @@ test:
   tags:
     - docker
 
-
 # ===========================================================================
 # STAGE 3: BUILD -- Docker build + push to registry
 # ===========================================================================
-
 
 # ---------------------------------------------------------------------------
 # Job: build:staging
@@ -163,7 +153,7 @@ build:staging:
     # TLS duoc bat de bao mat giao tiep giua Docker client va daemon
     - docker:27-dind
   variables:
-    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_CERTDIR: '/certs'
   before_script:
     # Login vao GitLab Container Registry
     # CI_REGISTRY, CI_REGISTRY_USER, CI_REGISTRY_PASSWORD la bien co san cua GitLab
@@ -172,7 +162,8 @@ build:staging:
     # Build image voi staging env vars (truyen qua --build-arg)
     # Cac bien VITE_* lay tu GitLab CI Variables (scope: staging)
     - >
-      docker build
+      docker buildx build
+      --platform linux/amd64
       --build-arg VITE_API_BASE_URL=$VITE_API_BASE_URL
       --build-arg VITE_SOCKET_URL=$VITE_SOCKET_URL
       --build-arg VITE_APP_API_URL=$VITE_APP_API_URL
@@ -180,10 +171,9 @@ build:staging:
       --build-arg VITE_DROP_CONSOLE=$VITE_DROP_CONSOLE
       -t $CI_REGISTRY_IMAGE:staging-$CI_COMMIT_SHORT_SHA
       -t $CI_REGISTRY_IMAGE:staging-latest
+      --push
       .
-    # Push ca 2 tags len registry
-    - docker push $CI_REGISTRY_IMAGE:staging-$CI_COMMIT_SHORT_SHA
-    - docker push $CI_REGISTRY_IMAGE:staging-latest
+
   # Chi chay tren branch staging
   rules:
     - if: $CI_COMMIT_BRANCH == "staging"
@@ -191,7 +181,6 @@ build:staging:
     name: staging
   tags:
     - docker
-
 
 # ---------------------------------------------------------------------------
 # Job: build:production
@@ -205,12 +194,13 @@ build:production:
   services:
     - docker:27-dind
   variables:
-    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_CERTDIR: '/certs'
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - >
-      docker build
+      docker buildx build
+      --platform linux/amd64
       --build-arg VITE_API_BASE_URL=$VITE_API_BASE_URL
       --build-arg VITE_SOCKET_URL=$VITE_SOCKET_URL
       --build-arg VITE_APP_API_URL=$VITE_APP_API_URL
@@ -218,16 +208,15 @@ build:production:
       --build-arg VITE_DROP_CONSOLE=$VITE_DROP_CONSOLE
       -t $CI_REGISTRY_IMAGE:prod-$CI_COMMIT_SHORT_SHA
       -t $CI_REGISTRY_IMAGE:prod-latest
+      --push
       .
-    - docker push $CI_REGISTRY_IMAGE:prod-$CI_COMMIT_SHORT_SHA
-    - docker push $CI_REGISTRY_IMAGE:prod-latest
+
   rules:
     - if: $CI_COMMIT_BRANCH == "production"
   environment:
     name: production
   tags:
     - docker
-
 
 # ===========================================================================
 # STAGE 4: DEPLOY -- SSH vao VPS, pull image, restart container
@@ -244,7 +233,6 @@ build:production:
 #   8. Doi 10 giay cho container khoi dong
 #   9. Health check bang curl
 # ===========================================================================
-
 
 # ---------------------------------------------------------------------------
 # Job: deploy:staging
@@ -278,7 +266,7 @@ deploy:staging:
     # SSH vao VPS va chay cac lenh tuan tu:
     - >
       ssh $VPS_USER@$VPS_HOST "
-        cd /opt/frontend &&
+        cd /opt/travel-fe/staging &&
 
         echo '[1/5] Login vao GitLab Registry...' &&
         docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY &&
@@ -307,7 +295,6 @@ deploy:staging:
   tags:
     - docker
 
-
 # ---------------------------------------------------------------------------
 # Job: deploy:production
 # ---------------------------------------------------------------------------
@@ -327,7 +314,7 @@ deploy:production:
   script:
     - >
       ssh $VPS_USER@$VPS_HOST "
-        cd /opt/frontend &&
+        cd /opt/travel-fe/production &&
 
         echo '[1/5] Login vao GitLab Registry...' &&
         docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY &&
