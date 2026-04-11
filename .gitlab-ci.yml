@@ -161,9 +161,9 @@ build:staging:
   script:
     # Build image voi staging env vars (truyen qua --build-arg)
     # Cac bien VITE_* lay tu GitLab CI Variables (scope: staging)
+    # --platform linux/amd64 macOS
     - >
       docker buildx build
-      --platform linux/amd64
       --build-arg VITE_API_BASE_URL=$VITE_API_BASE_URL
       --build-arg VITE_SOCKET_URL=$VITE_SOCKET_URL
       --build-arg VITE_APP_API_URL=$VITE_APP_API_URL
@@ -188,6 +188,7 @@ build:staging:
 # Build Docker image cho PRODUCTION environment.
 # Chi chay khi push/merge vao branch "production".
 # Tuong tu build:staging nhung dung production env vars.
+# --platform linux/amd64 macOS
 build:production:
   stage: build
   image: docker:27
@@ -200,7 +201,6 @@ build:production:
   script:
     - >
       docker buildx build
-      --platform linux/amd64
       --build-arg VITE_API_BASE_URL=$VITE_API_BASE_URL
       --build-arg VITE_SOCKET_URL=$VITE_SOCKET_URL
       --build-arg VITE_APP_API_URL=$VITE_APP_API_URL
