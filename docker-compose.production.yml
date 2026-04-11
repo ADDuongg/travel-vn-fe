@@ -35,12 +35,10 @@ services:
     container_name: frontend-production
 
     # -- PORT MAPPING --
-    # Map host port 80 → container port 80 (nginx ben trong listen 80)
-    # User truy cap production qua: http://vps-ip hoac yourdomain.com
-    # Neu dung host Nginx reverse proxy + SSL, host port co the doi thanh 3000
-    # va host Nginx proxy_pass vao 3000.
+    # Chi bind localhost: Nginx tren VPS giu :80 va :443, proxy vao port nay.
+    # (9080 -> container 80, nginx trong image van listen 80 ben trong.)
     ports:
-      - '80:80'
+      - '127.0.0.1:9080:80'
 
     # -- RESTART POLICY --
     # unless-stopped: tu dong restart khi crash hoac VPS reboot.

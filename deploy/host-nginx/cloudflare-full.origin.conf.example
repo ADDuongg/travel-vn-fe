@@ -1,0 +1,71 @@
+# =============================================================================
+# Nginx tren VPS -- ket hop Cloudflare SSL "Full"
+# =============================================================================
+#
+# Cach dung:
+#   1. Cloudflare: SSL/TLS -> Origin Server -> Create certificate (15 nam)
+#      Tai ve: origin.pem (certificate) va origin.key (private key)
+#   2. Luu file tren VPS, VD: /etc/nginx/ssl/cloudflare-origin.pem va .key
+#   3. Copy file nay -> /etc/nginx/sites-available/travel-vn (hoac conf.d/)
+#   4. Sua duong dan ssl_certificate* duoi day
+#   5. nginx -t && systemctl reload nginx
+#
+# Docker (docker-compose):
+#   - production: 127.0.0.1:9080 -> container 80
+#   - staging:    127.0.0.1:8080 -> container 80
+#
+# Nginx host: :80 redirect HTTP -> HTTPS, :443 TLS + proxy vao Docker.
+# Cloudflare "Full": edge ket noi HTTPS toi origin :443.
+#
+# =============================================================================
+
+# HTTP mac dinh -- chuyen het len HTTPS (can Docker khong chiem :80)
+server {
+    listen 80;
+    listen [::]:80;
+    server_name travel-vn.site www.travel-vn.site staging.travel-vn.site;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+    server_name travel-vn.site www.travel-vn.site;
+
+    ssl_certificate     /etc/nginx/ssl/cloudflare-origin.pem;
+    ssl_certificate_key /etc/nginx/ssl/cloudflare-origin.key;
+
+    # Cloudflare Origin Cert; "Full" chap nhan cert nay
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    location / {
+        proxy_pass http://127.0.0.1:9080;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+    server_name staging.travel-vn.site;
+
+    ssl_certificate     /etc/nginx/ssl/cloudflare-origin.pem;
+    ssl_certificate_key /etc/nginx/ssl/cloudflare-origin.key;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}

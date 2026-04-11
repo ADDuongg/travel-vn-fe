@@ -13,8 +13,8 @@
 #                   (chi branch staging hoac production)
 #
 # BRANCH STRATEGY:
-#   - Branch "staging"    → build + deploy len staging  (VPS port 8080)
-#   - Branch "production" → build + deploy len production (VPS port 80)
+#   - Branch "staging"    → build + deploy len staging  (localhost:8080 → container)
+#   - Branch "production" → build + deploy len production (localhost:9080 → container; :80/:443 = Nginx host)
 #   - Cac branch khac     → chi chay validate + test (khong deploy)
 #
 # GITLAB CI VARIABLES CAN THIET (cau hinh trong Settings > CI/CD > Variables):
@@ -238,7 +238,7 @@ build:production:
 # ---------------------------------------------------------------------------
 # Job: deploy:staging
 # ---------------------------------------------------------------------------
-# Deploy image staging len VPS (port 8080).
+# Deploy image staging len VPS (127.0.0.1:8080).
 # Chi chay khi push/merge vao branch "staging".
 deploy:staging:
   stage: deploy
@@ -271,7 +271,7 @@ deploy:staging:
 # ---------------------------------------------------------------------------
 # Job: deploy:production
 # ---------------------------------------------------------------------------
-# Deploy image production len VPS (port 80).
+# Deploy image production len VPS (127.0.0.1:9080; Nginx host :80/:443).
 # Chi chay khi push/merge vao branch "production".
 # Tuong tu deploy:staging nhung dung production compose file va image tag.
 deploy:production:
@@ -282,6 +282,10 @@ deploy:production:
     - export IMAGE_TAG=prod-$CI_COMMIT_SHORT_SHA
     - docker compose -f docker-compose.production.yml pull
     - docker compose -f docker-compose.production.yml up -d --force-recreate
+    - echo "Health check..."
+    - sleep 10
+    - curl -f http://127.0.0.1:9080/health || exit 1
+    - echo "Deploy production success"
   rules:
     - if: '$CI_COMMIT_BRANCH == "production"'
   environment:

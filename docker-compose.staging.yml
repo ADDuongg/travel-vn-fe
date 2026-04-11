@@ -35,10 +35,9 @@ services:
     container_name: frontend-staging
 
     # -- PORT MAPPING --
-    # Map host port 8080 → container port 80 (nginx ben trong listen 80)
-    # User/QA truy cap staging qua: http://vps-ip:8080 hoac staging.yourdomain.com
+    # Chi bind localhost: Nginx host :443 proxy vao day (xem deploy/host-nginx).
     ports:
-      - '8080:80'
+      - '127.0.0.1:8080:80'
 
     # -- RESTART POLICY --
     # unless-stopped: tu dong restart container neu bi crash hoac VPS reboot.
