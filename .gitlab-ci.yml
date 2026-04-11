@@ -171,8 +171,9 @@ build:staging:
       --build-arg VITE_DROP_CONSOLE=$VITE_DROP_CONSOLE
       -t $CI_REGISTRY_IMAGE:staging-$CI_COMMIT_SHORT_SHA
       -t $CI_REGISTRY_IMAGE:staging-latest
-      --push
       .
+    - docker push $CI_REGISTRY_IMAGE:staging-$CI_COMMIT_SHORT_SHA
+    - docker push $CI_REGISTRY_IMAGE:staging-latest
 
   # Chi chay tren branch staging
   rules:
@@ -208,8 +209,8 @@ build:production:
       --build-arg VITE_DROP_CONSOLE=$VITE_DROP_CONSOLE
       -t $CI_REGISTRY_IMAGE:prod-$CI_COMMIT_SHORT_SHA
       -t $CI_REGISTRY_IMAGE:prod-latest
-      --push
-      .
+    - docker push $CI_REGISTRY_IMAGE:prod-$CI_COMMIT_SHORT_SHA
+    - docker push $CI_REGISTRY_IMAGE:prod-latest
 
   rules:
     - if: '$CI_COMMIT_BRANCH == "production"'
