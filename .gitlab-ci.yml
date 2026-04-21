@@ -52,6 +52,11 @@ variables:
   # Khong can tu dinh nghia, GitLab tu set.
   DOCKER_TLS_CERTDIR: '/certs'
 
+  # Yarn v1 (classic) cache folder.
+  # Shell executor hay dung cache toan may (~/.yarn-cache) => de bi corrupt va lam fail yarn install.
+  # Set cache folder trong workspace de GitLab cache/restore on-demand.
+  YARN_CACHE_FOLDER: "$CI_PROJECT_DIR/.yarn-cache"
+
 # ---------------------------------------------------------------------------
 # GLOBAL CACHE -- Cache node_modules giua cac job (tiet kiem thoi gian install)
 # ---------------------------------------------------------------------------
@@ -62,7 +67,7 @@ cache:
     files:
       - yarn.lock
   paths:
-    - .yarn/cache/
+    - .yarn-cache/
   policy: pull-push
 
 default:
@@ -89,7 +94,7 @@ lint:
       - node_modules/
     policy: pull-push # Job nay push cache cho cac job sau dung
   script:
-    - yarn install --frozen-lockfile
+    - yarn install --frozen-lockfile --cache-folder $YARN_CACHE_FOLDER
     - yarn lint
   tags:
     - travel-staging
@@ -104,7 +109,7 @@ typecheck:
   stage: validate
   image: $NODE_IMAGE
   script:
-    - yarn install --frozen-lockfile
+    - yarn install --frozen-lockfile --cache-folder $YARN_CACHE_FOLDER
     - npx tsc -b --noEmit
   tags:
     - travel-staging
@@ -123,7 +128,7 @@ test:
   stage: test
   image: $NODE_IMAGE
   script:
-    - yarn install --frozen-lockfile
+    - yarn install --frozen-lockfile --cache-folder $YARN_CACHE_FOLDER
     - yarn test --coverage --passWithNoTests
   # Luu coverage report de xem tren GitLab merge request
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
