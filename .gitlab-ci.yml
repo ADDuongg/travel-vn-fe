@@ -212,6 +212,7 @@ build:production:
       --build-arg VITE_DROP_CONSOLE=$VITE_DROP_CONSOLE
       -t $CI_REGISTRY_IMAGE:prod-$CI_COMMIT_SHORT_SHA
       -t $CI_REGISTRY_IMAGE:prod-latest
+      .
     - docker push $CI_REGISTRY_IMAGE:prod-$CI_COMMIT_SHORT_SHA
     - docker push $CI_REGISTRY_IMAGE:prod-latest
 
