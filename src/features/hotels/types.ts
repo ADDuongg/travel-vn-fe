@@ -11,6 +11,8 @@ export interface ProvinceRef {
 export interface HotelOption {
   _id: string;
   slug: string;
+  /** Returned when request includes Authorization (Favorites module). */
+  isFavorited?: boolean;
   translations: Record<string, { name?: string; [key: string]: unknown }>;
   provinceId: string | ProvinceRef;
 }

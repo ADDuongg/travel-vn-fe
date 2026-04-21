@@ -6,6 +6,8 @@ import type { HotelOption } from '@/features/hotels/types';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/router';
 import { useTranslation } from 'react-i18next';
+import { FavoriteButton } from '@/features/favorites/FavoriteButton';
+import { FavoriteEntityType } from '@/features/favorites/types';
 
 /** Skeleton placeholder đồng bộ layout với HotelCard (shadcn Skeleton) */
 export function HotelCardSkeleton() {
@@ -67,6 +69,15 @@ const HotelCard: React.FC<HotelCardProps> = ({ item, lang = 'vi', loading = fals
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute top-4 right-4 z-[1]">
+            <FavoriteButton
+              entityType={FavoriteEntityType.HOTEL}
+              entityId={item._id}
+              initialIsFavorited={item.isFavorited}
+              stopNavigation
+              className="h-9 w-9 rounded-full"
+            />
+          </div>
           <div className="absolute top-4 left-4">
             <span className="inline-flex items-center gap-1 bg-amber-400/95 text-amber-900 text-xs font-bold px-2.5 py-1 rounded-full">
               <FaStar className="w-3 h-3 fill-current" />

@@ -26,6 +26,8 @@ import { Separator } from '@/components/ui/separator';
 import { fmtMoney } from '@/utils';
 import GuideReviews from '@/sections/tour-guide/GuideReviews';
 import type { TourGuide, ProvinceRef } from '@/features/tour-guide/types';
+import { FavoriteButton } from '@/features/favorites/FavoriteButton';
+import { FavoriteEntityType } from '@/features/favorites/types';
 
 function getBio(guide: TourGuide, lang: string): string | undefined {
   const t =
@@ -147,6 +149,13 @@ const TourGuideDetailPage: React.FC = () => {
                 <h1 className="text-2xl font-bold text-white md:text-3xl">
                   {name}
                 </h1>
+                <FavoriteButton
+                  entityType={FavoriteEntityType.GUIDE}
+                  entityId={guide._id}
+                  initialIsFavorited={guide.isFavorited}
+                  size="icon"
+                  className="h-10 w-10 rounded-full border-white/20 bg-white/10 text-white hover:bg-white/15"
+                />
                 {guide.isVerified && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/90 px-2.5 py-1 text-xs font-medium text-white">
                     <FaCircleCheck className="h-3.5 w-3.5" />

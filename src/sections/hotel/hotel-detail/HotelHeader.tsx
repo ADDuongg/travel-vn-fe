@@ -2,6 +2,8 @@ import type { Hotel } from '@/features/hotels/types';
 import { useLanguage } from '@/hooks/useLanguage';
 import { FaStar, FaLocationDot } from 'react-icons/fa6';
 import { ResponsiveH1 } from '@/components/ui/typography';
+import { FavoriteButton } from '@/features/favorites/FavoriteButton';
+import { FavoriteEntityType } from '@/features/favorites/types';
 
 function getProvinceName(hotel: Hotel, lang: string): string | null {
   const province = hotel.provinceId;
@@ -53,9 +55,18 @@ const HotelHeader = ({ hotel }: { hotel: Hotel }) => {
                 </span>
               )}
             </div>
-            <ResponsiveH1 className="font-bold tracking-tight text-foreground mb-2">
-              {name}
-            </ResponsiveH1>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <ResponsiveH1 className="font-bold tracking-tight text-foreground mb-2">
+                {name}
+              </ResponsiveH1>
+              <FavoriteButton
+                entityType={FavoriteEntityType.HOTEL}
+                entityId={hotel._id}
+                initialIsFavorited={hotel.isFavorited}
+                size="icon"
+                className="h-10 w-10 rounded-full"
+              />
+            </div>
             {locationLine && (
               <p className="text-lg text-muted-foreground flex items-center gap-2">
                 <FaLocationDot className="size-5 text-primary shrink-0" />

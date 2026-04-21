@@ -10,6 +10,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaCircleCheck, FaStar } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
+import { FavoriteButton } from '@/features/favorites/FavoriteButton';
+import { FavoriteEntityType } from '@/features/favorites/types';
 
 function getShortBio(item: TourGuideListItem, lang: string): string | null {
   const t =
@@ -76,6 +78,15 @@ const TourGuideCard: React.FC<TourGuideCardProps> = ({ item, lang = 'vi' }) => {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="absolute top-3 left-3 z-[1]">
+            <FavoriteButton
+              entityType={FavoriteEntityType.GUIDE}
+              entityId={item._id}
+              initialIsFavorited={item.isFavorited}
+              stopNavigation
+              className="h-9 w-9 rounded-full"
+            />
+          </div>
           {item.isVerified && (
             <div className="absolute top-3 right-3">
               <span className="inline-flex items-center gap-1 bg-emerald-500 text-white text-xs font-medium px-2 py-1 rounded-full">

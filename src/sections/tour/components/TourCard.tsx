@@ -8,6 +8,8 @@ import { ROUTES } from '@/constants/router';
 import { fmtMoney } from '@/utils';
 import { caculateSalePrice } from '@/utils';
 import type { TourListItem } from '@/features/tours/catalog-types';
+import { FavoriteButton } from '@/features/favorites/FavoriteButton';
+import { FavoriteEntityType } from '@/features/favorites/types';
 
 function getTourName(tour: TourListItem, lang: string): string {
   return (
@@ -81,8 +83,17 @@ const TourCard: React.FC<TourCardProps> = ({ item, lang = 'vi' }) => {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute top-4 right-4 z-[1]">
+            <FavoriteButton
+              entityType={FavoriteEntityType.TOUR}
+              entityId={item._id}
+              initialIsFavorited={item.isFavorited}
+              stopNavigation
+              className="h-9 w-9 rounded-full"
+            />
+          </div>
           {(salePercent > 0 || item.sale?.isActive) && (
-            <div className="absolute top-4 right-4">
+            <div className="absolute top-4 right-14">
               <span className="inline-flex items-center gap-1 bg-primary text-primary-foreground text-xs font-bold px-2.5 py-1 rounded-full">
                 {salePercent > 0 ? `${salePercent}% Off` : 'Special Offer'}
               </span>

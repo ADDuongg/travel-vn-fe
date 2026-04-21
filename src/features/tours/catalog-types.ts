@@ -81,6 +81,8 @@ export interface TourListItem {
   _id: string;
   slug: string;
   code: string;
+  /** Returned when request includes Authorization (Favorites module). */
+  isFavorited?: boolean;
   tourType: TourType;
   duration: { days: number; nights: number };
   destinations: TourDestination[];

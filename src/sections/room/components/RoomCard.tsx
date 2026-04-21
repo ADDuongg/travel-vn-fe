@@ -7,6 +7,8 @@ import type { Room, HotelRef } from '@/features/rooms/types';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/router';
 import { useTranslation } from 'react-i18next';
+import { FavoriteButton } from '@/features/favorites/FavoriteButton';
+import { FavoriteEntityType } from '@/features/favorites/types';
 
 function getHotelDisplay(hotel: string | HotelRef | undefined, lang: string): string | null {
   if (!hotel || typeof hotel === 'string') return null;
@@ -99,9 +101,19 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi', loading = false 
           {/* Gradient overlay on hover */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
+          <div className="absolute top-3 right-3 z-[1]">
+            <FavoriteButton
+              entityType={FavoriteEntityType.ROOM}
+              entityId={item._id}
+              initialIsFavorited={item.isFavorited}
+              stopNavigation
+              className="h-9 w-9 rounded-full"
+            />
+          </div>
+
           {/* Discount badge */}
           {discountLabel && (
-            <span className="absolute top-3 right-3 inline-flex items-center bg-primary text-primary-foreground text-xs font-bold px-2.5 py-1 rounded-full shadow-sm">
+            <span className="absolute top-3 right-14 inline-flex items-center bg-primary text-primary-foreground text-xs font-bold px-2.5 py-1 rounded-full shadow-sm">
               {discountLabel}
             </span>
           )}

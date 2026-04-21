@@ -33,6 +33,8 @@ export interface TourGuideRatingSummary {
 export interface TourGuideListItem {
   _id: string;
   userId: string;
+  /** Returned when request includes Authorization (Favorites module). */
+  isFavorited?: boolean;
   user?: TourGuideUserRef;
   translations: Record<string, TourGuideTranslation>;
   languages: string[];

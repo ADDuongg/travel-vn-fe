@@ -14,6 +14,7 @@ interface SharedHeaderProps {
   reviewCount?: number;
   details?: DetailItem[];
   GalleryComponent?: React.ReactNode;
+  ActionsComponent?: React.ReactNode;
 }
 
 const SharedHeader: React.FC<SharedHeaderProps> = ({
@@ -23,11 +24,19 @@ const SharedHeader: React.FC<SharedHeaderProps> = ({
   reviewCount,
   details = [],
   GalleryComponent,
+  ActionsComponent,
 }) => {
   return (
     <section className="mt-20">
       <div className="grid gap-5 mb-6">
-        <ResponsiveH1 className="font-dm-serif-display">{title}</ResponsiveH1>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <ResponsiveH1 className="font-dm-serif-display">{title}</ResponsiveH1>
+          {ActionsComponent && (
+            <div className="flex shrink-0 items-center gap-2">
+              {ActionsComponent}
+            </div>
+          )}
+        </div>
         {subtitle && (
           <p className="text-muted-foreground text-sm">{subtitle}</p>
         )}

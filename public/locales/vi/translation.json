@@ -571,7 +571,7 @@
   },
   "savedReviews": {
     "page_title": "Đánh giá & Yêu thích",
-    "page_subtitle": "Tất cả đánh giá của bạn ở một nơi. Danh sách yêu thích sẽ sớm có.",
+    "page_subtitle": "Quản lý đánh giá và danh sách yêu thích của bạn ở một nơi.",
     "card_title": "Đã lưu",
     "tab_reviews": "Đánh giá của tôi",
     "tab_wishlist": "Yêu thích",
@@ -607,6 +607,33 @@
       "BLOG": "Blog",
       "GUIDE": "Hướng dẫn viên"
     }
+  },
+  "savedFavorites": {
+    "filter_type": "Loại",
+    "filter_all": "Tất cả loại",
+    "loading": "Đang tải…",
+    "col_entity": "Mục",
+    "col_type": "Loại",
+    "col_created": "Đã lưu lúc",
+    "col_actions": "Thao tác",
+    "view": "Xem",
+    "view_unsupported": "Chưa có trang chi tiết cho loại này",
+    "remove": "Bỏ yêu thích",
+    "table_empty": "Bạn chưa có mục yêu thích nào.",
+    "error_title": "Không tải được yêu thích",
+    "error_body": "Đã có lỗi xảy ra. Vui lòng thử lại.",
+    "retry": "Thử lại",
+    "rating_line": "{{average}} • {{total}} đánh giá",
+    "entity": {
+      "ROOM": "Phòng",
+      "HOTEL": "Khách sạn",
+      "TOUR": "Tour",
+      "GUIDE": "Hướng dẫn viên"
+    }
+  },
+  "favorites": {
+    "favorite": "Yêu thích",
+    "unfavorite": "Bỏ yêu thích"
   },
   "savedWishlist": {
     "placeholder_title": "Yêu thích sắp ra mắt",

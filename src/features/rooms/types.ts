@@ -22,6 +22,8 @@ export interface Room {
 
   code: string;
   slug: string;
+  /** Returned when request includes Authorization (Favorites module). */
+  isFavorited?: boolean;
   roomType: string; // e.g., "Master", "Deluxe"
   isActive: boolean;
 

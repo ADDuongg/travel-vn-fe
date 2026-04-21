@@ -7,6 +7,8 @@ import SharedHeader from '@/sections/shared/SharedHeader';
 import { GalleryPreviewDetail } from '@components/GalleryPreviewDetail';
 import { useTourDetail } from './TourDetailContext';
 import { useLanguage } from '@/hooks/useLanguage';
+import { FavoriteButton } from '@/features/favorites/FavoriteButton';
+import { FavoriteEntityType } from '@/features/favorites/types';
 
 function getTourName(tour: NonNullable<ReturnType<typeof useTourDetail>>, lang: string) {
   return tour.translations?.[lang]?.name ?? tour.translations?.vi?.name ?? tour.translations?.en?.name ?? tour.slug;
@@ -69,6 +71,15 @@ const TourHeader: React.FC = () => {
       rating={rating}
       reviewCount={reviewCount}
       details={detailItems}
+      ActionsComponent={
+        <FavoriteButton
+          entityType={FavoriteEntityType.TOUR}
+          entityId={tour._id}
+          initialIsFavorited={tour.isFavorited}
+          size="icon"
+          className="h-10 w-10 rounded-full"
+        />
+      }
       GalleryComponent={
         hasGallery ? (
           <GalleryPreviewDetail

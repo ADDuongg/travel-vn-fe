@@ -1,14 +1,9 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import { authUtils } from '@/lib/auth-token';
 import { useChatStore } from '@/stores/useChatStore';
+import type { ChatMessage } from '@/stores/useChatStore';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
-
-export type ChatMessage = {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-};
 
 function parseSSEChunks(buffer: string, onChunk: (data: any) => void): string {
   const lines = buffer.split('\n');
@@ -34,11 +29,15 @@ function parseSSEChunks(buffer: string, onChunk: (data: any) => void): string {
 }
 
 export function useChatBot() {
-  const { conversationId } = useChatStore();
-
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const conversationId = useChatStore((s) => s.conversationId);
+  const messages = useChatStore((s) => s.messages);
+  const isLoading = useChatStore((s) => s.isLoading);
+  const error = useChatStore((s) => s.error);
+  const appendMessage = useChatStore((s) => s.appendMessage);
+  const upsertMessage = useChatStore((s) => s.upsertMessage);
+  const setIsLoading = useChatStore((s) => s.setIsLoading);
+  const setError = useChatStore((s) => s.setError);
+  const clearChat = useChatStore((s) => s.clearChat);
 
   const abortRef = useRef<AbortController | null>(null);
 
@@ -48,13 +47,12 @@ export function useChatBot() {
       abortRef.current = null;
     }
     setIsLoading(false);
-  }, []);
+  }, [setIsLoading]);
 
   const clear = useCallback(() => {
     stop();
-    setMessages([]);
-    setError(null);
-  }, [stop]);
+    clearChat();
+  }, [stop, clearChat]);
 
   const sendMessage = useCallback(
     async (content: string) => {
@@ -64,7 +62,7 @@ export function useChatBot() {
         role: 'user',
         content,
       };
-      setMessages((prev) => [...prev, userMessage]);
+      appendMessage(userMessage);
 
       // Prepare streaming request
       stop();
@@ -75,6 +73,7 @@ export function useChatBot() {
       abortRef.current = controller;
 
       try {
+        const currentMessages = useChatStore.getState().messages;
         const response = await fetch(`${API_BASE_URL}/api/chat`, {
           method: 'POST',
           headers: {
@@ -83,7 +82,7 @@ export function useChatBot() {
           },
           body: JSON.stringify({
             conversationId,
-            messages: [...messages, userMessage].map((m) => ({
+            messages: currentMessages.map((m) => ({
               role: m.role,
               content: m.content,
             })),
@@ -103,10 +102,7 @@ export function useChatBot() {
         let assistantText = '';
 
         // create empty assistant message to update as stream arrives
-        setMessages((prev) => [
-          ...prev,
-          { id: assistantId, role: 'assistant', content: '' },
-        ]);
+        appendMessage({ id: assistantId, role: 'assistant', content: '' });
 
         while (true) {
           const { done, value } = await reader.read();
@@ -117,19 +113,11 @@ export function useChatBot() {
           buffer = parseSSEChunks(buffer, (chunk) => {
             if (chunk.type === 'content' && typeof chunk.content === 'string') {
               assistantText = chunk.content;
-              setMessages((prev) =>
-                prev.map((m) =>
-                  m.id === assistantId ? { ...m, content: assistantText } : m,
-                ),
-              );
+              upsertMessage({ id: assistantId, role: 'assistant', content: assistantText });
             }
 
             if (chunk.type === 'error') {
-              setError(
-                new Error(
-                  chunk.error?.message || 'Unexpected error from server',
-                ),
-              );
+              setError(chunk.error?.message || 'Unexpected error from server');
             }
           });
         }
@@ -137,20 +125,20 @@ export function useChatBot() {
         if ((err as any)?.name === 'AbortError') {
           // stopped by user
         } else {
-          setError(err as Error);
+          setError((err as { message?: string })?.message ?? 'Unexpected error');
         }
       } finally {
         setIsLoading(false);
         abortRef.current = null;
       }
     },
-    [conversationId, messages, stop],
+    [conversationId, appendMessage, upsertMessage, stop, setIsLoading, setError],
   );
 
   return {
     messages,
     isLoading,
-    error,
+    error: error ? new Error(error) : null,
     sendMessage,
     stop,
     clear,

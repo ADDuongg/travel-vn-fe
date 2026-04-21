@@ -5,6 +5,8 @@ import { ResponsiveH6 } from '@components/ui/typography';
 import { FaBed, FaRulerCombined } from 'react-icons/fa';
 import { FaUserGroup } from 'react-icons/fa6';
 import { useLanguage } from '@/hooks/useLanguage';
+import { FavoriteButton } from '@/features/favorites/FavoriteButton';
+import { FavoriteEntityType } from '@/features/favorites/types';
 
 function getHotelDisplay(
   hotel: string | HotelRef | undefined,
@@ -84,6 +86,15 @@ const RoomHeader = ({ room }: { room: Room }) => {
       rating={room.ratingSummary?.average ?? 0}
       reviewCount={room.ratingSummary?.total ?? 0}
       details={detailItems}
+      ActionsComponent={
+        <FavoriteButton
+          entityType={FavoriteEntityType.ROOM}
+          entityId={room._id}
+          initialIsFavorited={room.isFavorited}
+          size="icon"
+          className="h-10 w-10 rounded-full"
+        />
+      }
       GalleryComponent={
         <GalleryPreviewDetail gallery={gallery} thumbnail={thumbnail} />
       }

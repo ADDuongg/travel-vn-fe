@@ -251,7 +251,7 @@ const DashboardOverviewPage: React.FC = () => {
       </Card>
 
       {/* Reviews — unified */}
-      <Card className="rounded-2xl border-slate-200/90 bg-white shadow-sm">
+      {/* <Card className="rounded-2xl border-slate-200/90 bg-white shadow-sm">
         <CardHeader className="flex flex-col gap-3 border-b border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#1E3A8A]">
             <MessageSquareText className="size-5 text-[#2563EB]" aria-hidden />
@@ -275,7 +275,7 @@ const DashboardOverviewPage: React.FC = () => {
             một nơi.
           </p>
         </CardContent>
-      </Card>
+      </Card> */}
     </div>
   );
 };

@@ -570,7 +570,7 @@
   },
   "savedReviews": {
     "page_title": "Reviews & wishlist",
-    "page_subtitle": "Your ratings in one place. Wishlist is coming soon.",
+    "page_subtitle": "Manage your reviews and favorites in one place.",
     "card_title": "Saved",
     "tab_reviews": "My reviews",
     "tab_wishlist": "Wishlist",
@@ -606,6 +606,33 @@
       "BLOG": "Blog",
       "GUIDE": "Tour guide"
     }
+  },
+  "savedFavorites": {
+    "filter_type": "Entity type",
+    "filter_all": "All types",
+    "loading": "Loading…",
+    "col_entity": "Item",
+    "col_type": "Type",
+    "col_created": "Saved at",
+    "col_actions": "Actions",
+    "view": "View",
+    "view_unsupported": "No detail page for this type yet",
+    "remove": "Remove",
+    "table_empty": "You have no favorites yet.",
+    "error_title": "Could not load favorites",
+    "error_body": "Something went wrong. Please try again.",
+    "retry": "Retry",
+    "rating_line": "{{average}} • {{total}} reviews",
+    "entity": {
+      "ROOM": "Room",
+      "HOTEL": "Hotel",
+      "TOUR": "Tour",
+      "GUIDE": "Tour guide"
+    }
+  },
+  "favorites": {
+    "favorite": "Favorite",
+    "unfavorite": "Unfavorite"
   },
   "savedWishlist": {
     "placeholder_title": "Wishlist coming soon",

@@ -39,9 +39,12 @@ const PaymentResult = () => {
     paymentStatus?.status === 'SUCCEEDED' ||
     booking?.paymentStatus === 'PAID';
   const isFailed =
-    paymentStatus?.status === 'FAILED' ||
-    paymentStatus?.status === 'CANCELLED';
+    paymentStatus?.status === 'FAILED' || paymentStatus?.status === 'CANCELLED';
   const isPending = paymentStatus?.status === 'PENDING';
+
+  console.log('isSuccess', isSuccess);
+  console.log('isFailed', isFailed);
+  console.log('isPending', isPending);
 
   if (isLoading) {
     return (
@@ -76,7 +79,9 @@ const PaymentResult = () => {
                     {booking._id.slice(-6)}
                   </p>
                   <p>
-                    <span className="font-medium">{t('bookings.total_amount')}:</span>{' '}
+                    <span className="font-medium">
+                      {t('bookings.total_amount')}:
+                    </span>{' '}
                     {booking.amount.toLocaleString()} {booking.currency}
                   </p>
                 </div>
@@ -84,7 +89,9 @@ const PaymentResult = () => {
               <div className="flex flex-wrap gap-4 justify-center">
                 <Button
                   onClick={() =>
-                    navigate(`${ROUTES.DASHBOARD.ROOM_BOOKINGS_DETAIL.replace(':id', bookingId!)}`)
+                    navigate(
+                      `${ROUTES.DASHBOARD.ROOM_BOOKINGS_DETAIL.replace(':id', bookingId!)}`,
+                    )
                   }
                 >
                   {t('payment_result.view_booking_details')}
@@ -111,7 +118,9 @@ const PaymentResult = () => {
               <div className="flex flex-wrap gap-4 justify-center">
                 <Button
                   onClick={() =>
-                    navigate(`${ROUTES.BOOKING_PAYMENT.replace(':id', bookingId!)}`)
+                    navigate(
+                      `${ROUTES.BOOKING_PAYMENT.replace(':id', bookingId!)}`,
+                    )
                   }
                 >
                   {t('payment_result.try_again')}
@@ -138,7 +147,9 @@ const PaymentResult = () => {
               <div className="flex flex-wrap gap-4 justify-center">
                 <Button
                   onClick={() =>
-                    navigate(`${ROUTES.DASHBOARD.ROOM_BOOKINGS_DETAIL.replace(':id', bookingId!)}`)
+                    navigate(
+                      `${ROUTES.DASHBOARD.ROOM_BOOKINGS_DETAIL.replace(':id', bookingId!)}`,
+                    )
                   }
                 >
                   {t('payment_result.view_booking')}

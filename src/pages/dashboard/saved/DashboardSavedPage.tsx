@@ -11,6 +11,11 @@ import {
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ROUTES } from '@/constants/router';
+import { FavoriteEntityType } from '@/features/favorites/types';
+import {
+  useMyFavoritesListQuery,
+  useToggleFavoriteMutation,
+} from '@/features/favorites/hooks';
 import { getSyncDetailPath } from '@/features/review/sync-entity-path';
 import { useMyReviewsListQuery } from '@/features/review/hooks';
 import type { MyReviewTableRow } from '@/features/review/types';
@@ -19,7 +24,7 @@ import { getTourById } from '@/features/tours/catalog-api';
 import * as I from '@/types/api';
 import DataTable from '@/shared/table/DataTable';
 import type { ColumnDef } from '@tanstack/react-table';
-import { AlertCircle, Heart, Loader2, MessageSquareText, Star } from 'lucide-react';
+import { AlertCircle, Loader2, MessageSquareText, Star, ArrowRight, Trash2 } from 'lucide-react';
 import {
   useCallback,
   useEffect,
@@ -29,6 +34,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useSearchParams } from 'react-router-dom';
 import type { RowSelectionState, SortingState } from '@tanstack/react-table';
+import type { FavoriteRecord, FavoriteEntitySummary } from '@/features/favorites/types';
 
 const REVIEW_ENTITY_TYPES = Object.values(ReviewEntityType).filter(
   (v): v is ReviewEntityType => typeof v === 'string',
@@ -398,19 +404,346 @@ const MyReviewsPanel: React.FC = () => {
   );
 };
 
-const WishlistPlaceholder: React.FC = () => {
-  const { t } = useTranslation();
+const FAVORITE_ENTITY_TYPES = Object.values(FavoriteEntityType).filter(
+  (v): v is FavoriteEntityType => typeof v === 'string',
+);
+
+type FavoriteEntityFilter = 'all' | FavoriteEntityType;
+
+function getFavoriteDetailPath(
+  entityType: FavoriteEntityType,
+  entityId: string,
+  summary?: FavoriteEntitySummary,
+) {
+  switch (entityType) {
+    case FavoriteEntityType.TOUR: {
+      if (summary?.slug) {
+        return generatePath(ROUTES.TOUR.DETAIL, { slug: summary.slug });
+      }
+      return null;
+    }
+    case FavoriteEntityType.ROOM:
+      return generatePath(ROUTES.ROOM.DETAIL, { id: entityId });
+    case FavoriteEntityType.HOTEL:
+      return generatePath(ROUTES.HOTEL.DETAIL, { id: entityId });
+    case FavoriteEntityType.GUIDE:
+      return generatePath(ROUTES.TOUR_GUIDE.DETAIL, { id: entityId });
+    default:
+      return null;
+  }
+}
+
+const MyFavoritesPanel: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const lang = i18n.language?.split('-')[0] || 'vi';
+
+  const [entityFilter, setEntityFilter] =
+    useState<FavoriteEntityFilter>('all');
+  const [pagination, setPagination] = useState<I.Paginate>({
+    pageIndex: 0,
+    pageSize: DEFAULT_PAGE_SIZE,
+  });
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [loadingRowId, setLoadingRowId] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setPagination((p) => ({ ...p, pageIndex: 0 }));
+  }, [entityFilter]);
+
+  const listParams = useMemo(
+    () => ({
+      page: pagination.pageIndex + 1,
+      limit: pagination.pageSize,
+      lang,
+      ...(entityFilter === 'all' ? {} : { entityType: entityFilter }),
+    }),
+    [pagination.pageIndex, pagination.pageSize, lang, entityFilter],
+  );
+
+  const { data, isFetching, isError, error, refetch } =
+    useMyFavoritesListQuery(listParams);
+
+  const toggleMutation = useToggleFavoriteMutation();
+
+  const handleView = useCallback(
+    async (row: FavoriteRecord) => {
+      setActionError(null);
+      const path = getFavoriteDetailPath(
+        row.entityType,
+        row.entityId,
+        row.entitySummary,
+      );
+      if (path) {
+        navigate(path);
+        return;
+      }
+
+      if (row.entityType === FavoriteEntityType.TOUR) {
+        setLoadingRowId(row._id);
+        try {
+          const tour = await getTourById(row.entityId);
+          if (tour?.slug) {
+            navigate(generatePath(ROUTES.TOUR.DETAIL, { slug: tour.slug }));
+          } else {
+            setActionError(t('savedFavorites.view_unsupported'));
+          }
+        } catch (e: unknown) {
+          setActionError(
+            (e as { message?: string })?.message ?? t('savedFavorites.error_body'),
+          );
+        } finally {
+          setLoadingRowId(null);
+        }
+      }
+    },
+    [navigate, t],
+  );
+
+  const handleRemove = useCallback(
+    async (row: FavoriteRecord) => {
+      setActionError(null);
+      setLoadingRowId(row._id);
+      try {
+        await toggleMutation.mutateAsync({
+          entityType: row.entityType,
+          entityId: row.entityId,
+        });
+      } catch (e: unknown) {
+        setActionError(
+          (e as { message?: string })?.message ?? t('savedFavorites.error_body'),
+        );
+      } finally {
+        setLoadingRowId(null);
+      }
+    },
+    [toggleMutation, t],
+  );
+
+  const columns = useMemo<ColumnDef<FavoriteRecord>[]>(
+    () => [
+      {
+        id: 'entity',
+        header: t('savedFavorites.col_entity'),
+        cell: ({ row }) => {
+          const r = row.original;
+          const name = r.entitySummary?.name?.trim() || '—';
+          const thumb = r.entitySummary?.thumbnailUrl;
+          const rating = r.entitySummary?.ratingSummary?.average;
+          const total = r.entitySummary?.ratingSummary?.total;
+          return (
+            <div className="flex max-w-[min(100vw-8rem,22rem)] items-start gap-3">
+              <div className="size-12 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-[#F8FAFC]">
+                {thumb ? (
+                  <img src={thumb} alt="" className="size-full object-cover" />
+                ) : (
+                  <div
+                    className="flex size-full items-center justify-center text-[10px] font-medium text-slate-400"
+                    aria-hidden
+                  >
+                    —
+                  </div>
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-medium leading-snug text-[#1E40AF] line-clamp-2">
+                  {name}
+                </p>
+                {rating != null && total != null && total > 0 && (
+                  <p className="mt-1 text-xs text-slate-500">
+                    {t('savedFavorites.rating_line', {
+                      average: rating.toFixed(1),
+                      total,
+                    })}
+                  </p>
+                )}
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        id: 'type',
+        header: t('savedFavorites.col_type'),
+        cell: ({ row }) => (
+          <Badge
+            variant="secondary"
+            className="whitespace-nowrap font-normal text-slate-700"
+          >
+            {t(`savedFavorites.entity.${row.original.entityType}`)}
+          </Badge>
+        ),
+      },
+      {
+        id: 'created',
+        header: t('savedFavorites.col_created'),
+        cell: ({ row }) =>
+          formatDate(row.original.createdAt, i18n.language || 'vi'),
+      },
+      {
+        id: 'actions',
+        header: () => (
+          <span className="sr-only">{t('savedFavorites.col_actions')}</span>
+        ),
+        cell: ({ row }) => {
+          const r = row.original;
+          const path = getFavoriteDetailPath(
+            r.entityType,
+            r.entityId,
+            r.entitySummary,
+          );
+          const unsupported = path == null;
+          const loading = loadingRowId === r._id;
+
+          return (
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                disabled={unsupported && r.entityType !== FavoriteEntityType.TOUR}
+                className="cursor-pointer border-[#1E3A8A]/25 text-[#1E3A8A] hover:bg-[#EFF6FF]"
+                title={
+                  unsupported && r.entityType !== FavoriteEntityType.TOUR
+                    ? t('savedFavorites.view_unsupported')
+                    : t('savedFavorites.view')
+                }
+                onClick={() => void handleView(r)}
+              >
+                {loading ? (
+                  <Loader2 className="mr-1 size-4 animate-spin" aria-hidden />
+                ) : (
+                  <ArrowRight className="mr-1 size-4" aria-hidden />
+                )}
+                {t('savedFavorites.view')}
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                disabled={loading}
+                className="cursor-pointer border-rose-200 text-rose-700 hover:bg-rose-50"
+                onClick={() => void handleRemove(r)}
+              >
+                {loading ? (
+                  <Loader2 className="mr-1 size-4 animate-spin" aria-hidden />
+                ) : (
+                  <Trash2 className="mr-1 size-4" aria-hidden />
+                )}
+                {t('savedFavorites.remove')}
+              </Button>
+            </div>
+          );
+        },
+      },
+    ],
+    [
+      t,
+      i18n.language,
+      loadingRowId,
+      handleView,
+      handleRemove,
+    ],
+  );
+
+  const tableData: I.ApiListResponse<FavoriteRecord> =
+    data ??
+    ({
+      data: [],
+      meta: {
+        pageIndex: 0,
+        pageSize: pagination.pageSize,
+        total: 0,
+        pageCount: 1,
+      },
+    } as I.ApiListResponse<FavoriteRecord>);
+
   return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-[#F8FAFC]/60 px-6 py-16 text-center">
-      <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-slate-200/80">
-        <Heart className="size-7 text-[#2563EB]" aria-hidden />
+    <div className="space-y-4">
+      {actionError && (
+        <Alert variant="destructive" className="rounded-xl border-rose-200">
+          <AlertCircle className="size-4" aria-hidden />
+          <AlertTitle>{t('savedFavorites.error_title')}</AlertTitle>
+          <AlertDescription>{actionError}</AlertDescription>
+        </Alert>
+      )}
+      {isError && (
+        <Alert variant="destructive" className="rounded-xl border-rose-200">
+          <AlertCircle className="size-4" aria-hidden />
+          <AlertTitle>{t('savedFavorites.error_title')}</AlertTitle>
+          <AlertDescription className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <span>
+              {(error as Error)?.message ?? t('savedFavorites.error_body')}
+            </span>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="w-fit cursor-pointer"
+              onClick={() => refetch()}
+            >
+              {t('savedFavorites.retry')}
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+        <div className="space-y-1.5">
+          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            {t('savedFavorites.filter_type')}
+          </p>
+          <Select
+            value={entityFilter}
+            onValueChange={(v) =>
+              setEntityFilter(v as FavoriteEntityFilter)
+            }
+          >
+            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-slate-200 bg-white text-[#1E40AF] sm:w-[240px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">
+                {t('savedFavorites.filter_all')}
+              </SelectItem>
+              {FAVORITE_ENTITY_TYPES.map((et) => (
+                <SelectItem key={et} value={et}>
+                  {t(`savedFavorites.entity.${et}`)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+          {isFetching && (
+            <>
+              <Loader2 className="size-4 animate-spin" aria-hidden />
+              <span>{t('savedFavorites.loading')}</span>
+            </>
+          )}
+        </div>
       </div>
-      <h3 className="text-base font-semibold text-[#1E3A8A]">
-        {t('savedWishlist.placeholder_title')}
-      </h3>
-      <p className="mt-2 max-w-md text-sm leading-relaxed text-slate-600">
-        {t('savedWishlist.placeholder_body')}
-      </p>
+
+      <DataTable
+        columns={columns}
+        data={tableData}
+        hideSearch
+        emptyMessage={t('savedFavorites.table_empty')}
+        tableState={{
+          pagination,
+          setPagination,
+          sorting,
+          setSorting,
+          globalFilter,
+          setGlobalFilter,
+          rowSelection,
+          setRowSelection,
+          isFetching,
+        }}
+      />
     </div>
   );
 };
@@ -469,7 +802,7 @@ const DashboardSavedPage: React.FC = () => {
               <MyReviewsPanel />
             </TabsContent>
             <TabsContent value="wishlist" className="mt-0 outline-none">
-              <WishlistPlaceholder />
+              <MyFavoritesPanel />
             </TabsContent>
           </Tabs>
         </CardContent>

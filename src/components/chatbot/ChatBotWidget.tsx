@@ -13,7 +13,6 @@ function ChatBotWidget() {
   const { isOpen, toggleChat, closeChat } = useChatStore();
   const { messages, sendMessage, stop, isLoading, clear, error } = useChatBot();
   const [errorDismissed, setErrorDismissed] = useState(false);
-  console.log('messages from BE', messages);
 
   const showError = Boolean(error && !errorDismissed);
 
