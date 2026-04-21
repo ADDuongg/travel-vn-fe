@@ -20,6 +20,20 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import DrawerHeader from '../components/DrawerHeader';
 import logox1 from '/images/logox1.png';
 
+import type { NotificationItem } from '@/features/notifications/types';
+
+/** Values from API metadata for i18n interpolation (e.g. {{tourName}}). */
+function notificationInterpolation(
+  metadata: NotificationItem['metadata'],
+): Record<string, string | number> {
+  if (!metadata || typeof metadata !== 'object') return {};
+  return Object.fromEntries(
+    Object.entries(metadata).filter(
+      ([, v]) => typeof v === 'string' || typeof v === 'number',
+    ),
+  ) as Record<string, string | number>;
+}
+
 const HeaderList = () => {
   const location = useLocation();
   const { t } = useTranslation();
@@ -152,7 +166,7 @@ const UserMenu = ({
         </Link>
 
         <Link
-          to="/wishlist"
+          to={`${ROUTES.DASHBOARD.SAVED}?tab=wishlist`}
           className="block px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
           onClick={() => setOpen(false)}
         >
@@ -186,13 +200,8 @@ const NotificationBell = () => {
   const { data: unreadData } = useUnreadNotificationCount(true);
   const unreadCount = unreadData?.count ?? 0;
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-  } = useInfiniteNotificationsList(5, open);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteNotificationsList(5, open);
 
   const notifications = data?.pages.flatMap((page) => page.items) ?? [];
 
@@ -308,10 +317,16 @@ const NotificationBell = () => {
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-gray-800 line-clamp-1">
-                          {t(item.title)}
+                          {t(item.title, {
+                            ns: 'notification',
+                            ...notificationInterpolation(item.metadata),
+                          })}
                         </p>
                         <p className="mt-1 text-gray-500 line-clamp-2">
-                          {t(item.message)}
+                          {t(item.message, {
+                            ns: 'notification',
+                            ...notificationInterpolation(item.metadata),
+                          })}
                         </p>
                         <p className="mt-1 text-[10px] text-gray-400">
                           {item.createdAt

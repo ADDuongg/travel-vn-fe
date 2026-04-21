@@ -6,6 +6,13 @@ export enum ReviewEntityType {
   GUIDE = 'GUIDE',
 }
 
+export enum ReviewStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  HIDDEN = 'HIDDEN',
+}
+
 export interface Review {
   _id: string;
 
@@ -18,8 +25,20 @@ export interface Review {
   userId: string;
   isAnonymous: boolean;
 
-  isApproved: boolean;
+  status: ReviewStatus;
+
   approvedAt?: string;
+  approvedBy?: string;
+
+  rejectedAt?: string;
+  rejectedBy?: string;
+  rejectReason?: string;
+
+  hiddenAt?: string;
+  hiddenBy?: string;
+  hiddenReason?: string;
+
+  deletedAt?: string | null;
 
   createdAt: string;
   updatedAt: string;
@@ -46,3 +65,36 @@ export type DeleteReviewInput = {
   entityType: ReviewEntityType;
   entityId: string;
 };
+
+/** Resolved title + thumbnail from backend (`entitySummary`) */
+export interface EntitySummary {
+  name: string;
+  thumbnailUrl: string;
+}
+
+/** Item from GET /api/v1/reviews/me/list (lean + entitySummary) */
+export interface MyReviewListItem extends Review {
+  entitySummary?: EntitySummary;
+}
+
+export type MyReviewsListParams = {
+  page?: number;
+  limit?: number;
+  entityType?: ReviewEntityType;
+  /** CSV e.g. `PENDING,APPROVED` — omit for all non-deleted */
+  status?: string;
+  lang?: string;
+};
+
+/** Raw API body before mapping to ApiListResponse */
+export type MyReviewsListPayload = {
+  data: MyReviewListItem[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+  };
+};
+
+/** Table row: stable `id` for TanStack Table */
+export type MyReviewTableRow = MyReviewListItem & { id: string };

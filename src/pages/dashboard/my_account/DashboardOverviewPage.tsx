@@ -49,7 +49,7 @@ const quickLinks: QuickLink[] = [
     icon: MapPin,
   },
   {
-    to: ROUTES.DASHBOARD.WISHLIST,
+    to: `${ROUTES.DASHBOARD.SAVED}?tab=wishlist`,
     title: 'Yêu thích',
     description: 'Danh sách đã lưu',
     icon: Heart,
@@ -250,12 +250,12 @@ const DashboardOverviewPage: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Reviews */}
+      {/* Reviews — unified */}
       <Card className="rounded-2xl border-slate-200/90 bg-white shadow-sm">
         <CardHeader className="flex flex-col gap-3 border-b border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#1E3A8A]">
             <MessageSquareText className="size-5 text-[#2563EB]" aria-hidden />
-            Đánh giá phòng
+            Đánh giá của tôi
           </CardTitle>
           <Button
             asChild
@@ -263,16 +263,16 @@ const DashboardOverviewPage: React.FC = () => {
             size="sm"
             className="cursor-pointer text-[#2563EB] hover:bg-[#EFF6FF] hover:text-[#1D4ED8]"
           >
-            <Link to={ROUTES.DASHBOARD.ROOM_BOOKINGS}>
-              Từ đơn đặt phòng
+            <Link to={`${ROUTES.DASHBOARD.SAVED}?tab=reviews`}>
+              Xem tất cả đánh giá
               <ArrowRight className="ml-1 size-4" />
             </Link>
           </Button>
         </CardHeader>
         <CardContent className="px-4 py-8 sm:px-6">
           <p className="mx-auto max-w-md text-center text-sm leading-relaxed text-slate-600">
-            Sau khi lưu trú, bạn có thể gửi đánh giá từ chi tiết đặt phòng hoặc
-            mục đánh giá trong menu.
+            Xem và quản lý đánh giá tour, phòng, khách sạn và hướng dẫn viên tại
+            một nơi.
           </p>
         </CardContent>
       </Card>

@@ -123,7 +123,7 @@ export interface TourGuideQueryParams {
   userId?: string;
 }
 
-/** Review item – GET /api/v1/tour-guides/:id/reviews */
+/** Review item – GET /api/v1/tour-guides/:id/reviews (may mirror global review schema) */
 export interface TourGuideReview {
   _id: string;
   entityType: 'GUIDE';
@@ -132,7 +132,9 @@ export interface TourGuideReview {
   comment?: string;
   userId?: string | null;
   isAnonymous: boolean;
-  isApproved: boolean;
+  /** @deprecated Prefer `status` when backend exposes it */
+  isApproved?: boolean;
+  status?: 'PENDING' | 'APPROVED' | 'REJECTED' | 'HIDDEN';
   createdAt: string;
 }
 

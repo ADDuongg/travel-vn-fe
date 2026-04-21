@@ -47,8 +47,8 @@ const TourBookingLookupPage = Loadable(
 const RoomBookingPage = Loadable(
   () => import('@pages/dashboard/room/RoomBookingPage'),
 );
-const WishlistPage = Loadable(
-  () => import('@pages/dashboard/tour/WishlistPage'),
+const DashboardSavedPage = Loadable(
+  () => import('@pages/dashboard/saved/DashboardSavedPage'),
 );
 
 const RoomBookingPaymentPage = Loadable(
@@ -140,9 +140,30 @@ export const routes: RouteConfig[] = [
         handle: { crumb: 'My Bookings' },
       },
       {
+        path: ROUTES.DASHBOARD.SAVED,
+        element: <DashboardSavedPage />,
+        handle: { crumb: 'Reviews & wishlist' },
+      },
+      {
         path: ROUTES.DASHBOARD.WISHLIST,
-        element: <WishlistPage />,
-        handle: { crumb: 'Wish List' },
+        element: (
+          <Navigate
+            to={`${ROUTES.DASHBOARD.SAVED}?tab=wishlist`}
+            replace
+          />
+        ),
+      },
+      {
+        path: ROUTES.DASHBOARD.REVIEWS,
+        element: <Navigate to={ROUTES.DASHBOARD.SAVED} replace />,
+      },
+      {
+        path: ROUTES.DASHBOARD.ROOM_REVIEWS,
+        element: <Navigate to={ROUTES.DASHBOARD.SAVED} replace />,
+      },
+      {
+        path: ROUTES.DASHBOARD.TOUR_REVIEWS,
+        element: <Navigate to={ROUTES.DASHBOARD.SAVED} replace />,
       },
       // ví dụ route động:
       {

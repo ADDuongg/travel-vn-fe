@@ -4,11 +4,16 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   deleteReview,
   getMyReviews,
+  getMyReviewsList,
   getReviews,
   submitReview,
   updateReview,
 } from './api';
-import type { Review, ReviewEntityType } from './types';
+import type {
+  MyReviewsListParams,
+  Review,
+  ReviewEntityType,
+} from './types';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 export const reviewKeys = {
@@ -17,6 +22,8 @@ export const reviewKeys = {
     [...reviewKeys.all, 'me', params] as const,
   list: (params: { entityType: ReviewEntityType; entityId: string }) =>
     [...reviewKeys.all, 'list', params] as const,
+  meList: (params: MyReviewsListParams) =>
+    [...reviewKeys.all, 'meList', params] as const,
 };
 
 export function useReviewsQuery(params: {
@@ -53,6 +60,26 @@ function invalidateEntityReviews(
   qc.invalidateQueries({ queryKey: reviewKeys.me(params) });
 }
 
+function invalidateMyReviewsList(
+  qc: ReturnType<typeof useQueryClient>,
+) {
+  qc.invalidateQueries({ queryKey: [...reviewKeys.all, 'meList'] });
+}
+
+export function useMyReviewsListQuery(
+  params: MyReviewsListParams,
+  options?: { enabled?: boolean },
+) {
+  const authUser = useAuthStore((s) => s.authUser);
+
+  return useQuery({
+    queryKey: reviewKeys.meList(params),
+    queryFn: () => getMyReviewsList(params),
+    enabled: options?.enabled !== false && !!authUser,
+    staleTime: 60 * 1000,
+  });
+}
+
 export function useSubmitReview() {
   const qc = useQueryClient();
 
@@ -63,12 +90,16 @@ export function useSubmitReview() {
         entityType: variables.entityType,
         entityId: variables.entityId,
       });
+      invalidateMyReviewsList(qc);
     },
   });
 
   return {
     submitReview: mutation.mutate,
     isPending: mutation.isPending,
+    isError: mutation.isError,
+    error: mutation.error as Error & { message?: string } | null,
+    reset: mutation.reset,
   };
 }
 
@@ -82,12 +113,16 @@ export function useDeleteReview() {
         entityType: variables.entityType,
         entityId: variables.entityId,
       });
+      invalidateMyReviewsList(qc);
     },
   });
 
   return {
     deleteReview: mutation.mutate,
     isPending: mutation.isPending,
+    isError: mutation.isError,
+    error: mutation.error as Error & { message?: string } | null,
+    reset: mutation.reset,
   };
 }
 
@@ -101,11 +136,15 @@ export function useEditReview() {
         entityType: variables.entityType,
         entityId: variables.entityId,
       });
+      invalidateMyReviewsList(qc);
     },
   });
 
   return {
     editReview: mutation.mutate,
     isPending: mutation.isPending,
+    isError: mutation.isError,
+    error: mutation.error as Error & { message?: string } | null,
+    reset: mutation.reset,
   };
 }

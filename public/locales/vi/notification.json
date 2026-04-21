@@ -1,8 +1,68 @@
 {
-  "notification.guide_registration_pending.title": "Đơn đăng ký HDV mới",
-  "notification.guide_registration_pending.message": "Có một đơn đăng ký hướng dẫn viên mới cần được admin xem và duyệt.",
-  "notification.guide_verified.title": "Hồ sơ HDV đã được duyệt",
-  "notification.guide_verified.message": "Hồ sơ hướng dẫn viên của bạn đã được admin duyệt. Bạn có thể bắt đầu nhận tour.",
-  "notification.guide_rejected.title": "Hồ sơ HDV chưa được duyệt",
-  "notification.guide_rejected.message": "Hồ sơ hướng dẫn viên của bạn chưa được duyệt. Vui lòng kiểm tra lại thông tin hoặc liên hệ admin."
+  "notification": {
+    "guide_registration_pending": {
+      "title": "Đơn đăng ký HDV mới",
+      "message": "Có một đơn đăng ký hướng dẫn viên mới cần được admin xem và duyệt."
+    },
+    "guide_verified": {
+      "title": "Hồ sơ HDV đã được duyệt",
+      "message": "Hồ sơ hướng dẫn viên của bạn đã được admin duyệt. Bạn có thể bắt đầu nhận tour."
+    },
+    "guide_rejected": {
+      "title": "Hồ sơ HDV chưa được duyệt",
+      "message": "Hồ sơ hướng dẫn viên của bạn chưa được duyệt. Vui lòng kiểm tra lại thông tin hoặc liên hệ admin."
+    },
+    "tour_created": {
+      "title": "Tour mới đã được tạo",
+      "message": "Tour {{tourName}} đã được tạo thành công."
+    },
+    "tour_updated": {
+      "title": "Tour đã được cập nhật",
+      "message": "Thông tin tour {{tourName}} đã được cập nhật."
+    },
+    "tour_deleted": {
+      "title": "Tour đã bị xóa",
+      "message": "Tour {{tourName}} đã bị xóa khỏi hệ thống. Hãy kiểm tra lại các chiến dịch liên quan."
+    },
+    "tour_published": {
+      "title": "Tour đã được publish",
+      "message": "Tour {{tourName}} đã được publish và sẵn sàng hiển thị cho khách hàng."
+    },
+    "tour_unpublished": {
+      "title": "Tour đã bị unpublish",
+      "message": "Tour {{tourName}} đã bị unpublish và sẽ không còn hiển thị cho khách hàng."
+    },
+    "tour_inventory_low": {
+      "title": "Tồn kho tour sắp hết chỗ",
+      "message": "Tour {{tourName}} chỉ còn {{remainingSlots}} chỗ trống. Vui lòng kiểm tra và điều chỉnh tồn kho nếu cần."
+    },
+    "tour_inventory_sold_out": {
+      "title": "Tour đã hết chỗ",
+      "message": "Tour {{tourName}} đã hết chỗ (sold out). Vui lòng cập nhật tồn kho hoặc tạo thêm lịch khởi hành mới."
+    },
+    "tour_inventory_restocked": {
+      "title": "Tồn kho tour đã được bổ sung",
+      "message": "Tồn kho tour {{tourName}} đã được bổ sung thêm {{addedSlots}} chỗ. Tour đã sẵn sàng nhận thêm booking."
+    },
+    "tour_booking_created": {
+      "title": "Có booking tour mới",
+      "message": "Đã tạo một booking mới cho tour {{tourName}}. Vui lòng kiểm tra và xác nhận."
+    },
+    "tour_booking_confirmed": {
+      "title": "Booking tour đã được xác nhận",
+      "message": "Booking tour {{tourName}} đã được xác nhận. Hãy chuẩn bị dịch vụ cho khách."
+    },
+    "tour_booking_cancelled": {
+      "title": "Booking tour đã bị hủy",
+      "message": "Booking tour {{tourName}} đã bị hủy. Vui lòng kiểm tra lại tồn kho và lịch khởi hành."
+    },
+    "tour_booking_payment_failed": {
+      "title": "Thanh toán booking tour thất bại",
+      "message": "Thanh toán cho booking tour {{tourName}} đã thất bại. Vui lòng kiểm tra lại với khách hàng hoặc cổng thanh toán."
+    },
+    "tour_booking_overbooking": {
+      "title": "Cảnh báo overbooking tour",
+      "message": "Hệ thống phát hiện khả năng overbooking cho tour {{tourName}}. Vui lòng kiểm tra tồn kho và điều chỉnh kịp thời."
+    }
+  }
 }

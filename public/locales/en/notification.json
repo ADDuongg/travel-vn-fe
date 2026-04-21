@@ -1,8 +1,68 @@
 {
-  "notification.guide_registration_pending.title": "New tour guide registration",
-  "notification.guide_registration_pending.message": "There is a new tour guide registration that needs admin review.",
-  "notification.guide_verified.title": "Guide profile approved",
-  "notification.guide_verified.message": "Your tour guide profile has been approved. You can now receive tours.",
-  "notification.guide_rejected.title": "Guide profile not approved",
-  "notification.guide_rejected.message": "Your tour guide profile was not approved. Please review your information or contact the admin."
+  "notification": {
+    "guide_registration_pending": {
+      "title": "New tour guide registration",
+      "message": "There is a new tour guide registration that needs admin review."
+    },
+    "guide_verified": {
+      "title": "Guide profile approved",
+      "message": "Your tour guide profile has been approved. You can now receive tours."
+    },
+    "guide_rejected": {
+      "title": "Guide profile not approved",
+      "message": "Your tour guide profile was not approved. Please review your information or contact the admin."
+    },
+    "tour_created": {
+      "title": "New tour created",
+      "message": "Tour {{tourName}} has been created successfully."
+    },
+    "tour_updated": {
+      "title": "Tour updated",
+      "message": "Information for tour {{tourName}} has been updated."
+    },
+    "tour_deleted": {
+      "title": "Tour deleted",
+      "message": "Tour {{tourName}} has been removed from the system. Please review related campaigns."
+    },
+    "tour_published": {
+      "title": "Tour published",
+      "message": "Tour {{tourName}} has been published and is ready for customers."
+    },
+    "tour_unpublished": {
+      "title": "Tour unpublished",
+      "message": "Tour {{tourName}} has been unpublished and will no longer be visible to customers."
+    },
+    "tour_inventory_low": {
+      "title": "Tour inventory running low",
+      "message": "Tour {{tourName}} only has {{remainingSlots}} spots left. Please review and adjust inventory if needed."
+    },
+    "tour_inventory_sold_out": {
+      "title": "Tour sold out",
+      "message": "Tour {{tourName}} is sold out. Please update inventory or add more departures."
+    },
+    "tour_inventory_restocked": {
+      "title": "Tour inventory restocked",
+      "message": "Tour {{tourName}} inventory has been increased by {{addedSlots}} spots. The tour is ready for more bookings."
+    },
+    "tour_booking_created": {
+      "title": "New tour booking",
+      "message": "A new booking has been created for tour {{tourName}}. Please review and confirm."
+    },
+    "tour_booking_confirmed": {
+      "title": "Tour booking confirmed",
+      "message": "Tour booking for {{tourName}} has been confirmed. Prepare services for the guest."
+    },
+    "tour_booking_cancelled": {
+      "title": "Tour booking cancelled",
+      "message": "Tour booking for {{tourName}} has been cancelled. Please review inventory and departures."
+    },
+    "tour_booking_payment_failed": {
+      "title": "Tour booking payment failed",
+      "message": "Payment for tour booking {{tourName}} failed. Please check with the customer or the payment gateway."
+    },
+    "tour_booking_overbooking": {
+      "title": "Tour overbooking warning",
+      "message": "The system detected a possible overbooking for tour {{tourName}}. Please review inventory and adjust promptly."
+    }
+  }
 }

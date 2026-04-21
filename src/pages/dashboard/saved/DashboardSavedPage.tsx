@@ -1,0 +1,481 @@
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ROUTES } from '@/constants/router';
+import { getSyncDetailPath } from '@/features/review/sync-entity-path';
+import { useMyReviewsListQuery } from '@/features/review/hooks';
+import type { MyReviewTableRow } from '@/features/review/types';
+import { ReviewEntityType, ReviewStatus } from '@/features/review/types';
+import { getTourById } from '@/features/tours/catalog-api';
+import * as I from '@/types/api';
+import DataTable from '@/shared/table/DataTable';
+import type { ColumnDef } from '@tanstack/react-table';
+import { AlertCircle, Heart, Loader2, MessageSquareText, Star } from 'lucide-react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { useTranslation } from 'react-i18next';
+import { generatePath, useNavigate, useSearchParams } from 'react-router-dom';
+import type { RowSelectionState, SortingState } from '@tanstack/react-table';
+
+const REVIEW_ENTITY_TYPES = Object.values(ReviewEntityType).filter(
+  (v): v is ReviewEntityType => typeof v === 'string',
+);
+
+const DEFAULT_PAGE_SIZE = 20;
+
+type EntityFilter = 'all' | ReviewEntityType;
+
+/** Matches GET /reviews/me/list `?status=` CSV */
+type StatusFilter =
+  | 'all'
+  | 'PENDING'
+  | 'APPROVED'
+  | 'REJECTED'
+  | 'HIDDEN'
+  | 'PENDING,APPROVED';
+
+function reviewStatusBadgeClass(status: ReviewStatus | string) {
+  switch (status) {
+    case ReviewStatus.APPROVED:
+      return 'border-emerald-200 bg-emerald-50 text-emerald-900';
+    case ReviewStatus.PENDING:
+      return 'border-amber-200 bg-amber-50 text-amber-900';
+    case ReviewStatus.REJECTED:
+      return 'border-rose-200 bg-rose-50 text-rose-900';
+    case ReviewStatus.HIDDEN:
+      return 'border-slate-200 bg-slate-100 text-slate-800';
+    default:
+      return 'border-slate-200 bg-slate-50 text-slate-800';
+  }
+}
+
+function formatDate(value: string | undefined, locale: string) {
+  if (!value) return '—';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return '—';
+  return d.toLocaleDateString(locale, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+}
+
+function RatingStars({ value }: { value?: number }) {
+  const n = value != null ? Math.round(value) : 0;
+  return (
+    <div className="flex items-center gap-0.5" aria-label={`Rating ${n} of 5`}>
+      {Array.from({ length: 5 }, (_, i) => (
+        <Star
+          key={i}
+          className={`size-4 shrink-0 ${
+            i < n ? 'fill-amber-400 text-amber-500' : 'text-slate-200'
+          }`}
+          aria-hidden
+        />
+      ))}
+    </div>
+  );
+}
+
+const MyReviewsPanel: React.FC = () => {
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const lang = i18n.language?.split('-')[0] || 'vi';
+
+  const [entityFilter, setEntityFilter] = useState<EntityFilter>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [pagination, setPagination] = useState<I.Paginate>({
+    pageIndex: 0,
+    pageSize: DEFAULT_PAGE_SIZE,
+  });
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [loadingRowId, setLoadingRowId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setPagination((p) => ({ ...p, pageIndex: 0 }));
+  }, [entityFilter, statusFilter]);
+
+  const listParams = useMemo(
+    () => ({
+      page: pagination.pageIndex + 1,
+      limit: pagination.pageSize,
+      lang,
+      ...(entityFilter === 'all' ? {} : { entityType: entityFilter }),
+      ...(statusFilter === 'all' ? {} : { status: statusFilter }),
+    }),
+    [
+      pagination.pageIndex,
+      pagination.pageSize,
+      lang,
+      entityFilter,
+      statusFilter,
+    ],
+  );
+
+  const { data, isFetching, isError, error, refetch } =
+    useMyReviewsListQuery(listParams);
+
+  const handleView = useCallback(
+    async (row: MyReviewTableRow) => {
+      const sync = getSyncDetailPath(row.entityType, row.entityId);
+      if (sync) {
+        navigate(sync);
+        return;
+      }
+      if (row.entityType === ReviewEntityType.TOUR) {
+        setLoadingRowId(row.id);
+        try {
+          const tour = await getTourById(row.entityId);
+          if (tour?.slug) {
+            navigate(generatePath(ROUTES.TOUR.DETAIL, { slug: tour.slug }));
+          }
+        } finally {
+          setLoadingRowId(null);
+        }
+      }
+    },
+    [navigate],
+  );
+
+  const columns = useMemo<ColumnDef<MyReviewTableRow>[]>(
+    () => [
+      {
+        id: 'entity',
+        header: t('savedReviews.col_entity'),
+        cell: ({ row }) => {
+          const r = row.original;
+          const name = r.entitySummary?.name?.trim() || '—';
+          const thumb = r.entitySummary?.thumbnailUrl;
+          return (
+            <div className="flex max-w-[min(100vw-8rem,22rem)] items-start gap-3">
+              <div className="size-12 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-[#F8FAFC]">
+                {thumb ? (
+                  <img
+                    src={thumb}
+                    alt=""
+                    className="size-full object-cover"
+                  />
+                ) : (
+                  <div
+                    className="flex size-full items-center justify-center text-[10px] font-medium text-slate-400"
+                    aria-hidden
+                  >
+                    —
+                  </div>
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-medium leading-snug text-[#1E40AF] line-clamp-2">
+                  {name}
+                </p>
+              </div>
+            </div>
+          );
+        },
+      },
+      {
+        id: 'type',
+        header: t('savedReviews.col_type'),
+        cell: ({ row }) => (
+          <Badge
+            variant="secondary"
+            className="whitespace-nowrap font-normal text-slate-700"
+          >
+            {t(`savedReviews.entity.${row.original.entityType}`)}
+          </Badge>
+        ),
+      },
+      {
+        id: 'rating',
+        header: t('savedReviews.col_rating'),
+        cell: ({ row }) => <RatingStars value={row.original.rating} />,
+      },
+      {
+        id: 'comment',
+        header: t('savedReviews.col_comment'),
+        cell: ({ row }) => (
+          <p className="line-clamp-2 text-slate-600">
+            {row.original.comment?.trim() || '—'}
+          </p>
+        ),
+      },
+      {
+        id: 'status',
+        header: t('savedReviews.col_status'),
+        cell: ({ row }) => {
+          const s = row.original.status;
+          const label = t(`savedReviews.status.${s}`, {
+            defaultValue: String(s),
+          });
+          return (
+            <Badge
+              variant="outline"
+              className={`whitespace-nowrap font-normal ${reviewStatusBadgeClass(s)}`}
+            >
+              {label}
+            </Badge>
+          );
+        },
+      },
+      {
+        id: 'updated',
+        header: t('savedReviews.col_updated'),
+        cell: ({ row }) =>
+          formatDate(row.original.updatedAt, i18n.language || 'vi'),
+      },
+      {
+        id: 'date',
+        header: t('savedReviews.col_date'),
+        cell: ({ row }) =>
+          formatDate(row.original.createdAt, i18n.language || 'vi'),
+      },
+      {
+        id: 'actions',
+        header: () => <span className="sr-only">{t('savedReviews.col_actions')}</span>,
+        cell: ({ row }) => {
+          const r = row.original;
+          const canSync = getSyncDetailPath(r.entityType, r.entityId) != null;
+          const canTour = r.entityType === ReviewEntityType.TOUR;
+          const unsupported =
+            r.entityType === ReviewEntityType.BLOG ||
+            (!canSync && !canTour);
+          const loading = loadingRowId === r.id;
+
+          return (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              disabled={unsupported || loading}
+              className="cursor-pointer border-[#1E3A8A]/25 text-[#1E3A8A] hover:bg-[#EFF6FF]"
+              title={
+                unsupported
+                  ? t('savedReviews.view_unsupported')
+                  : t('savedReviews.view')
+              }
+              onClick={() => handleView(r)}
+            >
+              {loading ? (
+                <Loader2 className="size-4 animate-spin" aria-hidden />
+              ) : (
+                t('savedReviews.view')
+              )}
+            </Button>
+          );
+        },
+      },
+    ],
+    [t, i18n.language, loadingRowId, handleView],
+  );
+
+  const tableData: I.ApiListResponse<MyReviewTableRow> =
+    data ??
+    ({
+      data: [],
+      meta: {
+        pageIndex: 0,
+        pageSize: pagination.pageSize,
+        total: 0,
+        pageCount: 1,
+      },
+    } as I.ApiListResponse<MyReviewTableRow>);
+
+  return (
+    <div className="space-y-4">
+      {isError && (
+        <Alert variant="destructive" className="rounded-xl border-rose-200">
+          <AlertCircle className="size-4" aria-hidden />
+          <AlertTitle>{t('savedReviews.error_title')}</AlertTitle>
+          <AlertDescription className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <span>
+              {(error as Error)?.message ?? t('savedReviews.error_body')}
+            </span>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="w-fit cursor-pointer"
+              onClick={() => refetch()}
+            >
+              {t('savedReviews.retry')}
+            </Button>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+        <div className="space-y-1.5">
+          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            {t('savedReviews.filter_type')}
+          </p>
+          <Select
+            value={entityFilter}
+            onValueChange={(v) =>
+              setEntityFilter(v as EntityFilter)
+            }
+          >
+            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-slate-200 bg-white text-[#1E40AF] sm:w-[240px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t('savedReviews.filter_all')}</SelectItem>
+              {REVIEW_ENTITY_TYPES.map((et) => (
+                <SelectItem key={et} value={et}>
+                  {t(`savedReviews.entity.${et}`)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-1.5">
+          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            {t('savedReviews.filter_status')}
+          </p>
+          <Select
+            value={statusFilter}
+            onValueChange={(v) => setStatusFilter(v as StatusFilter)}
+          >
+            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-slate-200 bg-white text-[#1E40AF] sm:w-[260px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">
+                {t('savedReviews.filter_status_all')}
+              </SelectItem>
+              <SelectItem value="PENDING">
+                {t('savedReviews.status.PENDING')}
+              </SelectItem>
+              <SelectItem value="APPROVED">
+                {t('savedReviews.status.APPROVED')}
+              </SelectItem>
+              <SelectItem value="REJECTED">
+                {t('savedReviews.status.REJECTED')}
+              </SelectItem>
+              <SelectItem value="HIDDEN">
+                {t('savedReviews.status.HIDDEN')}
+              </SelectItem>
+              <SelectItem value="PENDING,APPROVED">
+                {t('savedReviews.filter_status_pending_approved')}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <DataTable
+        columns={columns}
+        data={tableData}
+        hideSearch
+        emptyMessage={t('savedReviews.table_empty')}
+        tableState={{
+          pagination,
+          setPagination,
+          sorting,
+          setSorting,
+          globalFilter,
+          setGlobalFilter,
+          rowSelection,
+          setRowSelection,
+          isFetching,
+        }}
+      />
+    </div>
+  );
+};
+
+const WishlistPlaceholder: React.FC = () => {
+  const { t } = useTranslation();
+  return (
+    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-[#F8FAFC]/60 px-6 py-16 text-center">
+      <div className="mb-4 flex size-14 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-slate-200/80">
+        <Heart className="size-7 text-[#2563EB]" aria-hidden />
+      </div>
+      <h3 className="text-base font-semibold text-[#1E3A8A]">
+        {t('savedWishlist.placeholder_title')}
+      </h3>
+      <p className="mt-2 max-w-md text-sm leading-relaxed text-slate-600">
+        {t('savedWishlist.placeholder_body')}
+      </p>
+    </div>
+  );
+};
+
+const DashboardSavedPage: React.FC = () => {
+  const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab');
+  const activeTab = tabParam === 'wishlist' ? 'wishlist' : 'reviews';
+
+  const setTab = (value: string) => {
+    const next = new URLSearchParams(searchParams);
+    if (value === 'reviews') {
+      next.delete('tab');
+    } else {
+      next.set('tab', value);
+    }
+    setSearchParams(next, { replace: true });
+  };
+
+  return (
+    <div className="flex-1 space-y-6">
+      <div>
+        <h1 className="text-xl font-semibold tracking-tight text-[#1E3A8A] sm:text-2xl">
+          {t('savedReviews.page_title')}
+        </h1>
+        <p className="mt-1 text-sm text-slate-600 sm:text-base">
+          {t('savedReviews.page_subtitle')}
+        </p>
+      </div>
+
+      <Card className="overflow-hidden rounded-2xl border-slate-200/90 bg-white shadow-sm">
+        <CardHeader className="border-b border-slate-100 bg-[#F8FAFC]/80 px-4 py-4 sm:px-6">
+          <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#1E3A8A]">
+            <MessageSquareText className="size-5 text-[#2563EB]" aria-hidden />
+            {t('savedReviews.card_title')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 sm:p-6">
+          <Tabs value={activeTab} onValueChange={setTab} className="w-full">
+            <TabsList className="mb-6 h-auto w-full justify-start gap-6 border-b border-slate-200 bg-transparent p-0">
+              <TabsTrigger
+                value="reviews"
+                className="cursor-pointer rounded-none border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-slate-500 shadow-none transition-colors data-[state=active]:border-[#2563EB] data-[state=active]:bg-transparent data-[state=active]:text-[#1E3A8A] data-[state=active]:shadow-none"
+              >
+                {t('savedReviews.tab_reviews')}
+              </TabsTrigger>
+              <TabsTrigger
+                value="wishlist"
+                className="cursor-pointer rounded-none border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-slate-500 shadow-none transition-colors data-[state=active]:border-[#2563EB] data-[state=active]:bg-transparent data-[state=active]:text-[#1E3A8A] data-[state=active]:shadow-none"
+              >
+                {t('savedReviews.tab_wishlist')}
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="reviews" className="mt-0 outline-none">
+              <MyReviewsPanel />
+            </TabsContent>
+            <TabsContent value="wishlist" className="mt-0 outline-none">
+              <WishlistPlaceholder />
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default DashboardSavedPage;

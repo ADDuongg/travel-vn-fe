@@ -41,7 +41,12 @@ export function useServerTable<TData>(opts: {
     manualSorting: true,
     pageCount: meta.pageCount,
     autoResetPageIndex: false,
-    getRowId: (row) => String(row),
+    getRowId: (row, index) => {
+      if (row && typeof row === 'object' && 'id' in row) {
+        return String((row as { id: string | number }).id);
+      }
+      return String(index);
+    },
     getCoreRowModel: getCoreRowModel(),
   });
 

@@ -47,6 +47,8 @@ export const ROUTES = {
     BOOKINGS: '/dashboard/bookings',
     INVOICES: '/dashboard/invoices',
     REVIEWS: '/dashboard/reviews',
+    /** Đánh giá + Yêu thích (tabs: ?tab=reviews|wishlist) */
+    SAVED: '/dashboard/saved',
     WISHLIST: '/dashboard/wishlist',
     FAVORITES: '/dashboard/favorites',
     ROOM_BOOKINGS: '/dashboard/room-bookings',

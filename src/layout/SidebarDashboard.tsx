@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils';
 import {
   BookOpen,
   FileText,
-  Heart,
   KeyRound,
   LayoutDashboard,
   LogOut,
@@ -113,14 +112,6 @@ const SidebarDashboard = ({
             <FileText className="size-4 shrink-0 opacity-90" aria-hidden />
             Hóa đơn tour
           </NavItem>
-          <NavItem to={ROUTES.DASHBOARD.REVIEWS} onNavigate={onNavigate}>
-            <MessageSquareText className="size-4 shrink-0 opacity-90" aria-hidden />
-            Đánh giá tour
-          </NavItem>
-          <NavItem to={ROUTES.DASHBOARD.WISHLIST} onNavigate={onNavigate}>
-            <Heart className="size-4 shrink-0 opacity-90" aria-hidden />
-            Yêu thích
-          </NavItem>
         </div>
       </div>
 
@@ -135,9 +126,15 @@ const SidebarDashboard = ({
             <FileText className="size-4 shrink-0 opacity-90" aria-hidden />
             Hóa đơn phòng
           </NavItem>
-          <NavItem to={ROUTES.DASHBOARD.ROOM_REVIEWS} onNavigate={onNavigate}>
+        </div>
+      </div>
+
+      <div>
+        <SectionLabel>Đã lưu</SectionLabel>
+        <div className="space-y-1">
+          <NavItem to={ROUTES.DASHBOARD.SAVED} onNavigate={onNavigate}>
             <MessageSquareText className="size-4 shrink-0 opacity-90" aria-hidden />
-            Đánh giá phòng
+            Đánh giá & Yêu thích
           </NavItem>
         </div>
       </div>

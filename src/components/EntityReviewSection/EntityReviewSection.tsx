@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useReviewsQuery, useMyReviewQuery } from '@/features/review/hooks';
-import { ReviewEntityType } from '@/features/review/types';
+import { ReviewEntityType, ReviewStatus } from '@/features/review/types';
 import { useAuthStore } from '@/stores/useAuthStore';
 import ReviewSection from './ReviewSection';
 
@@ -32,15 +32,19 @@ export default function EntityReviewSection({
 
   const mergedReviews = useMemo(() => {
     if (!myReview) return reviews;
-
-    return [myReview, ...reviews.filter((r) => r.userId !== myReview.userId)];
-  }, [reviews, myReview]);
+    if (!authUser || authUser._id !== myReview.userId) return reviews;
+    if (myReview.status === ReviewStatus.APPROVED) {
+      return reviews;
+    }
+    return [myReview, ...reviews];
+  }, [reviews, myReview, authUser]);
 
   if (isLoading) return null;
 
   return (
     <ReviewSection
       reviews={mergedReviews}
+      myReview={myReview ?? null}
       canReview={!!authUser}
       entityId={entityId}
       entityType={entityType}

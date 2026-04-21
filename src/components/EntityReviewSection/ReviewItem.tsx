@@ -3,7 +3,12 @@ import { Ratings } from '@components/ui/rating';
 import { Button } from '@components/ui/button';
 import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 import { useEditReview, useDeleteReview } from '@/features/review/hooks';
-import { ReviewEntityType, type Review } from '@/features/review/types';
+import {
+  ReviewEntityType,
+  ReviewStatus,
+  type Review,
+} from '@/features/review/types';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   review: Review;
@@ -18,35 +23,54 @@ export default function ReviewItem({
   entityId,
   entityType,
 }: Props) {
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState({
     rating: review.rating,
     comment: review.comment,
   });
 
-  const { editReview, isPending } = useEditReview();
+  const { editReview, isPending, isError, error, reset } = useEditReview();
   const { deleteReview } = useDeleteReview();
 
+  const canEdit =
+    isOwner &&
+    review.status !== ReviewStatus.HIDDEN &&
+    review.deletedAt == null;
+
+  const errStatus = (error as { response?: { status?: number } } | null)
+    ?.response?.status;
+  const editErrorMessage =
+    isError && errStatus === 403
+      ? t('entityReview.error_edit_forbidden')
+      : isError
+        ? (error?.message ?? t('entityReview.error_edit_generic'))
+        : null;
+
   return (
-    <div className="border-b pb-6 relative">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-2">
+    <div className="relative border-b pb-6">
+      <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img
             src={review.user?.avatar || '/images/avatar-placeholder.png'}
-            className="w-10 h-10 rounded-full"
+            alt=""
+            className="size-10 rounded-full"
           />
           <p className="font-semibold">{review.user?.name}</p>
         </div>
 
-        {isOwner && !isEditing && (
+        {isOwner && !isEditing && review.deletedAt == null && (
           <div className="flex gap-2 text-sm">
-            <AiFillEdit
-              className="cursor-pointer text-blue-600"
-              onClick={() => setIsEditing(true)}
-            />
+            {canEdit && (
+              <AiFillEdit
+                className="cursor-pointer text-blue-600"
+                aria-label={t('entityReview.edit')}
+                onClick={() => setIsEditing(true)}
+              />
+            )}
             <AiFillDelete
               className="cursor-pointer text-red-500"
+              aria-label={t('entityReview.delete')}
               onClick={() =>
                 deleteReview({
                   id: review._id,
@@ -59,43 +83,56 @@ export default function ReviewItem({
         )}
       </div>
 
-      {/* Rating */}
       <Ratings
         rating={value.rating ?? 5}
         readOnly={!isEditing}
         onRate={(v) => setValue((p) => ({ ...p, rating: v }))}
       />
 
-      {/* Comment */}
       {isEditing ? (
         <textarea
           value={value.comment}
-          onChange={(e) => setValue((p) => ({ ...p, comment: e.target.value }))}
-          className="w-full border rounded-lg p-2 text-sm mt-2"
+          onChange={(e) =>
+            setValue((p) => ({ ...p, comment: e.target.value }))
+          }
+          className="mt-2 w-full rounded-lg border p-2 text-sm"
         />
       ) : (
-        <p className="text-sm text-gray-700 mt-2">{review.comment}</p>
+        <p className="mt-2 text-sm text-gray-700">{review.comment}</p>
       )}
 
-      {/* Actions */}
+      {editErrorMessage && (
+        <p className="mt-2 text-sm text-red-600" role="alert">
+          {editErrorMessage}
+        </p>
+      )}
+
       {isEditing && (
-        <div className="flex gap-3 mt-3">
+        <div className="mt-3 flex gap-3">
           <Button
             size="sm"
             loading={isPending}
             onClick={() => {
-              editReview({
-                ...value!,
-                entityType,
-                entityId,
-              });
-              setIsEditing(false);
+              editReview(
+                {
+                  ...value,
+                  entityType,
+                  entityId,
+                },
+                {
+                  onSuccess: () => {
+                    setIsEditing(false);
+                    reset();
+                  },
+                },
+              );
             }}
           >
-            Save
+            {t('entityReview.save')}
           </Button>
 
           <button
+            type="button"
             className="text-sm text-gray-500"
             onClick={() => {
               setIsEditing(false);
@@ -103,9 +140,10 @@ export default function ReviewItem({
                 rating: review.rating,
                 comment: review.comment,
               });
+              reset();
             }}
           >
-            Cancel
+            {t('entityReview.cancel')}
           </button>
         </div>
       )}

@@ -12,6 +12,10 @@ i18n
     supportedLngs: ['en', 'vi'],
     nonExplicitSupportedLngs: true,
 
+    defaultNS: 'translation',
+    /** Load with translation so notification keys resolve (nested paths use keySeparator). */
+    ns: ['translation', 'notification'],
+
     detection: {
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],

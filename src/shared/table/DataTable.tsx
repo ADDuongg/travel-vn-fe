@@ -30,6 +30,10 @@ type DataTableProps<TData> = {
   data: I.ApiListResponse<TData>;
   tableState: IC.TableState;
   searchPlaceholder?: string;
+  /** Hide global search input (e.g. server-only filters elsewhere) */
+  hideSearch?: boolean;
+  /** Override default empty state copy */
+  emptyMessage?: string;
 };
 
 function DataTable<TData>({
@@ -37,6 +41,8 @@ function DataTable<TData>({
   data,
   tableState,
   searchPlaceholder,
+  hideSearch = false,
+  emptyMessage,
 }: DataTableProps<TData>) {
   const { t } = useTranslation();
   const {
@@ -85,19 +91,21 @@ function DataTable<TData>({
       {/* Toolbar */}
       <div className="flex flex-col gap-3 border-b border-slate-100 bg-gradient-to-b from-[#F8FAFC] to-white px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:px-4 sm:py-4">
         <div className="flex min-w-0 flex-1 flex-col gap-2 sm:max-w-md sm:flex-row sm:items-center">
-          <div className="relative w-full">
-            <Search
-              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
-              aria-hidden
-            />
-            <Input
-              placeholder={placeholder}
-              value={globalFilter}
-              onChange={(e) => table.setGlobalFilter(e.target.value)}
-              className="h-10 border-slate-200 bg-white pl-9 text-sm text-[#1E40AF] placeholder:text-slate-400 transition-colors duration-200 focus-visible:border-[#3B82F6] focus-visible:ring-[#3B82F6]/20"
-              aria-label={placeholder}
-            />
-          </div>
+          {!hideSearch && (
+            <div className="relative w-full">
+              <Search
+                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+                aria-hidden
+              />
+              <Input
+                placeholder={placeholder}
+                value={globalFilter}
+                onChange={(e) => table.setGlobalFilter(e.target.value)}
+                className="h-10 border-slate-200 bg-white pl-9 text-sm text-[#1E40AF] placeholder:text-slate-400 transition-colors duration-200 focus-visible:border-[#3B82F6] focus-visible:ring-[#3B82F6]/20"
+                aria-label={placeholder}
+              />
+            </div>
+          )}
           {isFetching && (
             <span
               className="flex items-center gap-1.5 text-xs font-medium text-[#2563EB] sm:ml-1 sm:shrink-0"
@@ -239,7 +247,7 @@ function DataTable<TData>({
                       aria-hidden
                     />
                     <span className="text-sm font-medium text-slate-600">
-                      {t('bookings.table_empty')}
+                      {emptyMessage ?? t('bookings.table_empty')}
                     </span>
                   </div>
                 </TableCell>
