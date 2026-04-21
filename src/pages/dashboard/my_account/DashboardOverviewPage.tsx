@@ -8,7 +8,6 @@ import {
   BookOpen,
   Heart,
   MapPin,
-  MessageSquareText,
   Sparkles,
   UserPen,
 } from 'lucide-react';
