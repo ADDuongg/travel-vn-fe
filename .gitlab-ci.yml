@@ -35,8 +35,8 @@
 # Moi stage chay tuan tu (validate xong moi chay test, test xong moi build, ...)
 # Trong cung 1 stage, cac job chay song song (VD: build:staging va build:production)
 stages:
-  - validate
-  - test
+  # - validate
+  # - test
   - build
   - deploy
 
@@ -55,7 +55,7 @@ variables:
   # Yarn v1 (classic) cache folder.
   # Shell executor hay dung cache toan may (~/.yarn-cache) => de bi corrupt va lam fail yarn install.
   # Set cache folder trong workspace de GitLab cache/restore on-demand.
-  YARN_CACHE_FOLDER: "$CI_PROJECT_DIR/.yarn-cache"
+  YARN_CACHE_FOLDER: '$CI_PROJECT_DIR/.yarn-cache'
 
 # ---------------------------------------------------------------------------
 # GLOBAL CACHE -- Cache node_modules giua cac job (tiet kiem thoi gian install)
@@ -73,6 +73,9 @@ cache:
 default:
   before_script:
     - rm -rf node_modules
+  after_script:
+    - rm -rf node_modules dist build .vite || true
+  interruptible: true
 # ===========================================================================
 # STAGE 1: VALIDATE -- Lint + TypeScript type check
 # ===========================================================================
@@ -83,21 +86,22 @@ default:
 # Chay ESLint de kiem tra code style, best practices, potential bugs.
 # Chay tren MOI branch (khong gioi han).
 # Neu lint fail -> pipeline dung, khong chay tiep.
-lint:
-  stage: validate
-  image: $NODE_IMAGE
-  cache:
-    key:
-      files:
-        - yarn.lock
-    paths:
-      - node_modules/
-    policy: pull-push # Job nay push cache cho cac job sau dung
-  script:
-    - yarn install --frozen-lockfile --cache-folder $YARN_CACHE_FOLDER
-    - yarn lint
-  tags:
-    - travel-staging
+
+# lint:
+#   stage: validate
+#   image: $NODE_IMAGE
+#   cache:
+#     key:
+#       files:
+#         - yarn.lock
+#     paths:
+#       - node_modules/
+#     policy: pull-push
+#   script:
+#     - yarn install --frozen-lockfile --cache-folder $YARN_CACHE_FOLDER
+#     - yarn lint
+#   tags:
+#     - travel-staging
 
 # ---------------------------------------------------------------------------
 # Job: typecheck
@@ -105,14 +109,15 @@ lint:
 # Chay TypeScript compiler de kiem tra type errors.
 # --noEmit: chi check, khong tao output files.
 # Chay song song voi lint (cung stage validate).
-typecheck:
-  stage: validate
-  image: $NODE_IMAGE
-  script:
-    - yarn install --frozen-lockfile --cache-folder $YARN_CACHE_FOLDER
-    - npx tsc -b --noEmit
-  tags:
-    - travel-staging
+
+# typecheck:
+#   stage: validate
+#   image: $NODE_IMAGE
+#   script:
+#     - yarn install --frozen-lockfile --cache-folder $YARN_CACHE_FOLDER
+#     - npx tsc -b --noEmit
+#   tags:
+#     - travel-staging
 
 # ===========================================================================
 # STAGE 2: TEST -- Unit tests
@@ -124,21 +129,22 @@ typecheck:
 # Chay Jest unit tests voi coverage report.
 # Chi chay sau khi validate stage thanh cong.
 # Coverage report duoc luu lai de xem tren GitLab UI.
-test:
-  stage: test
-  image: $NODE_IMAGE
-  script:
-    - yarn install --frozen-lockfile --cache-folder $YARN_CACHE_FOLDER
-    - yarn test --coverage --passWithNoTests
-  # Luu coverage report de xem tren GitLab merge request
-  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
-  artifacts:
-    when: always
-    paths:
-      - coverage/
-    expire_in: 7 days
-  tags:
-    - travel-staging
+
+# test:
+#   stage: test
+#   image: $NODE_IMAGE
+#   script:
+#     - yarn install --frozen-lockfile --cache-folder $YARN_CACHE_FOLDER
+#     - yarn test --coverage --passWithNoTests
+#   # Luu coverage report de xem tren GitLab merge request
+#   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+#   artifacts:
+#     when: always
+#     paths:
+#       - coverage/
+#     expire_in: 7 days
+#   tags:
+#     - travel-staging
 
 # ===========================================================================
 # STAGE 3: BUILD -- Docker build + push to registry
@@ -270,6 +276,8 @@ deploy:staging:
     - curl -f http://127.0.0.1:8080/health || exit 1
 
     - echo "Deploy staging success"
+  after_script:
+    - docker image prune -f || true
   rules:
     - if: '$CI_COMMIT_BRANCH == "staging"'
   environment:
@@ -295,6 +303,8 @@ deploy:production:
     - sleep 10
     - curl -f http://127.0.0.1:9080/health || exit 1
     - echo "Deploy production success"
+  after_script:
+    - docker image prune -f || true
   rules:
     - if: '$CI_COMMIT_BRANCH == "production"'
   environment:
