@@ -20,21 +20,25 @@ import { getSyncDetailPath } from '@/features/review/sync-entity-path';
 import { useMyReviewsListQuery } from '@/features/review/hooks';
 import type { MyReviewTableRow } from '@/features/review/types';
 import { ReviewEntityType, ReviewStatus } from '@/features/review/types';
-import { getTourById } from '@/features/tours/catalog-api';
 import * as I from '@/types/api';
 import DataTable from '@/shared/table/DataTable';
 import type { ColumnDef } from '@tanstack/react-table';
-import { AlertCircle, Loader2, MessageSquareText, Star, ArrowRight, Trash2 } from 'lucide-react';
 import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+  AlertCircle,
+  Loader2,
+  MessageSquareText,
+  Star,
+  ArrowRight,
+  Trash2,
+} from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { generatePath, useNavigate, useSearchParams } from 'react-router-dom';
 import type { RowSelectionState, SortingState } from '@tanstack/react-table';
-import type { FavoriteRecord, FavoriteEntitySummary } from '@/features/favorites/types';
+import type {
+  FavoriteRecord,
+  FavoriteEntitySummary,
+} from '@/features/favorites/types';
 
 const REVIEW_ENTITY_TYPES = Object.values(ReviewEntityType).filter(
   (v): v is ReviewEntityType => typeof v === 'string',
@@ -62,9 +66,9 @@ function reviewStatusBadgeClass(status: ReviewStatus | string) {
     case ReviewStatus.REJECTED:
       return 'border-rose-200 bg-rose-50 text-rose-900';
     case ReviewStatus.HIDDEN:
-      return 'border-slate-200 bg-slate-100 text-slate-800';
+      return 'border-border bg-slate-100 text-slate-800';
     default:
-      return 'border-slate-200 bg-slate-50 text-slate-800';
+      return 'border-border bg-slate-50 text-slate-800';
   }
 }
 
@@ -110,7 +114,6 @@ const MyReviewsPanel: React.FC = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [loadingRowId, setLoadingRowId] = useState<string | null>(null);
 
   useEffect(() => {
     setPagination((p) => ({ ...p, pageIndex: 0 }));
@@ -144,15 +147,7 @@ const MyReviewsPanel: React.FC = () => {
         return;
       }
       if (row.entityType === ReviewEntityType.TOUR) {
-        setLoadingRowId(row.id);
-        try {
-          const tour = await getTourById(row.entityId);
-          if (tour?.slug) {
-            navigate(generatePath(ROUTES.TOUR.DETAIL, { slug: tour.slug }));
-          }
-        } finally {
-          setLoadingRowId(null);
-        }
+        navigate(generatePath(ROUTES.TOUR.DETAIL, { id: row.entityId }));
       }
     },
     [navigate],
@@ -169,13 +164,9 @@ const MyReviewsPanel: React.FC = () => {
           const thumb = r.entitySummary?.thumbnailUrl;
           return (
             <div className="flex max-w-[min(100vw-8rem,22rem)] items-start gap-3">
-              <div className="size-12 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-[#F8FAFC]">
+              <div className="size-12 shrink-0 overflow-hidden rounded-xl border border-border bg-vn-cream/50">
                 {thumb ? (
-                  <img
-                    src={thumb}
-                    alt=""
-                    className="size-full object-cover"
-                  />
+                  <img src={thumb} alt="" className="size-full object-cover" />
                 ) : (
                   <div
                     className="flex size-full items-center justify-center text-[10px] font-medium text-slate-400"
@@ -186,7 +177,7 @@ const MyReviewsPanel: React.FC = () => {
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="font-medium leading-snug text-[#1E40AF] line-clamp-2">
+                <p className="font-medium leading-snug text-primary line-clamp-2">
                   {name}
                 </p>
               </div>
@@ -200,7 +191,7 @@ const MyReviewsPanel: React.FC = () => {
         cell: ({ row }) => (
           <Badge
             variant="secondary"
-            className="whitespace-nowrap font-normal text-slate-700"
+            className="whitespace-nowrap font-normal text-foreground"
           >
             {t(`savedReviews.entity.${row.original.entityType}`)}
           </Badge>
@@ -215,7 +206,7 @@ const MyReviewsPanel: React.FC = () => {
         id: 'comment',
         header: t('savedReviews.col_comment'),
         cell: ({ row }) => (
-          <p className="line-clamp-2 text-slate-600">
+          <p className="line-clamp-2 text-muted-foreground">
             {row.original.comment?.trim() || '—'}
           </p>
         ),
@@ -252,23 +243,23 @@ const MyReviewsPanel: React.FC = () => {
       },
       {
         id: 'actions',
-        header: () => <span className="sr-only">{t('savedReviews.col_actions')}</span>,
+        header: () => (
+          <span className="sr-only">{t('savedReviews.col_actions')}</span>
+        ),
         cell: ({ row }) => {
           const r = row.original;
           const canSync = getSyncDetailPath(r.entityType, r.entityId) != null;
           const canTour = r.entityType === ReviewEntityType.TOUR;
           const unsupported =
-            r.entityType === ReviewEntityType.BLOG ||
-            (!canSync && !canTour);
-          const loading = loadingRowId === r.id;
+            r.entityType === ReviewEntityType.BLOG || (!canSync && !canTour);
 
           return (
             <Button
               type="button"
               size="sm"
               variant="outline"
-              disabled={unsupported || loading}
-              className="cursor-pointer border-[#1E3A8A]/25 text-[#1E3A8A] hover:bg-[#EFF6FF]"
+              disabled={unsupported}
+              className="cursor-pointer border-primary/30 text-primary hover:bg-vn-red-soft/50"
               title={
                 unsupported
                   ? t('savedReviews.view_unsupported')
@@ -276,17 +267,13 @@ const MyReviewsPanel: React.FC = () => {
               }
               onClick={() => handleView(r)}
             >
-              {loading ? (
-                <Loader2 className="size-4 animate-spin" aria-hidden />
-              ) : (
-                t('savedReviews.view')
-              )}
+              {t('savedReviews.view')}
             </Button>
           );
         },
       },
     ],
-    [t, i18n.language, loadingRowId, handleView],
+    [t, i18n.language, handleView],
   );
 
   const tableData: I.ApiListResponse<MyReviewTableRow> =
@@ -326,20 +313,20 @@ const MyReviewsPanel: React.FC = () => {
 
       <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
         <div className="space-y-1.5">
-          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             {t('savedReviews.filter_type')}
           </p>
           <Select
             value={entityFilter}
-            onValueChange={(v) =>
-              setEntityFilter(v as EntityFilter)
-            }
+            onValueChange={(v) => setEntityFilter(v as EntityFilter)}
           >
-            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-slate-200 bg-white text-[#1E40AF] sm:w-[240px]">
+            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-border bg-white text-primary sm:w-[240px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">{t('savedReviews.filter_all')}</SelectItem>
+              <SelectItem value="all">
+                {t('savedReviews.filter_all')}
+              </SelectItem>
               {REVIEW_ENTITY_TYPES.map((et) => (
                 <SelectItem key={et} value={et}>
                   {t(`savedReviews.entity.${et}`)}
@@ -349,14 +336,14 @@ const MyReviewsPanel: React.FC = () => {
           </Select>
         </div>
         <div className="space-y-1.5">
-          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             {t('savedReviews.filter_status')}
           </p>
           <Select
             value={statusFilter}
             onValueChange={(v) => setStatusFilter(v as StatusFilter)}
           >
-            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-slate-200 bg-white text-[#1E40AF] sm:w-[260px]">
+            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-border bg-white text-primary sm:w-[260px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -413,14 +400,11 @@ type FavoriteEntityFilter = 'all' | FavoriteEntityType;
 function getFavoriteDetailPath(
   entityType: FavoriteEntityType,
   entityId: string,
-  summary?: FavoriteEntitySummary,
+  _summary?: FavoriteEntitySummary,
 ) {
   switch (entityType) {
     case FavoriteEntityType.TOUR: {
-      if (summary?.slug) {
-        return generatePath(ROUTES.TOUR.DETAIL, { slug: summary.slug });
-      }
-      return null;
+      return generatePath(ROUTES.TOUR.DETAIL, { id: entityId });
     }
     case FavoriteEntityType.ROOM:
       return generatePath(ROUTES.ROOM.DETAIL, { id: entityId });
@@ -438,8 +422,7 @@ const MyFavoritesPanel: React.FC = () => {
   const navigate = useNavigate();
   const lang = i18n.language?.split('-')[0] || 'vi';
 
-  const [entityFilter, setEntityFilter] =
-    useState<FavoriteEntityFilter>('all');
+  const [entityFilter, setEntityFilter] = useState<FavoriteEntityFilter>('all');
   const [pagination, setPagination] = useState<I.Paginate>({
     pageIndex: 0,
     pageSize: DEFAULT_PAGE_SIZE,
@@ -483,21 +466,7 @@ const MyFavoritesPanel: React.FC = () => {
       }
 
       if (row.entityType === FavoriteEntityType.TOUR) {
-        setLoadingRowId(row._id);
-        try {
-          const tour = await getTourById(row.entityId);
-          if (tour?.slug) {
-            navigate(generatePath(ROUTES.TOUR.DETAIL, { slug: tour.slug }));
-          } else {
-            setActionError(t('savedFavorites.view_unsupported'));
-          }
-        } catch (e: unknown) {
-          setActionError(
-            (e as { message?: string })?.message ?? t('savedFavorites.error_body'),
-          );
-        } finally {
-          setLoadingRowId(null);
-        }
+        navigate(generatePath(ROUTES.TOUR.DETAIL, { id: row.entityId }));
       }
     },
     [navigate, t],
@@ -514,7 +483,8 @@ const MyFavoritesPanel: React.FC = () => {
         });
       } catch (e: unknown) {
         setActionError(
-          (e as { message?: string })?.message ?? t('savedFavorites.error_body'),
+          (e as { message?: string })?.message ??
+            t('savedFavorites.error_body'),
         );
       } finally {
         setLoadingRowId(null);
@@ -536,7 +506,7 @@ const MyFavoritesPanel: React.FC = () => {
           const total = r.entitySummary?.ratingSummary?.total;
           return (
             <div className="flex max-w-[min(100vw-8rem,22rem)] items-start gap-3">
-              <div className="size-12 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-[#F8FAFC]">
+              <div className="size-12 shrink-0 overflow-hidden rounded-xl border border-border bg-vn-cream/50">
                 {thumb ? (
                   <img src={thumb} alt="" className="size-full object-cover" />
                 ) : (
@@ -549,11 +519,11 @@ const MyFavoritesPanel: React.FC = () => {
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="font-medium leading-snug text-[#1E40AF] line-clamp-2">
+                <p className="font-medium leading-snug text-primary line-clamp-2">
                   {name}
                 </p>
                 {rating != null && total != null && total > 0 && (
-                  <p className="mt-1 text-xs text-slate-500">
+                  <p className="mt-1 text-xs text-muted-foreground">
                     {t('savedFavorites.rating_line', {
                       average: rating.toFixed(1),
                       total,
@@ -571,7 +541,7 @@ const MyFavoritesPanel: React.FC = () => {
         cell: ({ row }) => (
           <Badge
             variant="secondary"
-            className="whitespace-nowrap font-normal text-slate-700"
+            className="whitespace-nowrap font-normal text-foreground"
           >
             {t(`savedFavorites.entity.${row.original.entityType}`)}
           </Badge>
@@ -604,8 +574,10 @@ const MyFavoritesPanel: React.FC = () => {
                 type="button"
                 size="sm"
                 variant="outline"
-                disabled={unsupported && r.entityType !== FavoriteEntityType.TOUR}
-                className="cursor-pointer border-[#1E3A8A]/25 text-[#1E3A8A] hover:bg-[#EFF6FF]"
+                disabled={
+                  unsupported && r.entityType !== FavoriteEntityType.TOUR
+                }
+                className="cursor-pointer border-primary/30 text-primary hover:bg-vn-red-soft/50"
                 title={
                   unsupported && r.entityType !== FavoriteEntityType.TOUR
                     ? t('savedFavorites.view_unsupported')
@@ -640,13 +612,7 @@ const MyFavoritesPanel: React.FC = () => {
         },
       },
     ],
-    [
-      t,
-      i18n.language,
-      loadingRowId,
-      handleView,
-      handleRemove,
-    ],
+    [t, i18n.language, loadingRowId, handleView, handleRemove],
   );
 
   const tableData: I.ApiListResponse<FavoriteRecord> =
@@ -693,16 +659,14 @@ const MyFavoritesPanel: React.FC = () => {
 
       <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
         <div className="space-y-1.5">
-          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             {t('savedFavorites.filter_type')}
           </p>
           <Select
             value={entityFilter}
-            onValueChange={(v) =>
-              setEntityFilter(v as FavoriteEntityFilter)
-            }
+            onValueChange={(v) => setEntityFilter(v as FavoriteEntityFilter)}
           >
-            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-slate-200 bg-white text-[#1E40AF] sm:w-[240px]">
+            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-border bg-white text-primary sm:w-[240px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -717,7 +681,7 @@ const MyFavoritesPanel: React.FC = () => {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+        <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
           {isFetching && (
             <>
               <Loader2 className="size-4 animate-spin" aria-hidden />
@@ -767,33 +731,33 @@ const DashboardSavedPage: React.FC = () => {
   return (
     <div className="flex-1 space-y-6">
       <div>
-        <h1 className="text-xl font-semibold tracking-tight text-[#1E3A8A] sm:text-2xl">
+        <h1 className="text-xl font-semibold tracking-tight text-primary sm:text-2xl">
           {t('savedReviews.page_title')}
         </h1>
-        <p className="mt-1 text-sm text-slate-600 sm:text-base">
+        <p className="mt-1 text-sm text-muted-foreground sm:text-base">
           {t('savedReviews.page_subtitle')}
         </p>
       </div>
 
-      <Card className="overflow-hidden rounded-2xl border-slate-200/90 bg-white shadow-sm">
-        <CardHeader className="border-b border-slate-100 bg-[#F8FAFC]/80 px-4 py-4 sm:px-6">
-          <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#1E3A8A]">
-            <MessageSquareText className="size-5 text-[#2563EB]" aria-hidden />
+      <Card className="overflow-hidden rounded-2xl border-border/90 bg-white shadow-sm">
+        <CardHeader className="border-b border-border bg-vn-cream/50/80 px-4 py-4 sm:px-6">
+          <CardTitle className="flex items-center gap-2 text-lg font-semibold text-primary">
+            <MessageSquareText className="size-5 text-primary" aria-hidden />
             {t('savedReviews.card_title')}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-4 sm:p-6">
           <Tabs value={activeTab} onValueChange={setTab} className="w-full">
-            <TabsList className="mb-6 h-auto w-full justify-start gap-6 border-b border-slate-200 bg-transparent p-0">
+            <TabsList className="mb-6 h-auto w-full justify-start gap-6 border-b border-border bg-transparent p-0">
               <TabsTrigger
                 value="reviews"
-                className="cursor-pointer rounded-none border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-slate-500 shadow-none transition-colors data-[state=active]:border-[#2563EB] data-[state=active]:bg-transparent data-[state=active]:text-[#1E3A8A] data-[state=active]:shadow-none"
+                className="cursor-pointer rounded-none border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-muted-foreground shadow-none transition-colors data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
               >
                 {t('savedReviews.tab_reviews')}
               </TabsTrigger>
               <TabsTrigger
                 value="wishlist"
-                className="cursor-pointer rounded-none border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-slate-500 shadow-none transition-colors data-[state=active]:border-[#2563EB] data-[state=active]:bg-transparent data-[state=active]:text-[#1E3A8A] data-[state=active]:shadow-none"
+                className="cursor-pointer rounded-none border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-muted-foreground shadow-none transition-colors data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
               >
                 {t('savedReviews.tab_wishlist')}
               </TabsTrigger>

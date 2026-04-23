@@ -9,8 +9,11 @@ import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import DataTable from '@/shared/table/DataTable';
-import { useMyTourBookingsQuery } from '@/features/tours/booking-hooks';
-import type { TourBookingListItem, TourBookingTourRef } from '@/features/tours/booking-types';
+import { useMyTourBookingsQuery } from '@/features/tours/hooks';
+import type {
+  TourBookingListItem,
+  TourBookingTourRef,
+} from '@/features/tours/types';
 import type { RowSelectionState, SortingState } from '@tanstack/react-table';
 import * as I from '@/types/api';
 import { ROUTES } from '@/constants/router';
@@ -26,9 +29,9 @@ function getTourName(tourId: TourBookingListItem['tourId']): string {
   return (tourId as TourBookingTourRef).code ?? '—';
 }
 
-function getTourSlug(tourId: TourBookingListItem['tourId']): string | null {
+function getTourId(tourId: TourBookingListItem['tourId']): string | null {
   if (!tourId || typeof tourId === 'string') return null;
-  return (tourId as TourBookingTourRef).slug ?? null;
+  return (tourId as TourBookingTourRef)._id ?? null;
 }
 
 const TOUR_STATUS_KEYS: Record<string, string> = {
@@ -39,7 +42,10 @@ const TOUR_STATUS_KEYS: Record<string, string> = {
   COMPLETED: 'completed',
 };
 
-const StatusBadge: React.FC<{ status: string; label: string }> = ({ status, label }) => (
+const StatusBadge: React.FC<{ status: string; label: string }> = ({
+  status,
+  label,
+}) => (
   <Badge
     variant="outline"
     className={
@@ -57,7 +63,8 @@ const StatusBadge: React.FC<{ status: string; label: string }> = ({ status, labe
 /** Nút Detail + Pay online; ẩn Pay online khi đã hết hạn (1h) hoặc paymentStatus EXPIRED */
 const TourActionsCell: React.FC<{ item: TourBookingListItem }> = ({ item }) => {
   const { t } = useTranslation();
-  const paymentStatus = item.paymentStatus ?? (item.status === 'PAID' ? 'PAID' : 'UNPAID');
+  const paymentStatus =
+    item.paymentStatus ?? (item.status === 'PAID' ? 'PAID' : 'UNPAID');
   const expireAt = getPaymentExpireAt(item.createdAt);
   const remaining = useCountdown(expireAt);
   const isExpired =
@@ -76,7 +83,10 @@ const TourActionsCell: React.FC<{ item: TourBookingListItem }> = ({ item }) => {
         asChild
       >
         <Link
-          to={ROUTES.DASHBOARD.TOUR_BOOKINGS_DETAIL.replace(':code', item.bookingCode)}
+          to={ROUTES.DASHBOARD.TOUR_BOOKINGS_DETAIL.replace(
+            ':code',
+            item.bookingCode,
+          )}
         >
           {t('bookings.table_detail')}
         </Link>
@@ -106,9 +116,7 @@ const TourPaymentCell: React.FC<{ item: TourBookingListItem }> = ({ item }) => {
   if (!remaining) {
     return (
       <div>
-        <Badge variant="destructive">
-          {t('bookings.payment_expired')}
-        </Badge>
+        <Badge variant="destructive">{t('bookings.payment_expired')}</Badge>
         <div className="text-xs text-muted-foreground mt-1">
           {t('bookings.payment_expired_desc')}
         </div>
@@ -118,10 +126,7 @@ const TourPaymentCell: React.FC<{ item: TourBookingListItem }> = ({ item }) => {
 
   return (
     <div>
-      <Badge
-        variant="outline"
-        className="border-amber-300 text-amber-700"
-      >
+      <Badge variant="outline" className="border-amber-300 text-amber-700">
         {t('bookings.payment_unpaid')}
       </Badge>
       <div className="text-xs text-muted-foreground mt-1">
@@ -156,7 +161,10 @@ const useColumns = (): ColumnDef<TourBookingListItem>[] => {
           const item = row.original;
           return (
             <Link
-              to={ROUTES.DASHBOARD.TOUR_BOOKINGS_DETAIL.replace(':code', item.bookingCode)}
+              to={ROUTES.DASHBOARD.TOUR_BOOKINGS_DETAIL.replace(
+                ':code',
+                item.bookingCode,
+              )}
               className="cursor-pointer font-mono text-sm font-semibold text-[#2563EB] underline-offset-2 hover:text-[#1D4ED8] hover:underline"
             >
               {item.bookingCode}
@@ -170,11 +178,11 @@ const useColumns = (): ColumnDef<TourBookingListItem>[] => {
         cell: ({ row }) => {
           const item = row.original;
           const name = getTourName(item.tourId);
-          const slug = getTourSlug(item.tourId);
-          if (slug) {
+          const id = getTourId(item.tourId);
+          if (id) {
             return (
               <Link
-                to={ROUTES.TOUR.DETAIL.replace(':slug', slug)}
+                to={ROUTES.TOUR.DETAIL.replace(':id', id)}
                 className="cursor-pointer font-medium text-[#2563EB] underline-offset-2 hover:text-[#1D4ED8] hover:underline"
               >
                 {name}
@@ -220,7 +228,8 @@ const useColumns = (): ColumnDef<TourBookingListItem>[] => {
         header: () => t('bookings.table_payment'),
         cell: ({ row }) => {
           const item = row.original;
-          const status = item.paymentStatus ?? (item.status === 'PAID' ? 'PAID' : 'UNPAID');
+          const status =
+            item.paymentStatus ?? (item.status === 'PAID' ? 'PAID' : 'UNPAID');
 
           if (status === 'PAID') {
             return (
@@ -255,12 +264,12 @@ const useColumns = (): ColumnDef<TourBookingListItem>[] => {
       },
       {
         id: 'actions',
-        header: () => <span className="sr-only">{t('bookings.table_actions')}</span>,
+        header: () => (
+          <span className="sr-only">{t('bookings.table_actions')}</span>
+        ),
         cell: ({ row }) => {
           const item = row.original;
-          return (
-            <TourActionsCell item={item} />
-          );
+          return <TourActionsCell item={item} />;
         },
         size: 140,
       },

@@ -1,36 +1,54 @@
 import React from 'react';
-import { AiOutlineClose } from 'react-icons/ai';
+import { useTranslation } from 'react-i18next';
+import { X } from 'lucide-react';
 import { Card } from '@/components/ui/card';
-import { useTourDetail } from './TourDetailContext';
 import { useLanguage } from '@/hooks/useLanguage';
+import type { Tour } from '@/features/tours/types';
 
-const TourDetail: React.FC = () => {
-  const tour = useTourDetail();
+type TourDetailProps = {
+  tour: Tour;
+};
+
+const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
+  const { t } = useTranslation();
   const { language } = useLanguage();
 
-  if (!tour) return null;
-
-  const t = tour.translations?.[language] ?? tour.translations?.vi ?? tour.translations?.en;
-  const description = t?.description;
-  const exclusions = t?.exclusions ?? [];
+  const tr =
+    tour.translations?.[language] ??
+    tour.translations?.vi ??
+    tour.translations?.en;
+  const description = tr?.description;
+  const exclusions = tr?.exclusions ?? [];
 
   return (
-    <section id="detail" className="mt-10">
-      <Card className="p-6 rounded-2xl">
-        <h2 className="text-xl font-bold mb-4">Overview</h2>
+    <section id="detail" className="scroll-mt-40">
+      <Card className="border border-[rgba(28,26,20,0.1)] bg-white p-6 shadow-[var(--shadow-card)] sm:p-8">
+        <h2
+          className="mb-4 font-['Playfair_Display',serif] text-2xl font-bold tracking-[-0.02em] text-[#1c1a14] sm:text-[1.75rem]"
+          style={{ fontFamily: 'var(--font-dm-serif-display, Georgia, serif)' }}
+        >
+          {t('tour.detail.overview', 'Overview')}
+        </h2>
         {description && (
-          <div className="space-y-4 text-paleGray leading-relaxed">
-            <p>{description}</p>
+          <div className="prose-tour text-base leading-[1.65] text-[rgba(28,26,20,0.75)]">
+            <p className="whitespace-pre-line">{description}</p>
           </div>
         )}
 
         {exclusions.length > 0 && (
-          <div className="mt-6">
-            <h4 className="font-semibold text-base mb-3">What&apos;s Not Included</h4>
-            <ul className="space-y-2 text-paleGray">
+          <div className="mt-8 rounded-xl border border-[#f2d5d9] bg-[#faf7f2] p-4 sm:p-5">
+            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-[#a50d25]">
+              {t('tour.detail.not_included', "What's not included")}
+            </h3>
+            <ul className="space-y-2.5 text-sm text-[rgba(28,26,20,0.7)]">
               {exclusions.map((item, i) => (
-                <li key={i} className="flex items-center gap-2">
-                  <AiOutlineClose className="text-red-500 shrink-0" size={18} /> {item}
+                <li key={i} className="flex items-start gap-2.5">
+                  <X
+                    className="mt-0.5 size-4 shrink-0 text-[#c8102e]"
+                    strokeWidth={2.25}
+                    aria-hidden
+                  />
+                  {item}
                 </li>
               ))}
             </ul>

@@ -1,15 +1,17 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { FaLocationDot, FaStar } from 'react-icons/fa6';
-import { Ratings } from '@/components/ui/rating';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '@/constants/router';
 import { fmtMoney } from '@/utils';
 import { caculateSalePrice } from '@/utils';
-import type { TourListItem } from '@/features/tours/catalog-types';
+import type { TourListItem } from '@/features/tours/types';
 import { FavoriteButton } from '@/features/favorites/FavoriteButton';
 import { FavoriteEntityType } from '@/features/favorites/types';
+import { MapPin, Star } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 function getTourName(tour: TourListItem, lang: string): string {
   return (
@@ -29,7 +31,10 @@ function getShortDescription(tour: TourListItem, lang: string): string | null {
   );
 }
 
-function getMainDestinationName(tour: TourListItem, lang: string): string | null {
+function getMainDestinationName(
+  tour: TourListItem,
+  lang: string,
+): string | null {
   const main = tour.destinations?.find((d) => d.isMainDestination);
   const province = main?.provinceId;
   if (!province || typeof province === 'string') return null;
@@ -37,15 +42,26 @@ function getMainDestinationName(tour: TourListItem, lang: string): string | null
   return names?.[lang as 'vi' | 'en'] ?? names?.vi ?? names?.en ?? null;
 }
 
+function durationLabel(
+  d: { days: number; nights: number },
+  t: (k: string, opts?: Record<string, unknown>) => string,
+) {
+  if (d.days <= 0 && d.nights <= 0) return null;
+  return t('tour.card.duration', {
+    days: d.days,
+    nights: d.nights,
+  });
+}
+
 export function TourCardSkeleton() {
   return (
-    <Card className="overflow-hidden rounded-2xl shadow-md flex flex-col h-full border-0">
-      <Skeleton className="relative w-full aspect-[4/3] min-h-[12rem] rounded-none" />
-      <div className="p-5 flex flex-col flex-1 gap-3">
-        <Skeleton className="h-5 w-16 rounded-full" />
-        <Skeleton className="h-6 w-full max-w-[90%] rounded" />
-        <Skeleton className="h-4 w-[75%] rounded" />
-        <Skeleton className="h-4 w-28 rounded mt-auto pt-2" />
+    <Card className="tour-card-premium border border-[rgba(28,26,20,0.1)] bg-white">
+      <Skeleton className="relative aspect-[4/3] w-full rounded-t-[0.75rem] rounded-b-none" />
+      <div className="flex flex-1 flex-col gap-3 p-5">
+        <Skeleton className="h-5 w-20 rounded-full" />
+        <Skeleton className="h-7 w-full max-w-[90%] rounded" />
+        <Skeleton className="h-4 w-3/4 rounded" />
+        <Skeleton className="mt-auto h-8 w-28 rounded" />
       </div>
     </Card>
   );
@@ -54,105 +70,156 @@ export function TourCardSkeleton() {
 interface TourCardProps {
   item: TourListItem;
   lang?: string;
+  /** Wider image ratio for horizontal strips */
+  variant?: 'default' | 'wide';
 }
 
-const TourCard: React.FC<TourCardProps> = ({ item, lang = 'vi' }) => {
+const TourCard: React.FC<TourCardProps> = ({ item, lang = 'vi', variant = 'default' }) => {
+  const { t } = useTranslation();
   const name = getTourName(item, lang);
   const shortDesc = getShortDescription(item, lang);
   const destinationName = getMainDestinationName(item, lang);
   const thumbnail =
     item.thumbnail?.url ??
-    'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800';
+    'https://images.unsplash.com/photo-1506905925346-21bfe4e5667a?w=800';
   const rating = item.ratingSummary?.average ?? 0;
   const reviewCount = item.ratingSummary?.total ?? 0;
   const basePrice = item.pricing?.basePrice ?? 0;
   const salePercent =
     item.sale?.isActive && item.sale.type === 'PERCENT' ? item.sale.value : 0;
-  const salePrice = salePercent ? caculateSalePrice(basePrice, salePercent) : null;
+  const salePrice = salePercent
+    ? caculateSalePrice(basePrice, salePercent)
+    : null;
   const { days, nights } = item.duration ?? { days: 0, nights: 0 };
-
-  const linkTo = ROUTES.TOUR.DETAIL.replace(':slug', item.slug);
+  const linkTo = ROUTES.TOUR.DETAIL.replace(':id', item._id);
+  const dur = durationLabel({ days, nights }, t);
+  const pillText = destinationName
+    ? destinationName
+    : item.sale?.isActive
+      ? t('tour.card.badge_featured', 'Featured')
+      : t('tour.card.badge_vietnam', 'Vietnam');
+  const pillClass =
+    item.sale?.isActive && !destinationName
+      ? 'bg-[#f5e9d0] text-[#8a5a0f] border border-[rgba(201,146,42,0.35)]'
+      : 'bg-[#d4eae0] text-[#1e4d38] border border-[rgba(45,106,79,0.25)]';
 
   return (
-    <Link to={linkTo}>
-      <Card className="group overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full border-0 bg-white">
-        <div className="relative w-full aspect-[4/3] overflow-hidden">
+    <Link to={linkTo} className="block h-full min-w-0 cursor-pointer">
+      <Card
+        className={cn(
+          'tour-card-premium group flex h-full min-h-0 flex-col overflow-hidden border border-[rgba(28,26,20,0.1)] bg-white transition-[box-shadow,border-color] duration-200 motion-reduce:transition-none',
+          'rounded-[0.75rem] shadow-[var(--shadow-card)] hover:-translate-y-0.5 hover:border-[rgba(28,26,20,0.2)] hover:shadow-[var(--shadow-elevated)]',
+          variant === 'wide' && 'min-w-[280px] max-w-[320px] shrink-0',
+        )}
+      >
+        <div
+          className={cn(
+            'relative w-full overflow-hidden',
+            variant === 'wide' ? 'aspect-[16/9]' : 'aspect-[4/3]',
+          )}
+        >
           <img
             src={thumbnail}
-            alt={name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            alt=""
+            className="h-full w-full object-cover transition-transform duration-500 motion-reduce:transform-none group-hover:scale-[1.03]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="absolute top-4 right-4 z-[1]">
+          <div
+            className="absolute inset-0 bg-gradient-to-t from-[#1c1a14]/50 via-[#1c1a14]/0 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100 motion-reduce:opacity-0"
+            aria-hidden
+          />
+          <div className="absolute left-3 top-3 z-[1] max-w-[min(100%,14rem)]">
+            <span
+              className={cn(
+                'inline-flex max-w-full items-center truncate rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider',
+                destinationName
+                  ? 'bg-[#d4eae0] text-[#1e4d38] border-[rgba(45,106,79,0.25)]'
+                  : pillClass,
+              )}
+            >
+              {pillText}
+            </span>
+          </div>
+          <div className="absolute right-3 top-3 z-[1]">
             <FavoriteButton
               entityType={FavoriteEntityType.TOUR}
               entityId={item._id}
               initialIsFavorited={item.isFavorited}
               stopNavigation
-              className="h-9 w-9 rounded-full"
+              className="h-9 w-9 cursor-pointer rounded-full border border-white/30 bg-white/90 shadow-sm backdrop-blur-sm"
             />
           </div>
           {(salePercent > 0 || item.sale?.isActive) && (
-            <div className="absolute top-4 right-14">
-              <span className="inline-flex items-center gap-1 bg-primary text-primary-foreground text-xs font-bold px-2.5 py-1 rounded-full">
-                {salePercent > 0 ? `${salePercent}% Off` : 'Special Offer'}
-              </span>
+            <div className="absolute right-3 top-14 z-[1] sm:top-14">
+              <Badge className="cursor-default border-0 bg-[#c8102e] text-[10px] font-bold uppercase text-white">
+                {salePercent > 0
+                  ? t('tour.card.off_percent', { percent: salePercent })
+                  : t('tour.card.special_offer', 'Special')}
+              </Badge>
             </div>
           )}
           {rating > 0 && (
-            <div className="absolute top-4 left-4">
-              <span className="inline-flex items-center gap-1 bg-amber-400/95 text-amber-900 text-xs font-bold px-2.5 py-1 rounded-full">
-                <FaStar className="w-3 h-3 fill-current" />
+            <div className="absolute bottom-3 left-3 z-[1]">
+              <span className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/90 px-2 py-0.5 text-xs font-semibold text-[#1c1a14] backdrop-blur-sm">
+                <Star className="size-3.5 fill-[#c9922a] text-[#c9922a]" aria-hidden />
                 {rating.toFixed(1)}
               </span>
             </div>
           )}
         </div>
 
-        <div className="p-5 flex flex-col flex-1">
-          <h3 className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors line-clamp-2 mb-2">
+        <div className="flex flex-1 flex-col p-5">
+          <h3
+            className="font-['Playfair_Display',Georgia,serif] text-[1.38rem] font-semibold leading-[1.3] tracking-[-0.01em] text-[#1c1a14] line-clamp-2 transition-colors duration-200 group-hover:text-[#c8102e]"
+            style={{ fontFamily: 'var(--font-dm-serif-display, Playfair Display, Georgia, serif)' }}
+          >
             {name}
           </h3>
           {shortDesc && (
-            <p className="text-sm text-gray-500 line-clamp-2 mb-2">
+            <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-[rgba(28,26,20,0.6)]">
               {shortDesc}
             </p>
           )}
-          {(days > 0 || destinationName) && (
-            <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500 mb-3">
-              {days > 0 && (
-                <span>
-                  {days}D/{nights}N
-                </span>
-              )}
-              {destinationName && (
-                <span className="flex items-center gap-1">
-                  <FaLocationDot size={14} className="text-primary shrink-0" />
-                  {destinationName}
-                </span>
-              )}
-            </div>
-          )}
-          {reviewCount > 0 && (
-            <div className="flex items-center gap-1 text-xs text-gray-400 mb-3">
-              <Ratings
-                rating={rating}
-                variant="yellow"
-                totalStars={5}
-                readOnly
-                size={12}
-              />
-              <span>({reviewCount} reviews)</span>
-            </div>
-          )}
-          <div className="mt-auto flex items-baseline gap-2">
-            {salePrice != null && (
-              <span className="text-sm text-gray-400 line-through">
-                {fmtMoney(basePrice)}
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-[rgba(28,26,20,0.55)]">
+            {dur && (
+              <span className="rounded-full bg-[#ede7d9] px-2.5 py-0.5 text-xs font-medium text-[#1c1a14]">
+                {dur}
               </span>
             )}
-            <span className="font-semibold text-primary">
-              {fmtMoney(salePrice ?? basePrice)}
+            {destinationName ? (
+              <span className="inline-flex max-w-full items-center gap-1.5 text-xs sm:text-sm">
+                <MapPin
+                  className="size-3.5 shrink-0 text-[#2d6a4f]"
+                  strokeWidth={2.25}
+                  aria-hidden
+                />
+                <span className="truncate">{destinationName}</span>
+              </span>
+            ) : null}
+          </div>
+          {reviewCount > 0 && (
+            <div className="mt-2 flex items-center gap-1.5 text-xs text-[rgba(28,26,20,0.5)]">
+              <span className="text-[#c9922a]">★</span>
+              <span>
+                {rating.toFixed(1)} · {t('tour.card.reviews_count', { count: reviewCount })}
+              </span>
+            </div>
+          )}
+          <div className="mt-4 flex flex-wrap items-baseline justify-between gap-2 border-t border-[rgba(28,26,20,0.08)] pt-4">
+            <div className="flex items-baseline gap-2">
+              {salePrice != null && (
+                <span className="text-sm text-[rgba(28,26,20,0.4)] line-through">
+                  {fmtMoney(basePrice)}
+                </span>
+              )}
+              <span
+                className="text-2xl font-bold leading-none text-[#c8102e]"
+                style={{ fontFamily: 'var(--font-dm-serif-display, Playfair Display, Georgia, serif)' }}
+              >
+                {fmtMoney(salePrice ?? basePrice)}
+              </span>
+            </div>
+            <span className="text-xs text-[rgba(28,26,20,0.5)]">
+              {t('tour.card.per_person', '/ guest')}
             </span>
           </div>
         </div>

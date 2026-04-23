@@ -5,7 +5,7 @@ import {
   getHotelById,
   type GetHotelsParams,
 } from './api';
-import type { Hotel, HotelOption } from './types';
+import type { Hotel, HotelOption, HotelPaginatedResponse } from './types';
 
 export const hotelKeys = {
   all: ['hotels'] as const,
@@ -17,7 +17,7 @@ export const hotelKeys = {
 };
 
 export function useHotelsQuery(params?: GetHotelsParams) {
-  return useQuery<HotelOption[]>({
+  return useQuery<HotelPaginatedResponse>({
     queryKey: hotelKeys.list(params),
     queryFn: () => getHotels(params),
     staleTime: 5 * 60 * 1000,

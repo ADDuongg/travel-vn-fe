@@ -15,7 +15,10 @@ const ListLayout = () => {
             {t('list_page.title', 'Discover')}
           </ResponsiveH1>
           <p className="text-lg text-white/90 max-w-2xl mx-auto">
-            {t('list_page.subtitle', 'Explore tours, rooms and hotels across Vietnam')}
+            {t(
+              'list_page.subtitle',
+              'Explore tours, rooms and hotels across Vietnam',
+            )}
           </p>
         </div>
       </div>

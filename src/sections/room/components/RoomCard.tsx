@@ -31,9 +31,9 @@ function getProvinceDisplay(hotel: string | HotelRef | undefined, lang: string):
 /** Skeleton placeholder đồng bộ layout với RoomCard (shadcn Skeleton) */
 export function RoomCardSkeleton() {
   return (
-    <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-lg transition-shadow flex flex-col h-full border-0 bg-card">
+    <Card className="overflow-hidden rounded-2xl border border-[rgba(28,26,20,0.1)] bg-white shadow-[var(--shadow-card)] transition-shadow hover:shadow-[var(--shadow-elevated)]">
       <Skeleton className="relative w-full aspect-[4/3] min-h-[10rem] sm:min-h-[12rem] lg:min-h-[14rem] rounded-none" />
-      <div className="p-4 sm:p-5 flex flex-col flex-1 gap-3">
+      <div className="flex flex-1 flex-col gap-3 p-4 sm:p-5">
         <Skeleton className="h-3 w-14 rounded-full" />
         <Skeleton className="h-5 sm:h-6 w-full max-w-[90%] rounded-md" />
         <Skeleton className="h-4 w-[80%] rounded" />
@@ -89,8 +89,8 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi', loading = false 
   const hasRating = item.ratingSummary && item.ratingSummary.total > 0;
 
   return (
-    <Link to={ROUTES.ROOM.DETAIL.replace(':id', item._id ?? item.slug)}>
-      <Card className="group overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full border-0 bg-card">
+    <Link to={ROUTES.ROOM.DETAIL.replace(':id', item._id)}>
+      <Card className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[rgba(28,26,20,0.1)] bg-white shadow-[var(--shadow-card)] transition-all duration-300 hover:shadow-[var(--shadow-elevated)]">
         {/* Image */}
         <div className="relative w-full aspect-[4/3] min-h-[10rem] sm:min-h-[12rem] lg:min-h-[14rem] overflow-hidden">
           <img
@@ -113,15 +113,15 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi', loading = false 
 
           {/* Discount badge */}
           {discountLabel && (
-            <span className="absolute top-3 right-14 inline-flex items-center bg-primary text-primary-foreground text-xs font-bold px-2.5 py-1 rounded-full shadow-sm">
+            <span className="absolute right-14 top-3 inline-flex items-center rounded-full bg-[#c8102e] px-2.5 py-1 text-xs font-bold text-white shadow-sm">
               {discountLabel}
             </span>
           )}
 
           {/* Price pill */}
           <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center gap-2">
-            <span className="inline-flex flex-wrap items-baseline gap-1.5 bg-black/80 text-white text-xs sm:text-sm font-semibold px-3 py-2 rounded-lg backdrop-blur-sm">
-              <span className="text-muted-foreground/90">{t('room.from')}</span>
+            <span className="inline-flex flex-wrap items-baseline gap-1.5 rounded-lg bg-[#1c1a14]/82 px-3 py-2 text-xs font-semibold text-white backdrop-blur-sm sm:text-sm">
+              <span className="text-white/70">{t('room.from')}</span>
               {oldPrice != null && (
                 <span className="line-through text-muted-foreground/80 text-xs">
                   {oldPrice.toLocaleString()} {currency}
@@ -135,23 +135,28 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi', loading = false 
         </div>
 
         {/* Content */}
-        <div className="p-4 sm:p-5 flex flex-col flex-1 min-w-0">
+        <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
           {/* Type & Title */}
           <div className="mb-2">
             {item.roomType && (
-              <span className="text-xs font-semibold text-primary uppercase tracking-wider">
+              <span className="text-xs font-semibold uppercase tracking-wider text-[#2d6a4f]">
                 {item.roomType}
               </span>
             )}
-            <h3 className="font-bold text-base sm:text-lg text-foreground line-clamp-2 mt-0.5">
+            <h3
+              className="mt-0.5 line-clamp-2 text-base font-bold text-[#1c1a14] sm:text-lg"
+              style={{
+                fontFamily: 'var(--font-dm-serif-display, "Playfair Display", Georgia, serif)',
+              }}
+            >
               {translation?.name ?? item.code}
             </h3>
           </div>
 
           {/* Location */}
           {(hotelName || provinceName) && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2 min-w-0">
-              <FaLocationDot className="size-3.5 shrink-0 text-primary" />
+            <div className="mb-2 flex min-w-0 items-center gap-2 text-sm text-[rgba(28,26,20,0.62)]">
+              <FaLocationDot className="size-3.5 shrink-0 text-[#2d6a4f]" />
               <span className="truncate">
                 {[hotelName, provinceName].filter(Boolean).join(' • ')}
               </span>
@@ -159,32 +164,32 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi', loading = false 
           )}
 
           {/* Meta: size & guests */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground mb-3">
+          <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[rgba(28,26,20,0.62)]">
             <span className="inline-flex items-center gap-1.5">
-              <FaBed className="size-4 shrink-0 text-muted-foreground/80" />
+              <FaBed className="size-4 shrink-0 text-[rgba(28,26,20,0.45)]" />
               {item.roomSize ? `${item.roomSize} m²` : t('input.field_label.room')}
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <FaUserGroup className="size-4 shrink-0 text-muted-foreground/80" />
+              <FaUserGroup className="size-4 shrink-0 text-[rgba(28,26,20,0.45)]" />
               {totalGuests} / {item.maxGuests} {t('room.guests')}
             </span>
           </div>
 
           {/* Rating */}
           {hasRating && (
-            <div className="inline-flex items-center gap-1.5 text-sm text-muted-foreground mb-3">
-              <span className="inline-flex items-center gap-1 bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 text-xs font-medium px-2 py-0.5 rounded">
+            <div className="mb-3 inline-flex items-center gap-1.5 text-sm text-[rgba(28,26,20,0.62)]">
+              <span className="inline-flex items-center gap-1 rounded bg-[#f5e9d0] px-2 py-0.5 text-xs font-medium text-[#8c5d10]">
                 <FaStar className="size-3 fill-current" />
-                {item.ratingSummary!.average.toFixed(1)}
+                {item.ratingSummary?.average?.toFixed(1)}
               </span>
               <span>
-                ({item.ratingSummary!.total} {t('room.reviews')})
+                ({item.ratingSummary?.total} {t('room.reviews')})
               </span>
             </div>
           )}
 
           {/* CTA */}
-          <span className="mt-auto inline-flex items-center gap-2 text-sm font-semibold text-primary uppercase tracking-wide group-hover:gap-3 transition-[gap] pt-1">
+          <span className="mt-auto inline-flex items-center gap-2 pt-1 text-sm font-semibold uppercase tracking-wide text-[#2d6a4f] transition-[gap] group-hover:gap-3">
             {t('room.view_details')}
             <span aria-hidden>→</span>
           </span>

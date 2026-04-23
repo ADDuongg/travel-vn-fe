@@ -1,42 +1,70 @@
-import { Separator } from '@components/ui/separator';
+import { useTranslation } from 'react-i18next';
+import { Card } from '@/components/ui/card';
+import { useLanguage } from '@/hooks/useLanguage';
+import { fmtMoney } from '@/utils';
+import { caculateSalePrice } from '@/utils';
 import type { Room } from '@/features/rooms/types';
-import { EnumLanguage } from '@/constants/commons';
-import { useI18nStorage } from '@/hooks/useI18nStorage';
 
-const RoomDetail = ({ room }: { room: Room }) => {
-  const [value] = useI18nStorage(EnumLanguage.DEFAULT);
-  console.log('room', room);
+type RoomDetailProps = {
+  room: Room;
+};
+
+const RoomDetail = ({ room }: RoomDetailProps) => {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
+
+  const translation =
+    room.translations?.[language] ??
+    room.translations?.vi ??
+    room.translations?.en;
+  const description = translation?.description ?? '';
+  const basePrice = room.pricing?.basePrice ?? 0;
+  const salePrice =
+    room.sale?.isActive && room.sale.type === 'PERCENT'
+      ? caculateSalePrice(basePrice, room.sale.value)
+      : room.sale?.isActive && room.sale.type === 'FIXED'
+        ? Math.max(0, basePrice - room.sale.value)
+        : basePrice;
+  const hasSale = salePrice < basePrice;
+  const currency = room.pricing?.currency ?? 'VND';
 
   return (
-    <section id="room-detail" className="mt-6">
-      {/* Price Section */}
-      <div className="mb-6">
+    <section id="overview" className="scroll-mt-40">
+      <Card className="border border-[rgba(28,26,20,0.1)] bg-white p-6 shadow-[var(--shadow-card)] sm:p-8">
+        <h2
+          className="mb-4 font-['Playfair_Display',serif] text-2xl font-bold tracking-[-0.02em] text-[#1c1a14] sm:text-[1.75rem]"
+          style={{
+            fontFamily: 'var(--font-dm-serif-display, "Playfair Display", Georgia, serif)',
+          }}
+        >
+          {t('room.detail.overview', 'Overview')}
+        </h2>
         <div className="flex items-baseline gap-2">
-          <span className="text-2xl text-black">From</span>
-
-          {room.pricing && (
-            <span className="text-gray-400 line-through text-lg">
-              €{room.pricing.basePrice.toFixed(2)}
+          <span className="text-lg text-[rgba(28,26,20,0.6)]">
+            {t('room.from', 'From')}
+          </span>
+          {hasSale && (
+            <span className="text-base text-[rgba(28,26,20,0.45)] line-through">
+              {fmtMoney(basePrice)} {currency}
             </span>
           )}
-
-          <span className="text-2xl font-bold text-black">
-            €{room.sale?.value.toFixed(2)}
+          <span
+            className="text-2xl font-bold text-[#c8102e]"
+            style={{
+              fontFamily:
+                'var(--font-dm-serif-display, "Playfair Display", Georgia, serif)',
+            }}
+          >
+            {fmtMoney(salePrice)} {currency}
           </span>
         </div>
-
-        <p className="text-gray-500 text-md">per night</p>
-      </div>
-
-      <Separator className="my-6" />
-
-      {/* Description */}
-      <div
-        className="space-y-4 text-paleGray leading-relaxed whitespace-pre-line"
-        dangerouslySetInnerHTML={{
-          __html: room.translations?.[value]?.description || '',
-        }}
-      />
+        <p className="mt-1 text-sm text-[rgba(28,26,20,0.5)]">
+          {t('room.detail.per_night', 'per night')}
+        </p>
+        <p className="mt-6 whitespace-pre-line text-base leading-[1.65] text-[rgba(28,26,20,0.75)]">
+          {description}
+        </p>
+      </Card>
     </section>
   );
 };

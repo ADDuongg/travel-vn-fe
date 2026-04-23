@@ -16,12 +16,12 @@ const DestinationSearchPage = Loadable(
   () => import('@/pages/destination/DestinationSearch'),
 );
 const RegisterPage = Loadable(() => import('@/pages/auth/register/Register'));
-const TourPage = Loadable(() => import('@/pages/tour/Tour'));
+const TourPage = Loadable(() => import('@/pages/tour/TourList'));
 const TourDetailPage = Loadable(() => import('@/pages/tour/TourDetail'));
 const RoomDetailPage = Loadable(() => import('@/pages/room/RoomDetail'));
+const RoomListStandalonePage = Loadable(() => import('@/pages/room/RoomList'));
 const ListLayout = Loadable(() => import('@/layout/ListLayout'));
-const RoomListPage = Loadable(() => import('@/pages/list/RoomListPage'));
-const HotelListPage = Loadable(() => import('@/pages/list/HotelListPage'));
+const HotelListPage = Loadable(() => import('@/pages/hotel/HotelList'));
 const HotelDetailPage = Loadable(() => import('@/pages/hotel/HotelDetail'));
 const DashboardOverviewPage = Loadable(
   () => import('@pages/dashboard/my_account/DashboardOverviewPage'),
@@ -76,11 +76,9 @@ const OurServicesPage = Loadable(() => import('@/pages/our-services/OurServices'
 const TeamPage = Loadable(() => import('@/pages/team/Team'));
 const GalleryPage = Loadable(() => import('@/pages/gallery/Gallery'));
 const FoodDetailPage = Loadable(() => import('@/pages/food/FoodDetail'));
-const TourGuideListPage = Loadable(
-  () => import('@/pages/tour-guide/TourGuideListPage'),
-);
+const TourGuideListPage = Loadable(() => import('@/pages/tour-guide/TourGuideList'));
 const TourGuideDetailPage = Loadable(
-  () => import('@/pages/tour-guide/TourGuideDetailPage'),
+  () => import('@/pages/tour-guide/TourGuideDetail'),
 );
 const ProvinceListPage = Loadable(
   () => import('@/pages/province/ProvinceListPage'),
@@ -187,17 +185,17 @@ export const routes: RouteConfig[] = [
       },
       {
         path: 'rooms',
-        element: <RoomListPage />,
-      },
-      {
-        path: 'hotels',
-        element: <HotelListPage />,
+        element: <Navigate to={ROUTES.ROOM.INDEX} replace />,
       },
     ],
   },
   {
+    path: ROUTES.LIST_HOTELS,
+    element: <HotelListPage />,
+  },
+  {
     path: ROUTES.TOUR.SEARCH,
-    element: <Navigate to={ROUTES.LIST_ROOMS} replace />,
+    element: <Navigate to={ROUTES.TOUR.INDEX} replace />,
   },
   {
     path: ROUTES.ROOM.SEARCH,
@@ -217,7 +215,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: ROUTES.ROOM.INDEX,
-    element: <Navigate to={ROUTES.LIST_ROOMS} replace />,
+    element: <RoomListStandalonePage />,
   },
   {
     path: ROUTES.ROOM.DETAIL,

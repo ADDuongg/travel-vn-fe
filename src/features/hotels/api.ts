@@ -1,12 +1,15 @@
 import api from '@/lib/axios';
-import type { Hotel, HotelOption } from './types';
+import type {
+  Hotel,
+  HotelOption,
+  HotelPaginatedResponse,
+  HotelQueryParams,
+} from './types';
 
-export interface GetHotelsParams {
-  provinceId?: string;
-}
+export type GetHotelsParams = HotelQueryParams;
 
 export function getHotels(params?: GetHotelsParams) {
-  return api.get<HotelOption[]>('/api/v1/hotels', { params });
+  return api.get<HotelPaginatedResponse>('/api/v1/hotels', { params });
 }
 
 export function getHotelOptions(params?: GetHotelsParams) {

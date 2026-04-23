@@ -45,20 +45,17 @@ const statusStyle: Record<string, string> = {
     'bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200/90 shadow-sm shadow-emerald-100/50',
   CANCELLED:
     'bg-rose-50 text-rose-800 ring-1 ring-rose-200/90 shadow-sm shadow-rose-100/50',
-  COMPLETED:
-    'bg-[#EFF6FF] text-[#1E40AF] ring-1 ring-[#3B82F6]/25 shadow-sm',
+  COMPLETED: 'bg-[#EFF6FF] text-[#1E40AF] ring-1 ring-[#3B82F6]/25 shadow-sm',
   REJECTED:
     'bg-rose-50 text-rose-800 ring-1 ring-rose-200/90 shadow-sm shadow-rose-100/50',
 };
 
 const paymentStyle: Record<string, string> = {
-  UNPAID:
-    'bg-amber-50 text-amber-900 ring-1 ring-amber-200/80 font-semibold',
+  UNPAID: 'bg-amber-50 text-amber-900 ring-1 ring-amber-200/80 font-semibold',
   PAID: 'bg-emerald-50 text-emerald-900 ring-1 ring-emerald-200/80 font-semibold',
   REFUNDED:
     'bg-slate-100 text-slate-800 ring-1 ring-slate-200/80 font-semibold',
-  EXPIRED:
-    'bg-rose-50 text-rose-900 ring-1 ring-rose-200/80 font-semibold',
+  EXPIRED: 'bg-rose-50 text-rose-900 ring-1 ring-rose-200/80 font-semibold',
 };
 
 function roomPaymentLabelKey(status: string): string {
@@ -106,8 +103,7 @@ const MyBookingDetailPage: React.FC = () => {
   const cancelMutation = useCancelRoomBookingMutation();
 
   const canCancel =
-    booking &&
-    (booking.status === 'PENDING' || booking.status === 'APPROVED');
+    booking && (booking.status === 'PENDING' || booking.status === 'APPROVED');
 
   const handleCancel = async () => {
     if (!booking?._id || !window.confirm(t('bookings.confirm_cancel'))) return;
@@ -221,7 +217,9 @@ const MyBookingDetailPage: React.FC = () => {
           'font-dashboard-sans text-center sm:text-left',
         )}
       >
-        <p className="text-sm text-slate-600">{t('bookings.booking_not_found')}</p>
+        <p className="text-sm text-slate-600">
+          {t('bookings.booking_not_found')}
+        </p>
         <Button
           className="mt-4 cursor-pointer"
           variant="outline"
@@ -244,12 +242,7 @@ const MyBookingDetailPage: React.FC = () => {
       </Link>
 
       {/* Header */}
-      <header
-        className={cn(
-          cardClass,
-          'border-t-4 border-t-[#1E3A8A]',
-        )}
-      >
+      <header className={cn(cardClass, 'border-t-4 border-t-[#1E3A8A]')}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0 space-y-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -525,10 +518,7 @@ const MyBookingDetailPage: React.FC = () => {
 
         {/* Sidebar */}
         <aside
-          className={cn(
-            cardClass,
-            'h-fit lg:sticky lg:top-24 lg:self-start',
-          )}
+          className={cn(cardClass, 'h-fit lg:sticky lg:top-24 lg:self-start')}
         >
           <div className="space-y-3 border-b border-slate-100 pb-5">
             <div className="flex items-center justify-between gap-2">

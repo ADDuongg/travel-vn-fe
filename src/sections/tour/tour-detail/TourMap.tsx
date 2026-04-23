@@ -1,20 +1,28 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 
 const TourMap: React.FC = () => {
+  const { t } = useTranslation();
   return (
-    <section id="map" className="mt-10">
-      <Card className="p-6 rounded-2xl overflow-hidden">
-        <h2 className="text-xl font-bold mb-4">Journey Route</h2>
-        <div className="w-full h-[400px] rounded-xl overflow-hidden border border-gray-100 bg-gray-50 flex items-center justify-center">
+    <section id="map" className="scroll-mt-40">
+      <Card className="overflow-hidden border border-[rgba(28,26,20,0.1)] bg-white p-6 shadow-[var(--shadow-card)] sm:p-8">
+        <h2
+          className="mb-4 font-['Playfair_Display',serif] text-2xl font-bold text-[#1c1a14]"
+          style={{ fontFamily: 'var(--font-dm-serif-display, Georgia, serif)' }}
+        >
+          {t('tour.detail.map_title', 'Journey route')}
+        </h2>
+        <div className="overflow-hidden rounded-xl border border-[rgba(28,26,20,0.1)] bg-[#faf7f2] shadow-inner">
           <iframe
             src="https://www.google.com/maps/d/embed?mid=xxxx"
             width="100%"
-            height="100%"
+            height="400"
             style={{ border: 0 }}
             allowFullScreen
             loading="lazy"
-            title="Journey route map"
+            title={t('tour.detail.map_iframe_title', 'Journey route map')}
+            className="min-h-[280px] w-full sm:min-h-[400px]"
           />
         </div>
       </Card>

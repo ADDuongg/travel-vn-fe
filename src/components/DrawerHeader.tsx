@@ -53,7 +53,9 @@ const DrawerHeader = () => {
           {HeaderItem.map((item) => {
             const isActive = item.path
               ? location.pathname === item.path
-              : !!item.children?.some((c) => c.path && location.pathname === c.path);
+              : !!item.children?.some(
+                  (c) => c.path && location.pathname === c.path,
+                );
             return (
               <div key={item.name}>
                 {item.children ? (

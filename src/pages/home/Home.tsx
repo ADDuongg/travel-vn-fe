@@ -2,44 +2,58 @@ import { MainLayout } from '@/layout';
 import {
   CustomerFeedback,
   DiscoverDeal,
-  FreshlyAdded,
-  OurService,
-  PopularTour,
+  ExploreByRegion,
+  FeaturedHotels,
+  FoodExperiences,
   TitleSection,
   TopDestination,
+  TravelGuides,
 } from '@/sections';
 
 const HomePage = () => {
   return (
     <MainLayout>
-      {/* Title section (hero) — keep as-is per request */}
-      <div className="bg-background_paleGray">
-        <TitleSection />
+      <TitleSection />
+
+      <div className="bg-background">
+        <div className="py-20 md:py-24 lg:py-28">
+          <ExploreByRegion />
+        </div>
       </div>
 
-      <section className="bg-background py-20 md:py-28">
-        <TopDestination />
-      </section>
+      <div className="bg-surface-300">
+        <div className="py-20 md:py-24 lg:py-28">
+          <TopDestination />
+        </div>
+      </div>
 
-      <section className="border-t border-border/40 bg-background_paleGray py-20 md:py-28">
-        <PopularTour />
-      </section>
+      <div className="bg-background">
+        <div className="py-20 md:py-24 lg:py-28">
+          <FeaturedHotels />
+        </div>
+      </div>
 
-      <section className="border-t border-border/40 bg-background py-20 md:py-28">
-        <FreshlyAdded />
-      </section>
+      <div className="bg-surface-300">
+        <div className="py-20 md:py-24 lg:py-28">
+          <FoodExperiences />
+        </div>
+      </div>
 
-      <section className="border-t border-border/40 bg-background_paleGray py-20 md:py-28">
+      <div className="bg-background">
+        <div className="py-20 md:py-24 lg:py-28">
+          <TravelGuides />
+        </div>
+      </div>
+
+      <div className="bg-surface-300">
+        <div className="py-20 md:py-24 lg:py-28">
+          <CustomerFeedback />
+        </div>
+      </div>
+
+      <div className="bg-background">
         <DiscoverDeal />
-      </section>
-
-      <section className="border-t border-border/40 bg-background py-20 md:py-28">
-        <CustomerFeedback />
-      </section>
-
-      <section className="border-t border-border/40 bg-background py-16 md:py-20">
-        <OurService />
-      </section>
+      </div>
     </MainLayout>
   );
 };

@@ -29,7 +29,7 @@ export function useRoomsQuery(params: RoomQueryParams) {
 
 export function useRoomDetailQuery(id?: string) {
   return useQuery<Room>({
-    queryKey: id ? roomKeys.detail(id) : [],
+    queryKey: roomKeys.detail(id ?? ''),
     queryFn: () => getRoomById(id!),
     enabled: !!id,
   });
@@ -52,5 +52,6 @@ export function useGetTotalRoomByDate(id?: string, from?: string, to?: string) {
     queryKey: ['room-availability', id, from, to],
     queryFn: () => getTotalRoomByDate(id!, from!, to!),
     staleTime: 5 * 60 * 1000,
+    enabled: !!id && !!from && !!to,
   });
 }

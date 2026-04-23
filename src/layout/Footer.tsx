@@ -79,9 +79,7 @@ const Footer: React.FC = () => {
             {t('contact')}
           </a>
         </nav>
-        <div className="text-center md:text-right">
-          {t('footer.copyright')}
-        </div>
+        <div className="text-center md:text-right">{t('footer.copyright')}</div>
       </div>
     </footer>
   );

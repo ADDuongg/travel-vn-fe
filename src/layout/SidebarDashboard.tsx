@@ -39,9 +39,7 @@ const NavItem = ({
     to={to}
     end={end}
     onClick={() => onNavigate?.()}
-    className={({ isActive }) =>
-      cn(linkBase, isActive ? dashActive : dashIdle)
-    }
+    className={({ isActive }) => cn(linkBase, isActive ? dashActive : dashIdle)}
   >
     {children}
   </NavLink>
@@ -67,17 +65,17 @@ const SidebarDashboard = ({
 
   return (
     <nav
-      className={cn(
-        'text-sm',
-        layout === 'mobile' ? 'space-y-5' : 'space-y-6',
-      )}
+      className={cn('text-sm', layout === 'mobile' ? 'space-y-5' : 'space-y-6')}
       aria-label="Dashboard navigation"
     >
       <div>
         <SectionLabel>Tài khoản</SectionLabel>
         <div className="space-y-1">
           <NavItem to={ROUTES.DASHBOARD.INDEX} end onNavigate={onNavigate}>
-            <LayoutDashboard className="size-4 shrink-0 opacity-90" aria-hidden />
+            <LayoutDashboard
+              className="size-4 shrink-0 opacity-90"
+              aria-hidden
+            />
             Tổng quan
           </NavItem>
           <NavItem to={ROUTES.DASHBOARD.PROFILE} onNavigate={onNavigate}>
@@ -133,7 +131,10 @@ const SidebarDashboard = ({
         <SectionLabel>Đã lưu</SectionLabel>
         <div className="space-y-1">
           <NavItem to={ROUTES.DASHBOARD.SAVED} onNavigate={onNavigate}>
-            <MessageSquareText className="size-4 shrink-0 opacity-90" aria-hidden />
+            <MessageSquareText
+              className="size-4 shrink-0 opacity-90"
+              aria-hidden
+            />
             Đánh giá & Yêu thích
           </NavItem>
         </div>

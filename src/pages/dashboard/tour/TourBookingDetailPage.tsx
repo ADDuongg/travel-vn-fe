@@ -11,13 +11,13 @@ import {
   useMyTourBookingByCodeQuery,
   useCancelTourBookingMutation,
   useUploadTourBookingReceiptMutation,
-} from '@/features/tours/booking-hooks';
+} from '@/features/tours/hooks';
 import { fmtDate, getPaymentExpireAt } from '@/utils';
 import { useCountdown } from '@/hooks/useCountdown';
 import type {
   TourBookingDetail,
   TourBookingTourRef,
-} from '@/features/tours/booking-types';
+} from '@/features/tours/types';
 import {
   ArrowLeft,
   CalendarRange,
@@ -52,10 +52,8 @@ const statusStyle: Record<string, string> = {
 };
 
 const paymentStyle: Record<string, string> = {
-  unpaid:
-    'bg-amber-50 text-amber-900 ring-1 ring-amber-200/80 font-semibold',
-  partial:
-    'bg-amber-50 text-amber-900 ring-1 ring-amber-200/80 font-semibold',
+  unpaid: 'bg-amber-50 text-amber-900 ring-1 ring-amber-200/80 font-semibold',
+  partial: 'bg-amber-50 text-amber-900 ring-1 ring-amber-200/80 font-semibold',
   paid: 'bg-emerald-50 text-emerald-900 ring-1 ring-emerald-200/80 font-semibold',
 };
 
@@ -71,9 +69,9 @@ function getTourName(tourId: TourBookingDetail['tourId']): string {
   return (tourId as TourBookingTourRef).code ?? '—';
 }
 
-function getTourSlug(tourId: TourBookingDetail['tourId']): string | null {
+function getTourId(tourId: TourBookingDetail['tourId']): string | null {
   if (!tourId || typeof tourId === 'string') return null;
-  return (tourId as TourBookingTourRef).slug ?? null;
+  return (tourId as TourBookingTourRef)._id ?? null;
 }
 
 function getTourDuration(tourId: TourBookingDetail['tourId']): string | null {
@@ -183,8 +181,10 @@ const TourBookingDetailPage = () => {
     );
   }
 
-  const slug = getTourSlug(booking.tourId);
-  const tourDetailUrl = slug ? ROUTES.TOUR.DETAIL.replace(':slug', slug) : null;
+  const tourId = getTourId(booking.tourId);
+  const tourDetailUrl = tourId
+    ? ROUTES.TOUR.DETAIL.replace(':id', tourId)
+    : null;
   const durationStr = getTourDuration(booking.tourId);
   const thumbnailUrl = getTourThumbnailUrl(booking.tourId);
   const balanceDue = Math.max(
@@ -423,7 +423,8 @@ const TourBookingDetailPage = () => {
                   )}
                 </div>
                 <p className="tabular-nums text-slate-700">
-                  {t('bookings.departure_date')}: {fmtDate(booking.departureDate)}
+                  {t('bookings.departure_date')}:{' '}
+                  {fmtDate(booking.departureDate)}
                 </p>
                 <div className="flex flex-wrap gap-3 text-slate-600">
                   <span>
@@ -587,10 +588,7 @@ const TourBookingDetailPage = () => {
         </div>
 
         <aside
-          className={cn(
-            cardClass,
-            'h-fit lg:sticky lg:top-24 lg:self-start',
-          )}
+          className={cn(cardClass, 'h-fit lg:sticky lg:top-24 lg:self-start')}
         >
           <div className="space-y-3 border-b border-slate-100 pb-5">
             <div className="flex items-center justify-between gap-2">

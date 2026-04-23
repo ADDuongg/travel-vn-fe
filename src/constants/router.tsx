@@ -18,7 +18,7 @@ export const ROUTES = {
   TOUR: {
     INDEX: '/tour',
     SEARCH: '/tour/search',
-    DETAIL: '/tour/:slug',
+    DETAIL: '/tour/:id',
     /** Tra cứu đơn theo mã (public) */
     BOOKING_LOOKUP: '/tour/booking/lookup',
   },

@@ -57,7 +57,7 @@ function DataTable<TData>({
     isFetching,
   } = tableState;
 
-  const { table, selectedRows, pages, start, end } = useServerTable<TData>({
+  const { table, selectedRows } = useServerTable<TData>({
     data: data?.data ?? [],
     columns,
     meta: data?.meta ?? {
@@ -77,14 +77,10 @@ function DataTable<TData>({
       setRowSelection,
       isFetching,
     },
-    windowSize: 2,
   });
 
-  const placeholder =
-    searchPlaceholder ?? t('bookings.table_search');
-  const hasSelectableRows = columns.some(
-    (c) => 'id' in c && c.id === 'select',
-  );
+  const placeholder = searchPlaceholder ?? t('bookings.table_search');
+  const hasSelectableRows = columns.some((c) => 'id' in c && c.id === 'select');
 
   return (
     <div className="space-y-0 overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-sm">
@@ -141,7 +137,9 @@ function DataTable<TData>({
                     key={column.id}
                     className="cursor-pointer capitalize"
                     checked={column.getIsVisible()}
-                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>
@@ -261,9 +259,6 @@ function DataTable<TData>({
         table={table}
         pageCount={data?.meta?.pageCount ?? 0}
         total={data?.meta?.total}
-        pages={pages}
-        start={start}
-        end={end}
       />
     </div>
   );

@@ -58,7 +58,9 @@ const MultiRoomPopover: React.FC<{ rooms: Booking['rooms'] }> = ({ rooms }) => {
       </PopoverTrigger>
 
       <PopoverContent className="w-80 space-y-3 rounded-xl border-slate-200/90 p-4 shadow-lg">
-        <div className="font-semibold text-[#1E3A8A]">{t('bookings.booked_rooms')}</div>
+        <div className="font-semibold text-[#1E3A8A]">
+          {t('bookings.booked_rooms')}
+        </div>
 
         {rooms.map((r, i) => (
           <div
@@ -113,8 +115,7 @@ export const useColumns = (): ColumnDef<Booking>[] => {
     () =>
       (Object.keys(STATUS_KEYS) as Booking['status'][]).reduce(
         (acc, status) => {
-          acc[status] =
-            t(`bookings.status_${STATUS_KEYS[status]}`) || status;
+          acc[status] = t(`bookings.status_${STATUS_KEYS[status]}`) || status;
           return acc;
         },
         {} as Record<Booking['status'], string>,
@@ -140,9 +141,9 @@ export const useColumns = (): ColumnDef<Booking>[] => {
 
           return (
             <div className="flex flex-col gap-1">
-              {room.slug ? (
+              {room._id ? (
                 <Link
-                  to={`/rooms/${room.slug}`}
+                  to={ROUTES.ROOM.DETAIL.replace(':id', room._id)}
                   className="font-medium text-[#2563EB] underline-offset-2 transition-colors hover:text-[#1D4ED8] hover:underline"
                 >
                   {room.name}
@@ -179,7 +180,9 @@ export const useColumns = (): ColumnDef<Booking>[] => {
 
           return (
             <div className="text-sm tabular-nums">
-              <div className="font-medium text-slate-800">{fmtDate(r.checkIn)}</div>
+              <div className="font-medium text-slate-800">
+                {fmtDate(r.checkIn)}
+              </div>
               <div className="text-xs text-slate-500 sm:text-sm">
                 → {fmtDate(r.checkOut)}
               </div>
@@ -198,7 +201,9 @@ export const useColumns = (): ColumnDef<Booking>[] => {
           return (
             <span>
               {g.adults} {t('bookings.adults_label')}
-              {g.children ? `, ${g.children} ${t('bookings.children_label')}` : ''}
+              {g.children
+                ? `, ${g.children} ${t('bookings.children_label')}`
+                : ''}
             </span>
           );
         },
@@ -279,7 +284,9 @@ export const useColumns = (): ColumnDef<Booking>[] => {
 
       {
         id: 'actions',
-        header: () => <span className="sr-only">{t('bookings.table_actions')}</span>,
+        header: () => (
+          <span className="sr-only">{t('bookings.table_actions')}</span>
+        ),
         cell: ({ row }) => (
           <Button
             variant="outline"

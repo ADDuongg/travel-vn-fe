@@ -3,12 +3,11 @@ import { Button } from '@/components/ui/button';
 import CustomInput from '@/components/CustomInput';
 import { BsLightningFill } from 'react-icons/bs';
 import { HiOutlineLockClosed } from 'react-icons/hi2';
-import type { Tour } from '@/features/tours/catalog-types';
+import type { Tour } from '@/features/tours/types';
 import {
   useTourAvailabilityQuery,
   useCreateTourBookingMutation,
-} from '@/features/tours/booking-hooks';
-import { useTourDetail } from '@/sections/tour/tour-detail/TourDetailContext';
+} from '@/features/tours/hooks';
 import { useCallback, useState } from 'react';
 import { fmtMoney } from '@/utils';
 import { Link } from 'react-router-dom';
@@ -30,12 +29,11 @@ type BookingFormValues = {
 const currentMonth = () => new Date().toISOString().slice(0, 7); // YYYY-MM
 
 const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
-  const tourFromContext = useTourDetail();
-  const tour = tourProp ?? tourFromContext;
+  const tour = tourProp;
   const authUser = useAuthStore((s) => s.authUser);
   const { t } = useTranslation();
 
-  const [month, setMonth] = useState(currentMonth());
+  const [month, setMonth] = useState(() => currentMonth());
   const [bookingSuccess, setBookingSuccess] = useState<{
     bookingCode: string;
     bookingId: string;
@@ -90,6 +88,9 @@ const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
       if (!tour?._id || !authUser?._id) return;
       setBookingSuccess(null);
       try {
+        const adults = Math.max(1, parseInt(data.adults, 10) || 1);
+        const children = Math.max(0, parseInt(data.children, 10) || 0);
+        const infants = Math.max(0, parseInt(data.infants, 10) || 0);
         const result = await createBooking.mutateAsync({
           tourId: tour._id,
           departureDate: data.departureDate,
@@ -99,9 +100,9 @@ const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
             phone: data.phone || undefined,
             note: data.note || undefined,
           },
-          adults: parseInt(data.adults, 10),
-          children: parseInt(data.children, 10) || 0,
-          infants: parseInt(data.infants, 10) || 0,
+          adults,
+          children,
+          infants,
           userId: authUser._id,
         });
         setBookingSuccess({
@@ -127,6 +128,8 @@ const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
     d.setMonth(d.getMonth() + 1);
     setMonth(d.toISOString().slice(0, 7));
   };
+
+  if (!tour) return null;
 
   // Yêu cầu đăng nhập mới cho đặt tour
   if (!authUser) {

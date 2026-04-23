@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MainLayout } from '@/layout';
 import Container from '@/components/Container';
 import { ProvinceCard } from '@/sections/province/ProvinceCard';
@@ -7,9 +7,11 @@ import { ProvinceFilter } from '@/sections/province/ProvinceFilter';
 import { useProvincesListQuery } from '@/features/provinces/hooks';
 import { FaCompass } from 'react-icons/fa6';
 import { useTranslation } from 'react-i18next';
+import ServerPagination from '@/shared/pagination/ServerPagination';
 
 export default function ProvinceListPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const params = useMemo(() => {
@@ -33,6 +35,14 @@ export default function ProvinceListPage() {
   const { data, isLoading, error } = useProvincesListQuery(params);
   const items = data?.items ?? [];
   const pagination = data?.pagination;
+  const currentPage = pagination?.page ?? (Number(searchParams.get('page')) || 1);
+  const totalPages = Math.max(1, pagination?.totalPages ?? 1);
+
+  const handlePageChange = (nextPage: number) => {
+    const next = new URLSearchParams(searchParams);
+    next.set('page', String(nextPage));
+    navigate(`?${next.toString()}`);
+  };
 
   return (
     <MainLayout>
@@ -102,6 +112,19 @@ export default function ProvinceListPage() {
                       <ProvinceCard key={item._id} item={item} variant="compact" />
                     ))}
                   </div>
+                  {totalPages > 1 && (
+                    <ServerPagination
+                      page={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                      className="mt-8"
+                      labels={{
+                        previous: t('common.previous'),
+                        next: t('common.next'),
+                        pageAriaLabel: t('province.title', 'Province Discovery'),
+                      }}
+                    />
+                  )}
                 </>
               )}
             </main>

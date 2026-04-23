@@ -1,5 +1,9 @@
 import { ROUTES } from '@/constants/router';
-import { useRegister, useSendOtpVerifyEmail, useVerifyOtpEmail } from '@/features/auth/hooks';
+import {
+  useRegister,
+  useSendOtpVerifyEmail,
+  useVerifyOtpEmail,
+} from '@/features/auth/hooks';
 import { MainLayout } from '@/layout';
 import Container from '@components/Container';
 import CustomInput from '@components/CustomInput';
@@ -23,8 +27,11 @@ const RegisterPage = () => {
   const methods = useForm<I.RegisterFormValues>();
   const navigate = useNavigate();
   const { register: registerMutation, isPending } = useRegister();
-  const { sendOtpVerifyEmail, isPending: isSendingOtp, isSuccess: isOtpSent } =
-    useSendOtpVerifyEmail();
+  const {
+    sendOtpVerifyEmail,
+    isPending: isSendingOtp,
+    isSuccess: isOtpSent,
+  } = useSendOtpVerifyEmail();
   const {
     verifyOtpEmail,
     isPending: isVerifyingOtp,
@@ -150,7 +157,9 @@ const RegisterPage = () => {
                       {/* Email verification — grouped for clarity */}
                       <div className="rounded-2xl border border-border/60 bg-background p-5 shadow-sm sm:p-6">
                         <ResponsiveH6 className="mb-4 font-semibold text-foreground">
-                          {t('auth.verify_email_title', { defaultValue: 'Verify your email' })}
+                          {t('auth.verify_email_title', {
+                            defaultValue: 'Verify your email',
+                          })}
                         </ResponsiveH6>
 
                         <div className="grid gap-4">
@@ -213,7 +222,8 @@ const RegisterPage = () => {
                                 className="w-full rounded-xl"
                                 onClick={() => {
                                   const email = methods.getValues('email');
-                                  const code = (methods.getValues() as any).emailOtp;
+                                  const code = (methods.getValues() as any)
+                                    .emailOtp;
                                   if (!email || !code) return;
                                   verifyOtpEmail({ target: email, code });
                                 }}

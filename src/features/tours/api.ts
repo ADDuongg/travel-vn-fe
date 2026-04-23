@@ -1,6 +1,17 @@
 import api from '@/lib/axios';
 import type { BookingStatus } from '../shared/types';
-import type { TourBookingRow } from './types';
+import type {
+  CancelTourBookingBody,
+  CreateTourBookingPayload,
+  Tour,
+  TourAvailabilityItem,
+  TourBookingDetail,
+  TourBookingListResponse,
+  TourBookingRow,
+  TourListItem,
+  TourPaginatedResponse,
+  TourQueryParams,
+} from './types';
 import * as I from '@/types/api';
 
 export type GetBookingsParams = I.Paginate & {
@@ -28,4 +39,88 @@ export async function deleteBooking(id: string) {
 
 export async function createBooking(payload: Partial<TourBookingRow>) {
   return api.post<TourBookingRow>('/test-api/bookings', payload);
+}
+
+const TOURS_BASE = '/api/v1/tours';
+const BOOKINGS_BASE = '/api/v1/tour-bookings';
+
+export function getTours(params?: TourQueryParams) {
+  return api.get<TourPaginatedResponse>(TOURS_BASE, { params });
+}
+
+export function getTourById(id: string) {
+  return api.get<Tour>(`${TOURS_BASE}/${id}`);
+}
+
+export function getFeaturedTours(limit = 6) {
+  return api.get<TourListItem[]>(`${TOURS_BASE}/featured`, {
+    params: { limit },
+  });
+}
+
+export function getTourOptions(destinationId?: string) {
+  return api.get<TourListItem[]>(`${TOURS_BASE}/options`, {
+    params: destinationId ? { destinationId } : undefined,
+  });
+}
+
+export function getTourAvailability(
+  tourId: string,
+  month: string,
+): Promise<TourAvailabilityItem[]> {
+  return api.get<TourAvailabilityItem[]>(`${TOURS_BASE}/${tourId}/availability`, {
+    params: { month },
+  });
+}
+
+export function createTourBooking(
+  payload: CreateTourBookingPayload,
+): Promise<TourBookingDetail> {
+  return api.post<TourBookingDetail>(BOOKINGS_BASE, payload);
+}
+
+export function getTourBookingByCode(code: string): Promise<TourBookingDetail> {
+  return api.get<TourBookingDetail>(`${BOOKINGS_BASE}/by-code/${encodeURIComponent(code)}`);
+}
+
+export function getMyTourBookings(params: {
+  page?: number;
+  limit?: number;
+}): Promise<TourBookingListResponse> {
+  return api.get<TourBookingListResponse>(`${BOOKINGS_BASE}/my-bookings`, {
+    params: { page: params.page ?? 1, limit: params.limit ?? 10 },
+  });
+}
+
+export function getMyTourBookingByCode(code: string): Promise<TourBookingDetail> {
+  return api.get<TourBookingDetail>(
+    `${BOOKINGS_BASE}/my-bookings/${encodeURIComponent(code)}`,
+  );
+}
+
+export function getTourBookingById(id: string): Promise<TourBookingDetail> {
+  return api.get<TourBookingDetail>(`${BOOKINGS_BASE}/${id}`);
+}
+
+export function cancelTourBooking(
+  id: string,
+  body?: CancelTourBookingBody,
+): Promise<TourBookingDetail> {
+  return api.patch<TourBookingDetail>(`${BOOKINGS_BASE}/${id}/cancel`, body ?? {});
+}
+
+export interface UploadReceiptResponse {
+  message: string;
+  receipt: { url: string; uploadedAt: string; verified: boolean };
+}
+
+export function uploadTourBookingReceipt(
+  id: string,
+  file: File,
+): Promise<UploadReceiptResponse> {
+  const formData = new FormData();
+  formData.append('file', file);
+  return api.post<UploadReceiptResponse>(`${BOOKINGS_BASE}/${id}/receipt`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
 }

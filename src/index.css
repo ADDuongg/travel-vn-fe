@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @custom-variant dark (&:is(.dark *));
@@ -7,55 +7,79 @@
   width: 100%;
 }
 
+/* TravelVN Vietnam palette — see DESIGN.md */
 :root {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-body);
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light dark;
-  /* color: rgba(255, 255, 255, 0.87); */
-  /* background-color: #242424; */
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.6799 0.1478 258.31);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  --primary-btn: oklch(0.6799 0.1478 258.31);
-  --paleGray: oklch(0.6807 0.0105 252.85);
-  --paleGray-100: oklch(0.9761 0 0);
-  --background_paleGray: oklch(0.9791 0 0);
+  --radius: 0.75rem;
+  /* Core */
+  --background: #f8f8f6;
+  --foreground: #1c1a14;
+  --card: #ffffff;
+  --card-foreground: #1c1a14;
+  --popover: #ffffff;
+  --popover-foreground: #1c1a14;
+  /* Brand — Vietnam Red primary CTA */
+  --primary: #c8102e;
+  --primary-foreground: #ffffff;
+  --secondary: #ede7d9;
+  --secondary-foreground: #1c1a14;
+  --muted: #ede7d9;
+  --muted-foreground: rgba(28, 26, 20, 0.6);
+  --accent: #d4eae0;
+  --accent-foreground: #1e4d38;
+  --destructive: #c8102e;
+  --destructive-foreground: #ffffff;
+  --border: rgba(28, 26, 20, 0.1);
+  --input: rgba(28, 26, 20, 0.15);
+  --ring: rgba(200, 16, 46, 0.35);
+  /* Charts */
+  --chart-1: #c8102e;
+  --chart-2: #2d6a4f;
+  --chart-3: #c9922a;
+  --chart-4: #2a6b9c;
+  --chart-5: #a50d25;
+  /* Sidebar */
+  --sidebar: #faf7f2;
+  --sidebar-foreground: #1c1a14;
+  --sidebar-primary: #c8102e;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ede7d9;
+  --sidebar-accent-foreground: #1c1a14;
+  --sidebar-border: rgba(28, 26, 20, 0.1);
+  --sidebar-ring: rgba(200, 16, 46, 0.35);
+  /* Legacy token names used in codebase */
+  --primary-btn: #c8102e;
+  --paleGray: rgba(28, 26, 20, 0.55);
+  --paleGray-100: #faf7f2;
+  --background_paleGray: #ede7d9;
+  /* Extended */
+  --vietnam-red: #c8102e;
+  --vietnam-red-deep: #a50d25;
+  --sapa-green: #2d6a4f;
+  --sapa-green-deep: #1e4d38;
+  --hoi-an-gold: #c9922a;
+  --gold-soft: #f5e9d0;
+  --green-soft: #d4eae0;
+  --red-soft: #f2d5d9;
+  --surface-100: #faf7f2;
+  --surface-300: #ede7d9;
+  --surface-400: #e5ded0;
+  --surface-500: #ddd6c7;
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', ui-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-dm-serif-display: 'Playfair Display', Georgia, serif;
+  --font-dashboard-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --shadow-card:
+    rgba(0, 0, 0, 0.1) 0px 8px 32px, rgba(28, 26, 20, 0.06) 0px 0px 0px 1px;
+  --shadow-elevated:
+    rgba(0, 0, 0, 0.14) 0px 24px 60px, rgba(28, 26, 20, 0.1) 0px 0px 0px 1px;
 }
 
 body {
@@ -64,7 +88,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-body);
 }
 
 @theme inline {
@@ -93,6 +117,7 @@ body {
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -113,47 +138,66 @@ body {
   --color-paleGray: var(--paleGray);
   --color-paleGray-100: var(--paleGray-100);
   --color-background_paleGray: var(--background_paleGray);
-  --font-dm-serif-display: 'DM Serif Display', serif;
-  --font-dashboard-sans: 'Fira Sans', ui-sans-serif, system-ui, sans-serif;
+  --color-vietnam-red: var(--vietnam-red);
+  --color-sapa-green: var(--sapa-green);
+  --color-hoi-an-gold: var(--hoi-an-gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-green-soft: var(--green-soft);
+  --color-surface-100: var(--surface-100);
+  --color-surface-300: var(--surface-300);
+  --color-surface-400: var(--surface-400);
+  --color-surface-500: var(--surface-500);
+  --font-dm-serif-display: var(--font-dm-serif-display);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-body);
+  --font-dashboard-sans: var(--font-dashboard-sans);
 }
 
-/* UI UX Pro Max / dashboard: readable sans per design kit */
+/* UI / dashboard sans */
 .font-dashboard-sans {
   font-family: var(--font-dashboard-sans);
 }
 
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Warm dark mode */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.269 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.371 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.439 0 0);
+  --background: #141210;
+  --foreground: #f8f8f6;
+  --card: #1c1a18;
+  --card-foreground: #f8f8f6;
+  --popover: #1c1a18;
+  --popover-foreground: #f8f8f6;
+  --primary: #e24d63;
+  --primary-foreground: #1c0a0c;
+  --secondary: #2a2622;
+  --secondary-foreground: #f8f8f6;
+  --muted: #2a2622;
+  --muted-foreground: rgba(245, 240, 232, 0.65);
+  --accent: #1e3d32;
+  --accent-foreground: #d4eae0;
+  --destructive: #e24d63;
+  --border: rgba(245, 240, 232, 0.12);
+  --input: rgba(245, 240, 232, 0.15);
+  --ring: rgba(226, 77, 99, 0.45);
+  --chart-1: #e24d63;
+  --chart-2: #4a9d7a;
+  --chart-3: #d4a84b;
+  --chart-4: #5a9cc8;
+  --chart-5: #b83a4a;
+  --sidebar: #1c1a18;
+  --sidebar-foreground: #f8f8f6;
+  --sidebar-primary: #e24d63;
+  --sidebar-primary-foreground: #1c0a0c;
+  --sidebar-accent: #2a2622;
+  --sidebar-accent-foreground: #f8f8f6;
+  --sidebar-border: rgba(245, 240, 232, 0.1);
+  --sidebar-ring: rgba(226, 77, 99, 0.45);
+  --paleGray: rgba(245, 240, 232, 0.55);
+  --background_paleGray: #1c1a18;
+  --paleGray-100: #2a2622;
 }
 
 @layer base {
@@ -169,14 +213,6 @@ body {
   @apply h-20 w-full;
 }
 
-/* .title {
-  @apply text-[50px] sm:text-5xl font-dm-serif-display;
-}
-
-.sub-title {
-  @apply sm:text-[20px] text-[15px] text-paleGray;
-} */
-
 .destination-card {
   @apply rounded-xl flex flex-col md:flex-row items-center justify-between gap-4  h-auto overflow-hidden max-w-[383px];
 }
@@ -189,12 +225,40 @@ body {
   @apply xl:text-lg md:text-md text-sm  font-semibold  font-dm-serif-display;
 }
 
+/* Scroll reveal — homepage sections */
+@media (prefers-reduced-motion: no-preference) {
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.6s ease-out;
+  }
+  .scroll-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @layer utilities {
   .animate-slide-in-right {
     animation: slideInRight 0.5s;
   }
   .animate-slide-in-left {
     animation: slideInLeft 0.5s;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-slide-in-right,
+    .animate-slide-in-left {
+      animation: none;
+    }
   }
   @keyframes slideInRight {
     from {
@@ -214,6 +278,16 @@ body {
     to {
       opacity: 1;
       transform: translateX(0) translateY(0);
+    }
+  }
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 }

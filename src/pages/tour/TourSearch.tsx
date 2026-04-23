@@ -1,5 +1,5 @@
 import { MainLayout } from '@/layout';
-import DisplayItemType from '@/sections/tour/components/DisplayItemType';
+import DisplayItemType from '@/sections/shared/DisplayItemType';
 import CardSearching from '@components/CardSearching';
 import Container from '@components/Container';
 import DisplayContainer from '@components/DisplayContainer';

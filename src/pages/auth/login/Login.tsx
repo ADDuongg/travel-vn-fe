@@ -64,13 +64,19 @@ const LoginPage = () => {
                         <button
                           type="button"
                           className="text-sm font-semibold text-primary hover:underline"
-                          onClick={() => navigate(ROUTES.FORGOT_PASSWORD_REQUEST)}
+                          onClick={() =>
+                            navigate(ROUTES.FORGOT_PASSWORD_REQUEST)
+                          }
                         >
                           {t('auth.forget_password')}
                         </button>
                       </div>
 
-                      <Button size="lg" loading={isPending} className="w-full rounded-xl">
+                      <Button
+                        size="lg"
+                        loading={isPending}
+                        className="w-full rounded-xl"
+                      >
                         {t('buttons.login')}
                       </Button>
                     </form>

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useReviewsQuery, useMyReviewQuery } from '@/features/review/hooks';
 import { ReviewEntityType, ReviewStatus } from '@/features/review/types';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { Skeleton } from '@/components/ui/skeleton';
 import ReviewSection from './ReviewSection';
 
 import type { RatingSummary } from './ReviewSection';
@@ -39,7 +40,21 @@ export default function EntityReviewSection({
     return [myReview, ...reviews];
   }, [reviews, myReview, authUser]);
 
-  if (isLoading) return null;
+  if (isLoading) {
+    return (
+      <div className="space-y-4 py-1" aria-busy aria-label="Loading reviews">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <Skeleton className="h-6 w-40" />
+          <div className="flex gap-3">
+            <Skeleton className="h-9 w-44" />
+            <Skeleton className="h-9 w-28" />
+          </div>
+        </div>
+        <Skeleton className="h-24 w-full" />
+        <Skeleton className="h-24 w-full" />
+      </div>
+    );
+  }
 
   return (
     <ReviewSection

@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { ResponsiveH1, P } from '@/components/ui/typography';
 import { ROUTES } from '@/constants/router';
 import { useTourPaymentStatus } from '@/features/payment/hooks';
-import { useTourBookingByIdQuery } from '@/features/tours/booking-hooks';
+import { useTourBookingByIdQuery } from '@/features/tours/hooks';
 import { CheckCircle2, XCircle, Loader2 } from 'lucide-react';
 import { fmtMoney } from '@/utils';
 

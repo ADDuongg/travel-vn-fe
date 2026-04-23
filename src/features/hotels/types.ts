@@ -51,4 +51,30 @@ export interface Hotel extends HotelOption {
     order?: number;
   }>;
   amenities?: Array<{ _id: string; [key: string]: unknown }>;
+  /** From API when included — for review header (average / count) */
+  ratingSummary?: { average: number; total: number };
+}
+
+export type HotelSortBy = 'name' | 'rating' | 'newest';
+
+export interface HotelQueryParams {
+  page?: number;
+  limit?: number;
+  provinceId?: string;
+  search?: string;
+  minStars?: number;
+  sortBy?: HotelSortBy;
+  lang?: string;
+}
+
+export interface HotelPagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+export interface HotelPaginatedResponse {
+  items: Hotel[];
+  pagination: HotelPagination;
 }

@@ -14,10 +14,9 @@ export function useServerTable<TData>(opts: {
   columns: ColumnDef<TData, any>[];
   meta: I.PageMeta;
   state: IC.TableState;
-  windowSize?: number;
   onSelectionChange?: (rows: TData[]) => void;
 }) {
-  const { meta, state, windowSize = 2 } = opts;
+  const { meta, state } = opts;
   const [internalRowSelection, setInternalRowSelection] =
     React.useState<RowSelectionState>({});
 
@@ -53,16 +52,7 @@ export function useServerTable<TData>(opts: {
   const selectedRows = table
     .getSelectedRowModel()
     .rows.map((r) => r.original as TData);
-  const { pageIndex } = table.getState().pagination;
-
-  const start = Math.max(0, pageIndex - windowSize);
-  const end = Math.min(meta.pageCount - 1, pageIndex + windowSize);
-  const pages = Array.from(
-    { length: Math.max(0, end - start + 1) },
-    (_, i) => start + i,
-  );
-
-  return { table, selectedRows, pages, start, end };
+  return { table, selectedRows };
 }
 
 export type ServerTableInstance<T extends { id: string | number }> = ReturnType<

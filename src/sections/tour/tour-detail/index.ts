@@ -1,0 +1,11 @@
+export { default as TourDetail } from './TourDetail';
+export { default as TourHeader } from './TourHeader';
+export { default as TourExpect } from './TourExpect';
+export { default as TourItinerary } from './TourItinerary';
+export { default as TourIncluded } from './TourIncluded';
+export { default as TourMap } from './TourMap';
+export { default as TourRelated } from './TourRelated';
+export { default as TourFAQ } from './TourFAQ';
+export { default as TourReviews } from './TourReviews';
+export { default as TourSidebar } from './TourSidebar';
+export { default as TourFloatingBookingBar } from './TourFloatingBookingBar';

@@ -9,11 +9,11 @@ import Container from '@/components/Container';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { useTourBookingByCodeQuery } from '@/features/tours/booking-hooks';
+import { useTourBookingByCodeQuery } from '@/features/tours/hooks';
 import { fmtMoney, fmtDate } from '@/utils';
 import { ROUTES } from '@/constants/router';
 import { Link } from 'react-router-dom';
-import type { TourBookingDetail, TourBookingTourRef } from '@/features/tours/booking-types';
+import type { TourBookingDetail, TourBookingTourRef } from '@/features/tours/types';
 
 const STATUS_LABELS: Record<string, string> = {
   PENDING: 'Chờ xác nhận',

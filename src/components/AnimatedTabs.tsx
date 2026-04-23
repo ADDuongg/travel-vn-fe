@@ -20,6 +20,8 @@ export type AnimatedTabsProps = {
   defaultActiveId?: string;
   omitContainer?: boolean;
   scrollOffset?: number;
+  /** TravelVN product pages — warm ivory, red active indicator */
+  variant?: 'default' | 'travel';
 };
 
 export function AnimatedTabs({
@@ -27,6 +29,7 @@ export function AnimatedTabs({
   defaultActiveId,
   omitContainer = false,
   scrollOffset = 150,
+  variant = 'default',
 }: AnimatedTabsProps): JSX.Element {
   const initialActive = defaultActiveId ?? tabs[0]?.id ?? '';
   const [active, setActive] = useState<string>(initialActive);
@@ -78,33 +81,49 @@ export function AnimatedTabs({
     setActive(id);
     const section = document.getElementById(id);
     if (section) {
-      const y = section.getBoundingClientRect().top + window.scrollY - scrollOffset;
+      const y =
+        section.getBoundingClientRect().top + window.scrollY - scrollOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
     }
   };
 
+  const isTravel = variant === 'travel';
+
   const content = (
-    <div ref={containerRef} className="relative flex gap-8 py-4">
-        {tabs.map((t) => (
-          <button
-            key={t.id}
-            data-id={t.id}
-            onClick={() => handleClick(t.id)}
-            onMouseEnter={() => setHovered(t.id)}
-            onMouseLeave={() => setHovered(null)}
-            className={cn(
-              'relative pb-2 text-sm font-medium transition-colors hover:text-black cursor-pointer',
-              active === t.id
+    <div
+      ref={containerRef}
+      className={cn(
+        'relative flex gap-4 overflow-x-auto py-3 sm:gap-8 md:py-4',
+      )}
+    >
+      {tabs.map((t) => (
+        <button
+          key={t.id}
+          data-id={t.id}
+          type="button"
+          onClick={() => handleClick(t.id)}
+          onMouseEnter={() => setHovered(t.id)}
+          onMouseLeave={() => setHovered(null)}
+          className={cn(
+            'relative shrink-0 cursor-pointer pb-2 text-sm font-medium transition-colors duration-200',
+            isTravel
+              ? active === t.id
+                ? 'text-[#c8102e]'
+                : 'text-[rgba(28,26,20,0.6)] hover:text-[#1c1a14]'
+              : active === t.id
                 ? 'text-primary'
                 : 'text-muted-foreground hover:text-foreground',
-            )}
-          >
-            {t.label}
-          </button>
-        ))}
+          )}
+        >
+          {t.label}
+        </button>
+      ))}
 
       <span
-        className="absolute bottom-0 h-[2px] bg-primary transition-all duration-300 ease-in-out"
+        className={cn(
+          'absolute bottom-0 h-[2px] transition-all duration-300 ease-in-out',
+          isTravel ? 'bg-[#c8102e]' : 'bg-primary',
+        )}
         style={indicatorStyle}
       />
     </div>
