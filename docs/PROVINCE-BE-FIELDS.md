@@ -5,6 +5,10 @@ This document lists additional fields needed from backend to support the redesig
 ## Endpoint
 
 - `GET /api/v1/provinces/:slug`
+- `GET /api/v1/provinces` (paginated list) also includes these fields and travel counts.
+- `GET /api/v1/provinces/popular` and `GET /api/v1/provinces/dropdown` do not guarantee travel counts.
+
+See also FE client contract: `docs/PROVINCE-FE-CLIENT-FIELDS.md`.
 
 ## Required Additions
 

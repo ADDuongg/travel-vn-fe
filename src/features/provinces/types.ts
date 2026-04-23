@@ -49,9 +49,21 @@ export interface ProvinceHighlight {
   thumbnail?: ImageItem;
   description?: LocalizedName;
 }
+export type ProvinceHighlightItem = ProvinceHighlight;
+
+/** ProvinceClientExtensions - optional fields for public FE list/detail */
+export interface ProvinceClientExtensions {
+  population?: number;
+  area?: number;
+  bestTimeToVisit?: LocalizedName;
+  highlights?: ProvinceHighlight[];
+  totalHotels?: number;
+  totalTours?: number;
+  totalTourGuides?: number;
+}
 
 /** ProvinceListItem – list + popular response */
-export interface ProvinceListItem {
+export interface ProvinceListItem extends ProvinceClientExtensions {
   _id: string;
   type?: string;
   code: string;
@@ -70,15 +82,8 @@ export interface ProvinceListItem {
 }
 
 /** ProvinceDetail – detail response (kèm wards) */
-export interface ProvinceDetail extends ProvinceListItem {
+export interface ProvinceDetail extends ProvinceListItem, ProvinceClientExtensions {
   wards?: Ward[];
-  population?: number;
-  area?: number;
-  bestTimeToVisit?: LocalizedName;
-  highlights?: ProvinceHighlight[];
-  totalHotels?: number;
-  totalTours?: number;
-  totalTourGuides?: number;
 }
 
 /** ProvinceDropdownItem – dropdown response */

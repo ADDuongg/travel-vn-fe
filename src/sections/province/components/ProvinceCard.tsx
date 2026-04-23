@@ -2,12 +2,13 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { MapPin } from 'lucide-react';
+import { Building2, Compass, MapPin, Users } from 'lucide-react';
 import { ROUTES } from '@/constants/router';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/hooks/useLanguage';
 import { langKey } from '@/utils/addressOptions';
 import type { ProvinceListItem } from '@/features/provinces/types';
+import { formatCount } from '@/utils/formatNumber';
 
 interface ProvinceCardProps {
   item: ProvinceListItem;
@@ -52,6 +53,7 @@ export function ProvinceCard({ item, className }: ProvinceCardProps) {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const lang = langKey(language);
+  const locale = language === 'vi' ? 'vi-VN' : 'en-US';
   const name = getProvinceName(item, lang);
   const shortDescription = getShortDescription(item, lang);
   const regionLabel = getRegionLabel(item.region);
@@ -59,6 +61,16 @@ export function ProvinceCard({ item, className }: ProvinceCardProps) {
     item.thumbnail?.url ??
     item.gallery?.[0]?.url ??
     'https://images.unsplash.com/photo-1528127269322-539801943592?w=800&q=80';
+  const stats = [
+    { icon: Building2, label: t('province.total_hotels', 'Hotels'), value: item.totalHotels },
+    { icon: Compass, label: t('province.total_tours', 'Tours'), value: item.totalTours },
+    {
+      icon: Users,
+      label: t('province.total_tour_guides', 'Tour guides'),
+      value: item.totalTourGuides,
+    },
+  ].filter((stat) => stat.value !== undefined);
+  const hasAnyCount = stats.length > 0;
 
   return (
     <Link to={ROUTES.PROVINCE.DETAIL.replace(':slug', item.slug)} className="block h-full">
@@ -108,6 +120,20 @@ export function ProvinceCard({ item, className }: ProvinceCardProps) {
             <div className="mb-3 mt-2 flex items-center gap-1.5 text-sm text-[rgba(28,26,20,0.6)]">
               <MapPin className="size-4 shrink-0 text-[#2d6a4f]" strokeWidth={2.25} />
               <span>{item.fullName?.[lang] ?? item.name?.[lang]}</span>
+            </div>
+          )}
+          {hasAnyCount && (
+            <div className="mb-3 flex flex-wrap items-center gap-2 text-xs text-[rgba(28,26,20,0.72)]">
+              {stats.map((stat) => (
+                <span
+                  key={stat.label}
+                  className="inline-flex items-center gap-1 rounded-full bg-[#faf7f2] px-2.5 py-1"
+                >
+                  <stat.icon className="size-3.5 text-[#2d6a4f]" />
+                  <span className="font-medium">{stat.label}:</span>
+                  <span>{formatCount(stat.value as number, locale)}</span>
+                </span>
+              ))}
             </div>
           )}
           <span className="mt-auto flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-[#c8102e] transition-all duration-200 group-hover:gap-3">

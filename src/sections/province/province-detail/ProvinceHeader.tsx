@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useLanguage } from '@/hooks/useLanguage';
 import { langKey } from '@/utils/addressOptions';
 import type { ProvinceDetail } from '@/features/provinces/types';
+import { formatAreaKm2, formatCount } from '@/utils/formatNumber';
 
 interface ProvinceHeaderProps {
   province: ProvinceDetail;
@@ -18,6 +19,7 @@ export function ProvinceHeader({ province }: ProvinceHeaderProps) {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const lang = langKey(language);
+  const locale = language === 'vi' ? 'vi-VN' : 'en-US';
   const name = province.name?.[lang] ?? province.name?.vi ?? province.name?.en ?? province.slug;
   const shortDescription =
     province.translations?.[lang]?.shortDescription ??
@@ -60,7 +62,7 @@ export function ProvinceHeader({ province }: ProvinceHeaderProps) {
                 {t('province.population', 'Population')}
               </p>
               <p className="mt-1 text-lg font-semibold">
-                {province.population ? province.population.toLocaleString() : '--'}
+                {province.population !== undefined ? formatCount(province.population, locale) : '--'}
               </p>
             </div>
             <div className="rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white backdrop-blur-sm">
@@ -68,7 +70,7 @@ export function ProvinceHeader({ province }: ProvinceHeaderProps) {
                 {t('province.area', 'Area')}
               </p>
               <p className="mt-1 text-lg font-semibold">
-                {province.area ? `${province.area.toLocaleString()} km2` : '--'}
+                {province.area !== undefined ? formatAreaKm2(province.area, locale) : '--'}
               </p>
             </div>
             <div className="rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white backdrop-blur-sm">
