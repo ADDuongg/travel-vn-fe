@@ -43,6 +43,13 @@ export interface ProvinceTranslation {
   seo?: ProvinceSeo;
 }
 
+/** ProvinceHighlight */
+export interface ProvinceHighlight {
+  name: LocalizedName;
+  thumbnail?: ImageItem;
+  description?: LocalizedName;
+}
+
 /** ProvinceListItem – list + popular response */
 export interface ProvinceListItem {
   _id: string;
@@ -65,6 +72,13 @@ export interface ProvinceListItem {
 /** ProvinceDetail – detail response (kèm wards) */
 export interface ProvinceDetail extends ProvinceListItem {
   wards?: Ward[];
+  population?: number;
+  area?: number;
+  bestTimeToVisit?: LocalizedName;
+  highlights?: ProvinceHighlight[];
+  totalHotels?: number;
+  totalTours?: number;
+  totalTourGuides?: number;
 }
 
 /** ProvinceDropdownItem – dropdown response */
