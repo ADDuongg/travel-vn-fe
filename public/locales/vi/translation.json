@@ -7,7 +7,6 @@
   "tour_guide_list": "Hướng dẫn viên",
   "room_list": "Danh sách phòng",
   "search": "Tìm kiếm",
-  "blog": "Blog",
   "destination_page": {
     "title": "Điểm đến",
     "subtitle": "Khám phá tour và điểm đến trên khắp Việt Nam"
@@ -15,6 +14,7 @@
   "nav": {
     "destination": "Điểm đến",
     "provinces": "Tỉnh thành",
+    "blog": "Cẩm nang",
     "about_us": "Về chúng tôi",
     "contact": "Liên hệ",
     "our_services": "Dịch vụ của chúng tôi",
@@ -41,6 +41,43 @@
     "no_results": "Không tìm thấy tỉnh thành.",
     "showing_count": "Hiển thị {{count}} / {{total}} tỉnh thành",
     "popular_badge": "Nổi bật"
+  },
+  "blog": {
+    "hero_title": "Cẩm nang du lịch và góc nhìn địa phương",
+    "hero_subtitle": "Khám phá kinh nghiệm thực tế, lịch trình gợi ý và thông tin điểm đến cho chuyến đi Việt Nam của bạn.",
+    "hero_badge": "Bài viết tuyển chọn",
+    "list": {
+      "heading": "Bài viết mới nhất",
+      "showing": "Hiển thị {{from}}-{{to}} trên {{total}} bài viết",
+      "clear_cta": "Đặt lại bộ lọc"
+    },
+    "filter": {
+      "search_placeholder": "Tìm theo tiêu đề hoặc từ khóa...",
+      "all_categories": "Tất cả danh mục",
+      "all_tags": "Tất cả thẻ",
+      "sort_label": "Sắp xếp",
+      "sort_latest": "Mới nhất",
+      "sort_popular": "Nhiều lượt xem",
+      "sort_oldest": "Cũ nhất"
+    },
+    "no_results": "Không tìm thấy bài viết",
+    "empty_hint": "Hãy thử từ khóa, danh mục hoặc thẻ khác.",
+    "error_title": "Không thể tải dữ liệu blog",
+    "error_desc": "Vui lòng thử lại sau ít phút.",
+    "not_found": "Không tìm thấy bài viết",
+    "not_found_desc": "Bài viết có thể đã bị gỡ hoặc đường dẫn không đúng.",
+    "read_time": "{{count}} phút đọc",
+    "view_count": "{{count}} lượt xem",
+    "by_author": "Tác giả: {{name}}",
+    "published_on": "Đăng ngày {{date}}",
+    "toc_title": "Mục lục",
+    "share": "Chia sẻ bài viết",
+    "related_title": "Bài viết liên quan",
+    "category_page_title": "Danh mục: {{name}}",
+    "tag_page_title": "Thẻ: {{name}}",
+    "reviews_tab": "Đánh giá",
+    "reviews_title": "Đánh giá từ độc giả",
+    "rating_summary": "{{avg}} / 5 ({{count}} đánh giá)"
   },
   "common": {
     "loading": "Đang tải...",

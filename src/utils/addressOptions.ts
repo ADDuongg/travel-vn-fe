@@ -1,4 +1,5 @@
 import type { DistrictOrWard, Province } from '@/features/provinces/types';
+import { pickLocale } from '@/features/provinces/locale';
 
 /** Giá trị "không chọn" cho select tỉnh/xã */
 export const ADDRESS_NONE = '__none__';
@@ -11,7 +12,7 @@ export function langKey(lang: string): LangKey {
 
 /** Lấy label phường/xã theo ngôn ngữ */
 export function getWardLabel(w: DistrictOrWard, lang: LangKey): string {
-  return w.name?.[lang] ?? w.name?.vi ?? w.name?.en ?? '';
+  return pickLocale(w.name, lang) ?? '';
 }
 
 export interface SelectOption {
@@ -31,8 +32,7 @@ export function toProvinceSelectOptions(
   return [
     { label: noneLabel, value: ADDRESS_NONE },
     ...provinces.map((p) => ({
-      label:
-        p.name?.[lang] ?? p.name?.vi ?? p.name?.en ?? p.code ?? String(p._id),
+      label: pickLocale(p.name, lang) ?? p.code ?? String(p._id),
       value: String(p._id),
     })),
   ];

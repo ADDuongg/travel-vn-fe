@@ -73,7 +73,7 @@ const Footer: React.FC = () => {
             {t('about_us')}
           </a>
           <a href="#" className="hover:text-white">
-            {t('blog')}
+            {t('nav.blog')}
           </a>
           <a href="#" className="hover:text-white">
             {t('contact')}

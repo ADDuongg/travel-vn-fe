@@ -15,6 +15,12 @@ export const ROUTES = {
     INDEX: '/provinces',
     DETAIL: '/provinces/:slug',
   },
+  BLOG: {
+    INDEX: '/blog',
+    DETAIL: '/blog/:slug',
+    CATEGORY: '/blog/category/:slug',
+    TAG: '/blog/tag/:slug',
+  },
   TOUR: {
     INDEX: '/tour',
     SEARCH: '/tour/search',

@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useLanguage } from '@/hooks/useLanguage';
 import { langKey } from '@/utils/addressOptions';
 import type { ProvinceDetail } from '@/features/provinces/types';
+import { getHighlightTitleAndDescription } from '@/features/provinces/locale';
 
 interface ProvinceHighlightsProps {
   province: ProvinceDetail;
@@ -27,30 +28,33 @@ export function ProvinceHighlights({ province }: ProvinceHighlightsProps) {
       </h2>
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {highlights.map((highlight, index) => {
-          const name = highlight.name?.[lang] ?? highlight.name?.vi ?? highlight.name?.en ?? '--';
-          const description =
-            highlight.description?.[lang] ??
-            highlight.description?.vi ??
-            highlight.description?.en ??
-            '';
+          const { title, description } = getHighlightTitleAndDescription(
+            highlight,
+            lang,
+            language,
+          );
+          const imgAlt = highlight.thumbnail?.alt?.trim() || title;
 
           return (
             <article
-              key={`${name}-${index}`}
-              className="overflow-hidden rounded-xl border border-[rgba(28,26,20,0.08)] bg-[#faf7f2]"
+              key={highlight.thumbnail?.url ?? `highlight-${index}`}
+              className="overflow-hidden rounded-xl border border-[rgba(28,26,20,0.08)] bg-[#faf7f2] transition-shadow duration-200 hover:shadow-md"
             >
               {highlight.thumbnail?.url && (
                 <div className="aspect-[16/10] overflow-hidden">
                   <img
                     src={highlight.thumbnail.url}
-                    alt={name}
-                    className="h-full w-full object-cover transition-transform duration-300 hover:scale-[1.03]"
+                    alt={imgAlt}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-300 motion-reduce:transition-none hover:scale-[1.03] motion-reduce:hover:scale-100"
                   />
                 </div>
               )}
               <div className="p-4">
-                <h3 className="text-lg font-semibold text-[#1c1a14]">{name}</h3>
-                {description && <p className="mt-2 text-sm leading-6 text-[rgba(28,26,20,0.72)]">{description}</p>}
+                <h3 className="text-lg font-semibold text-[#1c1a14]">{title}</h3>
+                {description ? (
+                  <p className="mt-2 text-sm leading-6 text-[rgba(28,26,20,0.72)]">{description}</p>
+                ) : null}
               </div>
             </article>
           );

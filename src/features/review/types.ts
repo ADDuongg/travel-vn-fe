@@ -70,6 +70,7 @@ export type DeleteReviewInput = {
 export interface EntitySummary {
   name: string;
   thumbnailUrl: string;
+  slug?: string;
 }
 
 /** Item from GET /api/v1/reviews/me/list (lean + entitySummary) */

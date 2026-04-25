@@ -12,8 +12,6 @@ const chipBtn =
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e]/30 ' +
   'data-[state=open]:border-[rgba(28,26,20,0.2)] data-[state=open]:bg-stone-50 data-[state=open]:shadow';
 
-const chipActive = 'border-[#c9922a]/50 bg-[#f5e9d0]/60 text-[#1e4d38]';
-
 interface ProvinceFilterProps {
   value: ProvinceListQuery;
   onChange: (next: ProvinceListQuery) => void;

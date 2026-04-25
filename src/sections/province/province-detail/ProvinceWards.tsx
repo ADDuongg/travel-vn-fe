@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '@/hooks/useLanguage';
-import { langKey } from '@/utils/addressOptions';
 import { MapPinned } from 'lucide-react';
 import type { ProvinceDetail } from '@/features/provinces/types';
+import { pickLocale } from '@/features/provinces/locale';
 
 interface ProvinceWardsProps {
   province: ProvinceDetail;
@@ -11,7 +11,6 @@ interface ProvinceWardsProps {
 export function ProvinceWards({ province }: ProvinceWardsProps) {
   const { t } = useTranslation();
   const { language } = useLanguage();
-  const lang = langKey(language);
   const wards = province.wards ?? [];
 
   if (wards.length === 0) {
@@ -37,7 +36,7 @@ export function ProvinceWards({ province }: ProvinceWardsProps) {
       </p>
       <div className="mt-4 flex flex-wrap gap-2">
         {wards.map((ward) => {
-          const name = ward.name?.[lang] ?? ward.name?.vi ?? ward.name?.en ?? ward.slug;
+          const name = pickLocale(ward.name, language) ?? ward.slug;
           return (
             <span
               key={ward.code}

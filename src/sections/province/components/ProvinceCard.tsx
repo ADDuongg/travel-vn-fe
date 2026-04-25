@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { useLanguage } from '@/hooks/useLanguage';
 import { langKey } from '@/utils/addressOptions';
 import type { ProvinceListItem } from '@/features/provinces/types';
+import { pickLocale } from '@/features/provinces/locale';
 import { formatCount } from '@/utils/formatNumber';
 
 interface ProvinceCardProps {
@@ -22,8 +23,8 @@ function getRegionLabel(region?: ProvinceListItem['region']) {
   return '';
 }
 
-function getProvinceName(item: ProvinceListItem, lang: 'vi' | 'en') {
-  return item.name?.[lang] ?? item.name?.vi ?? item.name?.en ?? item.slug;
+function getProvinceName(item: ProvinceListItem, language: string) {
+  return pickLocale(item.name, language) ?? item.slug;
 }
 
 function getShortDescription(item: ProvinceListItem, lang: 'vi' | 'en') {
@@ -54,7 +55,7 @@ export function ProvinceCard({ item, className }: ProvinceCardProps) {
   const { language } = useLanguage();
   const lang = langKey(language);
   const locale = language === 'vi' ? 'vi-VN' : 'en-US';
-  const name = getProvinceName(item, lang);
+  const name = getProvinceName(item, language);
   const shortDescription = getShortDescription(item, lang);
   const regionLabel = getRegionLabel(item.region);
   const thumbnail =
@@ -73,10 +74,13 @@ export function ProvinceCard({ item, className }: ProvinceCardProps) {
   const hasAnyCount = stats.length > 0;
 
   return (
-    <Link to={ROUTES.PROVINCE.DETAIL.replace(':slug', item.slug)} className="block h-full">
+    <Link
+      to={ROUTES.PROVINCE.DETAIL.replace(':slug', item.slug)}
+      className="block h-full cursor-pointer"
+    >
       <Card
         className={cn(
-          'group flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-[rgba(28,26,20,0.08)] bg-white shadow-[var(--shadow-card)] transition-all duration-300',
+          'group flex h-full flex-col overflow-hidden rounded-2xl border border-[rgba(28,26,20,0.08)] bg-white shadow-[var(--shadow-card)] transition-all duration-300',
           'hover:shadow-[var(--shadow-elevated)]',
           className,
         )}
@@ -119,7 +123,7 @@ export function ProvinceCard({ item, className }: ProvinceCardProps) {
           ) : (
             <div className="mb-3 mt-2 flex items-center gap-1.5 text-sm text-[rgba(28,26,20,0.6)]">
               <MapPin className="size-4 shrink-0 text-[#2d6a4f]" strokeWidth={2.25} />
-              <span>{item.fullName?.[lang] ?? item.name?.[lang]}</span>
+              <span>{pickLocale(item.fullName, language) ?? pickLocale(item.name, language)}</span>
             </div>
           )}
           {hasAnyCount && (

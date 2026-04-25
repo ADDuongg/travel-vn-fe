@@ -76,8 +76,8 @@ export const HeaderItem: I.HeaderItemType[] = [
   },
   {
     name: 'blog',
-    label: 'blog',
-    path: '/blog',
+    label: 'nav.blog',
+    path: ROUTES.BLOG.INDEX,
   },
 ];
 

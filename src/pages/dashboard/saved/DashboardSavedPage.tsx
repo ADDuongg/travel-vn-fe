@@ -146,6 +146,10 @@ const MyReviewsPanel: React.FC = () => {
         navigate(sync);
         return;
       }
+      if (row.entityType === ReviewEntityType.BLOG && row.entitySummary?.slug) {
+        navigate(generatePath(ROUTES.BLOG.DETAIL, { slug: row.entitySummary.slug }));
+        return;
+      }
       if (row.entityType === ReviewEntityType.TOUR) {
         navigate(generatePath(ROUTES.TOUR.DETAIL, { id: row.entityId }));
       }
@@ -250,8 +254,8 @@ const MyReviewsPanel: React.FC = () => {
           const r = row.original;
           const canSync = getSyncDetailPath(r.entityType, r.entityId) != null;
           const canTour = r.entityType === ReviewEntityType.TOUR;
-          const unsupported =
-            r.entityType === ReviewEntityType.BLOG || (!canSync && !canTour);
+          const canBlog = r.entityType === ReviewEntityType.BLOG && !!r.entitySummary?.slug;
+          const unsupported = !canSync && !canTour && !canBlog;
 
           return (
             <Button
@@ -400,8 +404,9 @@ type FavoriteEntityFilter = 'all' | FavoriteEntityType;
 function getFavoriteDetailPath(
   entityType: FavoriteEntityType,
   entityId: string,
-  _summary?: FavoriteEntitySummary,
+  summary?: FavoriteEntitySummary,
 ) {
+  void summary;
   switch (entityType) {
     case FavoriteEntityType.TOUR: {
       return generatePath(ROUTES.TOUR.DETAIL, { id: entityId });

@@ -7,7 +7,6 @@
   "tour_guide_list": "Tour Guides",
   "room_list": "Room List",
   "search": "Search",
-  "blog": "Blog",
   "destination_page": {
     "title": "Destinations",
     "subtitle": "Explore tours and destinations across Vietnam"
@@ -15,6 +14,7 @@
   "nav": {
     "destination": "Destination",
     "provinces": "Provinces",
+    "blog": "Blog",
     "about_us": "About Us",
     "contact": "Contact",
     "our_services": "Our Services",
@@ -41,6 +41,43 @@
     "no_results": "No provinces found.",
     "showing_count": "Showing {{count}} of {{total}} provinces",
     "popular_badge": "Popular"
+  },
+  "blog": {
+    "hero_title": "Travel stories and local insights",
+    "hero_subtitle": "Discover practical guides, curated itineraries, and destination knowledge for your next Vietnam journey.",
+    "hero_badge": "Editorial picks",
+    "list": {
+      "heading": "Latest articles",
+      "showing": "Showing {{from}}-{{to}} of {{total}} articles",
+      "clear_cta": "Reset filters"
+    },
+    "filter": {
+      "search_placeholder": "Search by title or keyword...",
+      "all_categories": "All categories",
+      "all_tags": "All tags",
+      "sort_label": "Sort",
+      "sort_latest": "Latest",
+      "sort_popular": "Most viewed",
+      "sort_oldest": "Oldest"
+    },
+    "no_results": "No articles found",
+    "empty_hint": "Try another keyword, category, or tag.",
+    "error_title": "Unable to load blog data",
+    "error_desc": "Please try again in a few moments.",
+    "not_found": "Article not found",
+    "not_found_desc": "This article may have been removed or the link is incorrect.",
+    "read_time": "{{count}} min read",
+    "view_count": "{{count}} views",
+    "by_author": "By {{name}}",
+    "published_on": "Published {{date}}",
+    "toc_title": "Table of contents",
+    "share": "Share article",
+    "related_title": "Related articles",
+    "category_page_title": "Category: {{name}}",
+    "tag_page_title": "Tag: {{name}}",
+    "reviews_tab": "Reviews",
+    "reviews_title": "Reader reviews",
+    "rating_summary": "{{avg}} / 5 ({{count}} reviews)"
   },
   "common": {
     "loading": "Loading...",

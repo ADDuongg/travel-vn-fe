@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useLanguage } from '@/hooks/useLanguage';
 import { langKey } from '@/utils/addressOptions';
 import type { ProvinceDetail } from '@/features/provinces/types';
+import { getProvinceBestTimeDisplay, pickLocale } from '@/features/provinces/locale';
 import { formatAreaKm2, formatCount } from '@/utils/formatNumber';
 
 interface ProvinceHeaderProps {
@@ -20,7 +21,7 @@ export function ProvinceHeader({ province }: ProvinceHeaderProps) {
   const { language } = useLanguage();
   const lang = langKey(language);
   const locale = language === 'vi' ? 'vi-VN' : 'en-US';
-  const name = province.name?.[lang] ?? province.name?.vi ?? province.name?.en ?? province.slug;
+  const name = pickLocale(province.name, language) ?? province.slug;
   const shortDescription =
     province.translations?.[lang]?.shortDescription ??
     province.translations?.vi?.shortDescription ??
@@ -39,6 +40,7 @@ export function ProvinceHeader({ province }: ProvinceHeaderProps) {
           src={coverImage}
           alt={name}
           className="h-[340px] w-full object-cover sm:h-[420px] lg:h-[500px]"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1c1a14]/80 via-[#1c1a14]/45 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 z-[1] p-6 sm:p-8 lg:p-10">
@@ -78,10 +80,7 @@ export function ProvinceHeader({ province }: ProvinceHeaderProps) {
                 {t('province.best_time_to_visit', 'Best time to visit')}
               </p>
               <p className="mt-1 text-lg font-semibold">
-                {province.bestTimeToVisit?.[lang] ??
-                  province.bestTimeToVisit?.vi ??
-                  province.bestTimeToVisit?.en ??
-                  '--'}
+                {getProvinceBestTimeDisplay(province, lang, language) ?? '--'}
               </p>
             </div>
           </div>

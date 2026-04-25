@@ -86,6 +86,10 @@ const ProvinceListPage = Loadable(
 const ProvinceDetailPage = Loadable(
   () => import('@/pages/province/ProvinceDetailPage'),
 );
+const BlogListPage = Loadable(() => import('@/pages/blog/BlogListPage'));
+const BlogDetailPage = Loadable(() => import('@/pages/blog/BlogDetailPage'));
+const BlogCategoryPage = Loadable(() => import('@/pages/blog/BlogCategoryPage'));
+const BlogTagPage = Loadable(() => import('@/pages/blog/BlogTagPage'));
 
 export const routes: RouteConfig[] = [
   {
@@ -268,6 +272,22 @@ export const routes: RouteConfig[] = [
   {
     path: ROUTES.PROVINCE.DETAIL,
     element: <ProvinceDetailPage />,
+  },
+  {
+    path: ROUTES.BLOG.INDEX,
+    element: <BlogListPage />,
+  },
+  {
+    path: ROUTES.BLOG.DETAIL,
+    element: <BlogDetailPage />,
+  },
+  {
+    path: ROUTES.BLOG.CATEGORY,
+    element: <BlogCategoryPage />,
+  },
+  {
+    path: ROUTES.BLOG.TAG,
+    element: <BlogTagPage />,
   },
   {
     path: ROUTES.LOGIN,

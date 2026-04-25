@@ -1,7 +1,21 @@
-/** LocalizedName – vi/en */
-export interface LocalizedName {
-  vi: string;
-  en: string;
+/**
+ * Type province public API: docs/PROVINCE-FE.md
+ * Name / fullName / ward.name: Record<locale, string> (key lowercase: vi, en, …)
+ */
+
+/** DynamicLocalized — tên & text đa ngôn ngữ (BE dùng Record, không còn cố định { vi, en } tại cùng cấp) */
+export type DynamicLocalized = Record<string, string>;
+
+/** @deprecated dùng DynamicLocalized; giữ alias để code cũ đọc dễ */
+export type LocalizedName = DynamicLocalized;
+
+/** Nội dung theo từng locale — bestTimeToVisit nằm trong đây (PROVINCE-FE.md §2.3) */
+export interface ProvinceTranslation {
+  description?: string;
+  shortDescription?: string;
+  /** Thời điểm du lịch tốt — chuỗi theo locale (không còn field bestTimeToVisit root) */
+  bestTimeToVisit?: string;
+  seo?: ProvinceSeo;
 }
 
 /** Ward (quận/huyện, phường/xã) */
@@ -9,7 +23,7 @@ export interface Ward {
   type: string;
   code: string;
   slug: string;
-  name: LocalizedName;
+  name: DynamicLocalized;
 }
 
 /** District/Ward – alias for backward compatibility (dropdown uses wards) */
@@ -18,7 +32,7 @@ export interface DistrictOrWard {
   type?: string;
   code: string;
   slug?: string;
-  name: LocalizedName;
+  name: DynamicLocalized;
 }
 
 /** ImageItem – thumbnail, gallery */
@@ -36,40 +50,44 @@ export interface ProvinceSeo {
   keywords?: string[];
 }
 
-/** ProvinceTranslation */
-export interface ProvinceTranslation {
+/** Một dòng highlight theo ngôn ngữ */
+export interface ProvinceHighlightLocaleBlock {
+  name: string;
   description?: string;
-  shortDescription?: string;
-  seo?: ProvinceSeo;
 }
 
-/** ProvinceHighlight */
+/**
+ * Điểm nổi bật: highlights[].translations[lang].name / description
+ * (legacy: name/description cùng cấp — BE có thể parse tạm)
+ */
 export interface ProvinceHighlight {
-  name: LocalizedName;
+  translations?: Record<string, ProvinceHighlightLocaleBlock>;
   thumbnail?: ImageItem;
-  description?: LocalizedName;
+  /** Legacy shape (migration) — ưu tiên translations khi có */
+  name?: DynamicLocalized;
+  description?: DynamicLocalized;
 }
+
 export type ProvinceHighlightItem = ProvinceHighlight;
 
-/** ProvinceClientExtensions - optional fields for public FE list/detail */
+/** Các field mở rộng FE client — list + detail (trừ wards) */
 export interface ProvinceClientExtensions {
   population?: number;
   area?: number;
-  bestTimeToVisit?: LocalizedName;
   highlights?: ProvinceHighlight[];
   totalHotels?: number;
   totalTours?: number;
   totalTourGuides?: number;
 }
 
-/** ProvinceListItem – list + popular response */
+/** ProvinceListItem — list + popular; không có wards trên từng item list */
 export interface ProvinceListItem extends ProvinceClientExtensions {
   _id: string;
   type?: string;
   code: string;
   slug: string;
-  name: LocalizedName;
-  fullName?: LocalizedName;
+  name: DynamicLocalized;
+  fullName?: DynamicLocalized;
   thumbnail?: ImageItem;
   gallery?: ImageItem[];
   translations?: Record<string, ProvinceTranslation>;
@@ -81,8 +99,8 @@ export interface ProvinceListItem extends ProvinceClientExtensions {
   updatedAt?: string;
 }
 
-/** ProvinceDetail – detail response (kèm wards) */
-export interface ProvinceDetail extends ProvinceListItem, ProvinceClientExtensions {
+/** Chi tiết theo slug — thêm wards */
+export interface ProvinceDetail extends ProvinceListItem {
   wards?: Ward[];
 }
 
@@ -91,8 +109,8 @@ export interface ProvinceDropdownItem {
   _id: string;
   code: string;
   slug: string;
-  name: LocalizedName;
-  fullName?: LocalizedName;
+  name: DynamicLocalized;
+  fullName?: DynamicLocalized;
   wards?: Ward[];
 }
 

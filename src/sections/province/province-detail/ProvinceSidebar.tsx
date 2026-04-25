@@ -3,6 +3,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { langKey } from '@/utils/addressOptions';
 import { Building2, Compass, Landmark, Users } from 'lucide-react';
 import type { ProvinceDetail } from '@/features/provinces/types';
+import { getProvinceBestTimeDisplay } from '@/features/provinces/locale';
 import { formatAreaKm2, formatCount } from '@/utils/formatNumber';
 
 interface ProvinceSidebarProps {
@@ -15,6 +16,15 @@ export function ProvinceSidebar({ province }: ProvinceSidebarProps) {
   const lang = langKey(language);
   const locale = language === 'vi' ? 'vi-VN' : 'en-US';
 
+  const regionLabel =
+    province.region === 'NORTH'
+      ? t('province.region_north', 'North')
+      : province.region === 'CENTRAL'
+        ? t('province.region_central', 'Central')
+        : province.region === 'SOUTH'
+          ? t('province.region_south', 'South')
+          : undefined;
+
   const facts = [
     {
       label: t('province.population', 'Population'),
@@ -26,15 +36,11 @@ export function ProvinceSidebar({ province }: ProvinceSidebarProps) {
     },
     {
       label: t('province.best_time_to_visit', 'Best time to visit'),
-      value:
-        province.bestTimeToVisit?.[lang] ??
-        province.bestTimeToVisit?.vi ??
-        province.bestTimeToVisit?.en ??
-        '--',
+      value: getProvinceBestTimeDisplay(province, lang, language) ?? '--',
     },
     {
       label: t('province.region', 'Region'),
-      value: province.region ?? '--',
+      value: regionLabel ?? '--',
     },
   ];
 
