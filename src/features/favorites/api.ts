@@ -11,17 +11,17 @@ export async function toggleFavorite(payload: {
   entityType: FavoriteEntityType;
   entityId: string;
 }): Promise<{ isFavorited: boolean }> {
-  return api.post('/api/v1/favorites/toggle', payload);
+  return api.post('/api/v1/client/favorites/toggle', payload);
 }
 
 /**
- * GET /api/v1/favorites/me/list — maps to shared ApiListResponse for DataTable.
+ * GET /api/v1/client/favorites/me/list — maps to shared ApiListResponse for DataTable.
  */
 export async function getMyFavoritesList(
   params: MyFavoritesListParams,
 ): Promise<I.ApiListResponse<FavoriteRecord>> {
   const payload = await api.get<MyFavoritesListPayload>(
-    '/api/v1/favorites/me/list',
+    '/api/v1/client/favorites/me/list',
     { params },
   );
 
@@ -51,6 +51,6 @@ export async function getMyIsFavorited(params: {
   entityType: FavoriteEntityType;
   entityId: string;
 }): Promise<{ isFavorited: boolean }> {
-  return api.get('/api/v1/favorites/me/is-favorited', { params });
+  return api.get('/api/v1/client/favorites/me/is-favorited', { params });
 }
 

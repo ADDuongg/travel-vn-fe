@@ -7,7 +7,7 @@ import type {
   ProvinceListResponse,
 } from './types';
 
-const BASE = '/api/v1/provinces';
+const BASE = '/api/v1/public/provinces';
 
 /** Danh sách tỉnh (filter, pagination) */
 export function getProvincesList(params?: ProvinceListParams) {

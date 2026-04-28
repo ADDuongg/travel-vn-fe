@@ -18,9 +18,9 @@ export function updateProfile(
       else formData.append(key, String(value));
     });
     formData.append('avatar', avatarFile);
-    return api.patch<I.UserProfile>('/api/v1/users/profile/me', formData, {
+    return api.patch<I.UserProfile>('/api/v1/client/users/profile/me', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   }
-  return api.patch<I.UserProfile>('/api/v1/users/profile/me', data);
+  return api.patch<I.UserProfile>('/api/v1/client/users/profile/me', data);
 }

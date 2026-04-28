@@ -5,7 +5,7 @@ import type {
   NotificationItem,
 } from './types';
 
-const BASE = '/api/v1/notifications';
+const BASE = '/api/v1/client/notifications';
 
 export function getUnreadCount(): Promise<{ count: number }> {
   return api.get<{ count: number }>(`${BASE}/unread-count`);

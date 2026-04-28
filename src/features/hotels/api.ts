@@ -9,13 +9,13 @@ import type {
 export type GetHotelsParams = HotelQueryParams;
 
 export function getHotels(params?: GetHotelsParams) {
-  return api.get<HotelPaginatedResponse>('/api/v1/hotels', { params });
+  return api.get<HotelPaginatedResponse>('/api/v1/public/hotels', { params });
 }
 
 export function getHotelOptions(params?: GetHotelsParams) {
-  return api.get<HotelOption[]>('/api/v1/hotels/options', { params });
+  return api.get<HotelOption[]>('/api/v1/public/hotels/options', { params });
 }
 
 export function getHotelById(id: string) {
-  return api.get<Hotel>(`/api/v1/hotels/${id}`);
+  return api.get<Hotel>(`/api/v1/public/hotels/${id}`);
 }

@@ -1,5 +1,8 @@
 import api from '@/lib/axios';
 
+/** User JWT routes under global prefix — see MODULES-12-15-FE-API.md */
+const CLIENT_PAYMENTS_BASE = '/api/v1/client/payments';
+
 export interface CreatePaymentIntentResponse {
   clientSecret: string;
   paymentId: string;
@@ -34,32 +37,36 @@ export function generateIdempotencyKey(bookingId: string): string {
 }
 
 /**
- * Create Stripe payment intent
- * @param bookingId - Booking ID
- * @param idempotencyKey - Unique idempotency key
+ * Create Stripe payment intent (room booking)
+ * POST /api/v1/client/payments/create-intent
  */
 export async function createPaymentIntent(
   bookingId: string,
   idempotencyKey: string,
 ): Promise<CreatePaymentIntentResponse> {
-  // Note: Backend payment controller uses @Controller('payments')
-  // If backend has /api/v1 prefix, update route accordingly
-  return api.post<CreatePaymentIntentResponse>('/payments/create-intent', {
-    bookingId,
-  }, {
-    headers: {
-      'Idempotency-Key': idempotencyKey,
+  return api.post<CreatePaymentIntentResponse>(
+    `${CLIENT_PAYMENTS_BASE}/create-intent`,
+    {
+      bookingId,
     },
-  });
+    {
+      headers: {
+        'Idempotency-Key': idempotencyKey,
+      },
+    },
+  );
 }
 
 /**
  * Get payment status by booking ID (room)
+ * GET /api/v1/client/payments/status/:bookingId
  */
 export async function getPaymentStatus(
   bookingId: string,
 ): Promise<PaymentStatusResponse> {
-  return api.get<PaymentStatusResponse>(`/payments/status/${bookingId}`);
+  return api.get<PaymentStatusResponse>(
+    `${CLIENT_PAYMENTS_BASE}/status/${bookingId}`,
+  );
 }
 
 // --- Tour payment (Phase 2) ---
@@ -70,14 +77,14 @@ export interface CreateTourPaymentIntentDto {
 
 /**
  * Create Stripe payment intent for tour booking
- * POST /api/v1/payments/create-intent/tour
+ * POST /api/v1/client/payments/create-intent/tour
  */
 export async function createTourPaymentIntent(
   tourBookingId: string,
   idempotencyKey: string,
 ): Promise<CreatePaymentIntentResponse> {
   return api.post<CreatePaymentIntentResponse>(
-    '/payments/create-intent/tour',
+    `${CLIENT_PAYMENTS_BASE}/create-intent/tour`,
     { tourBookingId },
     {
       headers: {
@@ -89,13 +96,13 @@ export async function createTourPaymentIntent(
 
 /**
  * Get payment status for tour booking
- * GET /api/v1/payments/status/tour/:tourBookingId
+ * GET /api/v1/client/payments/status/tour/:tourBookingId
  */
 export async function getTourPaymentStatus(
   tourBookingId: string,
 ): Promise<PaymentStatusResponse> {
   return api.get<PaymentStatusResponse>(
-    `/payments/status/tour/${tourBookingId}`,
+    `${CLIENT_PAYMENTS_BASE}/status/tour/${tourBookingId}`,
   );
 }
 

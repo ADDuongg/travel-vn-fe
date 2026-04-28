@@ -17,7 +17,7 @@ export function getReviews(params: {
   entityType: ReviewEntityType;
   entityId: string;
 }) {
-  return api.get<Review[]>('/api/v1/reviews', { params });
+  return api.get<Review[]>('/api/v1/public/reviews', { params });
 }
 
 export async function getMyReviews(params: {
@@ -25,7 +25,7 @@ export async function getMyReviews(params: {
   entityId: string;
 }): Promise<Review | null> {
   try {
-    return await api.get<Review>('/api/v1/reviews/me', { params });
+    return await api.get<Review>('/api/v1/client/reviews/me', { params });
   } catch (e: unknown) {
     const status = (e as { response?: { status?: number } })?.response?.status;
     if (status === 404) return null;
@@ -40,13 +40,13 @@ function isListPayload(
 }
 
 /**
- * GET /api/v1/reviews/me/list — maps to shared ApiListResponse for DataTable.
+ * GET /api/v1/client/reviews/me/list — maps to shared ApiListResponse for DataTable.
  */
 export async function getMyReviewsList(
   params: MyReviewsListParams,
 ): Promise<I.ApiListResponse<MyReviewTableRow>> {
   const payload = await api.get<MyReviewsListPayload | MyReviewListItem[]>(
-    '/api/v1/reviews/me/list',
+    '/api/v1/client/reviews/me/list',
     { params },
   );
 
@@ -85,12 +85,12 @@ export function submitReview(payload: {
 
   isAnonymous?: boolean;
 }) {
-  return api.post('/api/v1/reviews', payload);
+  return api.post('/api/v1/client/reviews', payload);
 }
 
 export const deleteReview = ({ id }: DeleteReviewInput) =>
-  api.delete(`/api/v1/reviews/${id}`);
+  api.delete(`/api/v1/client/reviews/${id}`);
 
 export const updateReview = (payload: UpdateReviewInput) => {
-  return api.post('/api/v1/reviews', payload);
+  return api.post('/api/v1/client/reviews', payload);
 };

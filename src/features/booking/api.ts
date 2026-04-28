@@ -10,7 +10,7 @@ export async function getMyBookings(params: {
   status?: string;
   sort?: I.SortParam[];
 }) {
-  return api.get<I.ApiListResponse<Booking>>('/api/v1/bookings/me', {
+  return api.get<I.ApiListResponse<Booking>>('/api/v1/client/bookings/me', {
     params: {
       page: params.pageIndex + 1,
       limit: params.pageSize,
@@ -22,10 +22,10 @@ export async function getMyBookings(params: {
 }
 
 export async function getBookingById(id: string) {
-  return api.get<Booking>(`/api/v1/bookings/me/${id}`);
+  return api.get<Booking>(`/api/v1/client/bookings/me/${id}`);
 }
 
-/** PATCH /api/v1/bookings/:id/cancel – User/Admin, Bearer required */
+/** PATCH /api/v1/client/bookings/:id/cancel – user owner, Bearer required */
 export async function cancelBooking(id: string) {
-  return api.patch<Booking>(`/api/v1/bookings/${id}/cancel`);
+  return api.patch<Booking>(`/api/v1/client/bookings/${id}/cancel`);
 }

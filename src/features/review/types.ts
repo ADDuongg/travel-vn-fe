@@ -73,7 +73,7 @@ export interface EntitySummary {
   slug?: string;
 }
 
-/** Item from GET /api/v1/reviews/me/list (lean + entitySummary) */
+/** Item from GET /api/v1/client/reviews/me/list (lean + entitySummary) */
 export interface MyReviewListItem extends Review {
   entitySummary?: EntitySummary;
 }

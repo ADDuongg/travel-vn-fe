@@ -48,7 +48,7 @@ const DEFAULT_PAGE_SIZE = 20;
 
 type EntityFilter = 'all' | ReviewEntityType;
 
-/** Matches GET /reviews/me/list `?status=` CSV */
+/** Matches GET /client/reviews/me/list `?status=` CSV */
 type StatusFilter =
   | 'all'
   | 'PENDING'

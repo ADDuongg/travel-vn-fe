@@ -1,4 +1,4 @@
-/** Province ref (populated) – từ GET /api/v1/provinces */
+/** Province ref (populated) – từ GET /api/v1/public/provinces */
 export interface ProvinceRef {
   _id: string;
   name: { vi: string; en: string };
@@ -29,7 +29,7 @@ export interface TourGuideRatingSummary {
   total: number;
 }
 
-/** TourGuide – list item (GET /api/v1/tour-guides) */
+/** TourGuide – list item (GET /api/v1/public/tour-guides) */
 export interface TourGuideListItem {
   _id: string;
   userId: string;
@@ -60,7 +60,7 @@ export interface TourGuideListItem {
   updatedAt?: string;
 }
 
-/** TourGuide – full detail (GET /api/v1/tour-guides/:id) */
+/** TourGuide – full detail (GET /api/v1/public/tour-guides/:id) */
 export interface TourGuide extends TourGuideListItem {
   cv?: {
     url: string;
@@ -77,7 +77,7 @@ export interface TourGuidePagination {
   totalPages: number;
 }
 
-/** Payload when registering a new tour guide (POST /api/v1/tour-guides/register) */
+/** Payload when registering a new tour guide (POST /api/v1/client/tour-guides/register) */
 export interface TourGuideRegisterPayload {
   translations: Record<string, TourGuideTranslation>;
   languages: string[];
@@ -125,7 +125,7 @@ export interface TourGuideQueryParams {
   userId?: string;
 }
 
-/** Review item – GET /api/v1/tour-guides/:id/reviews (may mirror global review schema) */
+/** Review item – GET /api/v1/public/tour-guides/:id/reviews (may mirror global review schema) */
 export interface TourGuideReview {
   _id: string;
   entityType: 'GUIDE';

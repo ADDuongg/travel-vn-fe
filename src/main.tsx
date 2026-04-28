@@ -4,16 +4,18 @@ import AppRouter from './AppRouter.tsx';
 import { ThemeProvider } from './components/theme-provider.tsx';
 import './i18n.ts';
 import './index.css';
+import { StrictMode } from 'react';
 const queryClient = new QueryClient();
 createRoot(document.getElementById('root')!).render(
-  // <StrictMode>
-  <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-    {/* <AuthProvider> */}
-    <QueryClientProvider client={queryClient}>
-      <AppRouter />
-    </QueryClientProvider>
-    {/* </AuthProvider> */}
-    {/* <App /> */}
-  </ThemeProvider>,
-  // </StrictMode>,
+  <StrictMode>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      {/* <AuthProvider> */}
+      <QueryClientProvider client={queryClient}>
+        <AppRouter />
+      </QueryClientProvider>
+      {/* </AuthProvider> */}
+      {/* <App /> */}
+    </ThemeProvider>
+    , //{' '}
+  </StrictMode>,
 );

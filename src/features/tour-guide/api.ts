@@ -7,25 +7,26 @@ import type {
   TourGuideReviewsResponse,
 } from './types';
 
-const BASE = '/api/v1/tour-guides';
+const PUBLIC_BASE = '/api/v1/public/tour-guides';
+const CLIENT_BASE = '/api/v1/client/tour-guides';
 
 export function getTourGuides(params?: TourGuideQueryParams) {
-  return api.get<TourGuidePaginatedResponse>(BASE, { params });
+  return api.get<TourGuidePaginatedResponse>(PUBLIC_BASE, { params });
 }
 
 export function getTourGuideById(id: string) {
-  return api.get<TourGuide>(`${BASE}/${id}`);
+  return api.get<TourGuide>(`${PUBLIC_BASE}/${id}`);
 }
 
 export function getTourGuideReviews(
   guideId: string,
   params?: { page?: number; limit?: number },
 ) {
-  return api.get<TourGuideReviewsResponse>(`${BASE}/${guideId}/reviews`, {
+  return api.get<TourGuideReviewsResponse>(`${PUBLIC_BASE}/${guideId}/reviews`, {
     params,
   });
 }
 
 export function registerTourGuide(payload: TourGuideRegisterPayload) {
-  return api.post<TourGuide>(`${BASE}/register`, payload);
+  return api.post<TourGuide>(`${CLIENT_BASE}/register`, payload);
 }

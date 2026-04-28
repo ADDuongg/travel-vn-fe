@@ -178,7 +178,7 @@ export interface TourBookingGuest {
   note?: string;
 }
 
-/** Payload for POST /api/v1/tour-bookings */
+/** Payload for POST /api/v1/client/tour-bookings */
 export interface CreateTourBookingPayload {
   tourId: string;
   departureDate: string;

@@ -8,13 +8,13 @@ import type {
 import { diffInNights } from '@utils/index';
 
 export function getRooms(params: RoomQueryParams) {
-  return api.get<RoomListResponse>('/api/v1/rooms', {
+  return api.get<RoomListResponse>('/api/v1/public/rooms', {
     params,
   });
 }
 
 export function getRoomById(id: string) {
-  return api.get<Room>(`/api/v1/rooms/${id}`);
+  return api.get<Room>(`/api/v1/public/rooms/${id}`);
 }
 
 export function createRoomBooking(room: Room, payload: RoomBookingPayload) {
@@ -43,7 +43,7 @@ export function createRoomBooking(room: Room, payload: RoomBookingPayload) {
     throw new Error(`Only ${inventory.totalRooms} rooms available`);
   }
 
-  return api.post('/api/v1/bookings/room', payload);
+  return api.post('/api/v1/client/bookings/room', payload);
 }
 
 export const getTotalRoomByDate = (
@@ -56,7 +56,7 @@ export const getTotalRoomByDate = (
     to,
   };
   return api.get<{ maxRoomsCanBook: number }>(
-    `/api/v1/room-inventories/${roomId}/availability`,
+    `/api/v1/public/room-inventories/${roomId}/availability`,
     {
       params,
     },
