@@ -98,20 +98,20 @@ export interface PaginationInfo {
   totalPages: number;
 }
 
-export interface BlogListResponse {
-  items: BlogPostListItem[];
-  pagination: PaginationInfo;
+/** Matches API-ARCHITECTURE §9 (items + page/limit/total/totalPages). */
+export interface PaginatedList<T> {
+  items: T[];
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
 }
 
-export interface BlogCategoryListResponse {
-  items: BlogCategory[];
-  pagination: PaginationInfo;
-}
+export type BlogListResponse = PaginatedList<BlogPostListItem>;
 
-export interface BlogTagListResponse {
-  items: BlogTag[];
-  pagination: PaginationInfo;
-}
+export type BlogCategoryListResponse = PaginatedList<BlogCategory>;
+
+export type BlogTagListResponse = PaginatedList<BlogTag>;
 
 export interface BlogListParams {
   page?: number;

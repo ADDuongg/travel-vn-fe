@@ -28,7 +28,7 @@ export default function BlogCategoryPage() {
   });
 
   const items = data?.items ?? [];
-  const totalPages = Math.max(1, data?.pagination?.totalPages ?? 1);
+  const totalPages = Math.max(1, data?.totalPages ?? 1);
   const categoryTitle = pickLocale(category?.name, language) ?? slug ?? '';
   const categoryDesc = pickLocale(category?.description, language);
 

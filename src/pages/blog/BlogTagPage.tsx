@@ -23,7 +23,7 @@ export default function BlogTagPage() {
   });
 
   const items = data?.items ?? [];
-  const totalPages = Math.max(1, data?.pagination?.totalPages ?? 1);
+  const totalPages = Math.max(1, data?.totalPages ?? 1);
 
   return (
     <MainLayout>

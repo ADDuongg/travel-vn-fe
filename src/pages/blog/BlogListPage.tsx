@@ -83,9 +83,8 @@ export default function BlogListPage() {
   const { data: featuredPosts = [] } = useFeaturedBlogPostsQuery(3);
 
   const items = data?.items ?? [];
-  const pagination = data?.pagination;
-  const total = pagination?.total ?? items.length;
-  const totalPages = Math.max(1, pagination?.totalPages ?? 1);
+  const total = data?.total ?? items.length;
+  const totalPages = Math.max(1, data?.totalPages ?? 1);
   const showingFrom = total ? (currentPage - 1) * PAGE_SIZE + 1 : 0;
   const showingTo = Math.min(currentPage * PAGE_SIZE, total);
   const isFilterApplied = !!(query.search || query.category || query.tag || query.sort !== 'latest');
