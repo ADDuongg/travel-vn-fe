@@ -56,6 +56,7 @@ variables:
   # Shell executor hay dung cache toan may (~/.yarn-cache) => de bi corrupt va lam fail yarn install.
   # Set cache folder trong workspace de GitLab cache/restore on-demand.
   YARN_CACHE_FOLDER: '$CI_PROJECT_DIR/.yarn-cache'
+  DOCKER_BUILDKIT: '1'
 
 # ---------------------------------------------------------------------------
 # GLOBAL CACHE -- Cache node_modules giua cac job (tiet kiem thoi gian install)
@@ -187,8 +188,16 @@ build:staging:
       -t $CI_REGISTRY_IMAGE:staging-$CI_COMMIT_SHORT_SHA
       -t $CI_REGISTRY_IMAGE:staging-latest
       .
-    - docker push $CI_REGISTRY_IMAGE:staging-$CI_COMMIT_SHORT_SHA
-
+    - |
+      for i in 1 2 3; do
+        docker push $CI_REGISTRY_IMAGE:staging-$CI_COMMIT_SHORT_SHA && break
+        echo "Push failed, retry $i/3..." && sleep 10
+      done
+    - |
+      for i in 1 2 3; do
+        docker push $CI_REGISTRY_IMAGE:staging-latest && break
+        echo "Push failed, retry $i/3..." && sleep 10
+      done
   # Chi chay tren branch staging
   rules:
     - if: '$CI_COMMIT_BRANCH == "staging"'
@@ -224,8 +233,16 @@ build:production:
       -t $CI_REGISTRY_IMAGE:prod-$CI_COMMIT_SHORT_SHA
       -t $CI_REGISTRY_IMAGE:prod-latest
       .
-    - docker push $CI_REGISTRY_IMAGE:prod-$CI_COMMIT_SHORT_SHA
-
+    - |
+      for i in 1 2 3; do
+        docker push $CI_REGISTRY_IMAGE:prod-$CI_COMMIT_SHORT_SHA && break
+        echo "Push failed, retry $i/3..." && sleep 10
+      done
+    - |
+      for i in 1 2 3; do
+        docker push $CI_REGISTRY_IMAGE:prod-latest && break
+        echo "Push failed, retry $i/3..." && sleep 10
+      done
   rules:
     - if: '$CI_COMMIT_BRANCH == "production"'
   environment:
