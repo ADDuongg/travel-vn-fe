@@ -172,7 +172,7 @@ build:staging:
     # Login vao GitLab Container Registry
     # CI_REGISTRY, CI_REGISTRY_USER, CI_REGISTRY_PASSWORD la bien co san cua GitLab
     # dùng token để login đỡ bị lỗi auth lặt vặt
-    - docker login -u $CI_JOB_TOKEN $CI_REGISTRY
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
     # Build image voi staging env vars (truyen qua --build-arg)
     # Cac bien VITE_* lay tu GitLab CI Variables (scope: staging)
@@ -212,7 +212,7 @@ build:production:
   variables:
     DOCKER_TLS_CERTDIR: '/certs'
   before_script:
-    - docker login -u $CI_JOB_TOKEN $CI_REGISTRY
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
   script:
     - >
       docker build
@@ -259,7 +259,7 @@ deploy:staging:
   script:
     - cd /opt/travel-fe/staging
     - echo "Login registry..."
-    - docker login -u $CI_JOB_TOKEN $CI_REGISTRY
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
     - echo "Set image tag..."
     - export IMAGE_TAG=staging-$CI_COMMIT_SHORT_SHA
@@ -294,7 +294,7 @@ deploy:production:
   stage: deploy
   script:
     - cd /opt/travel-fe/production
-    - docker login -u $CI_JOB_TOKEN $CI_REGISTRY
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - export IMAGE_TAG=prod-$CI_COMMIT_SHORT_SHA
     - docker compose -f docker-compose.production.yml pull
     - docker compose -f docker-compose.production.yml up -d --force-recreate
