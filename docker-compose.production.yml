@@ -28,8 +28,8 @@ services:
     # ${CI_REGISTRY_IMAGE} la dia chi registry (VD: registry.gitlab.com/group/project)
     # ${IMAGE_TAG} la tag cua image (VD: prod-abc1234)
     # Neu khong set, mac dinh dung tag "prod-latest"
-    image: ${CI_REGISTRY_IMAGE:-registry.gitlab.com/your-group/your-project}:${IMAGE_TAG:-prod-latest}
-
+    # image: ${CI_REGISTRY_IMAGE:-registry.gitlab.com/your-group/your-project}:${IMAGE_TAG:-prod-latest}
+    image: registry.gitlab.com/nvduong2302/travel-vn-fe:prod-latest
     # -- CONTAINER NAME --
     # Dat ten co dinh de de quan ly
     container_name: frontend-production

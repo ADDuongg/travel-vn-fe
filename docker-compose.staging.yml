@@ -28,8 +28,8 @@ services:
     # ${CI_REGISTRY_IMAGE} la dia chi registry (VD: registry.gitlab.com/group/project)
     # ${IMAGE_TAG} la tag cua image (VD: staging-abc1234)
     # Neu khong set, mac dinh dung tag "staging-latest"
-    image: ${CI_REGISTRY_IMAGE:-registry.gitlab.com/your-group/your-project}:${IMAGE_TAG:-staging-latest}
-
+    # image: ${CI_REGISTRY_IMAGE:-registry.gitlab.com/your-group/your-project}:${IMAGE_TAG:-staging-latest}
+    image: registry.gitlab.com/nvduong2302/travel-vn-fe:staging-latest
     # -- CONTAINER NAME --
     # Dat ten co dinh de de quan ly (xem log, restart, ...)
     container_name: frontend-staging
