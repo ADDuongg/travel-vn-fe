@@ -56,7 +56,7 @@ variables:
   # Shell executor hay dung cache toan may (~/.yarn-cache) => de bi corrupt va lam fail yarn install.
   # Set cache folder trong workspace de GitLab cache/restore on-demand.
   YARN_CACHE_FOLDER: '$CI_PROJECT_DIR/.yarn-cache'
-  DOCKER_BUILDKIT: '1'
+  # DOCKER_BUILDKIT: '1'
 
 # ---------------------------------------------------------------------------
 # GLOBAL CACHE -- Cache node_modules giua cac job (tiet kiem thoi gian install)
