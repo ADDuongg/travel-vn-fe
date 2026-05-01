@@ -102,10 +102,8 @@ COPY --from=builder /app/dist ./
 # Copy nginx config (SPA fallback, caching, gzip, security headers)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Nginx listen port 80 ben trong container
-# Port nay duoc map ra host port khac nhau tuy moi truong:
-#   staging:    host 8080 → container 80
-#   production: host 80   → container 80
+# Nginx listen port 80 ben trong container.
+# Tren host: staging 127.0.0.1:8080, production 127.0.0.1:9080 (xem docker-compose).
 EXPOSE 80
 
 # HEALTHCHECK: Docker tu dong kiem tra container con song khong
