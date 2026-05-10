@@ -1,15 +1,15 @@
 // layout/MainLayout.tsx
-import React from 'react';
-import Header from './Header';
-import Footer from './Footer';
 import { ChatBotWidget } from '@components/chatbot';
+import React from 'react';
+import Footer from './Footer';
+import Header from './Header';
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="h-screen flex flex-col ">
-      <div className="flex-1 flex flex-col justify-between">
+    <div className="flex min-h-screen flex-col">
+      <div className="flex flex-1 flex-col justify-between">
         <Header />
-        <div className="pt-[136px]">{children}</div>
+        <div>{children}</div>
         <Footer />
       </div>
       <ChatBotWidget />

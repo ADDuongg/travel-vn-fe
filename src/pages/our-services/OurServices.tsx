@@ -1,238 +1,243 @@
-import { MainLayout } from '@/layout';
-import Container from '@components/Container';
-import { PageHero } from '@components/PageHero';
-import { Button } from '@components/ui/button';
-import { Card, CardContent } from '@components/ui/card';
-import { ResponsiveH2, ResponsiveH3, ResponsiveH4 } from '@components/ui/typography';
+import { ParallaxHero } from '@/components/home-editorial/ParallaxHero';
+import { Reveal, RevealItem, Stagger } from '@/components/home-editorial/Reveal';
 import { ROUTES } from '@/constants/router';
-import { SectionReveal } from '@/sections/home/SectionReveal';
+import {
+  experienceOffersMeta,
+  flowStepIds,
+  serviceVisuals,
+  showcaseImageKeys,
+  type ServiceEditorialLinkTarget,
+} from '@/features/services-editorial/data/servicesPage';
+import { MainLayout } from '@/layout';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import {
-  Building2,
-  Map,
-  UtensilsCrossed,
-  ShoppingBag,
-  Building,
-  Route,
-  Handshake,
-  MapPin,
-  ArrowRight,
-  Search,
-  CreditCard,
-  Compass,
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
 
-const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=1920&h=1080&auto=format&fit=crop';
+function resolveEditorialLink(target: ServiceEditorialLinkTarget): string {
+  switch (target) {
+    case 'provinces':
+      return ROUTES.PROVINCE.INDEX;
+    case 'tour':
+      return ROUTES.TOUR.INDEX;
+    case 'about':
+      return ROUTES.ABOUT_US;
+    case 'home':
+      return ROUTES.HOME;
+    default:
+      return ROUTES.HOME;
+  }
+}
 
 const OurServicesPage = () => {
   const { t } = useTranslation();
-
-  const services = [
-    { key: 'booking_rooms' as const, href: ROUTES.LIST_ROOMS, Icon: Building2 },
-    { key: 'tours' as const, href: ROUTES.TOUR.INDEX, Icon: Map },
-    { key: 'foods' as const, href: ROUTES.LIST_FOODS, Icon: UtensilsCrossed },
-    { key: 'shop' as const, href: ROUTES.LIST_SHOP, Icon: ShoppingBag },
-  ];
-
-  const stats = [
-    { key: 'stats_hotels', value: '500+', Icon: Building },
-    { key: 'stats_tours', value: '200+', Icon: Route },
-    { key: 'stats_partners', value: '100+', Icon: Handshake },
-  ];
-
-  const steps = [
-    { titleKey: 'how_step1_title' as const, descKey: 'how_step1_desc' as const, Icon: Search },
-    { titleKey: 'how_step2_title' as const, descKey: 'how_step2_desc' as const, Icon: CreditCard },
-    { titleKey: 'how_step3_title' as const, descKey: 'how_step3_desc' as const, Icon: Compass },
-  ] as const;
+  const reduceMotion = useReducedMotion();
+  const base = 'our_services_editorial';
 
   return (
     <MainLayout>
-      <PageHero
-        id="our-services-hero-heading"
-        backgroundImage={HERO_IMAGE}
-        badge={t('our_services.badge')}
-        title={t('our_services.hero_title')}
-        subtitle={t('our_services.hero_subtitle')}
-      />
-
-      <section className="relative z-20 -mt-14 bg-transparent md:-mt-20">
-        <Container>
-          <div className="grid gap-0 overflow-hidden rounded-2xl border border-border/80 bg-card shadow-[var(--shadow-card)] sm:grid-cols-3">
-            {stats.map(({ key, value, Icon }, i) => (
-              <div
-                key={key}
-                className={cn(
-                  'flex items-center gap-4 px-6 py-8 sm:py-10 md:px-8',
-                  i > 0 ? 'border-t border-border/60 sm:border-l sm:border-t-0' : '',
-                )}
+      <div className="pb-6">
+        <ParallaxHero
+          image={serviceVisuals.hero}
+          overlayClass="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/48 to-charcoal/28"
+        >
+          <div className="flex min-h-[92vh] flex-col justify-end px-6 pb-16 pt-36 md:px-14 md:pb-24 md:pt-44">
+            <motion.div
+              initial={reduceMotion ? undefined : { opacity: 0, y: 36 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              className="mx-auto flex w-full max-w-5xl flex-col gap-8 text-center text-sand-50"
+            >
+              <p className="text-[11px] uppercase tracking-[0.38em] text-sand-100/78">{t(`${base}.hero.eyebrow`)}</p>
+              <h1
+                id="our-services-hero-heading"
+                className="font-display text-[clamp(2.45rem,7.4vw,5.65rem)] leading-[0.95] tracking-[-0.01em]"
               >
-                <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Icon className="size-6" aria-hidden />
-                </div>
-                <div className="min-w-0 text-left">
-                  <span className="block text-2xl font-semibold tracking-tight text-foreground">
-                    {value}
-                  </span>
-                  <span className="text-sm text-muted-foreground">{t(`our_services.${key}`)}</span>
-                </div>
+                {t(`${base}.hero.title`)}
+              </h1>
+              <p className="mx-auto max-w-2xl text-base leading-relaxed text-sand-100/88 md:text-lg">{t(`${base}.hero.subtitle`)}</p>
+            </motion.div>
+            <motion.div
+              aria-hidden
+              className="mx-auto mt-14 flex items-center justify-center gap-3 text-[11px] uppercase tracking-[0.34em] text-sand-50/50"
+              animate={reduceMotion ? undefined : { opacity: [0.4, 0.95, 0.4] }}
+              transition={{ duration: 5.1, repeat: Infinity }}
+            >
+              <span className="h-px w-12 bg-sand-50/35" />
+              {t(`${base}.hero.scroll_hint`)}
+            </motion.div>
+          </div>
+        </ParallaxHero>
+
+        <section className="mx-auto max-w-6xl px-4 py-20 md:px-10 md:py-28">
+          <Reveal className="max-w-3xl space-y-6">
+            <p className="text-[11px] uppercase tracking-[0.32em] text-forest">{t(`${base}.intro.eyebrow`)}</p>
+            <h2 className="font-display text-4xl text-charcoal md:text-[2.85rem]">{t(`${base}.intro.title`)}</h2>
+            <div className="space-y-5 text-[1.05rem] leading-relaxed text-mist md:text-lg">
+              <p>
+                {t(`${base}.intro.p1_prefix`)}
+                <span className="text-charcoal/92">{t(`${base}.intro.p1_emphasis`)}</span>
+                {t(`${base}.intro.p1_suffix`)}
+              </p>
+              <p>{t(`${base}.intro.p2`)}</p>
+            </div>
+          </Reveal>
+        </section>
+
+        <section className="border-y border-charcoal/10 bg-sand-100 py-16 md:py-24">
+          <div className="mx-auto max-w-6xl space-y-24 px-4 md:space-y-28 md:px-10">
+            <Reveal className="max-w-xl space-y-3">
+              <p className="text-[11px] uppercase tracking-[0.32em] text-forest">{t(`${base}.immersive.eyebrow`)}</p>
+              <h2 className="font-display text-4xl text-charcoal md:text-[2.75rem]">{t(`${base}.immersive.title`)}</h2>
+              <p className="text-mist md:text-[1.05rem] md:leading-relaxed">{t(`${base}.immersive.subtitle`)}</p>
+            </Reveal>
+
+            {experienceOffersMeta.map((block) => (
+              <div key={block.id} className="grid items-center gap-10 md:grid-cols-[1.05fr_1fr] md:gap-14">
+                <Reveal className={block.imageFirst ? '' : 'md:order-2'}>
+                  <motion.div
+                    whileHover={reduceMotion ? undefined : { y: -3 }}
+                    transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+                    className="overflow-hidden rounded-[1.75rem] shadow-soft"
+                  >
+                    <div className="relative aspect-[16/11]">
+                      <img
+                        src={serviceVisuals[block.imageKey]}
+                        alt=""
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                      <div className={`absolute inset-0 bg-gradient-to-tr ${block.gradient}`} />
+                    </div>
+                  </motion.div>
+                </Reveal>
+                <Reveal className={`space-y-5 ${block.imageFirst ? '' : 'md:order-1'}`} delay={0.06}>
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-charcoal/40">{t(`${base}.offers.${block.id}.eyebrow`)}</p>
+                  <h3 className="font-display text-3xl text-charcoal md:text-[2.25rem]">{t(`${base}.offers.${block.id}.title`)}</h3>
+                  <p className="text-mist md:text-[1.05rem] md:leading-relaxed">{t(`${base}.offers.${block.id}.body`)}</p>
+                  <Link
+                    to={resolveEditorialLink(block.linkTarget)}
+                    className="inline-flex text-sm font-semibold text-sunset-deep underline-offset-4 hover:underline"
+                  >
+                    {t(`${base}.offers.${block.id}.link_label`)}
+                  </Link>
+                </Reveal>
               </div>
             ))}
           </div>
-        </Container>
-      </section>
+        </section>
 
-      <section className="border-b border-border/40 bg-background py-20 md:py-28">
-        <SectionReveal>
-          <Container>
-            <div className="mx-auto max-w-3xl text-center">
-              <ResponsiveH2 className="mb-4 text-balance text-foreground">
-                {t('our_services.context_title')}
-              </ResponsiveH2>
-              <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                {t('our_services.context_desc')}
-              </p>
-            </div>
-          </Container>
-        </SectionReveal>
-      </section>
-
-      <section
-        className="border-b border-border/40 bg-surface-300 py-20 md:py-28"
-        aria-labelledby="our-services-grid-heading"
-      >
-        <SectionReveal>
-          <Container>
-            <div className="mb-10 flex flex-col gap-3 text-center md:mb-12">
-              <ResponsiveH2
-                id="our-services-grid-heading"
-                className="text-balance text-foreground"
-              >
-                {t('our_services.title')}
-              </ResponsiveH2>
-              <p className="mx-auto max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-                {t('our_services.context_desc')}
-              </p>
-            </div>
-            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-              {services.map(({ key, href, Icon }) => (
-                <Card
-                  key={key}
-                  className="group cursor-pointer gap-0 overflow-hidden rounded-2xl border border-border/70 bg-card py-0 shadow-[var(--shadow-card)] motion-safe:transition-all motion-safe:duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[var(--shadow-elevated)]"
-                >
-                  <CardContent className="flex flex-col p-6 sm:p-7">
-                    <div className="mb-5 flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary sm:size-14">
-                      <Icon className="size-6 sm:size-7" aria-hidden />
+        <section className="relative isolate overflow-hidden py-20 md:py-28">
+          <img
+            src={serviceVisuals.fog}
+            alt=""
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20 grayscale"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-sand-50 via-sand-50/94 to-sand-100" />
+          <div className="relative mx-auto max-w-6xl px-4 md:px-10">
+            <Reveal className="mb-14 max-w-2xl space-y-4">
+              <p className="text-[11px] uppercase tracking-[0.32em] text-forest">{t(`${base}.showcase.eyebrow`)}</p>
+              <h2 className="font-display text-4xl text-charcoal md:text-[2.8rem]">{t(`${base}.showcase.title`)}</h2>
+              <p className="text-mist md:text-lg">{t(`${base}.showcase.subtitle`)}</p>
+            </Reveal>
+            <Stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" stagger={0.07}>
+              {showcaseImageKeys.map((key) => (
+                <RevealItem key={key}>
+                  <motion.div
+                    whileHover={reduceMotion ? undefined : { y: -4 }}
+                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    className="overflow-hidden rounded-[1.65rem] shadow-soft"
+                  >
+                    <div className="relative aspect-[16/11]">
+                      <img
+                        src={serviceVisuals[key]}
+                        alt=""
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-charcoal/72 via-charcoal/15 to-transparent" />
+                      <p className="absolute inset-x-0 bottom-5 px-5 font-display text-xl leading-snug text-sand-50 md:text-[1.35rem]">
+                        {t(`${base}.showcase.lines.${key}`)}
+                      </p>
                     </div>
-                    <ResponsiveH4 className="mb-2 text-foreground">{t(`our_services.${key}`)}</ResponsiveH4>
-                    <p className="mb-6 flex-1 text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
-                      {t(`our_services.${key}_desc`)}
-                    </p>
-                    <Button asChild variant="default" size="sm" className="w-full cursor-pointer sm:w-auto">
-                      <Link to={href} className="inline-flex items-center justify-center gap-1.5">
-                        {t('buttons.see_more')}
-                        <ArrowRight className="size-4 motion-safe:transition-transform group-hover:translate-x-0.5" aria-hidden />
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
+                  </motion.div>
+                </RevealItem>
               ))}
-            </div>
-          </Container>
-        </SectionReveal>
-      </section>
+            </Stagger>
+          </div>
+        </section>
 
-      <section className="border-b border-border/40 bg-background py-20 md:py-28">
-        <SectionReveal>
-          <Container>
-            <div className="mb-10 text-center">
-              <ResponsiveH3 className="text-balance text-foreground">
-                {t('our_services.how_works_title')}
-              </ResponsiveH3>
-              <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-                {t('our_services.how_works_subtitle')}
-              </p>
-            </div>
-            <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-3">
-              {steps.map(({ titleKey, descKey, Icon }, index) => (
-                <div
-                  key={titleKey}
-                  className="relative rounded-2xl border border-border/60 bg-card p-6 text-center shadow-sm sm:p-8"
-                >
-                  <div className="relative mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-sapa-green/15 text-sapa-green sm:size-14">
-                    <span className="absolute -top-3 left-1/2 flex size-7 -translate-x-1/2 items-center justify-center rounded-full bg-sapa-green text-xs font-bold text-white">
-                      {index + 1}
-                    </span>
-                    <Icon className="size-6" aria-hidden />
-                  </div>
-                  <h4 className="font-dm-serif-display text-lg font-bold text-foreground sm:text-xl">
-                    {t(`our_services.${titleKey}`)}
-                  </h4>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    {t(`our_services.${descKey}`)}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </Container>
-        </SectionReveal>
-      </section>
-
-      <section className="border-b border-border/40 bg-surface-300 py-20 md:py-28">
-        <SectionReveal>
-          <Container>
-            <div className="mx-auto flex max-w-4xl flex-col gap-8 rounded-2xl border border-border/70 bg-card p-8 shadow-sm md:flex-row md:items-center md:gap-12 md:p-10 lg:p-12">
-              <div className="flex shrink-0 justify-center md:justify-start">
-                <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary md:size-16">
-                  <MapPin className="size-7 md:size-8" aria-hidden />
-                </div>
-              </div>
-              <div className="text-center md:text-left">
-                <ResponsiveH3 className="mb-3 text-foreground">{t('our_services.local_title')}</ResponsiveH3>
-                <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                  {t('our_services.local_desc')}
+        <section className="border-y border-charcoal/10 bg-charcoal px-4 py-20 text-sand-50 md:px-10 md:py-28">
+          <div className="mx-auto max-w-5xl space-y-10">
+            <Reveal className="max-w-3xl space-y-5">
+              <p className="text-[11px] uppercase tracking-[0.34em] text-sand-100/65">{t(`${base}.philosophy.eyebrow`)}</p>
+              <h2 className="font-display text-4xl leading-tight md:text-[2.75rem]">{t(`${base}.philosophy.title`)}</h2>
+              <div className="space-y-5 text-sand-100/78 md:text-[1.05rem] md:leading-relaxed">
+                <p>{t(`${base}.philosophy.p1`)}</p>
+                <p>
+                  {t(`${base}.philosophy.p2_lead`)}{' '}
+                  <span className="text-sand-50/92">{t(`${base}.philosophy.p2_emphasis`)}</span>
                 </p>
               </div>
-            </div>
-          </Container>
-        </SectionReveal>
-      </section>
+            </Reveal>
+          </div>
+        </section>
 
-      <section className="bg-background py-20 md:py-28">
-        <SectionReveal>
-          <Container>
-            <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl bg-primary px-6 py-10 text-center text-primary-foreground shadow-md sm:px-10 sm:py-12 md:py-14">
-              <ResponsiveH2 className="mb-3 text-balance text-primary-foreground">
-                {t('our_services.cta_title')}
-              </ResponsiveH2>
-              <p className="mb-8 text-base text-primary-foreground/90 sm:text-lg">
-                {t('our_services.cta_subtitle')}
-              </p>
-              <div className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-                <Button
-                  asChild
-                  size="lg"
-                  variant="secondary"
-                  className="h-12 min-h-12 cursor-pointer rounded-xl bg-primary-foreground text-primary"
+        <section className="mx-auto max-w-6xl px-4 py-20 md:px-10 md:py-28">
+          <Reveal className="mb-14 max-w-2xl space-y-4">
+            <p className="text-[11px] uppercase tracking-[0.32em] text-forest">{t(`${base}.flow.eyebrow`)}</p>
+            <h2 className="font-display text-4xl text-charcoal md:text-[2.75rem]">{t(`${base}.flow.title`)}</h2>
+            <p className="text-mist md:text-lg">{t(`${base}.flow.subtitle`)}</p>
+          </Reveal>
+          <Stagger className="grid gap-8 md:grid-cols-5 md:gap-6" stagger={0.08}>
+            {flowStepIds.map((step) => (
+              <RevealItem key={step}>
+                <motion.article
+                  whileHover={reduceMotion ? undefined : { y: -3 }}
+                  transition={{ type: 'spring', stiffness: 280, damping: 26 }}
+                  className="rounded-3xl border border-charcoal/10 bg-sand-50/85 p-7 shadow-soft backdrop-blur-[2px]"
                 >
-                  <Link to={ROUTES.LIST_ROOMS}>{t('our_services.cta_rooms')}</Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="h-12 min-h-12 cursor-pointer rounded-xl border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10"
+                  <p className="font-display text-2xl text-charcoal">{t(`${base}.flow.steps.${step}.word`)}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-mist">{t(`${base}.flow.steps.${step}.line`)}</p>
+                </motion.article>
+              </RevealItem>
+            ))}
+          </Stagger>
+        </section>
+
+        <ParallaxHero
+          image={serviceVisuals.closing}
+          overlayClass="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/52 to-charcoal/22"
+        >
+          <div className="flex min-h-[88vh] flex-col justify-end px-6 pb-16 pt-36 md:px-14 md:pb-24 md:pt-40">
+            <Reveal className="max-w-2xl space-y-7 text-sand-50">
+              <p className="text-[11px] uppercase tracking-[0.36em] text-sand-100/75">{t(`${base}.closing.eyebrow`)}</p>
+              <h2 className="font-display text-[clamp(2.2rem,5.4vw,3.75rem)] leading-[1.05]">{t(`${base}.closing.title`)}</h2>
+              <p className="text-base leading-relaxed text-sand-100/85 md:text-lg">{t(`${base}.closing.body`)}</p>
+              <div className="flex flex-wrap gap-4 pt-2">
+                <Link
+                  to={ROUTES.TOUR.INDEX}
+                  className="rounded-full bg-sunset px-7 py-3 text-sm font-semibold text-sand-50 shadow-soft transition hover:bg-sunset-deep"
                 >
-                  <Link to={ROUTES.TOUR.INDEX}>{t('our_services.cta_tours')}</Link>
-                </Button>
+                  {t(`${base}.closing.cta_tours`)}
+                </Link>
+                <Link
+                  to={ROUTES.CONTACT}
+                  className="rounded-full border border-sand-50/35 px-7 py-3 text-sm font-medium text-sand-50 transition hover:border-sand-50 hover:bg-sand-50/10"
+                >
+                  {t(`${base}.closing.cta_contact`)}
+                </Link>
+                <Link
+                  to={ROUTES.HOME}
+                  className="rounded-full border border-transparent px-7 py-3 text-sm font-medium text-sand-50/82 underline-offset-[6px] transition hover:text-sand-50 hover:underline"
+                >
+                  {t(`${base}.closing.cta_home`)}
+                </Link>
               </div>
-            </div>
-          </Container>
-        </SectionReveal>
-      </section>
+            </Reveal>
+          </div>
+        </ParallaxHero>
+      </div>
     </MainLayout>
   );
 };

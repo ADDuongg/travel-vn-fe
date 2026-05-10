@@ -18,7 +18,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import DrawerHeader from '../components/DrawerHeader';
-import logox1 from '/images/logox1.png';
 
 import type { NotificationItem } from '@/features/notifications/types';
 
@@ -42,8 +41,8 @@ const HeaderList = () => {
   if (isMediumScreen) return null;
 
   return (
-    <nav>
-      <ul className="flex space-x-6 px-4 py-3 text-sm font-medium">
+    <nav aria-label="Main">
+      <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm font-medium lg:gap-x-6">
         {HeaderItem.map((item) => {
           const isActive = item.path
             ? location.pathname === item.path
@@ -54,41 +53,37 @@ const HeaderList = () => {
           return (
             <li
               key={item.name}
-              className={`relative group ${item.children ? 'pb-4' : ''}`}
+              className={`relative group ${item.children ? 'pb-1' : ''}`}
             >
               {item.children ? (
                 <span
-                  className={`hover:text-black transition-colors ${
-                    isActive ? 'text-black font-bold' : 'text-paleGray'
-                  } cursor-default`}
+                  className={`cursor-default transition-colors hover:text-sunset-deep ${
+                    isActive ? 'font-semibold text-forest' : 'text-charcoal/80'
+                  }`}
                 >
                   {t(item.label)}
                 </span>
               ) : (
                 <Link
                   to={item.path || ''}
-                  className={`hover:text-black transition-colors ${
-                    isActive ? 'text-black font-bold' : 'text-paleGray'
+                  className={`transition-colors hover:text-sunset-deep ${
+                    isActive ? 'font-semibold text-forest' : 'text-charcoal/80'
                   }`}
                 >
                   {t(item.label)}
                 </Link>
               )}
 
-              {/* <div className="absolute left-1/2 transform -translate-x-1/2 -bottom-3 w-full h-2 z-50 flex justify-center">
-                <div className="w-2 h-2 bg-transparent group-hover:bg-gray-400 rounded-full transition-all"></div>
-              </div> */}
-
               {item.children && (
-                <ul className="absolute top-full left-0  w-40 bg-white shadow-lg rounded-sm opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto transition-opacity duration-200 z-50">
+                <ul className="pointer-events-none invisible absolute top-full left-0 z-50 w-44 rounded-xl border border-charcoal/10 bg-card/95 opacity-0 shadow-soft backdrop-blur-md transition-opacity duration-200 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100">
                   {item.children.map((child) => (
                     <li key={child.name}>
                       <Link
                         to={child.path || ''}
-                        className={`block px-4 py-2 text-gray-700 hover:text-black ${
+                        className={`block px-4 py-2 text-sm transition-colors hover:text-sunset-deep ${
                           child.path && location.pathname === child.path
-                            ? 'text-black font-bold'
-                            : 'text-paleGray'
+                            ? 'font-semibold text-forest'
+                            : 'text-charcoal/80'
                         }`}
                       >
                         {t(child.label)}
@@ -144,14 +139,14 @@ const UserMenu = ({
 
       <div
         className={`
-          absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md
+          absolute right-0 mt-2 w-44 rounded-xl border border-charcoal/10 bg-card shadow-soft
           transition-opacity duration-200 z-20
           ${open ? 'opacity-100 visible' : 'opacity-0 invisible'}
         `}
       >
         <Link
           to={ROUTES.DASHBOARD.INDEX}
-          className="block px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
+          className="block px-4 py-2 text-sm text-charcoal/80 transition-colors hover:bg-muted hover:text-charcoal first:rounded-t-xl"
           onClick={() => setOpen(false)}
         >
           {t('header.dashboard')}
@@ -159,7 +154,7 @@ const UserMenu = ({
 
         <Link
           to={ROUTES.DASHBOARD.PROFILE}
-          className="block px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
+          className="block px-4 py-2 text-sm text-charcoal/80 transition-colors hover:bg-muted hover:text-charcoal"
           onClick={() => setOpen(false)}
         >
           {t('header.edit_profile')}
@@ -167,7 +162,7 @@ const UserMenu = ({
 
         <Link
           to={`${ROUTES.DASHBOARD.SAVED}?tab=wishlist`}
-          className="block px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
+          className="block px-4 py-2 text-sm text-charcoal/80 transition-colors hover:bg-muted hover:text-charcoal"
           onClick={() => setOpen(false)}
         >
           {t('header.wish_list')}
@@ -176,7 +171,8 @@ const UserMenu = ({
         <Separator className="my-1" />
 
         <button
-          className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-paleGray"
+          type="button"
+          className="block w-full rounded-b-xl px-4 py-2 text-left text-sm text-charcoal/80 transition-colors hover:bg-muted hover:text-charcoal"
           onClick={() => {
             setOpen(false);
             logout();
@@ -256,7 +252,7 @@ const NotificationBell = () => {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="relative flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
+        className="relative flex h-9 w-9 items-center justify-center rounded-full border border-charcoal/15 bg-sand-50/90 text-charcoal transition-colors hover:bg-sand-100"
         aria-label={t('header.notifications') || 'Notifications'}
       >
         <Bell className="h-5 w-5" />
@@ -268,19 +264,19 @@ const NotificationBell = () => {
       </button>
 
       <div
-        className={`absolute right-0 mt-2 w-80 max-w-[320px] rounded-md bg-white shadow-lg transition-opacity duration-200 z-30 ${
+        className={`absolute right-0 mt-2 z-30 w-80 max-w-[320px] rounded-xl border border-charcoal/10 bg-card shadow-soft transition-opacity duration-200 ${
           open ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
       >
-        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
-          <span className="text-sm font-semibold">
+        <div className="flex items-center justify-between border-b border-charcoal/10 px-4 py-2">
+          <span className="text-sm font-semibold text-charcoal">
             {t('header.notifications_title', 'Thông báo')}
           </span>
           <button
             type="button"
             onClick={handleMarkAllAsRead}
             disabled={isMarkAllPending || !notifications.length}
-            className="text-xs text-blue-600 hover:underline disabled:text-gray-300"
+            className="text-xs text-sunset-deep hover:underline disabled:text-charcoal/40"
           >
             {t('header.mark_all_read', 'Đánh dấu đã đọc')}
           </button>
@@ -292,43 +288,43 @@ const NotificationBell = () => {
           onScroll={handleScroll}
         >
           {isLoading && (
-            <div className="px-4 py-4 text-center text-xs text-gray-400">
+            <div className="px-4 py-4 text-center text-xs text-mist">
               {t('header.loading_notifications')}
             </div>
           )}
 
           {!isLoading && !notifications.length && (
-            <div className="px-4 py-6 text-center text-xs text-gray-400">
+            <div className="px-4 py-6 text-center text-xs text-mist">
               {t('header.no_notifications')}
             </div>
           )}
 
           {!!notifications.length && (
             <>
-              <ul className="divide-y divide-gray-100">
+              <ul className="divide-y divide-charcoal/10">
                 {notifications.map((item) => (
                   <li
                     key={item._id}
-                    className={`px-4 py-3 text-xs cursor-pointer hover:bg-gray-50 ${
-                      !item.isRead ? 'bg-gray-50' : ''
+                    className={`cursor-pointer px-4 py-3 text-xs transition-colors hover:bg-muted ${
+                      !item.isRead ? 'bg-muted/60' : ''
                     }`}
                     onClick={() => handleNotificationClick(item._id, item.link)}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-gray-800 line-clamp-1">
+                        <p className="line-clamp-1 font-medium text-charcoal">
                           {t(item.title, {
                             ns: 'notification',
                             ...notificationInterpolation(item.metadata),
                           })}
                         </p>
-                        <p className="mt-1 text-gray-500 line-clamp-2">
+                        <p className="mt-1 line-clamp-2 text-mist">
                           {t(item.message, {
                             ns: 'notification',
                             ...notificationInterpolation(item.metadata),
                           })}
                         </p>
-                        <p className="mt-1 text-[10px] text-gray-400">
+                        <p className="mt-1 text-[10px] text-charcoal/45">
                           {item.createdAt
                             ? formatDistanceToNow(new Date(item.createdAt), {
                                 addSuffix: true,
@@ -337,7 +333,7 @@ const NotificationBell = () => {
                         </p>
                       </div>
                       {!item.isRead && (
-                        <span className="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-blue-500" />
+                        <span className="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-sunset" />
                       )}
                     </div>
                   </li>
@@ -350,7 +346,7 @@ const NotificationBell = () => {
                     type="button"
                     onClick={() => fetchNextPage()}
                     disabled={isFetchingNextPage}
-                    className="text-[11px] text-blue-600 hover:underline disabled:text-gray-300"
+                    className="text-[11px] text-sunset-deep hover:underline disabled:text-charcoal/40"
                   >
                     {isFetchingNextPage
                       ? t('header.loading_notifications')
@@ -368,17 +364,8 @@ const NotificationBell = () => {
 
 const Header = () => {
   const isMediumScreen = useMediaQuery('(max-width: 900px)');
-  const [isScrolled, setIsScrolled] = useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const { data: me } = useMe();
   const { authUser } = useAuthStore();
@@ -387,56 +374,55 @@ const Header = () => {
   const avatarUrl = me?.avatar?.url;
 
   return (
-    <div
-      className={`w-full h-[136px] bg-background_paleGray flex items-center justify-between md:px-10 px-5 fixed top-0 left-0 z-50 ${
-        isScrolled ? 'shadow-lg backdrop-blur-md' : ''
-      }`}
-      style={{
-        transition: 'filter 0.3s, box-shadow 0.3s, padding 0.3s',
-        backdropFilter: isScrolled ? 'blur(8px)' : 'none',
-        willChange: 'filter, box-shadow, padding',
-        background: 'rgba(245, 245, 245, 0.95)',
-        paddingTop: isScrolled ? '12px' : '56px',
-        paddingBottom: isScrolled ? '12px' : '56px',
-      }}
-    >
-      <img src={logox1} alt="logox1" className="h-[20px]" />
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-10 md:pt-8">
+      <div className="pointer-events-auto mx-auto flex max-w-6xl items-center justify-between gap-3 rounded-2xl px-4 py-3 shadow-soft glass-panel md:gap-6 md:px-5">
+        <Link
+          to={ROUTES.HOME}
+          className="font-display shrink-0 text-xl tracking-[0.04em] text-charcoal md:text-2xl"
+        >
+          {t('editorial.brand')}
+        </Link>
 
-      {/* Desktop */}
-      {!isMediumScreen && (
-        <>
-          <HeaderList />
-          <div className="flex gap-3 items-center">
+        {!isMediumScreen && (
+          <div className="flex min-w-0 flex-1 items-center justify-center gap-4 lg:gap-6">
+            <HeaderList />
+            <span className="hidden rounded-full border border-charcoal/10 px-3 py-1 text-xs uppercase tracking-[0.22em] text-charcoal/50 2xl:inline">
+              {t('footer.magazine_badge')}
+            </span>
+          </div>
+        )}
+
+        {!isMediumScreen && (
+          <div className="flex shrink-0 items-center gap-2 md:gap-3">
             <NotificationBell />
             <DropdownLanguage />
             {!authUser ? (
-              <Button onClick={() => navigate(ROUTES.LOGIN)}>
+              <Button onClick={() => navigate(ROUTES.LOGIN)} size="sm" className="shrink-0">
                 {t('buttons.login')}
               </Button>
             ) : (
               <UserMenu userName={displayName} avatarUrl={avatarUrl} />
             )}
           </div>
-        </>
-      )}
+        )}
 
-      {/* Mobile */}
-      {isMediumScreen && (
-        <div className="flex items-center gap-3">
-          <DrawerHeader />
-          {!authUser ? (
-            <Button onClick={() => navigate(ROUTES.LOGIN)}>
-              {t('buttons.login')}
-            </Button>
-          ) : (
-            <>
-              <NotificationBell />
-              <UserMenu userName={displayName} avatarUrl={avatarUrl} />
-            </>
-          )}
-        </div>
-      )}
-    </div>
+        {isMediumScreen && (
+          <div className="ml-auto flex items-center gap-2">
+            <DrawerHeader />
+            {!authUser ? (
+              <Button onClick={() => navigate(ROUTES.LOGIN)} size="sm">
+                {t('buttons.login')}
+              </Button>
+            ) : (
+              <>
+                <NotificationBell />
+                <UserMenu userName={displayName} avatarUrl={avatarUrl} />
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    </header>
   );
 };
 

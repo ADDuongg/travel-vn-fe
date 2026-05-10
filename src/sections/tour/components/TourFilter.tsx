@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useProvincesQuery } from '@/features/provinces/hooks';
@@ -20,8 +20,16 @@ import type {
 import type { Province } from '@/features/provinces/types';
 import { Settings2, X, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { RevealItem, Stagger } from '@/components/home-editorial/Reveal';
 
 const ALL_VALUE = '__all__';
+const SEARCH_DEBOUNCE_MS = 350;
+
+const atlasPillBase =
+  'rounded-full border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] transition';
+const atlasPillOn = 'border-forest bg-forest text-sand-50';
+const atlasPillOff =
+  'border-charcoal/12 bg-transparent text-charcoal/70 hover:border-forest/30';
 
 export type TourFilterValues = {
   destinationId: string;
@@ -112,6 +120,26 @@ function buildQueryParams(values: TourFilterValues): TourQueryParams {
   return params;
 }
 
+/** Hydrate tour filter form from URL / parent query (Tour list editorial sync). */
+export function tourQueryParamsToFilterValues(
+  q: TourQueryParams,
+): TourFilterValues {
+  return {
+    destinationId: q.destinationId ?? ALL_VALUE,
+    departureProvinceId: q.departureProvinceId ?? ALL_VALUE,
+    tourType: q.tourType ?? ALL_VALUE,
+    difficulty: q.difficulty ?? ALL_VALUE,
+    sortBy: q.sortBy ?? 'newest',
+    minPrice:
+      q.minPrice != null && q.minPrice > 0 ? String(q.minPrice) : '',
+    maxPrice:
+      q.maxPrice != null && q.maxPrice > 0 ? String(q.maxPrice) : '',
+    minDays: q.minDays != null && q.minDays > 0 ? String(q.minDays) : '',
+    maxDays: q.maxDays != null && q.maxDays > 0 ? String(q.maxDays) : '',
+    search: q.search ?? '',
+  };
+}
+
 const defaultForm: TourFilterValues = {
   destinationId: ALL_VALUE,
   departureProvinceId: ALL_VALUE,
@@ -133,11 +161,22 @@ const chipBtn =
 
 const chipBtnActive = 'border-[#1c1a14]/30 bg-stone-50/90';
 
+const chipBtnAtlas =
+  'inline-flex h-9 min-w-0 max-w-full shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-charcoal/12 bg-sand-50/90 px-3.5 text-left text-sm font-medium text-charcoal shadow-sm transition-[border-color,box-shadow,background-color] duration-200 ' +
+  'hover:border-forest/30 hover:bg-sand-100 hover:shadow ' +
+  'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-forest/25 ' +
+  'active:bg-sand-100/90 data-[state=open]:border-forest/30 data-[state=open]:bg-sand-100';
+
+const chipBtnAtlasActive =
+  'border-forest/40 bg-sand-100 text-charcoal shadow-[0_1px_8px_-2px_oklch(22%_0.02_75/0.12)]';
+
 interface TourFilterProps {
   onFilter?: (values: TourQueryParams) => void;
   onClear?: () => void;
-  syncedSearch?: string;
-  syncedDestinationId?: string;
+  /** When URL query string changes, form resets from this snapshot (share link / history). */
+  syncedTourQuery?: TourQueryParams;
+  urlSignature?: string;
+  variant?: 'default' | 'atlas';
 }
 
 function matchesPreset(minDays: string, maxDays: string): string | null {
@@ -165,8 +204,9 @@ function formatVnd(n: string) {
 const TourFilter: React.FC<TourFilterProps> = ({
   onFilter,
   onClear,
-  syncedSearch,
-  syncedDestinationId,
+  syncedTourQuery,
+  urlSignature,
+  variant = 'default',
 }) => {
   const { t } = useTranslation();
   const { language } = useLanguage();
@@ -174,6 +214,8 @@ const TourFilter: React.FC<TourFilterProps> = ({
 
   const [openPill, setOpenPill] = useState<string | null>(null);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [atlasDraftSearch, setAtlasDraftSearch] = useState('');
+  const atlasSearchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const methods = useForm<TourFilterValues>({
     defaultValues: { ...defaultForm },
@@ -182,19 +224,27 @@ const TourFilter: React.FC<TourFilterProps> = ({
   const watched = useWatch({ control });
   const w = (watched ?? defaultForm) as TourFilterValues;
 
-  useEffect(() => {
-    setValue('search', syncedSearch != null && syncedSearch !== '' ? syncedSearch : '', {
-      shouldDirty: false,
-    });
-  }, [syncedSearch, setValue]);
+  const syncedTourQueryRef = useRef(syncedTourQuery);
+  syncedTourQueryRef.current = syncedTourQuery;
 
   useEffect(() => {
-    if (syncedDestinationId) {
-      setValue('destinationId', syncedDestinationId, { shouldDirty: false });
-    } else {
-      setValue('destinationId', ALL_VALUE, { shouldDirty: false });
+    if (urlSignature === undefined) return;
+    const q = syncedTourQueryRef.current;
+    if (q == null) return;
+    reset(tourQueryParamsToFilterValues(q), { keepDirty: false });
+  }, [reset, urlSignature]);
+
+  useEffect(() => {
+    setAtlasDraftSearch(w.search ?? '');
+    if (atlasSearchTimerRef.current) {
+      clearTimeout(atlasSearchTimerRef.current);
+      atlasSearchTimerRef.current = null;
     }
-  }, [syncedDestinationId, setValue]);
+  }, [w.search]);
+
+  const chipPreset = variant === 'atlas';
+  const pillClassBtn = chipPreset ? chipBtnAtlas : chipBtn;
+  const pillClassActive = chipPreset ? chipBtnAtlasActive : chipBtnActive;
 
   const getProvinceLabel = useCallback(
     (p: Province) =>
@@ -213,6 +263,32 @@ const TourFilter: React.FC<TourFilterProps> = ({
     const v = { ...getValues(), ...patch };
     apply(v);
   };
+
+  useEffect(() => {
+    if (variant !== 'atlas') return;
+    if (atlasSearchTimerRef.current) {
+      clearTimeout(atlasSearchTimerRef.current);
+    }
+    atlasSearchTimerRef.current = setTimeout(() => {
+      atlasSearchTimerRef.current = null;
+      const applied = (getValues().search ?? '').trim();
+      const next = atlasDraftSearch.trim();
+      if (next !== applied) {
+        const merged: TourFilterValues = {
+          ...getValues(),
+          search: atlasDraftSearch,
+        };
+        setValue('search', atlasDraftSearch, { shouldDirty: true });
+        apply(merged);
+      }
+    }, SEARCH_DEBOUNCE_MS);
+    return () => {
+      if (atlasSearchTimerRef.current) {
+        clearTimeout(atlasSearchTimerRef.current);
+        atlasSearchTimerRef.current = null;
+      }
+    };
+  }, [apply, atlasDraftSearch, getValues, setValue, variant]);
 
   const handleClear = () => {
     reset({ ...defaultForm });
@@ -381,14 +457,110 @@ const TourFilter: React.FC<TourFilterProps> = ({
   const moreActive =
     w.departureProvinceId !== ALL_VALUE;
 
+  const atlasPopoverTrigger = (active: boolean) =>
+    cn(
+      atlasPillBase,
+      'inline-flex max-w-[12rem] items-center justify-between gap-1 normal-case',
+      active ? atlasPillOn : atlasPillOff,
+    );
+
   return (
     <FormProvider {...methods}>
       <div
-        className="sticky top-[136px] z-30 w-full overflow-hidden rounded-t-2xl border border-[rgba(28,26,20,0.07)] border-b-[rgba(28,26,20,0.08)] border-t-white/55 bg-white/95 shadow-[0_-6px_32px_rgba(0,0,0,0.06),0_12px_40px_rgba(28,26,20,0.07)] backdrop-blur-md sm:rounded-t-3xl"
+        className={cn(
+          variant === 'atlas'
+            ? 'sticky top-24 z-30 border-b border-charcoal/10 bg-sand-50/80 px-4 py-4 shadow-[0_12px_40px_-24px_oklch(22%_0.02_75/0.25)] backdrop-blur-md md:top-23 md:px-10'
+            : 'sticky top-[136px] z-30 w-full overflow-hidden rounded-t-2xl border border-[rgba(28,26,20,0.07)] border-b-[rgba(28,26,20,0.08)] border-t-white/55 bg-white/95 shadow-[0_-6px_32px_rgba(0,0,0,0.06),0_12px_40px_rgba(28,26,20,0.07)] backdrop-blur-md sm:rounded-t-3xl',
+        )}
         data-tour-filters
       >
-        <div className="mx-auto max-w-7xl px-3 py-2.5 sm:px-6 sm:py-3">
-          <div className="flex min-w-0 flex-nowrap items-center gap-2 overflow-x-auto pb-0.5 pt-0.5 [scrollbar-width:thin]">
+        <div
+          className={cn(
+            variant === 'atlas'
+              ? 'mx-auto max-w-6xl space-y-4'
+              : 'mx-auto max-w-7xl px-3 py-2.5 sm:px-6 sm:py-3',
+          )}
+        >
+          {variant === 'atlas' ? (
+            <>
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <label className="relative block min-w-[min(100%,280px)] flex-1">
+                  <span className="sr-only">
+                    {t('tour.filter.search', 'Search')}
+                  </span>
+                  <input
+                    type="search"
+                    value={atlasDraftSearch}
+                    onChange={(e) => setAtlasDraftSearch(e.target.value)}
+                    placeholder={t(
+                      'tour.filter.search_placeholder',
+                      'Tour name or code...',
+                    )}
+                    className="w-full rounded-full border border-charcoal/12 bg-sand-50/90 px-5 py-3 text-sm text-charcoal outline-none ring-forest/25 transition placeholder:text-charcoal/40 focus:border-forest/35 focus:ring-4"
+                  />
+                </label>
+                <Stagger className="flex flex-wrap gap-2 lg:justify-end">
+                  {TOUR_TYPES.map((o) => {
+                    const val = o.value || ALL_VALUE;
+                    const selected = w.tourType === val;
+                    return (
+                      <RevealItem key={val}>
+                        <button
+                          type="button"
+                          aria-pressed={selected}
+                          onClick={() => {
+                            setValue('tourType', val, { shouldDirty: true });
+                            applyPartial({ tourType: val });
+                          }}
+                          className={cn(
+                            atlasPillBase,
+                            selected ? atlasPillOn : atlasPillOff,
+                          )}
+                        >
+                          {t(o.labelKey)}
+                        </button>
+                      </RevealItem>
+                    );
+                  })}
+                </Stagger>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <Stagger className="flex flex-wrap gap-2">
+                  {DIFFICULTIES.map((o) => {
+                    const val = o.value || ALL_VALUE;
+                    const selected = w.difficulty === val;
+                    return (
+                      <RevealItem key={val || 'any'}>
+                        <button
+                          type="button"
+                          aria-pressed={selected}
+                          onClick={() => {
+                            setValue('difficulty', val, { shouldDirty: true });
+                            applyPartial({ difficulty: val });
+                          }}
+                          className={cn(
+                            atlasPillBase,
+                            selected ? atlasPillOn : atlasPillOff,
+                          )}
+                        >
+                          {t(o.labelKey)}
+                        </button>
+                      </RevealItem>
+                    );
+                  })}
+                </Stagger>
+              </div>
+            </>
+          ) : null}
+
+          <div
+            className={cn(
+              variant === 'atlas'
+                ? 'flex flex-wrap items-center gap-2'
+                : 'flex min-w-0 flex-nowrap items-center gap-2 overflow-x-auto pb-0.5 pt-0.5 [scrollbar-width:thin]',
+            )}
+          >
             <Popover
               open={openPill === 'dest'}
               onOpenChange={popoverOnChange('dest')}
@@ -397,8 +569,12 @@ const TourFilter: React.FC<TourFilterProps> = ({
                 <button
                   type="button"
                   className={cn(
-                    chipBtn,
-                    w.destinationId !== ALL_VALUE && chipBtnActive,
+                    variant === 'atlas'
+                      ? atlasPopoverTrigger(w.destinationId !== ALL_VALUE)
+                      : cn(
+                          pillClassBtn,
+                          w.destinationId !== ALL_VALUE && pillClassActive,
+                        ),
                   )}
                 >
                   <span className="max-w-[10rem] truncate">
@@ -445,51 +621,54 @@ const TourFilter: React.FC<TourFilterProps> = ({
               </PopoverContent>
             </Popover>
 
-            <Popover
-              open={openPill === 'type'}
-              onOpenChange={popoverOnChange('type')}
-            >
-              <PopoverTrigger asChild>
-                <button
-                  type="button"
-                  className={cn(
-                    chipBtn,
-                    w.tourType !== ALL_VALUE && chipBtnActive,
-                  )}
-                >
-                  <span className="max-w-[9rem] truncate">
-                    {tourTypeButtonLabel}
-                  </span>
-                  <ChevronDown className="size-3.5 shrink-0 opacity-50" />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-[min(100vw-2rem,18rem)] border-[rgba(28,26,20,0.1)] p-0 shadow-lg"
-                align="start"
+            {variant !== 'atlas' ? (
+              <Popover
+                open={openPill === 'type'}
+                onOpenChange={popoverOnChange('type')}
               >
-                <div className="p-1.5" role="listbox">
-                  {TOUR_TYPES.map((o) => {
-                    const val = o.value || ALL_VALUE;
-                    return (
-                      <button
-                        key={val}
-                        type="button"
-                        role="option"
-                        className="flex w-full cursor-pointer items-center rounded-lg px-3 py-2.5 text-left text-sm text-[#1c1a14] transition-colors hover:bg-stone-100"
-                        onClick={() => {
-                          setValue('tourType', val, { shouldDirty: true });
-                          applyPartial({ tourType: val });
-                          setOpenPill(null);
-                        }}
-                      >
-                        {t(o.labelKey)}
-                      </button>
-                    );
-                  })}
-                </div>
-              </PopoverContent>
-            </Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className={cn(
+                      pillClassBtn,
+                      w.tourType !== ALL_VALUE && pillClassActive,
+                    )}
+                  >
+                    <span className="max-w-[9rem] truncate">
+                      {tourTypeButtonLabel}
+                    </span>
+                    <ChevronDown className="size-3.5 shrink-0 opacity-50" />
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="w-[min(100vw-2rem,18rem)] border-[rgba(28,26,20,0.1)] p-0 shadow-lg"
+                  align="start"
+                >
+                  <div className="p-1.5" role="listbox">
+                    {TOUR_TYPES.map((o) => {
+                      const val = o.value || ALL_VALUE;
+                      return (
+                        <button
+                          key={val}
+                          type="button"
+                          role="option"
+                          className="flex w-full cursor-pointer items-center rounded-lg px-3 py-2.5 text-left text-sm text-[#1c1a14] transition-colors hover:bg-stone-100"
+                          onClick={() => {
+                            setValue('tourType', val, { shouldDirty: true });
+                            applyPartial({ tourType: val });
+                            setOpenPill(null);
+                          }}
+                        >
+                          {t(o.labelKey)}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </PopoverContent>
+              </Popover>
+            ) : null}
 
+            {variant !== 'atlas' ? (
             <Popover
               open={openPill === 'diff'}
               onOpenChange={popoverOnChange('diff')}
@@ -498,8 +677,8 @@ const TourFilter: React.FC<TourFilterProps> = ({
                 <button
                   type="button"
                   className={cn(
-                    chipBtn,
-                    w.difficulty !== ALL_VALUE && chipBtnActive,
+                    pillClassBtn,
+                    w.difficulty !== ALL_VALUE && pillClassActive,
                   )}
                 >
                   <span className="max-w-[8rem] truncate">
@@ -534,6 +713,7 @@ const TourFilter: React.FC<TourFilterProps> = ({
                 </div>
               </PopoverContent>
             </Popover>
+            ) : null}
 
             <Popover
               open={openPill === 'dur'}
@@ -543,8 +723,12 @@ const TourFilter: React.FC<TourFilterProps> = ({
                 <button
                   type="button"
                   className={cn(
-                    chipBtn,
-                    (w.minDays || w.maxDays) && chipBtnActive,
+                    variant === 'atlas'
+                      ? atlasPopoverTrigger(Boolean(w.minDays || w.maxDays))
+                      : cn(
+                          pillClassBtn,
+                          (w.minDays || w.maxDays) && pillClassActive,
+                        ),
                   )}
                 >
                   <span className="max-w-[11rem] truncate">
@@ -630,10 +814,19 @@ const TourFilter: React.FC<TourFilterProps> = ({
                 <button
                   type="button"
                   className={cn(
-                    chipBtn,
-                    ((w.minPrice && Number(w.minPrice) > 0) ||
-                      (w.maxPrice && Number(w.maxPrice) > 0)) &&
-                      chipBtnActive,
+                    variant === 'atlas'
+                      ? atlasPopoverTrigger(
+                          Boolean(
+                            (w.minPrice && Number(w.minPrice) > 0) ||
+                              (w.maxPrice && Number(w.maxPrice) > 0),
+                          ),
+                        )
+                      : cn(
+                          pillClassBtn,
+                          ((w.minPrice && Number(w.minPrice) > 0) ||
+                            (w.maxPrice && Number(w.maxPrice) > 0)) &&
+                            pillClassActive,
+                        ),
                   )}
                 >
                   <span className="max-w-[12rem] truncate">
@@ -688,54 +881,60 @@ const TourFilter: React.FC<TourFilterProps> = ({
               </PopoverContent>
             </Popover>
 
-            <Popover
-              open={openPill === 'sort'}
-              onOpenChange={popoverOnChange('sort')}
-            >
-              <PopoverTrigger asChild>
-                <button
-                  type="button"
-                  className={cn(
-                    chipBtn,
-                    w.sortBy !== 'newest' && chipBtnActive,
-                  )}
-                >
-                  <span className="max-w-[10rem] truncate">
-                    {w.sortBy === 'newest'
-                      ? t('tour.filter.chips.sort')
-                      : sortButtonLabel}
-                  </span>
-                  <ChevronDown className="size-3.5 shrink-0 opacity-50" />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-[min(100vw-2rem,20rem)] border-[rgba(28,26,20,0.1)] p-0 shadow-lg"
-                align="end"
+            {variant !== 'atlas' ? (
+              <Popover
+                open={openPill === 'sort'}
+                onOpenChange={popoverOnChange('sort')}
               >
-                <div className="p-1.5" role="listbox">
-                  {SORT_OPTIONS.map((o) => (
-                    <button
-                      key={o.value}
-                      type="button"
-                      className="flex w-full cursor-pointer items-center rounded-lg px-3 py-2.5 text-left text-sm text-[#1c1a14] transition-colors hover:bg-stone-100"
-                      onClick={() => {
-                        setValue('sortBy', o.value, { shouldDirty: true });
-                        applyPartial({ sortBy: o.value });
-                        setOpenPill(null);
-                      }}
-                    >
-                      {t(o.labelKey)}
-                    </button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className={cn(
+                      pillClassBtn,
+                      w.sortBy !== 'newest' && pillClassActive,
+                    )}
+                  >
+                    <span className="max-w-[10rem] truncate">
+                      {w.sortBy === 'newest'
+                        ? t('tour.filter.chips.sort')
+                        : sortButtonLabel}
+                    </span>
+                    <ChevronDown className="size-3.5 shrink-0 opacity-50" />
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="w-[min(100vw-2rem,20rem)] border-[rgba(28,26,20,0.1)] p-0 shadow-lg"
+                  align="end"
+                >
+                  <div className="p-1.5" role="listbox">
+                    {SORT_OPTIONS.map((o) => (
+                      <button
+                        key={o.value}
+                        type="button"
+                        className="flex w-full cursor-pointer items-center rounded-lg px-3 py-2.5 text-left text-sm text-[#1c1a14] transition-colors hover:bg-stone-100"
+                        onClick={() => {
+                          setValue('sortBy', o.value, { shouldDirty: true });
+                          applyPartial({ sortBy: o.value });
+                          setOpenPill(null);
+                        }}
+                      >
+                        {t(o.labelKey)}
+                      </button>
+                    ))}
+                  </div>
+                </PopoverContent>
+              </Popover>
+            ) : null}
 
             <Popover open={moreOpen} onOpenChange={setMoreOpen}>
               <PopoverTrigger asChild>
                 <button
                   type="button"
-                  className={cn(chipBtn, moreActive && chipBtnActive)}
+                  className={cn(
+                    variant === 'atlas'
+                      ? atlasPopoverTrigger(moreActive)
+                      : cn(pillClassBtn, moreActive && pillClassActive),
+                  )}
                 >
                   {t('tour.filter.more_filters', 'More filters')}
                   <Settings2 className="size-3.5 shrink-0 opacity-60" />
@@ -781,7 +980,7 @@ const TourFilter: React.FC<TourFilterProps> = ({
               </PopoverContent>
             </Popover>
 
-            {hasActive && (
+            {variant !== 'atlas' && hasActive ? (
               <Button
                 type="button"
                 variant="ghost"
@@ -790,10 +989,51 @@ const TourFilter: React.FC<TourFilterProps> = ({
               >
                 {t('tour.filter.clear_all', 'Clear all')}
               </Button>
-            )}
+            ) : null}
           </div>
 
-          {activeChips.length > 0 && (
+          {variant === 'atlas' ? (
+            <div className="flex flex-wrap items-center gap-4 border-t border-charcoal/10 pt-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-charcoal/55">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="self-center text-charcoal/40">
+                  {t('province.sort', 'Sort')}
+                </span>
+                {SORT_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    aria-pressed={w.sortBy === opt.value}
+                    onClick={() => {
+                      setValue('sortBy', opt.value, { shouldDirty: true });
+                      applyPartial({ sortBy: opt.value });
+                    }}
+                    className={cn(
+                      'rounded-full px-3 py-1.5 tracking-[0.16em] transition',
+                      w.sortBy === opt.value
+                        ? 'bg-charcoal text-sand-50'
+                        : 'hover:text-forest',
+                    )}
+                  >
+                    {t(opt.labelKey)}
+                  </button>
+                ))}
+              </div>
+              {hasActive ? (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="ml-auto h-8 shrink-0 gap-1 text-sunset-deep hover:text-sunset-deep/90"
+                  onClick={handleClear}
+                >
+                  <X className="size-3.5" />
+                  {t('province.reset_filter', 'Reset')}
+                </Button>
+              ) : null}
+            </div>
+          ) : null}
+
+          {variant !== 'atlas' && activeChips.length > 0 ? (
             <div className="mt-2 flex max-w-full flex-wrap items-center gap-1.5 border-t border-[rgba(28,26,20,0.06)] pt-2">
               <span className="shrink-0 text-[11px] font-medium text-[rgba(28,26,20,0.45)]">
                 {t('tour.filter.active', 'Active')}:
@@ -816,7 +1056,7 @@ const TourFilter: React.FC<TourFilterProps> = ({
                 </Badge>
               ))}
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </FormProvider>

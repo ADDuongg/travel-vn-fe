@@ -1,238 +1,310 @@
-import { MainLayout } from '@/layout';
-import Container from '@components/Container';
-import { PageHero } from '@components/PageHero';
-import { Button } from '@components/ui/button';
-import { Card, CardContent } from '@components/ui/card';
-import { ResponsiveH2, ResponsiveH3, ResponsiveH5 } from '@components/ui/typography';
+import { ParallaxHero } from '@/components/home-editorial/ParallaxHero';
+import { Reveal, RevealItem, Stagger } from '@/components/home-editorial/Reveal';
 import { ROUTES } from '@/constants/router';
-import { SectionReveal } from '@/sections/home/SectionReveal';
+import {
+  teamPortraitChapters,
+  teamVisuals,
+  type TeamChapterId,
+  type TeamPortraitChapterMeta,
+} from '@/features/team-editorial/data/team';
+import { MainLayout } from '@/layout';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Users, Calendar, UserCheck, Quote, MapPin, ArrowRight, Linkedin, Mail } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
-const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&h=1080&auto=format&fit=crop';
+const VALUE_KEYS = ['patience', 'proximity', 'texture', 'trust'] as const;
 
-const members = [
-  {
-    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&h=1000&fit=crop&auto=format',
-    nameKey: 'member1_name' as const,
-    roleKey: 'role_ceo' as const,
-    bioKey: 'bio_ceo' as const,
-    tag1Key: 'tag_ceo_1' as const,
-    tag2Key: 'tag_ceo_2' as const,
-    linkedin: 'https://www.linkedin.com',
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=1000&fit=crop&auto=format',
-    nameKey: 'member2_name' as const,
-    roleKey: 'role_expert' as const,
-    bioKey: 'bio_expert' as const,
-    tag1Key: 'tag_expert_1' as const,
-    tag2Key: 'tag_expert_2' as const,
-    linkedin: 'https://www.linkedin.com',
-  },
-  {
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&h=1000&fit=crop&auto=format',
-    nameKey: 'member3_name' as const,
-    roleKey: 'role_success' as const,
-    bioKey: 'bio_success' as const,
-    tag1Key: 'tag_support_1' as const,
-    tag2Key: 'tag_support_2' as const,
-    linkedin: 'https://www.linkedin.com',
-  },
-] as const;
+function PortraitFrame({
+  portraitSrc,
+  nameLabel,
+  portraitAlt,
+  tint,
+}: {
+  portraitSrc: string;
+  nameLabel: string;
+  portraitAlt: string;
+  tint: string;
+}) {
+  const reduceMotion = useReducedMotion();
+  return (
+    <motion.div
+      whileHover={reduceMotion ? undefined : { y: -3 }}
+      transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+      className="overflow-hidden rounded-[1.75rem] shadow-soft"
+    >
+      <div className="relative aspect-[4/5] md:aspect-[3/4]">
+        <img
+          src={portraitSrc}
+          alt={portraitAlt}
+          className="h-full w-full object-cover object-[center_22%]"
+          loading="lazy"
+        />
+        <div className={`absolute inset-0 bg-gradient-to-t ${tint}`} />
+        <p className="absolute inset-x-0 bottom-6 px-6 font-display text-2xl text-sand-50 md:text-[1.85rem]">
+          {nameLabel}
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+function SecondaryCluster({
+  secondaryStill,
+  alt,
+}: {
+  secondaryStill: NonNullable<TeamPortraitChapterMeta['secondaryStill']>;
+  alt: string;
+}) {
+  const reduceMotion = useReducedMotion();
+  return (
+    <div className="grid gap-5 md:grid-cols-12 md:gap-6">
+      <Reveal className="md:col-span-7">
+        <motion.div
+          whileHover={reduceMotion ? undefined : { y: -4 }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="overflow-hidden rounded-[1.65rem] shadow-soft"
+        >
+          <div className={`relative ${secondaryStill.aspect} w-full`}>
+            <img
+              src={secondaryStill.src}
+              alt={alt}
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-tr from-charcoal/38 via-transparent to-charcoal/14" />
+          </div>
+        </motion.div>
+      </Reveal>
+    </div>
+  );
+}
+
+function PortraitChapterBlock({
+  chapter,
+  scene,
+  index,
+}: {
+  chapter: TeamPortraitChapterMeta;
+  scene: TeamChapterId;
+  index: number;
+}) {
+  const { t } = useTranslation();
+  const base = `team_editorial.chapters.${scene}`;
+  const reverse = index % 2 === 1;
+  const tint =
+    index % 2 === 0
+      ? 'from-charcoal/52 via-charcoal/15 to-charcoal/25'
+      : 'from-charcoal/48 via-charcoal/12 to-charcoal/28';
+
+  const portraitCol = (
+    <Reveal>
+      <PortraitFrame
+        portraitSrc={chapter.portraitSrc}
+        nameLabel={t(`${base}.givenName`)}
+        portraitAlt={t(`${base}.portrait_alt`)}
+        tint={tint}
+      />
+    </Reveal>
+  );
+
+  const textCol = (
+    <div className="space-y-6">
+      <Reveal className="space-y-4" delay={0.05}>
+        <p className="text-[11px] uppercase tracking-[0.34em] text-charcoal/45">
+          {t('team_editorial.scene_prefix')} · {t(`${base}.scene`)}
+        </p>
+        <h2 className="font-display text-[clamp(2rem,4vw,2.85rem)] text-charcoal">
+          {t(`${base}.givenName`)}
+        </h2>
+        <p className="font-display text-lg italic text-forest md:text-[1.2rem]">{t(`${base}.descriptor`)}</p>
+        <p className="text-[11px] uppercase tracking-[0.26em] text-charcoal/40">{t(`${base}.vietnam_anchor`)}</p>
+      </Reveal>
+      <Reveal className="space-y-5" delay={0.08}>
+        <p className="font-display text-xl italic text-charcoal/88 md:text-[1.35rem]">{t(`${base}.verse`)}</p>
+        <div className="space-y-4 text-mist md:text-[1.05rem] md:leading-relaxed">
+          <p>{t(`${base}.p1`)}</p>
+          <p>{t(`${base}.p2`)}</p>
+        </div>
+      </Reveal>
+    </div>
+  );
+
+  return (
+    <article className="space-y-12 md:space-y-14">
+      <div className="grid items-start gap-10 md:grid-cols-[1.1fr_0.95fr] md:gap-14">
+        {reverse ? (
+          <>
+            {textCol}
+            {portraitCol}
+          </>
+        ) : (
+          <>
+            {portraitCol}
+            {textCol}
+          </>
+        )}
+      </div>
+      {chapter.secondaryStill ? (
+        <SecondaryCluster secondaryStill={chapter.secondaryStill} alt={t(`${base}.secondary_alt`)} />
+      ) : null}
+    </article>
+  );
+}
 
 const TeamPage = () => {
   const { t } = useTranslation();
+  const reduceMotion = useReducedMotion();
 
-  const stats = [
-    { key: 'stats_years', value: '5+', Icon: Calendar },
-    { key: 'stats_members', value: '12', Icon: Users },
-    { key: 'stats_guests', value: '10,000+', Icon: UserCheck },
-  ];
+  const firstPair = teamPortraitChapters.slice(0, 2);
+  const secondPair = teamPortraitChapters.slice(2, 4);
 
   return (
     <MainLayout>
-      <PageHero
-        id="team-hero-heading"
-        backgroundImage={HERO_IMAGE}
-        badge={t('team.badge')}
-        title={t('team.hero_title')}
-        subtitle={t('team.hero_subtitle')}
-      />
-
-      <section className="relative z-20 -mt-14 bg-transparent md:-mt-20">
-        <Container>
-          <div className="grid gap-0 overflow-hidden rounded-2xl border border-border/80 bg-card shadow-[var(--shadow-card)] sm:grid-cols-3">
-            {stats.map(({ key, value, Icon }, i) => (
-              <div
-                key={key}
-                className={cn(
-                  'flex items-center gap-4 px-6 py-8 sm:py-10 md:px-8',
-                  i > 0 ? 'border-t border-border/60 sm:border-l sm:border-t-0' : '',
-                )}
+      <div className="pb-6">
+        <ParallaxHero
+          image={teamVisuals.hero}
+          overlayClass="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/5 to-charcoal/35"
+        >
+          <div className="flex min-h-[92vh] flex-col justify-end px-6 pb-16 pt-36 md:px-14 md:pb-24 md:pt-44">
+            <motion.div
+              initial={reduceMotion ? false : { opacity: 0, y: 36 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              className="mx-auto flex w-full max-w-5xl flex-col gap-8 text-center text-sand-50"
+            >
+              <p className="text-[11px] uppercase tracking-[0.38em] text-sand-100/78">
+                {t('team_editorial.hero.eyebrow')}
+              </p>
+              <h1
+                id="team-hero-heading"
+                className="font-display text-[clamp(2.45rem,7.2vw,5.55rem)] leading-[0.95] tracking-[-0.01em]"
               >
-                <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Icon className="size-6" aria-hidden />
-                </div>
-                <div className="min-w-0 text-left">
-                  <span className="block text-2xl font-semibold tracking-tight text-foreground">
-                    {value}
-                  </span>
-                  <span className="text-sm text-muted-foreground">{t(`team.${key}`)}</span>
-                </div>
-              </div>
+                {t('team_editorial.hero.title')}
+              </h1>
+              <p className="mx-auto max-w-2xl text-base leading-relaxed text-sand-100/86 md:text-lg">
+                {t('team_editorial.hero.subtitle')}
+              </p>
+            </motion.div>
+            <motion.div
+              aria-hidden
+              className="mx-auto mt-14 flex items-center justify-center gap-3 text-[11px] uppercase tracking-[0.34em] text-sand-50/50"
+              animate={reduceMotion ? undefined : { opacity: [0.4, 0.95, 0.4] }}
+              transition={{ duration: 5.2, repeat: Infinity }}
+            >
+              <span className="h-px w-12 bg-sand-50/35" />
+              {t('team_editorial.hero.scroll_hint')}
+            </motion.div>
+          </div>
+        </ParallaxHero>
+
+        <section className="mx-auto max-w-6xl px-4 py-20 md:px-10 md:py-28">
+          <Reveal className="max-w-3xl space-y-6">
+            <p className="text-[11px] uppercase tracking-[0.32em] text-forest">{t('team_editorial.intro.eyebrow')}</p>
+            <h2 className="font-display text-4xl text-charcoal md:text-[2.85rem]">{t('team_editorial.intro.title')}</h2>
+            <div className="space-y-5 text-[1.05rem] leading-relaxed text-mist md:text-lg">
+              <p>
+                {t('team_editorial.intro.p1_lead')}
+                <span className="text-charcoal/90">{t('team_editorial.intro.p1_strong')}</span>
+              </p>
+              <p>{t('team_editorial.intro.p2')}</p>
+            </div>
+          </Reveal>
+        </section>
+
+        <section className="border-y border-charcoal/10 bg-sand-100 py-16 md:py-24">
+          <div className="mx-auto max-w-6xl space-y-24 px-4 md:space-y-28 md:px-10">
+            {firstPair.map((chapter, i) => (
+              <PortraitChapterBlock key={chapter.scene} chapter={chapter} scene={chapter.scene} index={i} />
             ))}
           </div>
-        </Container>
-      </section>
+        </section>
 
-      <section className="border-b border-border/40 bg-background py-20 md:py-28">
-        <SectionReveal>
-          <Container>
-            <div className="mx-auto max-w-3xl text-center">
-              <ResponsiveH2 className="mb-6 text-foreground">{t('team.context_title')}</ResponsiveH2>
-              <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                {t('team.context_desc')}
-              </p>
-            </div>
-          </Container>
-        </SectionReveal>
-      </section>
+        <section className="border-y border-charcoal/10 bg-sand-50 py-20 md:py-28">
+          <div className="mx-auto max-w-4xl px-4 md:px-10">
+            <Reveal className="space-y-8">
+              <p className="text-[11px] uppercase tracking-[0.34em] text-forest">{t('team_editorial.interlude.eyebrow')}</p>
+              <blockquote className="font-display text-[clamp(1.65rem,3.6vw,2.35rem)] leading-snug text-charcoal">
+                {t('team_editorial.interlude.quote')}
+              </blockquote>
+            </Reveal>
+          </div>
+        </section>
 
-      <section className="border-b border-border/40 bg-surface-300 py-20 md:py-28">
-        <SectionReveal>
-          <Container>
-            <div className="mb-12 text-center md:mb-14">
-              <ResponsiveH2 className="text-foreground">{t('team.title')}</ResponsiveH2>
-              <p className="mt-3 text-sm text-muted-foreground sm:text-base">{t('team.team_intro')}</p>
-            </div>
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {members.map((member) => (
-                <Card
-                  key={member.nameKey}
-                  className="group cursor-pointer overflow-hidden rounded-2xl border border-border/70 bg-card py-0 shadow-[var(--shadow-card)] motion-safe:transition-all motion-safe:duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[var(--shadow-elevated)]"
-                >
-                  <div className="relative aspect-[4/5] overflow-hidden bg-muted">
-                    <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#1c1a14]/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                    <img
-                      src={member.image}
-                      alt={t(`team.${member.nameKey}`)}
-                      className="h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-300 group-hover:scale-[1.02]"
-                      loading="lazy"
-                    />
+        <section className="mx-auto max-w-6xl space-y-24 px-4 py-20 md:space-y-28 md:px-10 md:py-28">
+          {secondPair.map((chapter, i) => (
+            <PortraitChapterBlock key={chapter.scene} chapter={chapter} scene={chapter.scene} index={i + 2} />
+          ))}
+        </section>
+
+        <ParallaxHero
+          image={teamVisuals.interlude}
+          heightClass="min-h-[74vh]"
+          overlayClass="absolute inset-0 bg-gradient-to-r from-charcoal/72 via-charcoal/40 to-charcoal/18"
+        >
+          <div className="flex min-h-[74vh] flex-col justify-center px-6 py-24 md:px-14">
+            <Reveal className="max-w-xl space-y-5 text-sand-50">
+              <p className="text-[11px] uppercase tracking-[0.34em] text-sand-100/72">{t('team_editorial.parallax_mid.eyebrow')}</p>
+              <h2 className="font-display text-[clamp(2rem,4.5vw,3.25rem)] leading-[1.05]">
+                {t('team_editorial.parallax_mid.title')}
+              </h2>
+              <p className="text-base leading-relaxed text-sand-100/84 md:text-[1.05rem]">{t('team_editorial.parallax_mid.body')}</p>
+            </Reveal>
+          </div>
+        </ParallaxHero>
+
+        <section className="border-y border-charcoal/10 bg-charcoal px-4 py-20 text-sand-50 md:px-10 md:py-28">
+          <div className="mx-auto max-w-5xl space-y-10">
+            <Reveal className="max-w-2xl space-y-4">
+              <p className="text-[11px] uppercase tracking-[0.34em] text-sand-100/65">{t('team_editorial.values_section.eyebrow')}</p>
+              <h2 className="font-display text-4xl leading-tight md:text-[2.8rem]">{t('team_editorial.values_section.title')}</h2>
+              <p className="text-sand-100/75 md:text-[1.05rem] md:leading-relaxed">{t('team_editorial.values_section.intro')}</p>
+            </Reveal>
+            <Stagger className="grid gap-8 md:grid-cols-2" stagger={0.08}>
+              {VALUE_KEYS.map((key) => (
+                <RevealItem key={key}>
+                  <div className="border-b border-sand-50/15 pb-8">
+                    <p className="font-display text-2xl">{t(`team_editorial.values.${key}.title`)}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-sand-100/74">{t(`team_editorial.values.${key}.body`)}</p>
                   </div>
-                  <CardContent className="border-t border-border/50 p-6 text-left">
-                    <div className="mb-2 flex flex-wrap gap-1.5">
-                      <span className="rounded-full bg-gold-soft px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#9a6f1a]">
-                        {t(`team.${member.tag1Key}`)}
-                      </span>
-                      <span className="rounded-full bg-gold-soft px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#9a6f1a]">
-                        {t(`team.${member.tag2Key}`)}
-                      </span>
-                    </div>
-                    <ResponsiveH5 className="mb-1 text-foreground">
-                      {t(`team.${member.nameKey}`)}
-                    </ResponsiveH5>
-                    <p className="text-sm text-muted-foreground">{t(`team.${member.roleKey}`)}</p>
-                    <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted-foreground">
-                      {t(`team.${member.bioKey}`)}
-                    </p>
-                    <div className="mt-4 flex items-center gap-2">
-                      <a
-                        href={member.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex size-9 cursor-pointer items-center justify-center rounded-lg border border-border/70 bg-surface-100 text-foreground transition-colors hover:border-primary/40 hover:text-primary"
-                        aria-label={t('team.aria_linkedin')}
-                      >
-                        <Linkedin className="size-4" aria-hidden />
-                      </a>
-                      <a
-                        href="mailto:hello@travelvn.com"
-                        className="inline-flex size-9 cursor-pointer items-center justify-center rounded-lg border border-border/70 bg-surface-100 text-foreground transition-colors hover:border-primary/40 hover:text-primary"
-                        aria-label={t('team.aria_email')}
-                      >
-                        <Mail className="size-4" aria-hidden />
-                      </a>
-                    </div>
-                    <Button
-                      asChild
-                      variant="outline"
-                      size="sm"
-                      className="mt-5 w-full cursor-pointer rounded-xl border-border/80"
-                    >
-                      <Link to={ROUTES.CONTACT} className="inline-flex items-center justify-center gap-2">
-                        {t('team.cta_contact')}
-                        <ArrowRight className="size-4 opacity-70" aria-hidden />
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
+                </RevealItem>
               ))}
-            </div>
-          </Container>
-        </SectionReveal>
-      </section>
+            </Stagger>
+          </div>
+        </section>
 
-      <section className="border-b border-border/40 bg-background py-20 md:py-28">
-        <SectionReveal>
-          <Container>
-            <div className="mx-auto max-w-3xl rounded-2xl border-2 border-hoi-an-gold/35 bg-card p-8 text-center shadow-sm sm:p-10">
-              <Quote className="mx-auto mb-5 size-10 text-primary/40" aria-hidden />
-              <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                {t('team.quote_text')}
-              </p>
-              <p className="mt-5 text-sm text-muted-foreground">{t('team.quote_author')}</p>
-            </div>
-          </Container>
-        </SectionReveal>
-      </section>
-
-      <section className="border-b border-border/40 bg-surface-300 py-20 md:py-28">
-        <SectionReveal>
-          <Container>
-            <div className="mx-auto flex max-w-4xl flex-col gap-8 rounded-2xl border border-border/70 bg-card p-8 shadow-sm md:flex-row md:items-center md:gap-12 md:p-10 lg:p-12">
-              <div className="flex shrink-0 justify-center md:justify-start">
-                <div className="flex size-14 items-center justify-center rounded-2xl bg-primary/10 text-primary md:size-16">
-                  <MapPin className="size-7 md:size-8" aria-hidden />
-                </div>
+        <ParallaxHero
+          image={teamVisuals.closing}
+          overlayClass="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/55 to-charcoal/22"
+        >
+          <div className="flex min-h-[88vh] flex-col justify-end px-6 pb-16 pt-36 md:px-14 md:pb-24 md:pt-40">
+            <Reveal className="max-w-2xl space-y-7 text-sand-50">
+              <p className="text-[11px] uppercase tracking-[0.36em] text-sand-100/75">{t('team_editorial.closing.eyebrow')}</p>
+              <h2 className="font-display text-[clamp(2.25rem,5.5vw,3.85rem)] leading-[1.05]">{t('team_editorial.closing.title')}</h2>
+              <p className="text-base leading-relaxed text-sand-100/85 md:text-lg">{t('team_editorial.closing.body')}</p>
+              <div className="flex flex-wrap gap-4 pt-2">
+                <Link
+                  to={ROUTES.CONTACT}
+                  className="rounded-full bg-sunset px-7 py-3 text-sm font-semibold text-sand-50 shadow-soft transition hover:bg-sunset-deep"
+                >
+                  {t('team_editorial.closing.cta_contact')}
+                </Link>
+                <Link
+                  to={ROUTES.TOUR.INDEX}
+                  className="rounded-full border border-sand-50/35 px-7 py-3 text-sm font-medium text-sand-50 transition hover:border-sand-50 hover:bg-sand-50/10"
+                >
+                  {t('team_editorial.closing.cta_tours')}
+                </Link>
+                <Link
+                  to={ROUTES.ABOUT_US}
+                  className="rounded-full border border-transparent px-7 py-3 text-sm font-medium text-sand-50/82 underline-offset-[6px] transition hover:text-sand-50 hover:underline"
+                >
+                  {t('team_editorial.closing.cta_about')}
+                </Link>
               </div>
-              <div className="text-center md:text-left">
-                <ResponsiveH3 className="mb-3 text-foreground">{t('team.local_title')}</ResponsiveH3>
-                <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
-                  {t('team.local_desc')}
-                </p>
-              </div>
-            </div>
-          </Container>
-        </SectionReveal>
-      </section>
-
-      <section className="bg-background py-20 md:py-28">
-        <SectionReveal>
-          <Container>
-            <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl bg-primary px-6 py-10 text-center text-primary-foreground shadow-md sm:px-10 sm:py-12 md:py-14">
-              <ResponsiveH2 className="mb-3 text-balance text-primary-foreground">
-                {t('team.cta_join_title')}
-              </ResponsiveH2>
-              <p className="mb-8 text-base text-primary-foreground/90 sm:text-lg">
-                {t('team.cta_join_subtitle')}
-              </p>
-              <Button
-                asChild
-                size="lg"
-                variant="secondary"
-                className="h-12 min-h-12 cursor-pointer rounded-xl bg-primary-foreground text-primary"
-              >
-                <Link to={ROUTES.CONTACT}>{t('team.cta_contact')}</Link>
-              </Button>
-            </div>
-          </Container>
-        </SectionReveal>
-      </section>
+            </Reveal>
+          </div>
+        </ParallaxHero>
+      </div>
     </MainLayout>
   );
 };

@@ -1,38 +1,56 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
+import { useHeroScrollNavReveal } from '@/components/home-editorial/useHeroScrollNavReveal';
 import { MainLayout } from '@/layout';
-import Container from '@/components/Container';
-import { AnimatedTabs } from '@/components/AnimatedTabs';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useProvinceDetailQuery } from '@/features/provinces/hooks';
 import {
+  getMergedProvinceImages,
+  ProvinceAtmosphereSection,
+  ProvinceDetailFloatingNav,
+  type ProvinceDetailNavItem,
+  ProvinceDetailHero,
   ProvinceGallery,
-  ProvinceHeader,
   ProvinceHighlights,
-  ProvinceOverview,
-  ProvinceSidebar,
+  ProvinceInsightsSection,
+  ProvinceIntroSection,
+  ProvinceJourneysSection,
+  ProvinceStorySection,
+  ProvinceTimingSection,
   ProvinceWards,
 } from '@/sections/province';
 
 export default function ProvinceDetailPage() {
   const { t } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
-  const { data: province, isLoading, isError } = useProvinceDetailQuery(slug ?? '');
-  const tabs = useMemo(
-    () => [
-      { id: 'overview', label: t('province.overview', 'Overview') },
-      ...(province?.highlights?.length
-        ? [{ id: 'highlights', label: t('province.highlights', 'Highlights') }]
-        : []),
-      ...(province?.gallery?.length || province?.thumbnail
-        ? [{ id: 'gallery', label: t('province.gallery', 'Gallery') }]
-        : []),
-      ...(province?.wards?.length
-        ? [{ id: 'wards', label: t('province.districts_wards', 'Districts') }]
-        : []),
-    ],
-    [province?.gallery, province?.highlights, province?.thumbnail, province?.wards, t],
+  const {
+    data: province,
+    isLoading,
+    isError,
+  } = useProvinceDetailQuery(slug ?? '');
+  const heroRef = useRef<HTMLElement | null>(null);
+  const navVisible = useHeroScrollNavReveal(heroRef);
+
+  const images = useMemo(
+    () => (province ? getMergedProvinceImages(province) : []),
+    [province],
   );
+
+  /** Mirrors Open Design province detail — fixed anchors so the strip always matches Intro → Journeys. */
+  const navItems = useMemo((): ProvinceDetailNavItem[] => {
+    if (!province) return [];
+    return [
+      { id: 'intro', label: t('province.detail.nav_intro') },
+      { id: 'story', label: t('province.detail.nav_story') },
+      { id: 'highlights', label: t('province.detail.nav_highlights') },
+      { id: 'gallery', label: t('province.detail.nav_gallery') },
+      { id: 'atmosphere', label: t('province.detail.nav_atmosphere') },
+      { id: 'wards', label: t('province.detail.nav_wards') },
+      { id: 'insights', label: t('province.detail.nav_insights') },
+      { id: 'timing', label: t('province.detail.nav_timing') },
+      { id: 'journeys', label: t('province.detail.nav_journeys') },
+    ];
+  }, [province, t]);
 
   if (!slug) {
     return (
@@ -72,49 +90,40 @@ export default function ProvinceDetailPage() {
 
   return (
     <MainLayout>
-      <div className="sticky top-[136px] z-20 border-b border-[rgba(28,26,20,0.1)] bg-[#faf7f2]/95 backdrop-blur-md">
-        <Container className="max-w-7xl px-4 sm:px-6">
-          <AnimatedTabs
-            variant="travel"
-            tabs={tabs}
-            scrollOffset={200}
-            omitContainer
-          />
-        </Container>
-      </div>
-
-      <div className="bg-[#F8F8F6] pb-24 lg:pb-10">
-        <Container>
-          <ProvinceHeader province={province} />
-          <div className="grid grid-cols-1 gap-8 pb-10 pt-6 lg:grid-cols-12 lg:gap-10">
-            <div className="min-w-0 space-y-8 lg:col-span-8">
-              <ProvinceOverview province={province} />
-              <ProvinceHighlights province={province} />
-              <ProvinceGallery province={province} />
-              <ProvinceWards province={province} />
-            </div>
-            <aside className="hidden min-w-0 lg:col-span-4 lg:block">
-              <ProvinceSidebar province={province} />
-            </aside>
-          </div>
-        </Container>
-      </div>
+      <article className="bg-sand-50 pb-24">
+        <ProvinceDetailHero province={province} heroRef={heroRef} />
+        <ProvinceDetailFloatingNav visible={navVisible} items={navItems} />
+        <ProvinceIntroSection province={province} images={images} />
+        <ProvinceStorySection province={province} />
+        <ProvinceHighlights province={province} />
+        <ProvinceGallery province={province} />
+        <ProvinceAtmosphereSection province={province} images={images} />
+        <ProvinceWards province={province} />
+        <ProvinceInsightsSection province={province} />
+        <ProvinceTimingSection province={province} />
+        <ProvinceJourneysSection province={province} />
+      </article>
     </MainLayout>
   );
 }
 
 const ProvinceDetailSkeleton = () => (
-  <div className="w-full">
-    <div className="mx-auto max-w-7xl px-4 sm:px-6">
-      <div className="pt-6">
-        <div className="mb-8 h-[360px] animate-pulse rounded-2xl bg-[#e5ded0] md:h-[440px]" />
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-          <div className="space-y-6 lg:col-span-8">
-            <div className="h-40 animate-pulse rounded-2xl bg-[#e5ded0]" />
-            <div className="h-64 animate-pulse rounded-2xl bg-[#e5ded0]" />
-          </div>
-          <div className="h-72 animate-pulse rounded-2xl bg-[#e5ded0] lg:col-span-4" />
+  <div className="w-full bg-sand-50">
+    <div className="min-h-[100svh] animate-pulse bg-sand-200" />
+    <div className="mx-auto max-w-6xl space-y-16 px-4 py-16 md:px-10">
+      <div className="grid gap-8 lg:grid-cols-2">
+        <div className="space-y-4">
+          <div className="h-3 w-24 animate-pulse rounded bg-sand-200" />
+          <div className="h-10 w-full max-w-md animate-pulse rounded-lg bg-sand-200" />
+          <div className="h-24 animate-pulse rounded-lg bg-sand-200" />
         </div>
+        <div className="aspect-[4/5] animate-pulse rounded-[2rem] bg-sand-200 md:min-h-[320px]" />
+      </div>
+      <div className="h-48 animate-pulse rounded-[2rem] bg-sand-200" />
+      <div className="grid gap-4 md:grid-cols-3">
+        <div className="h-72 animate-pulse rounded-[1.75rem] bg-sand-200" />
+        <div className="h-72 animate-pulse rounded-[1.75rem] bg-sand-200" />
+        <div className="h-72 animate-pulse rounded-[1.75rem] bg-sand-200" />
       </div>
     </div>
   </div>
@@ -125,14 +134,12 @@ type ProvinceDetailErrorProps = {
   description: string;
 };
 
-const ProvinceDetailError = ({ title, description }: ProvinceDetailErrorProps) => (
+const ProvinceDetailError = ({
+  title,
+  description,
+}: ProvinceDetailErrorProps) => (
   <div className="px-4 py-24 text-center">
-    <h2
-      className="font-['Playfair_Display',serif] text-2xl font-bold text-[#1c1a14]"
-      style={{ fontFamily: 'var(--font-dm-serif-display, Georgia, serif)' }}
-    >
-      {title}
-    </h2>
-    <p className="mt-2 text-sm text-[rgba(28,26,20,0.6)]">{description}</p>
+    <h2 className="font-display text-2xl font-bold text-charcoal">{title}</h2>
+    <p className="mt-2 text-sm text-mist">{description}</p>
   </div>
 );

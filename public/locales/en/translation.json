@@ -3,9 +3,9 @@
   "welcome": "Welcome to the app",
   "home": "Home",
   "pages": "Pages",
-  "tour_list": "Tour List",
+  "tour_list": "Tours",
   "tour_guide_list": "Tour Guides",
-  "room_list": "Room List",
+  "room_list": "Rooms",
   "search": "Search",
   "destination_page": {
     "title": "Destinations",
@@ -29,18 +29,139 @@
     "search": "Search",
     "search_placeholder": "Search provinces...",
     "filter_title": "Filter",
+    "reset_filter": "Reset",
     "region": "Region",
     "region_north": "North Vietnam",
     "region_central": "Central Vietnam",
     "region_south": "South Vietnam",
     "popular_only": "Popular only",
-    "sort": "Sort by",
-    "sort_name": "Name",
+    "sort": "Sort",
+    "sort_name": "Name (A–Z)",
     "sort_display_order": "Display order",
     "sort_newest": "Newest",
     "no_results": "No provinces found.",
     "showing_count": "Showing {{count}} of {{total}} provinces",
-    "popular_badge": "Popular"
+    "popular_badge": "Popular",
+    "demo_fallback_hint": "Sample provinces are shown until live data is available.",
+    "hero_kicker": "Atlas · moods by latitude",
+    "hero_title": "Discover Vietnam provinces",
+    "hero_subtitle": "Find destinations from highlands to delta coastlines — curated frames and practical filters.",
+    "hero_badge": "Vietnam — local destinations",
+    "error_title": "Unable to load provinces",
+    "error_desc": "Please try again in a moment.",
+    "empty_hint": "Try another keyword, region, or sort option.",
+    "magazine_cta": "Open dossier",
+    "magazine_fallback_lead": "A destination worth exploring on your Vietnam route.",
+    "magazine_stats_line": "{{guides}} guides · {{tours}} tours · {{hotels}} hotels",
+    "list": {
+      "heading": "Where to go next",
+      "showing": "Showing {{from}}–{{to}} of {{total}} provinces",
+      "display": "View",
+      "clear_cta": "Reset filters"
+    },
+    "pagination": {
+      "page": "Page",
+      "atlas_showing": "Showing {{from}}–{{to}} of {{total}} provinces",
+      "atlas_folio_prefix": "Folio",
+      "prev_spread": "Previous spread",
+      "next_spread": "Next spread",
+      "spread_nav": "Province atlas pagination"
+    },
+    "strip": {
+      "kicker": "Beloved signatures",
+      "title": "Provinces travelers return to"
+    },
+    "atlas": {
+      "kicker": "Immersive atlas",
+      "title": "Scroll as if paging a travel folio.",
+      "lead": "Each province card is geography as temperament — mountains, coast, and delta stories.",
+      "search_label": "Search provinces",
+      "all_regions": "All regions",
+      "region_north_short": "North",
+      "region_central_short": "Central",
+      "region_south_short": "South",
+      "popular_focus": "Popular focus",
+      "popular_unlocked": "Popular focus on"
+    },
+    "not_found": "Province not found",
+    "not_found_desc": "This province may have been removed or the link is incorrect.",
+    "default_description": "Explore this beautiful province of Vietnam.",
+    "detail": {
+      "nav_aria": "Province detail sections",
+      "nav_intro": "Intro",
+      "nav_story": "Story",
+      "nav_highlights": "Highlights",
+      "nav_gallery": "Gallery",
+      "nav_atmosphere": "Mood",
+      "nav_wards": "Wards",
+      "nav_insights": "Insights",
+      "nav_timing": "Seasons",
+      "nav_journeys": "Journeys",
+      "highlights_empty": "Highlight vignettes are not published for this province yet — check back as the atlas fills in.",
+      "gallery_empty": "No gallery frames are available for this province yet.",
+      "atmosphere_empty": "Regional mood unlocks when this province is mapped to North, Central, or South.",
+      "wards_empty": "Administrative wards are not listed for this province yet.",
+      "insights_empty": "Public tallies for hotels, tours, or guides are not available for this entry yet.",
+      "timing_empty": "Best-time notes have not been added yet — ask locally or revisit later.",
+      "hero_population_label": "Population (sense of scale)",
+      "hero_population_suffix": "people",
+      "hero_area_label": "Area",
+      "hero_area_suffix": "km² landscape",
+      "intro_kicker": "Atmospheric introduction",
+      "intro_title": "First light on {{name}}",
+      "story_kicker": "Province storytelling",
+      "story_title": "Essay without encyclopedia glaze",
+      "highlights_kicker": "Highlight experiences",
+      "highlights_title": "Scenes stitched from field notes",
+      "gallery_kicker": "Cinematic gallery",
+      "gallery_title": "Frames that refuse postcard flattening",
+      "atmosphere_kicker": "Regional atmosphere",
+      "atmosphere_quote": "“Mood before metadata — {{name}} keeps its own weather.”",
+      "wards_kicker": "Local discovery · wards",
+      "wards_title": "Neighborhoods as microclimates",
+      "wards_lead": "{{count}} districts, wards, and communes across {{province}} — official names from public records. Pins jump to the first few entries in the list.",
+      "wards_atlas_caption": "Abstract atlas — emotional pins, not survey lines",
+      "wards_atlas_pins_note": "Pins show {{shown}} of {{total}} — illustrative only.",
+      "wards_pagination_showing": "Showing {{from}}–{{to}} of {{total}} wards",
+      "wards_spread_nav": "Wards list pagination",
+      "ward_pin_label": "Jump to ward {{name}}",
+      "ward_vignette_label": "Ward vignette {{index}}",
+      "insights_kicker": "Travel insights",
+      "insights_title": "Field tallies kept honest",
+      "insights_lead": "Numbers below exist as archival texture — editorial context only, never a storefront grid.",
+      "insights_hotels_dt": "Shelters inventoried · hotels",
+      "insights_hotels_dd": "Roofs counted in public datasets — curiosity, not cart.",
+      "insights_tours_dt": "Circumstantial tours cited",
+      "insights_tours_dd": "Ways strangers describe walking these streets — distilled, not pitched.",
+      "insights_guides_dt": "Distinct narrators · guides referenced",
+      "insights_guides_dd": "Human voices aggregated as cultural density, not SKU.",
+      "timing_kicker": "Best windows",
+      "timing_title": "When the province softens toward you",
+      "journeys_kicker": "Related rhythms",
+      "journeys_title": "Journeys that echo this province",
+      "journeys_lead": "Curated routes — browse tours that match this destination.",
+      "journeys_empty_title": "Companion journeys are curated in the tour catalog.",
+      "journeys_empty_desc": "Open the tour list to find itineraries that fit your pace.",
+      "journeys_browse_tours": "Browse tours →",
+      "journeys_nearby_title": "Provinces in the same region",
+      "journeys_full_atlas": "Full province atlas",
+      "journeys_back_atlas": "Back to provinces atlas",
+      "journeys_home": "Home",
+      "atmosphere": {
+        "NORTH": {
+          "title": "Northern temperament",
+          "body": "Altitude writes the script — mist cuffs ridges, scooters carry soup steam uphill, afternoons dissolve into train-whistle echoes. Gradients stay cool; accents borrow pine and kiln smoke."
+        },
+        "CENTRAL": {
+          "title": "Central choreography",
+          "body": "Sea salt stitches fabric to lanterns; sandstone drinks heat then exhales it at dusk. Horizons stay wide; palettes warm toward copper."
+        },
+        "SOUTH": {
+          "title": "Southern resonance",
+          "body": "Tropical inertia meets voltage — jasmine competes with LED, deltas braid patience with commerce. Typography can stretch taller; overlays lean sunset without shouting sale."
+        }
+      }
+    }
   },
   "blog": {
     "hero_title": "Travel stories and local insights",
@@ -322,8 +443,114 @@
     "user": "User",
     "guest": "Guest"
   },
+  "editorial": {
+    "brand": "Đất Việt",
+    "hero": {
+      "eyebrow": "Curated Vietnam · Book when you're ready",
+      "title": "Chase alley kitchens, lantern dusk, and limestone fog.",
+      "subtitle": "Đất Việt reads like a travel magazine you can touch — sensory routes through cities, night markets, and coastal roads with room for real bookings when you choose.",
+      "cta_cities": "Explore destinations",
+      "cta_journeys": "Curated tours",
+      "cta_collections": "Story collections",
+      "scroll_hint": "Scroll · cinematic pacing"
+    },
+    "featured": {
+      "eyebrow": "Featured cities",
+      "title": "Faces of Vietnam — five atmospheres",
+      "cta_atlas": "Open full atlas →"
+    },
+    "food": {
+      "eyebrow": "Local food highlights",
+      "title": "Heat, herbs, and stalls that answer back",
+      "subtitle": "Vietnam feeds you before it introduces itself — plastic stools become stages for smoky grills and slow dripped coffee.",
+      "stories": {
+        "0": {
+          "title": "Night grills & rice paper",
+          "body": "Plastic stools glow under bare bulbs — pork skewers hiss beside dill-heavy cha ca trays."
+        },
+        "1": {
+          "title": "Market mornings",
+          "body": "Banana leaves unwrap sticky rice; vendors chop herbs by rhythm, not scale."
+        },
+        "2": {
+          "title": "Coffee as ceremony",
+          "body": "Phin drip stalls time — condensed milk layered slow while scooters blur outside."
+        }
+      }
+    },
+    "trending": {
+      "0": {
+        "label": "Sa Pa terraces",
+        "detail": "Mist ladders climb limestone ribs."
+      },
+      "1": {
+        "label": "Ha Giang loops",
+        "detail": "Karst walls ribbon beside hemp fields."
+      },
+      "2": {
+        "label": "Phong Nha caves",
+        "detail": "Underground rivers swallow headlamps."
+      },
+      "eyebrow": "Trending destinations",
+      "title": "Beyond the capital rhythm"
+    },
+    "navigate": {
+      "eyebrow": "Navigate",
+      "title": "Interactive Vietnam map",
+      "subtitle": "Tap pulses — each opens discovery prompts rather than generic widgets."
+    },
+    "map": {
+      "aria_map": "Stylized Vietnam map with city anchors",
+      "tap_hint": "Tap pulses · Explore destinations",
+      "side_eyebrow": "Interactive atlas",
+      "side_title": "Trace moods across latitude — fog towns to neon deltas.",
+      "side_body": "Distances compress when you follow cravings instead of checklists. Use this schematic map as a compass toward sensory contrasts — each pulse opens ideas for that region.",
+      "hotspots": {
+        "hanoi": "Hanoi",
+        "danang": "Da Nang",
+        "hoian": "Hoi An",
+        "hcmc": "HCMC",
+        "dalat": "Da Lat"
+      }
+    },
+    "collections": {
+      "0": {
+        "title": "Lantern streets after rain",
+        "subtitle": "Reflections, scooter sparks, wet lacquer."
+      },
+      "1": {
+        "title": "Mountain passes & ribbon fog",
+        "subtitle": "Switchbacks stitched above tea terraces."
+      },
+      "2": {
+        "title": "Island limestone mornings",
+        "subtitle": "Junks idle till mist peels back."
+      },
+      "eyebrow": "Story collections",
+      "title": "Films you walk through"
+    },
+    "seasonal": {
+      "eyebrow": "Seasonal recommendations",
+      "title": "April fog on terrace ribbons · August phosphor seas",
+      "body": "Chase shoulder seasons when storms polish limestone colors or rice floods mirrors — fewer crowds, sharper photographs, warmer bowls after dusk rides.",
+      "rows": {
+        "0": {
+          "left": "Northern plateaus",
+          "right": "Sep–Nov mist arcs"
+        },
+        "1": {
+          "left": "Central coast",
+          "right": "Feb–Jul lantern clarity"
+        },
+        "2": {
+          "left": "Mekong deltas",
+          "right": "Nov–Jan dry river paths"
+        }
+      }
+    }
+  },
   "footer": {
-    "brand": "Travel Tour",
+    "brand": "Đất Việt",
     "contact": "Contact",
     "useful_links": "Useful Links",
     "travel_blog_tips": "Travel Blog & Tips",
@@ -331,7 +558,17 @@
     "be_our_partner": "Be Our Partner",
     "pay_safely": "Pay Safely With Us",
     "pay_safely_desc": "The payment is encrypted and transmitted securely with an SSL protocol.",
-    "copyright": "Copyright © 2025 GoodLayers. All Rights Reserved."
+    "copyright": "Copyright © 2025 GoodLayers. All Rights Reserved.",
+    "tagline": "A curated magazine for travelers who chase alley kitchens, midnight scooters, and quiet fog above pine ridges — stays and tours when you're ready.",
+    "column_explore": "Explore",
+    "link_tours": "Curated tours",
+    "link_provinces": "Provinces atlas",
+    "link_destination": "Destinations search",
+    "link_blog": "Travel blog",
+    "column_note": "Note",
+    "note_body": "Imagery credits photographers via Unsplash. Verify opening hours locally before early outings.",
+    "bottom_tagline": "Booking-ready · Built for cinematic exploration",
+    "magazine_badge": "Magazine · Guide"
   },
   "header": {
     "dashboard": "Dashboard",
@@ -382,8 +619,6 @@
     "room_2": "Room 2"
   },
   "list": "List",
-  "tour_list": "Tours",
-  "room_list": "Rooms",
   "hotel_list": "Hotels",
   "hotel_search": "Search Hotels",
   "list_page": {
@@ -480,13 +715,26 @@
       "heading": "Handpicked Vietnam tours",
       "display": "View",
       "empty_hint": "Try adjusting your filters or search for another destination.",
-      "clear_cta": "Reset filters"
+      "clear_cta": "Reset filters",
+      "hero_kicker": "Journeys · routes as stories",
+      "hero_title": "Vietnam journeys, unhurried",
+      "hero_subtitle": "Scroll like a feature — filter when you need clarity, then choose a route that matches your tempo.",
+      "atlas_kicker": "Editorial catalog",
+      "atlas_title": "Every itinerary is a letter from the road.",
+      "atlas_lead": "Price and duration stay legible but quiet — the name and the place lead the frame."
     },
     "search": {
       "results": "{{count}} tours found",
       "noResults": "No tours found"
     },
-    "pagination": { "page": "Page" },
+    "pagination": {
+      "page": "Page",
+      "atlas_showing": "Showing {{from}}–{{to}} of {{total}} journeys",
+      "atlas_folio_prefix": "Folio",
+      "prev_spread": "Previous spread",
+      "next_spread": "Next spread",
+      "spread_nav": "Spread navigation"
+    },
     "filter": {
       "title": "Filter Tours",
       "all_destinations": "All destinations",
@@ -539,8 +787,11 @@
       "duration_desc": "Duration: Longest",
       "rating": "Rating"
     },
+    "error_title": "Unable to load tours",
+    "error_desc": "Please try again in a moment.",
     "card": {
       "duration": "{{days}}D / {{nights}}N",
+      "price_from": "From",
       "badge_vietnam": "Vietnam",
       "badge_featured": "Featured",
       "off_percent": "-{{percent}}%",
@@ -587,6 +838,113 @@
       "faq_4_a": "It depends on your passport and the regions you visit. We recommend checking your embassy and our support team for the latest rules.",
       "faq_5_q": "Is insurance included?",
       "faq_5_a": "Some packages include basic coverage. Details are listed in your tour inclusions; you can add travel insurance for extra protection."
+    },
+    "journey": {
+      "nav": {
+        "aria": "Section navigation",
+        "story": "Story",
+        "essentials": "Essentials",
+        "rhythm": "Rhythm",
+        "itinerary": "Itinerary",
+        "gallery": "Gallery",
+        "context": "Context",
+        "map": "Map",
+        "faq": "FAQ",
+        "plan": "Plan",
+        "reviews": "Reviews",
+        "more": "More"
+      },
+      "meta": {
+        "region": "Region",
+        "duration": "Time on foot & road",
+        "planning": "Indicative planning",
+        "travelers": "Traveler voices",
+        "review_notes": "{{count}} notes"
+      },
+      "rhythm": {
+        "departure_days_line": "Typical departure pattern: {{days}}",
+        "window_note": "{{count}} spots · {{status}}",
+        "cadence_heading": "Rhythm & cadence",
+        "windows_heading": "Suggested windows",
+        "kicker": "Departure cadence",
+        "section_title": "When the route finds its pulse"
+      },
+      "story": {
+        "kicker": "Editorial",
+        "title": "Why this route breathes"
+      },
+      "essentials": {
+        "kicker": "What travels with you",
+        "section_title": "Essentials & honest boundaries",
+        "included_heading": "Included in this arc",
+        "excluded_heading": "Thoughtful exclusions"
+      },
+      "itinerary": {
+        "kicker": "Itinerary",
+        "section_title": "A measured arc, not a spreadsheet",
+        "no_detail": "Details coming soon."
+      },
+      "gallery": {
+        "kicker": "Gallery",
+        "section_title": "Still frames from the same air",
+        "alt": "Tour gallery"
+      },
+      "context": {
+        "kicker": "Place & culture",
+        "section_title": "Context without encyclopedia voice",
+        "point_label": "Note {{num}}"
+      },
+      "map": {
+        "kicker": "Route"
+      },
+      "faq": {
+        "kicker": "Clarity"
+      },
+      "plan": {
+        "kicker": "Planning posture",
+        "kicker_section": "Invest in the arc",
+        "section_title": "Plan with us, slowly",
+        "copy_default": "Tell us your pace, dietary notes, and celebration dates — we shape departures around real availability.",
+        "disclaimer": "Prices and availability follow live inventory — our team confirms before payment.",
+        "from_label": "Indicative from",
+        "cta_book": "Book this journey",
+        "cta_contact": "Prefer a letter first — write to us"
+      },
+      "reviews": {
+        "kicker": "Honest signals"
+      },
+      "more": {
+        "kicker": "Suggested next",
+        "section_title": "Stay in the same posture",
+        "back_tours": "Back to all journeys",
+        "browse_destinations": "Browse destinations"
+      },
+      "share": {
+        "aria": "Share this tour",
+        "label": "Share"
+      },
+      "mobile": {
+        "note": "Note",
+        "book": "Book"
+      },
+      "booking": {
+        "kicker": "Hold dates",
+        "title": "Request this journey",
+        "subtitle": "Same booking flow as our live tours — pick a departure and we will confirm."
+      },
+      "mood": {
+        "tour_type": {
+          "DOMESTIC": "Domestic journey",
+          "INTERNATIONAL": "International journey",
+          "DAILY": "Day journey"
+        },
+        "difficulty": {
+          "EASY": "Easy pace",
+          "MODERATE": "Moderate pace",
+          "CHALLENGING": "Challenging route",
+          "DIFFICULT": "Demanding route"
+        }
+      }
     },
     "booking": {
       "from": "From",
@@ -942,7 +1300,14 @@
   "entityReview": {
     "title_new": "Leave a review",
     "submit": "Submit review",
+    "label_comment": "Comment",
     "placeholder_comment": "Write your review…",
+    "composer_kicker": "Your voice",
+    "your_rating": "Your rating",
+    "filter_by": "Filter",
+    "anonymous_display": "Guest",
+    "stars_avg_aria": "Average {{rating}} out of 5 stars",
+    "stars_row_aria": "{{rating}} out of 5 stars",
     "sort_rating_desc": "Rating (high to low)",
     "sort_rating_asc": "Rating (low to high)",
     "sort_date_desc": "Date (newest first)",
@@ -964,8 +1329,8 @@
     "error_submit_generic": "Could not submit your review. Please try again.",
     "error_edit_forbidden": "You cannot edit this review in its current state.",
     "error_edit_generic": "Could not save changes. Please try again.",
-    "edit": "Edit review",
-    "delete": "Delete review",
+    "edit": "Edit",
+    "delete": "Delete",
     "save": "Save",
     "cancel": "Cancel"
   },
@@ -1094,6 +1459,46 @@
     "no_results": "No matching tour guides",
     "page": "Page",
     "not_found": "Tour guide not found",
+    "not_found_desc": "This guide may have been removed or the link is incorrect.",
+    "hero_kicker": "Atlas · voices on the route",
+    "hero_title": "Tour Guides",
+    "hero_subtitle": "Local guides, told at walking pace — light, language, and the honest rhythm of the road.",
+    "hero_profile_kicker": "Guide · Vietnam",
+    "card_no_bio": "Open the spread to read their story.",
+    "chapter_about_kicker": "Portrait",
+    "field_notes_kicker": "Field notes",
+    "specialties_kicker": "Craft",
+    "gallery_chapter_kicker": "Field frames",
+    "gallery_chapter_title": "Moments from the route",
+    "gallery_chapter_lead": "Light, weather, and streets — the texture behind the itinerary.",
+    "reviews_chapter_kicker": "Voices",
+    "reviews_chapter_lead": "Travelers who walked with this guide — honest notes, not slogans.",
+    "sidebar_folio_kicker": "Folio",
+    "error_title": "Unable to load guides",
+    "error_desc": "Please try again in a moment.",
+    "filter_province": "All provinces",
+    "all_guides": "All guides",
+    "detail": {
+      "nav_aria": "Guide profile sections"
+    },
+    "pagination": {
+      "atlas_showing": "Showing {{from}}–{{to}} of {{total}} guides",
+      "atlas_folio_prefix": "Folio",
+      "prev_spread": "Previous spread",
+      "next_spread": "Next spread",
+      "spread_nav": "Spread navigation"
+    },
+    "atlas": {
+      "kicker": "Local guides",
+      "title": "Find your travel companion",
+      "lead": "Each profile is built for walking pace — languages, regions, and verified presence."
+    },
+    "list": {
+      "showing": "Showing {{from}}–{{to}} of {{total}} guides",
+      "display": "View",
+      "empty_hint": "Try a different destination, language, or verification filter.",
+      "clear_cta": "Reset filters"
+    },
     "about": "About",
     "language_and_area": "Languages & Area",
     "specialties": "Specialties",
@@ -1107,6 +1512,7 @@
     "contact_for_booking": "Please contact us to book a tour for pricing and guide contact details.",
     "filter_title": "Filter guides",
     "search_placeholder": "Guide name...",
+    "search_label": "Search guides",
     "province_specialty": "Province / Specialty",
     "select_province": "Select province",
     "language": "Language",
@@ -1181,5 +1587,538 @@
     "searching_hotels": "Searching hotels...",
     "searching_tours": "Searching tours...",
     "searching_food": "Searching food..."
+  },
+  "about_editorial": {
+    "hero": {
+      "eyebrow": "Đất Việt · Editorial note",
+      "title": "A manifesto folded into fog, lanterns, and the sound of spoons on tin.",
+      "subtitle": "We are not a booking desk. We are a magazine-minded companion for travelers who want Vietnam to unfold like a documentary written in humidity and light — slow, tactile, fiercely local.",
+      "scroll_hint": "Read slowly · atmosphere first"
+    },
+    "philosophy": {
+      "eyebrow": "Why we wander this way",
+      "title": "Discovering Vietnam quietly, on purpose",
+      "p1": "The country refuses a single storyline. Alley kitchens braid with lantern dusk; mountain fog rinses terraces until they look like graphite sketches; coastal highways hum with salt and karaoke bleeding from storefronts.",
+      "p1_emphasis": "Đất Việt chooses slowness: letting place arrive before itineraries, honoring food as culture's first handshake, insisting that hidden pockets remain hidden until you earn them with footsteps.",
+      "p2": "Cinematic travel, for us, is not spectacle — it’s fidelity to sensory truth. Noise, drizzle, incense, jasmine tea cooling in small cups — the palette of immersion is ordinary until you decide to listen."
+    },
+    "storytelling": {
+      "eyebrow": "How we see the archive",
+      "title": "Curated atlas, cinematic journal"
+    },
+    "block1": {
+      "eyebrow": "Curated exploration",
+      "title": "Routes chosen for texture, not checklists",
+      "body": "Journeys read like folded magazine features — glimpses through kitchen steam, scooters threading markets, ridges that blush at sunset. Commerce never steers us; longing does.",
+      "link": "Open curated journeys →"
+    },
+    "block2": {
+      "eyebrow": "Visual travel journal",
+      "title": "Images as handwriting, captions as whisper",
+      "body": "Photography here is pacing: wide shots for longing, tighter frames when detail matters — knuckles on a phin press, rainwater collecting in a tarp’s fold. Typography keeps the narration human; interface stays recessive so the atmosphere can lead.",
+      "link": "Wander cities · five moods →"
+    },
+    "sensory_section": {
+      "eyebrow": "Sensory atlas",
+      "title": "Vietnam, taught through sensation",
+      "intro": "These are not “features”. They’re the tonal notes we keep returning to when we edit light, copy, and motion — the evidence that travel here is orchestral, never flat."
+    },
+    "sensory": {
+      "alley_kitchens": {
+        "label": "Alley kitchens",
+        "line": "Charcoal hiss behind corrugated doors — supper before introductions."
+      },
+      "lantern_streets": {
+        "label": "Lantern streets",
+        "line": "Silk light pooled on pavers, tailoring conversations to a softer tempo."
+      },
+      "coffee_culture": {
+        "label": "Coffee culture",
+        "line": "Egg foam, phin drip, condensation on glass — the pause between chapters."
+      },
+      "mountain_fog": {
+        "label": "Mountain fog",
+        "line": "Terraces erased and redrawn by breath; ridges appear like ink bleeding through paper."
+      },
+      "coastal_roads": {
+        "label": "Coastal roads",
+        "line": "Salt film on skin, scooters leaning into bends that smell like midday fish markets."
+      },
+      "local_markets": {
+        "label": "Local markets",
+        "line": "Wet leaves, peeled fruit, shouted prices — choreography without a conductor."
+      },
+      "train_street_tempo": {
+        "label": "Train-street tempo",
+        "line": "Tracks as a hallway; houses leaning in until the whistle pulls everything upright."
+      },
+      "night_lights_rain": {
+        "label": "Night lights & rain",
+        "line": "Neon smeared across puddles, plastic covers snapping — texture you can hear."
+      }
+    },
+    "sensory_split": {
+      "coast_caption": "Coastline as moving manuscript",
+      "night_caption": "Urban electricity, humane scale"
+    },
+    "values_section": {
+      "eyebrow": "Tone we protect",
+      "title": "Editorial vows — not KPIs",
+      "intro": "Holding lines so the experience stays human: atmosphere before conversion, intimacy before scale, longing before logistics."
+    },
+    "values": {
+      "slowness": {
+        "title": "Slowness",
+        "body": "We privilege lingering over listing — corridors worth walking twice."
+      },
+      "atmosphere": {
+        "title": "Atmosphere",
+        "body": "Mood arrives before geography; humidity, sound, and color are geography too."
+      },
+      "authenticity": {
+        "title": "Authenticity",
+        "body": "We stay close to how places feel lived-in, imperfect, scented, audible."
+      },
+      "visual_storytelling": {
+        "title": "Visual storytelling",
+        "body": "Images carry plot; type whispers narration; whitespace is pacing."
+      },
+      "emotional_discovery": {
+        "title": "Emotional discovery",
+        "body": "Curiosity routed through feeling — awe, tenderness, bittersweet dusk."
+      },
+      "local_immersion": {
+        "title": "Local immersion",
+        "body": "Corners that do not audition for brochures; rhythms that refuse rush."
+      }
+    },
+    "manifesto": {
+      "eyebrow": "Journey manifesto",
+      "quote_lead": "Travel owes you memory, not velocity. Vietnam rewards the curious who accept humidity as a pause mark, detours as grace notes, and strangers’ chopsticks tapping rhythm against tin bowls as percussion for the night.",
+      "quote_body": "This land deserves cinematic patience — lanterns measured in breathing room, ridges allowed to veil and unveil, narratives that concede commerce is peripheral to appetite, sound, devotion, and dusk.",
+      "quote_emphasis": "We keep discovery human: no dashboards masquerading as poetry, no engine noise where a story should be whispered."
+    },
+    "closing": {
+      "eyebrow": "Return to the atlas",
+      "title": "Stay longer in the margins than the marquee.",
+      "body": "Let alley steam write your captions. Follow mountains until they blush. Carry this magazine spirit into night markets you did not rehearse — we built Đất Việt so those nights have a quieter map.",
+      "cta_provinces": "Provinces atlas",
+      "cta_journeys": "Curated journeys",
+      "cta_home": "Homepage →"
+    }
+  },
+  "contact_editorial": {
+    "hero": {
+      "eyebrow": "Đất Việt · Correspondence",
+      "title": "Every journey begins with a conversation.",
+      "subtitle": "Let Vietnam speak through stories — not tickets. Reach out like you are writing in the margins of a travel journal we are still filling together.",
+      "scroll_hint": "Calm replies · human pace"
+    },
+    "intro": {
+      "eyebrow": "Why we keep a mailbox open",
+      "title": "A studio for cinematic exploration, not a help desk",
+      "p1_before": "Đất Việt is built as a ",
+      "p1_emphasis": "curated Vietnam exploration — part magazine, part atlas, part love letter to alley steam and mountain fog.",
+      "p1_after": " When you write, you are not opening a ticket; you are extending a thread about atmosphere, appetite, and the hidden stories a map forgets.",
+      "p2": "This is a visual and emotional archive of travel — slow scouting, sensory truth, and editorial restraint. Tell us what moved you, what you are dreaming toward, or what corner of the country keeps tugging at your curiosity."
+    },
+    "form_side": {
+      "eyebrow": "Reach beyond the itinerary",
+      "quote": "We read every note with the lights low — the way you would replay a voice memo from a night market."
+    },
+    "form": {
+      "eyebrow": "Send a note",
+      "title": "Begin the thread",
+      "intro": "Soft fields, calm pacing — tell us who you are, what you are circling, and the texture of the journey on your mind.",
+      "label_name": "Name",
+      "label_email": "Email",
+      "label_journey": "Journey interest",
+      "label_message": "Message",
+      "placeholder_name": "How we should address you",
+      "placeholder_email": "you@domain.com",
+      "placeholder_journey": "Foggy highlands, lantern-lit old towns, midnight pho lanes…",
+      "placeholder_message": "A paragraph is enough — mood, references, questions you cannot shake.",
+      "submit": "Send note",
+      "sent_message": "Received — thank you. This is a prototype inbox; your words reset so you can keep drafting.",
+      "helper": "No urgency implied — we answer like editors, not automation."
+    },
+    "conversation": {
+      "eyebrow": "Kinds of correspondence",
+      "title": "What you might be circling",
+      "intro": "Choose a tone — not a department. Tap a card to echo it in your note; we fold the thread naturally.",
+      "echoed": "Echoed into your journey interest",
+      "stories": {
+        "title": "Story collaborations",
+        "line": "Co-create features, photo essays, or slow dispatches — we listen before we frame a shot."
+      },
+      "local": {
+        "title": "Local recommendations",
+        "line": "Whispered corners, dawn markets, and kitchens that never made a brochure."
+      },
+      "inspiration": {
+        "title": "Travel inspiration",
+        "line": "When you know the mood but not the latitude — we trade references, not templates."
+      },
+      "hidden": {
+        "title": "Hidden destinations",
+        "line": "Ridges, bays, and alleys that deserve patience instead of crowds."
+      },
+      "culture": {
+        "title": "Cultural conversations",
+        "line": "Ritual, sound, and food as the real map — dialogue, not a script."
+      },
+      "partnership": {
+        "title": "Partnership inquiries",
+        "line": "Editorial alignment first; anything commercial stays secondary to atmosphere."
+      }
+    },
+    "atmosphere": {
+      "eyebrow": "Atmosphere in the margin",
+      "title": "The weather of a reply",
+      "intro": "Before we write back, we hold these scenes in mind — the sensory grammar that makes Vietnam impossible to flatten into a brochure.",
+      "rain": "Rain reflections — glass and asphalt as one long sigh.",
+      "lanterns": "Lantern streets — silk light pooling where scooters slow down.",
+      "coffee": "Coffee corners — phin steam marking time between chapters.",
+      "train": "Train-street mood — houses leaning in until steel whistles through.",
+      "coast": "Coastal roads — salt film, open sky, curves that feel like exhale.",
+      "fog": "Foggy ridges — terraces erased, then redrawn by breath."
+    },
+    "closing": {
+      "eyebrow": "Stay in the slow light",
+      "title": "Connection, not checkout.",
+      "body": "Wander the atlas while you wait — provinces, cities, and journeys all breathe the same editorial air. We will meet you in the story, not the queue.",
+      "cta_provinces": "Provinces atlas",
+      "cta_about": "Our manifesto"
+    }
+  },
+  "team_editorial": {
+    "scene_prefix": "Scene",
+    "hero": {
+      "eyebrow": "Đất Việt · Field witnesses",
+      "title": "The people who walk slowly enough for Vietnam to speak in full sentences.",
+      "subtitle": "A documentary lens on the storytellers behind this atlas — not an org chart, not headshots for investors — portraits of patience, appetite, and fidelity to atmosphere.",
+      "scroll_hint": "Warmth first · credentials never"
+    },
+    "intro": {
+      "eyebrow": "Why humans lead the map",
+      "title": "Exploration edited like film — scenes, breath, texture",
+      "p1_lead": "Vietnam refuses to be reduced into bullet points. ",
+      "p1_strong": "The voices gathered here are not ‘staff’ — they are craftspeople who treat travel as sensory ethics: listen longer than the itinerary allows, eat where steam replaces signage, document without stealing dignity.",
+      "p2": "Read these chapters as interviews without microphones — faces lit by kitchen fog, coastlines humming through cheap headphones, notebooks softened by humidity. This is the crew behind the feelings you meet on every route we publish."
+    },
+    "interlude": {
+      "eyebrow": "Interlude · collective vow",
+      "quote": "We do not ‘lead’ Vietnam from a slide deck — we follow it with notebooks fogged by broth steam, microphones kissed by tide, and lenses cleaned with the hem of a shirt because the moment refused to wait."
+    },
+    "parallax_mid": {
+      "eyebrow": "Field frame",
+      "title": "Fog as collaborator — not weather to defeat.",
+      "body": "The team returns to mountains because silence there is honest — ridges erase distance until patience becomes visible. This frame is a reminder: cinematic travel dignifies waiting."
+    },
+    "values_section": {
+      "eyebrow": "Rhythm we protect",
+      "title": "Story first — hierarchy never",
+      "intro": "You will not find reporting lines here — only shared devotion to alley steam, coastal salt, and night rain wired through neon. We argue like editors, wander like students, return like locals-in-training."
+    },
+    "values": {
+      "patience": {
+        "title": "Patience",
+        "body": "Scenes earn their length — no montage where a pause would honor a vendor’s laugh."
+      },
+      "proximity": {
+        "title": "Proximity",
+        "body": "Microphones and notebooks close to bowls and tide lines — intimacy without intrusion."
+      },
+      "texture": {
+        "title": "Texture",
+        "body": "Humidity, oil, gravel sound — atmosphere treated as truthful data."
+      },
+      "trust": {
+        "title": "Trust",
+        "body": "Subjects before spectacle; contributors credited in spirit even when names stay quiet in public."
+      }
+    },
+    "closing": {
+      "eyebrow": "Walk with us",
+      "title": "Say hello — we answer like travelers, not desks.",
+      "body": "If our atlas reads cinematic, it is because humans carried its humidity across drafts and tide clocks. Reach out when you want routes that respect silence as much as spectacle.",
+      "cta_contact": "Write to us",
+      "cta_tours": "Curated journeys",
+      "cta_about": "Manifesto →"
+    },
+    "chapters": {
+      "s01": {
+        "scene": "01",
+        "givenName": "Lan",
+        "descriptor": "Listens through the lens until fog agrees to stay a little longer.",
+        "verse": "Mountains teach patience to anyone brave enough to wait without checking the time.",
+        "vietnam_anchor": "Mostly traced along Sapa terraces — mist as co-director, boots never arriving clean.",
+        "p1": "Lan treats photography like field recording: tripod low, breath slower than the shutter, waiting until a ridge stops pretending to be a postcard. People ask for ‘golden hour’; she waits for the hour when gold feels embarrassed — when cloud bruises the ridgeline and a farmer’s tarp snaps like a gentle cymbal.",
+        "p2": "Her Vietnam is not iconography. It is condensation on a bus window, plastic stools stacked before dawn, the polite silence between two scooters negotiating a curve that should not exist. The archive she leaves behind is warm because she refuses to steal dignity for contrast.",
+        "portrait_alt": "Lan outdoors in soft light, holding a camera at her chest.",
+        "secondary_alt": "River mist at dawn along an embankment."
+      },
+      "s02": {
+        "scene": "02",
+        "givenName": "Minh",
+        "descriptor": "Writes with appetite — sentences seasoned before geography.",
+        "verse": "Alley kitchens refuse abstraction; steam insists on specifics.",
+        "vietnam_anchor": "Saigon and Huế kitchens — charcoal hiss, broth fogging glasses, interviews whispered between batches.",
+        "p1": "Minh arrives as a guest who refuses to narrate from above. He sits where bowls steam his notebook shut; he learns names before dishes. His Vietnam chapters begin with verbs — frying, folding, laughing at a mistake — because hospitality here corrects your posture before your itinerary.",
+        "p2": "Exploration, for him, is not discovery as conquest. It is letting a place interrupt your cleverness. When he writes about Vietnam, you taste metal spoons, hear plastic curtains slap rain, feel the shy generosity of someone sliding another stool closer without asking permission.",
+        "portrait_alt": "Minh smiling slightly, seated in warm indoor light.",
+        "secondary_alt": "Evening street scene with lanterns and motion blur."
+      },
+      "s03": {
+        "scene": "03",
+        "givenName": "Hải",
+        "descriptor": "Collects sound the way others collect stamps — proof of honest motion.",
+        "verse": "The coast keeps time with nets and tide, not notifications.",
+        "vietnam_anchor": "Recording passes through Phú Yên dawn markets and Central Coast roads — salt as percussion.",
+        "p1": "Hải walks with microphones like lantern light: close enough to hear intimacy, respectful enough not to stage it. Motorbikes become chords; waves become rests; vendors calling prices overlap like polite jazz. His Vietnam is audible before it is visible — you recognize place when your chest learns its tempo.",
+        "p2": "He hates ‘immersive’ as marketing. Immersion, for him, is humidity in the mic windscreen, laughter ruined by wind, a dog barking on beat. When we stitch journeys together, his captures remind us exploration is sensory fidelity — not a brand promise.",
+        "portrait_alt": "Hải looking thoughtfully past the camera in natural light."
+      },
+      "s04": {
+        "scene": "04",
+        "givenName": "Thu",
+        "descriptor": "Maps emotion onto geography until both admit they are the same story.",
+        "verse": "Rain reorganizes cities emotionally before it reorganizes traffic.",
+        "vietnam_anchor": "Night walks in Đà Nẵng and Hội An — neon dragged through puddles, bridges as emotional hinges.",
+        "p1": "Thu edits the atlas like a film: pacing matters more than coverage. She refuses to flatten provinces into bullet points; she lets rivers carry paragraphs, lets mountain passes interrupt chapters so breath catches where legs once burned. Her Vietnam rewards curiosity without demanding speed.",
+        "p2": "She believes travelers deserve intimacy without surveillance — suggestions instead of commands, margins instead of marquees. If Đất Việt feels cinematic, it is because Thu insists every route keeps room for the scene you cannot schedule: an auntie’s joke, a missed turn that becomes the story.",
+        "portrait_alt": "Thu turned slightly toward warm light, contemplative portrait.",
+        "secondary_alt": "Urban street at night with reflections on wet pavement."
+      }
+    }
+  },
+  "our_services_editorial": {
+    "hero": {
+      "eyebrow": "Đất Việt · Offerings",
+      "title": "Journeys designed through atmosphere — not itineraries sold as inventory.",
+      "subtitle": "Vietnam experienced beyond spreadsheets: curated exploration, cinematic pacing, and sensory storytelling woven across cities, coastlines, and alleys that never audition for brochures.",
+      "scroll_hint": "Editorial services · human tempo"
+    },
+    "intro": {
+      "eyebrow": "What we craft together",
+      "title": "Exploration services — imagined as magazine fragments",
+      "p1_prefix": "Think of these offerings as ",
+      "p1_emphasis": "cinematic discovery journeys: immersive local storytelling, appetite-led wandering, and atmosphere-first guidance",
+      "p1_suffix": " — never a booking ledger dressed in prettier chrome.",
+      "p2": "Each module honors slow travel, sensory fidelity, and emotional immersion. Commerce stays peripheral; longing leads — whether you are chasing fog on pine ridges or neon dragged across wet pavement after midnight."
+    },
+    "immersive": {
+      "eyebrow": "Immersive chapters",
+      "title": "Seven atmospheres we steward",
+      "subtitle": "Postcard compositions — imagery carries plot; copy keeps whisper pace. Tap links like annotations, not checkout lanes."
+    },
+    "offers": {
+      "city_journey": {
+        "eyebrow": "City rhythms",
+        "title": "Curated city journeys",
+        "body": "Blocks paced like film reels — train-street hush, colonial balconies catching dusk, scooters knitting neon into humidity. We choreograph mood before mileage.",
+        "link_label": "Explore provinces · five moods →"
+      },
+      "food": {
+        "eyebrow": "Appetite as compass",
+        "title": "Food exploration experiences",
+        "body": "Steam becomes narration: broth clarity, herb scissors clicking, plastic stools arranged like stage seating. No checklist hunger — only sensory arcs worth lingering inside.",
+        "link_label": "Taste-led journeys →"
+      },
+      "hidden": {
+        "eyebrow": "Margins on purpose",
+        "title": "Hidden local discovery",
+        "body": "Alleys that tighten until sound muffles, rooftop corners where laundry paints breeze, stairwells scented with jasmine tea. Geography revealed through patience, not pins.",
+        "link_label": "Province atlas →"
+      },
+      "cultural": {
+        "eyebrow": "Ritual & resonance",
+        "title": "Cultural storytelling routes",
+        "body": "Temple incense threading fog, festival drums softened by rain tarp percussion — routes edited so belief and festivity read as atmosphere, not anthropology slides.",
+        "link_label": "Cultural arcs →"
+      },
+      "coffee_night": {
+        "eyebrow": "Night hum",
+        "title": "Coffee & night-market exploration",
+        "body": "Phin drip slowing clocks; fluorescent aisles where fruit knives spark polite bargaining. We pair caffeine patience with sodium glow — two languages of Vietnamese evening.",
+        "link_label": "Nocturnal lanes →"
+      },
+      "cinematic_guidance": {
+        "eyebrow": "Frames & fog",
+        "title": "Cinematic travel guidance",
+        "body": "Light direction as kindness — when to climb for mist burn-off, when to descend into lantern pools. Guidance feels like a cinematographer whispering, not a dispatcher routing.",
+        "link_label": "Our editorial vow →"
+      },
+      "atmosphere": {
+        "eyebrow": "Collections",
+        "title": "Local atmosphere archives",
+        "body": "Mood boards stitched from humidity grades, horn cadences, rain tempo on corrugated roofs — atmospheric bundles you wander through instead of purchase.",
+        "link_label": "Seasonal collections →"
+      }
+    },
+    "showcase": {
+      "eyebrow": "Visual atlas",
+      "title": "Scenes we design journeys around",
+      "subtitle": "Imagery dominates structure — each frame is invitation, not decoration. Hover lifts gently; pacing stays cinematic.",
+      "lines": {
+        "mountain": "Mountain routes — terraces erased, redrawn by fog breath.",
+        "lanterns": "Lantern streets — silk light slowing every negotiation.",
+        "coastal": "Coastal roads — salt film, open horizon, exhale curves.",
+        "fog": "Foggy mornings — ridges borrowing pencil from clouds.",
+        "cafe": "Local cafés — condensation grammar on slow glasses.",
+        "alley": "Hidden alley kitchens — charcoal hiss behind modest doors.",
+        "district": "Cultural districts — heritage woven into everyday commerce."
+      }
+    },
+    "philosophy": {
+      "eyebrow": "Philosophy of exploration",
+      "title": "Slow travel, sensory honesty, atmosphere before logistics",
+      "p1": "We resist optimization language — no funnels disguised as poetry. Services breathe through emotional immersion: fog as punctuation, broth steam as orientation, lantern blush as clock.",
+      "p2_lead": "Authentic discovery means granting places their uneven rhythms — scooters arguing at intersections, sudden rain improvising a roof chorus, elders claiming sidewalks with low plastic stools.",
+      "p2_emphasis": "Sensory storytelling stays our north star; anything transactional must stay quieter than the alley kitchens we praise."
+    },
+    "flow": {
+      "eyebrow": "Curated rhythm",
+      "title": "How presence unfolds here",
+      "subtitle": "Not a diagram — a sentence spoken across five breaths. Each beat is editorial pacing, not pipeline jargon.",
+      "steps": {
+        "discover": {
+          "word": "Discover",
+          "line": "Let headlines dissolve into humidity — maps suggested, never shouted."
+        },
+        "wander": {
+          "word": "Wander",
+          "line": "Footsteps edit the day; detours earn their own typography."
+        },
+        "immerse": {
+          "word": "Immerse",
+          "line": "Sound, steam, and pigment become orientation — not icons on glass."
+        },
+        "connect": {
+          "word": "Connect",
+          "line": "Conversation over counters; eyes meeting across broth steam."
+        },
+        "remember": {
+          "word": "Remember",
+          "line": "Carry scenes like folded negatives — tactile, imperfect, true."
+        }
+      }
+    },
+    "closing": {
+      "eyebrow": "Invitation, not invoice",
+      "title": "Carry Vietnam as atmosphere — long after the screen dims.",
+      "body": "Wander provinces for mood maps, cities for personality weather, journeys for sensory arcs. When you are ready for correspondence, we listen like editors — calm, human, unhurried.",
+      "cta_tours": "Curated journeys",
+      "cta_contact": "Begin a conversation",
+      "cta_home": "Homepage →"
+    }
+  },
+  "gallery_editorial": {
+    "chapter_label": "Chapter",
+    "hero": {
+      "eyebrow": "Đất Việt · Visual archive",
+      "title": "Fragments of Vietnam — light, smoke, rain, and the country between moments.",
+      "subtitle": "Stories held in still frames: not a stock library, not a portfolio grid — a slow walk through atmospheric memory, edited like a travel essay you can breathe inside.",
+      "scroll_hint": "Browse slowly · mood before category"
+    },
+    "intro": {
+      "eyebrow": "A cinematic memory collection",
+      "title": "Atmosphere first — captions kept whisper-quiet",
+      "p1_prefix": "This gallery behaves like a field notebook rendered large: sensory journeys through ",
+      "p1_emphasis": "lantern blush, mountain breath, alley steam, and neon dragged through storms",
+      "p1_suffix": " — arranged in chapters, not SKUs.",
+      "p2": "Let rhythm vary; let negative space be part of the image. We avoid crowded masonry and marketplace grids — the sequence should feel like turning heavy magazine leaves, not scanning a catalog."
+    },
+    "featured1": {
+      "eyebrow": "Featured frame",
+      "title": "Documentary still — lantern glass catching breath.",
+      "body": "Some images need the whole stage. Not every story fits a tile — some insist on occupying your periphery until you slow down enough to notice the sound implied in the light."
+    },
+    "featured2": {
+      "eyebrow": "Still · night texture",
+      "title": "Alley kitchens after dark — steam as narration.",
+      "body": "Heat, charcoal, neon leaking from signs — a single frame can hold an entire city’s appetite if you let it be large enough."
+    },
+    "story_strip": {
+      "eyebrow": "Visual essay · fragments",
+      "title": "Sensory captions — three stills, three tides",
+      "subtitle": "Imagery, copy, and pacing layered without hurry. Let each frame breathe; let the eye travel at foot-speed, not scroll-speed."
+    },
+    "story_stills": {
+      "ss1": "Scooter blur — city humming in polite impatience.",
+      "ss2": "Market bronze — fruit knives catching polite bargaining.",
+      "ss3": "Rice terraces — graphite steps rinsed by brief sun."
+    },
+    "closing": {
+      "eyebrow": "Fade quiet",
+      "title": "Carry the frames — then go make your own weather in the streets.",
+      "body": "This archive ends where your footsteps begin. Wander provinces for mood maps, cities for personality weather, journeys for sensory arcs — let Vietnam stay cinematic, human, and beautifully incomplete.",
+      "cta_provinces": "Province atlas",
+      "cta_tours": "Curated journeys",
+      "cta_home": "Homepage →"
+    },
+    "chapters": {
+      "ch01": {
+        "scene": "01",
+        "title": "Lantern nights",
+        "verse": "Silk light negotiates with shadow until the street forgets hurry.",
+        "body": "A chapter written in blush and brass — reflections gathered on water, vendors pausing mid-sentence, the humid vowels of evening eased into amber."
+      },
+      "ch02": {
+        "scene": "02",
+        "title": "Fog & pine",
+        "verse": "Mountains borrow pencil from clouds; terraces erase, then return.",
+        "body": "Pine resin and drizzle become a single scent. Roads narrow until headlights feel like conversation — one beam acknowledging another through the mute grammar of fog."
+      },
+      "ch03": {
+        "scene": "03",
+        "title": "Alley kitchens",
+        "verse": "Charcoal hisses behind modest doors — supper before introductions.",
+        "body": "Steam carries plot: shallots sweating, fish sauce brightening air, plastic stools claiming sidewalk like honest punctuation. Noise is intimacy here; appetite is orientation."
+      },
+      "ch04": {
+        "scene": "04",
+        "title": "Coastal silence",
+        "verse": "Salt writes a thin script on skin; horizons refuse deadlines.",
+        "body": "Fishing arcs at dawn, tarps snapping polite greetings, scooters leaning into bends that smell of midday catch — the coast as exhale, rhythm measured by tide instead of clock."
+      },
+      "ch05": {
+        "scene": "05",
+        "title": "Neon rain",
+        "verse": "Color dragged through puddles — city as wet manuscript.",
+        "body": "Rain collaborates with fluorescence; scooters sketch light trails; awnings drum a tempo you walk inside. Nothing is sterile — texture arrives with sound.",
+        "hint": "Urban drizzle, signage bleed, motion suggested — not spectacle for its own sake."
+      },
+      "ch06": {
+        "scene": "06",
+        "title": "Coffee corners",
+        "verse": "Phin drip slows clocks; condensation is its own punctuation.",
+        "body": "Egg foam, slow glasses, tiled floors recording decades of chair scrapes — cafés as editorial rooms where Vietnam edits the afternoon into patience, humor, and small sweetness."
+      },
+      "ch07": {
+        "scene": "07",
+        "title": "River light",
+        "verse": "Morning lifts in thin sheets — water holding sky until both agree.",
+        "body": "Misty embankments, washing lines echoing bridges, boats stitching currents with diesel patience — rivers organize cities emotionally before they organize them geographically."
+      },
+      "ch08": {
+        "scene": "08",
+        "title": "Hidden courtyards",
+        "verse": "Thresholds earned quiet — courtyards hum with private weather.",
+        "body": "Walls cup sound differently than streets; bonsai and laundry negotiate sunlight; tea cools while neighbors trade news across wells of shade — domestic mythologies held in tile."
+      },
+      "ch09": {
+        "scene": "09",
+        "title": "Train street echoes",
+        "verse": "Metal as corridor; houses leaning in until whistles realign space.",
+        "body": "Folded chairs, sudden hush, breath shared with strangers — proximity staged without performance. The train passes; ordinary life reasserts itself like a tide."
+      },
+      "ch10": {
+        "scene": "10",
+        "title": "Mountain roads",
+        "verse": "Curves teach humility; vistas repay it with silence you can wear.",
+        "body": "Switchbacks sketch nerve against beauty — rice terraces, limestone sentinels, mist erasing distance until the next bend reintroduces the world with gentler contrast."
+      }
+    }
   }
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useProvincesQuery } from '@/features/provinces/hooks';
 import { useLanguage } from '@/hooks/useLanguage';
@@ -13,20 +13,28 @@ import { ChevronDown, ShieldCheck, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Province } from '@/features/provinces/types';
 import type { TourGuideListQuery } from '../tour-guide-list-query';
+import { RevealItem, Stagger } from '@/components/home-editorial/Reveal';
+
+const SEARCH_DEBOUNCE_MS = 350;
+
+const atlasPillBase =
+  'rounded-full border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] transition';
+const atlasPillOn = 'border-forest bg-forest text-sand-50';
+const atlasPillOff =
+  'border-charcoal/12 bg-transparent text-charcoal/70 hover:border-forest/30';
+
+const atlasPopoverTrigger = (active: boolean) =>
+  cn(
+    atlasPillBase,
+    'inline-flex max-w-[12rem] min-h-9 items-center justify-between gap-1 normal-case',
+    active ? atlasPillOn : atlasPillOff,
+  );
 
 interface TourGuideFilterProps {
   value: TourGuideListQuery;
   onChange: (next: TourGuideListQuery) => void;
   onReset: () => void;
 }
-
-const chipBtn =
-  'inline-flex h-9 min-w-0 max-w-full shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-[rgba(28,26,20,0.1)] bg-white px-3.5 text-left text-sm font-medium text-[#1c1a14] shadow-sm transition-[border-color,box-shadow,background-color] duration-200 ' +
-  'hover:border-[rgba(28,26,20,0.2)] hover:bg-stone-50 hover:shadow ' +
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c8102e]/30 ' +
-  'data-[state=open]:border-[rgba(28,26,20,0.2)] data-[state=open]:bg-stone-50 data-[state=open]:shadow';
-
-const chipActive = 'border-[#c9922a]/50 bg-[#f5e9d0]/60 text-[#1e4d38]';
 
 const LANGUAGES: { value: string; label: string }[] = [
   { value: '', label: 'All languages' },
@@ -50,9 +58,42 @@ const TourGuideFilter: React.FC<TourGuideFilterProps> = ({
   onReset,
 }) => {
   const { t } = useTranslation();
-  const [openSort, setOpenSort] = useState(false);
   const { data: provincesList } = useProvincesQuery();
   const { language } = useLanguage();
+  const [draftSearch, setDraftSearch] = useState(value.search);
+  const valueRef = useRef(value);
+  const onChangeRef = useRef(onChange);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  valueRef.current = value;
+  onChangeRef.current = onChange;
+
+  useEffect(() => {
+    setDraftSearch(value.search);
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
+    }
+  }, [value.search]);
+
+  useEffect(() => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    debounceTimerRef.current = setTimeout(() => {
+      debounceTimerRef.current = null;
+      const q = valueRef.current;
+      if (draftSearch.trim() === q.search.trim() && draftSearch === q.search) {
+        return;
+      }
+      onChangeRef.current({ ...q, search: draftSearch });
+    }, SEARCH_DEBOUNCE_MS);
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+        debounceTimerRef.current = null;
+      }
+    };
+  }, [draftSearch]);
 
   const getProvinceLabel = useCallback(
     (p: Province) =>
@@ -62,6 +103,7 @@ const TourGuideFilter: React.FC<TourGuideFilterProps> = ({
 
   const hasActive = useMemo(
     () =>
+      value.search.trim() !== '' ||
       value.provinceId !== '' ||
       value.language !== '' ||
       value.isVerified !== 'all' ||
@@ -82,11 +124,6 @@ const TourGuideFilter: React.FC<TourGuideFilterProps> = ({
     return LANGUAGES.find((l) => l.value === value.language)?.label ?? value.language;
   }, [value.language, t]);
 
-  const sortLabel = useMemo(() => {
-    const opt = SORT_OPTIONS.find((o) => o.value === value.sortBy);
-    return opt ? t(opt.labelKey) : t('tour_guide.sort_newest');
-  }, [value.sortBy, t]);
-
   const verificationLabel = useMemo(() => {
     if (value.isVerified === 'true') return t('tour_guide.verified_only', 'Verified only');
     if (value.isVerified === 'false') return t('tour_guide.unverified', 'Unverified');
@@ -94,24 +131,65 @@ const TourGuideFilter: React.FC<TourGuideFilterProps> = ({
   }, [value.isVerified, t]);
 
   return (
-    <div className="sticky top-[136px] z-30 w-full overflow-hidden rounded-t-2xl border border-[rgba(28,26,20,0.07)] border-b-[rgba(28,26,20,0.08)] border-t-white/55 bg-white/95 shadow-[0_-6px_32px_rgba(0,0,0,0.06),0_12px_40px_rgba(28,26,20,0.07)] backdrop-blur-md sm:rounded-t-3xl">
-      <div className="mx-auto max-w-7xl px-3 py-2.5 sm:px-6 sm:py-3">
-        <div className="flex min-w-0 flex-nowrap items-center gap-2 overflow-x-auto pb-0.5 pt-0.5 [scrollbar-width:thin]">
+    <div
+      className={cn(
+        'sticky top-24 z-30 border-b border-charcoal/10 bg-sand-50/80 px-4 py-4 shadow-[0_12px_40px_-24px_oklch(22%_0.02_75/0.25)] backdrop-blur-md md:top-[5.75rem] md:px-10',
+      )}
+      data-tour-guide-filters
+    >
+      <div className="mx-auto max-w-6xl space-y-4">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <label className="relative block min-w-[min(100%,280px)] flex-1">
+            <span className="sr-only">{t('tour_guide.search_label', 'Search guides')}</span>
+            <input
+              type="search"
+              value={draftSearch}
+              onChange={(e) => setDraftSearch(e.target.value)}
+              placeholder={t(
+                'tour_guide.search_placeholder',
+                'Guide name, specialty...',
+              )}
+              className="w-full rounded-full border border-charcoal/12 bg-sand-50/90 px-5 py-3 text-sm text-charcoal outline-none ring-forest/25 transition placeholder:text-charcoal/40 focus:border-forest/35 focus:ring-4"
+            />
+          </label>
+          <Stagger className="flex flex-wrap gap-2 lg:justify-end">
+            {SORT_OPTIONS.map((option) => {
+              const selected = value.sortBy === option.value;
+              return (
+                <RevealItem key={option.value}>
+                  <button
+                    type="button"
+                    aria-pressed={selected}
+                    onClick={() => onChange({ ...value, sortBy: option.value })}
+                    className={cn(atlasPillBase, selected ? atlasPillOn : atlasPillOff)}
+                  >
+                    {t(option.labelKey)}
+                  </button>
+                </RevealItem>
+              );
+            })}
+          </Stagger>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
           <Popover>
             <PopoverTrigger asChild>
               <button
                 type="button"
-                className={cn(chipBtn, value.provinceId !== '' && chipActive)}
+                className={atlasPopoverTrigger(value.provinceId !== '')}
               >
-                {provinceLabel}
-                <ChevronDown className="size-4 shrink-0 opacity-60" />
+                <span className="max-w-[10rem] truncate">{provinceLabel}</span>
+                <ChevronDown className="size-3.5 shrink-0 opacity-50" />
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-64 p-2" align="start">
+            <PopoverContent
+              className="w-64 border-charcoal/10 bg-sand-50 p-2"
+              align="start"
+            >
               <div className="max-h-64 space-y-0.5 overflow-y-auto">
                 <button
                   type="button"
-                  className="w-full cursor-pointer rounded-lg px-2 py-2 text-left text-sm hover:bg-stone-50"
+                  className="w-full cursor-pointer rounded-lg px-2 py-2 text-left text-sm text-charcoal hover:bg-sand-100"
                   onClick={() => onChange({ ...value, provinceId: '' })}
                 >
                   {t('common.all', 'All')}
@@ -123,8 +201,8 @@ const TourGuideFilter: React.FC<TourGuideFilterProps> = ({
                     className={cn(
                       'w-full cursor-pointer rounded-lg px-2 py-2 text-left text-sm transition-colors',
                       value.provinceId === p._id
-                        ? 'bg-[#d4eae0] font-medium text-[#1e4d38]'
-                        : 'hover:bg-stone-50',
+                        ? 'bg-forest/12 font-medium text-forest'
+                        : 'text-charcoal hover:bg-sand-100',
                     )}
                     onClick={() => onChange({ ...value, provinceId: p._id })}
                   >
@@ -139,13 +217,16 @@ const TourGuideFilter: React.FC<TourGuideFilterProps> = ({
             <PopoverTrigger asChild>
               <button
                 type="button"
-                className={cn(chipBtn, value.language !== '' && chipActive)}
+                className={atlasPopoverTrigger(value.language !== '')}
               >
-                {languageLabel}
-                <ChevronDown className="size-4 shrink-0 opacity-60" />
+                <span className="max-w-[10rem] truncate">{languageLabel}</span>
+                <ChevronDown className="size-3.5 shrink-0 opacity-50" />
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-56 p-1.5" align="start">
+            <PopoverContent
+              className="w-56 border-charcoal/10 bg-sand-50 p-1.5"
+              align="start"
+            >
               {LANGUAGES.map((option) => (
                 <button
                   key={option.value || 'all'}
@@ -153,8 +234,8 @@ const TourGuideFilter: React.FC<TourGuideFilterProps> = ({
                   className={cn(
                     'w-full cursor-pointer rounded-lg px-3 py-2 text-left text-sm transition-colors',
                     value.language === option.value
-                      ? 'bg-[#d4eae0] font-medium text-[#1e4d38]'
-                      : 'hover:bg-stone-50',
+                      ? 'bg-forest/12 font-medium text-forest'
+                      : 'text-charcoal hover:bg-sand-100',
                   )}
                   onClick={() => onChange({ ...value, language: option.value })}
                 >
@@ -168,14 +249,17 @@ const TourGuideFilter: React.FC<TourGuideFilterProps> = ({
             <PopoverTrigger asChild>
               <button
                 type="button"
-                className={cn(chipBtn, value.isVerified !== 'all' && chipActive)}
+                className={atlasPopoverTrigger(value.isVerified !== 'all')}
               >
-                <ShieldCheck className="size-4 shrink-0 text-[#2d6a4f]" />
-                {verificationLabel}
-                <ChevronDown className="size-4 shrink-0 opacity-60" />
+                <ShieldCheck className="size-3.5 shrink-0 opacity-90" aria-hidden />
+                <span className="max-w-[9rem] truncate">{verificationLabel}</span>
+                <ChevronDown className="size-3.5 shrink-0 opacity-50" />
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-56 p-1.5" align="start">
+            <PopoverContent
+              className="w-56 border-charcoal/10 bg-sand-50 p-1.5"
+              align="start"
+            >
               {(
                 [
                   { id: 'all', label: t('tour_guide.all_guides', 'All guides') },
@@ -192,8 +276,8 @@ const TourGuideFilter: React.FC<TourGuideFilterProps> = ({
                   className={cn(
                     'w-full cursor-pointer rounded-lg px-3 py-2 text-left text-sm transition-colors',
                     value.isVerified === option.id
-                      ? 'bg-[#d4eae0] font-medium text-[#1e4d38]'
-                      : 'hover:bg-stone-50',
+                      ? 'bg-forest/12 font-medium text-forest'
+                      : 'text-charcoal hover:bg-sand-100',
                   )}
                   onClick={() =>
                     onChange({
@@ -208,71 +292,71 @@ const TourGuideFilter: React.FC<TourGuideFilterProps> = ({
             </PopoverContent>
           </Popover>
 
-          <Popover open={openSort} onOpenChange={setOpenSort}>
-            <PopoverTrigger asChild>
-              <button type="button" className={cn(chipBtn, 'max-sm:min-w-[120px]')}>
-                {sortLabel}
-                <ChevronDown className="size-4 shrink-0 opacity-60" />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent className="w-52 p-1" align="end">
-              {SORT_OPTIONS.map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  className={cn(
-                    'w-full cursor-pointer rounded-md px-3 py-2 text-left text-sm',
-                    value.sortBy === option.value
-                      ? 'bg-[#d4eae0] font-medium text-[#1e4d38]'
-                      : 'hover:bg-stone-50',
-                  )}
-                  onClick={() => {
-                    onChange({ ...value, sortBy: option.value });
-                    setOpenSort(false);
-                  }}
-                >
-                  {t(option.labelKey)}
-                </button>
-              ))}
-            </PopoverContent>
-          </Popover>
-
-          {hasActive && (
+          {hasActive ? (
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              className="ml-auto hidden h-8 shrink-0 cursor-pointer gap-1 text-[#c8102e] sm:inline-flex"
+              className="ml-auto hidden h-8 shrink-0 gap-1 text-sunset-deep hover:text-sunset-deep/90 sm:inline-flex"
               onClick={onReset}
             >
               <X className="size-3.5" />
               {t('tour.filter.clear_all', 'Clear all')}
             </Button>
-          )}
+          ) : null}
         </div>
 
-        {hasActive && (
-          <div className="mt-2 flex max-w-full flex-wrap items-center gap-1.5 border-t border-[rgba(28,26,20,0.06)] pt-2">
-            <span className="shrink-0 text-[11px] font-medium text-[rgba(28,26,20,0.45)]">
+        {hasActive ? (
+          <div className="flex max-w-full flex-wrap items-center gap-1.5 border-t border-charcoal/10 pt-3">
+            <span className="shrink-0 text-[11px] font-medium uppercase tracking-[0.14em] text-charcoal/45">
               {t('tour.filter.active', 'Active')}:
             </span>
-            {value.provinceId && (
-              <Badge variant="secondary" className="rounded-full bg-stone-100 text-[11px]">
+            {value.search.trim() !== '' ? (
+              <Badge
+                variant="secondary"
+                className="rounded-full border border-charcoal/10 bg-sand-100 text-[11px] text-charcoal"
+              >
+                “{value.search.trim().slice(0, 40)}
+                {value.search.trim().length > 40 ? '…' : ''}”
+              </Badge>
+            ) : null}
+            {value.provinceId ? (
+              <Badge
+                variant="secondary"
+                className="rounded-full border border-charcoal/10 bg-sand-100 text-[11px] text-charcoal"
+              >
                 {provinceLabel}
               </Badge>
-            )}
-            {value.language && (
-              <Badge variant="secondary" className="rounded-full bg-stone-100 text-[11px]">
+            ) : null}
+            {value.language ? (
+              <Badge
+                variant="secondary"
+                className="rounded-full border border-charcoal/10 bg-sand-100 text-[11px] text-charcoal"
+              >
                 {languageLabel}
               </Badge>
-            )}
-            {value.isVerified !== 'all' && (
-              <Badge variant="secondary" className="rounded-full bg-stone-100 text-[11px]">
+            ) : null}
+            {value.isVerified !== 'all' ? (
+              <Badge
+                variant="secondary"
+                className="rounded-full border border-charcoal/10 bg-sand-100 text-[11px] text-charcoal"
+              >
                 {verificationLabel}
               </Badge>
-            )}
+            ) : null}
+            {value.sortBy !== 'newest' ? (
+              <Badge
+                variant="secondary"
+                className="rounded-full border border-charcoal/10 bg-sand-100 text-[11px] text-charcoal"
+              >
+                {(() => {
+                  const opt = SORT_OPTIONS.find((o) => o.value === value.sortBy);
+                  return opt ? t(opt.labelKey) : '';
+                })()}
+              </Badge>
+            ) : null}
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

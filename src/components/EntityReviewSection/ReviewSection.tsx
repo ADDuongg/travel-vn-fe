@@ -1,7 +1,5 @@
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import CustomInput from '@components/CustomInput';
-import { Ratings } from '@components/ui/rating';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import ReviewItem from './ReviewItem';
 import ReviewForm from './ReviewForm';
@@ -13,6 +11,7 @@ import {
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useTranslation } from 'react-i18next';
 import { Info, AlertCircle, EyeOff } from 'lucide-react';
+import { StarRow, REVIEW_OD_SELECT } from './reviewVisualPrimitives';
 
 export interface RatingSummary {
   average: number;
@@ -63,8 +62,9 @@ export default function ReviewSection({
     },
   });
 
-  const { watch } = methods;
-  const { sortBy, filterBy } = watch();
+  const { watch, register } = methods;
+  const sortBy = watch('sortBy');
+  const filterBy = watch('filterBy');
 
   const sortedReviews = React.useMemo(() => {
     let data = [...reviews];
@@ -85,6 +85,8 @@ export default function ReviewSection({
         break;
       case 'date_asc':
         data.sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt));
+        break;
+      default:
         break;
     }
 
@@ -113,100 +115,135 @@ export default function ReviewSection({
     [t],
   );
 
+  const starsAria = t('entityReview.stars_avg_aria', {
+    rating: Math.round(displayRating),
+  });
+
   return (
-    <section className="mt-6">
+    <section className="space-y-10">
       <FormProvider {...methods}>
-        <div className="mb-6 flex flex-wrap items-center justify-between border-b pb-3">
-          <div className="flex items-center gap-2 text-sm font-medium">
-            <Ratings
-              rating={displayRating}
-              readOnly
-              size={16}
-              variant="yellow"
+        <div className="flex flex-col gap-8 rounded-[2rem] border border-charcoal/10 bg-sand-50/90 p-6 shadow-[var(--shadow-soft)] md:flex-row md:items-center md:justify-between md:gap-12 md:p-10">
+          <div className="space-y-3">
+            <p className="font-display text-5xl leading-none text-charcoal md:text-6xl">
+              {displayRating > 0 ? displayRating.toFixed(1) : '—'}
+            </p>
+            <StarRow
+              rating={Math.round(displayRating)}
+              ariaLabel={starsAria}
             />
-            <span className="text-gray-500">
+            <p className="text-sm text-mist">
               {t(
                 displayCount === 1
                   ? 'entityReview.reviews_count_one'
                   : 'entityReview.reviews_count_other',
                 { count: displayCount },
               )}
-            </span>
+            </p>
           </div>
 
-          <div className="flex items-center gap-6 text-sm">
-            <span className="font-semibold">{t('entityReview.sort_by')}</span>
-            <CustomInput
-              name="sortBy"
-              type="select"
-              options={sortOptions}
-              className="w-44"
-            />
-            <CustomInput
-              name="filterBy"
-              type="select"
-              options={filterOptions}
-              className="w-28"
-            />
+          <div className="flex w-full flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end md:w-auto md:min-w-0 md:justify-end">
+            <div className="flex min-w-0 flex-1 flex-col gap-2 sm:min-w-[200px]">
+              <label
+                htmlFor="entity-review-sort"
+                className="text-[11px] uppercase tracking-[0.22em] text-charcoal/45"
+              >
+                {t('entityReview.sort_by')}
+              </label>
+              <select
+                id="entity-review-sort"
+                {...register('sortBy')}
+                className={REVIEW_OD_SELECT}
+              >
+                {sortOptions.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex min-w-0 flex-1 flex-col gap-2 sm:min-w-[140px]">
+              <label
+                htmlFor="entity-review-filter"
+                className="text-[11px] uppercase tracking-[0.22em] text-charcoal/45"
+              >
+                {t('entityReview.filter_by')}
+              </label>
+              <select
+                id="entity-review-filter"
+                {...register('filterBy')}
+                className={REVIEW_OD_SELECT}
+              >
+                {filterOptions.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
+
+        {myReview?.status === ReviewStatus.PENDING && (
+          <Alert className="rounded-[1.25rem] border border-amber-200/80 bg-amber-50/90 shadow-inner">
+            <Info className="size-4 text-amber-800" aria-hidden />
+            <AlertTitle className="text-amber-950">
+              {t('entityReview.banner_pending_title')}
+            </AlertTitle>
+            <AlertDescription className="text-amber-950/90">
+              {t('entityReview.banner_pending_body')}
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {myReview?.status === ReviewStatus.REJECTED && (
+          <Alert
+            variant="destructive"
+            className="rounded-[1.25rem] border border-sunset-deep/30 bg-[var(--red-soft)]"
+          >
+            <AlertCircle className="size-4" aria-hidden />
+            <AlertTitle>{t('entityReview.banner_rejected_title')}</AlertTitle>
+            <AlertDescription>
+              {myReview.rejectReason?.trim()
+                ? t('entityReview.banner_rejected_reason', {
+                    reason: myReview.rejectReason.trim(),
+                  })
+                : t('entityReview.banner_rejected_body')}
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {myReview?.status === ReviewStatus.HIDDEN && (
+          <Alert className="rounded-[1.25rem] border border-charcoal/15 bg-sand-100/90 shadow-inner">
+            <EyeOff className="size-4 text-charcoal/60" aria-hidden />
+            <AlertTitle className="text-charcoal">
+              {t('entityReview.banner_hidden_title')}
+            </AlertTitle>
+            <AlertDescription className="text-mist">
+              {myReview.hiddenReason?.trim()
+                ? t('entityReview.banner_hidden_reason', {
+                    reason: myReview.hiddenReason.trim(),
+                  })
+                : t('entityReview.banner_hidden_body')}
+            </AlertDescription>
+          </Alert>
+        )}
+
+        <div className="space-y-6">
+          {sortedReviews.map((r) => (
+            <ReviewItem
+              key={r._id}
+              review={r}
+              isOwner={r.userId === currentUserId}
+              entityId={entityId}
+              entityType={entityType}
+            />
+          ))}
+        </div>
+
+        {showCreateForm ? (
+          <ReviewForm entityId={entityId} entityType={entityType} />
+        ) : null}
       </FormProvider>
-
-      {myReview?.status === ReviewStatus.PENDING && (
-        <Alert className="mb-6 rounded-xl border-amber-200 bg-amber-50/90">
-          <Info className="size-4 text-amber-700" aria-hidden />
-          <AlertTitle className="text-amber-900">
-            {t('entityReview.banner_pending_title')}
-          </AlertTitle>
-          <AlertDescription className="text-amber-900/90">
-            {t('entityReview.banner_pending_body')}
-          </AlertDescription>
-        </Alert>
-      )}
-
-      {myReview?.status === ReviewStatus.REJECTED && (
-        <Alert variant="destructive" className="mb-6 rounded-xl">
-          <AlertCircle className="size-4" aria-hidden />
-          <AlertTitle>{t('entityReview.banner_rejected_title')}</AlertTitle>
-          <AlertDescription>
-            {myReview.rejectReason?.trim()
-              ? t('entityReview.banner_rejected_reason', {
-                  reason: myReview.rejectReason.trim(),
-                })
-              : t('entityReview.banner_rejected_body')}
-          </AlertDescription>
-        </Alert>
-      )}
-
-      {myReview?.status === ReviewStatus.HIDDEN && (
-        <Alert className="mb-6 rounded-xl border-slate-200 bg-slate-50">
-          <EyeOff className="size-4 text-slate-600" aria-hidden />
-          <AlertTitle>{t('entityReview.banner_hidden_title')}</AlertTitle>
-          <AlertDescription>
-            {myReview.hiddenReason?.trim()
-              ? t('entityReview.banner_hidden_reason', {
-                  reason: myReview.hiddenReason.trim(),
-                })
-              : t('entityReview.banner_hidden_body')}
-          </AlertDescription>
-        </Alert>
-      )}
-
-      <div className="space-y-6">
-        {sortedReviews.map((r) => (
-          <ReviewItem
-            key={r._id}
-            review={r}
-            isOwner={r.userId === currentUserId}
-            entityId={entityId}
-            entityType={entityType}
-          />
-        ))}
-      </div>
-
-      {showCreateForm && (
-        <ReviewForm entityId={entityId} entityType={entityType} />
-      )}
     </section>
   );
 }

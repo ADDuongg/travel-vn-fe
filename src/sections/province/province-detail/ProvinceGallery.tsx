@@ -1,6 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import type { ImageItem, ProvinceDetail } from '@/features/provinces/types';
+import { Reveal } from '@/components/home-editorial/Reveal';
+import type { ProvinceDetail } from '@/features/provinces/types';
+import { getMergedProvinceImages } from './provinceDetailImages';
 
 interface ProvinceGalleryProps {
   province: ProvinceDetail;
@@ -8,67 +10,50 @@ interface ProvinceGalleryProps {
 
 export function ProvinceGallery({ province }: ProvinceGalleryProps) {
   const { t } = useTranslation();
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const images = useMemo(() => {
-    const merged: ImageItem[] = [];
-    const seen = new Set<string>();
-    if (province.thumbnail?.url) {
-      merged.push(province.thumbnail);
-      seen.add(province.thumbnail.url);
-    }
-    (province.gallery ?? [])
-      .slice()
-      .sort((first, second) => (first.order ?? 0) - (second.order ?? 0))
-      .forEach((image) => {
-        if (image.url && !seen.has(image.url)) {
-          merged.push(image);
-          seen.add(image.url);
-        }
-      });
-    return merged;
-  }, [province.gallery, province.thumbnail]);
-
-  useEffect(() => {
-    setActiveIndex(0);
-  }, [province._id]);
+  const images = getMergedProvinceImages(province);
 
   if (images.length === 0) {
-    return null;
+    return (
+      <section id="gallery" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-16 md:px-10 md:py-20">
+        <p className="max-w-2xl text-center text-base leading-relaxed text-mist md:text-lg">
+          {t('province.detail.gallery_empty')}
+        </p>
+      </section>
+    );
   }
 
-  const mainImage = images[activeIndex] ?? images[0];
-  const sideImages = images.filter((_, index) => index !== activeIndex).slice(0, 4);
-
   return (
-    <section id="gallery" className="scroll-mt-44 rounded-2xl bg-white p-6 shadow-[var(--shadow-card)]">
-      <h2
-        className="text-2xl font-bold tracking-[-0.02em] text-[#1c1a14] sm:text-3xl"
-        style={{ fontFamily: 'var(--font-dm-serif-display, Georgia, serif)' }}
-      >
-        {t('province.gallery', 'Gallery')}
-      </h2>
-      <div className="mt-6 grid grid-cols-12 gap-4">
-        <div className="col-span-12 aspect-[16/9] overflow-hidden rounded-2xl ring-1 ring-[rgba(28,26,20,0.1)] md:col-span-8">
-          <img src={mainImage.url} alt={mainImage.alt ?? 'Province'} className="h-full w-full object-cover" />
-        </div>
-        <div className="col-span-12 grid grid-cols-2 grid-rows-2 gap-4 md:col-span-4">
-          {sideImages.map((image) => (
-            <button
-              key={image.url}
-              type="button"
-              onClick={() => {
-                const index = images.findIndex((item) => item.url === image.url);
-                if (index >= 0) {
-                  setActiveIndex(index);
-                }
-              }}
-              className="overflow-hidden rounded-xl ring-1 ring-[rgba(28,26,20,0.1)] transition-all hover:ring-2 hover:ring-[#c8102e]/50"
+    <section id="gallery" className="mx-auto max-w-6xl scroll-mt-32 px-4 py-20 md:px-10 md:py-24">
+      <Reveal className="mb-10 space-y-3">
+        <p className="text-[11px] uppercase tracking-[0.32em] text-forest">
+          {t('province.detail.gallery_kicker')}
+        </p>
+        <h2 className="font-display text-4xl text-charcoal">{t('province.detail.gallery_title')}</h2>
+      </Reveal>
+      <div className="grid gap-4 md:grid-cols-12 md:grid-rows-2">
+        {images.map((image, idx) => {
+          const hero = idx === 0;
+          return (
+            <Reveal
+              key={`${province.slug}-${image.url}-${idx}`}
+              delay={idx * 0.05}
+              className={hero ? 'md:col-span-7 md:row-span-2' : 'md:col-span-5'}
             >
-              <img src={image.url} alt={image.alt ?? 'Province'} className="h-full w-full object-cover" />
-            </button>
-          ))}
-        </div>
+              <motion.div
+                whileHover={{ scale: hero ? 1.01 : 1.03 }}
+                transition={{ type: 'spring', stiffness: 240, damping: 22 }}
+                className="h-full"
+              >
+                <img
+                  src={image.url}
+                  alt={image.alt?.trim() || province.slug}
+                  loading="lazy"
+                  className={`w-full rounded-[1.35rem] object-cover shadow-soft ${hero ? 'min-h-[300px] md:min-h-[520px]' : 'aspect-[16/11] md:aspect-auto md:min-h-[240px]'}`}
+                />
+              </motion.div>
+            </Reveal>
+          );
+        })}
       </div>
     </section>
   );

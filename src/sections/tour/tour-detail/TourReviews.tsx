@@ -6,28 +6,35 @@ import type { Tour } from '@/features/tours/types';
 
 type TourReviewsProps = {
   tour: Tour;
+  /** Parent provides section + title (journey layout). */
+  embedded?: boolean;
 };
 
-const TourReviews: React.FC<TourReviewsProps> = ({ tour }) => {
+const TourReviews: React.FC<TourReviewsProps> = ({ tour, embedded }) => {
   const { t } = useTranslation();
 
-  return (
-    <section id="reviews" className="scroll-mt-40">
-      <h2
-        className="mb-4 font-['Playfair_Display',serif] text-2xl font-bold text-[#1c1a14] sm:mb-6 sm:text-3xl"
-        style={{ fontFamily: 'var(--font-dm-serif-display, Georgia, serif)' }}
-      >
-        {t('tour.detail.reviews_block_title', 'Traveler reviews')}
-      </h2>
-      <div className="rounded-2xl border border-[rgba(28,26,20,0.1)] bg-white p-4 shadow-[var(--shadow-card)] sm:p-6">
+  const block = (
+    <>
+      {!embedded ? (
+        <h2 className="mb-4 font-display text-2xl font-semibold tracking-tight text-charcoal sm:mb-6 sm:text-3xl md:text-4xl">
+          {t('tour.detail.reviews_block_title', 'Traveler reviews')}
+        </h2>
+      ) : null}
+      <div className="rounded-[2rem] border border-charcoal/10 bg-sand-50/90 p-4 shadow-[var(--shadow-soft)] sm:p-6 md:p-8">
         <EntityReviewSection
           entityType={ReviewEntityType.TOUR}
           entityId={tour._id}
           ratingSummary={tour.ratingSummary ?? undefined}
         />
       </div>
-    </section>
+    </>
   );
+
+  if (embedded) {
+    return block;
+  }
+
+  return <section id="reviews" className="scroll-mt-40">{block}</section>;
 };
 
 export default TourReviews;

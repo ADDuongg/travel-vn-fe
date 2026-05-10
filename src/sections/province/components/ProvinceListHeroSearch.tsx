@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -16,13 +16,30 @@ const ALL = 'ALL';
 
 interface ProvinceListHeroSearchProps {
   onApply: (params: { search?: string; region?: ProvinceRegion }) => void;
+  /** Synced from URL (`?search=`) */
+  initialSearch: string;
+  /** Synced from URL (`?region=`) */
+  initialRegion: ProvinceRegion;
   className?: string;
 }
 
-export function ProvinceListHeroSearch({ onApply, className = '' }: ProvinceListHeroSearchProps) {
+export function ProvinceListHeroSearch({
+  onApply,
+  initialSearch,
+  initialRegion,
+  className = '',
+}: ProvinceListHeroSearchProps) {
   const { t } = useTranslation();
-  const [search, setSearch] = useState('');
-  const [region, setRegion] = useState<ProvinceRegion>(ALL);
+  const [search, setSearch] = useState(initialSearch);
+  const [region, setRegion] = useState<ProvinceRegion>(initialRegion);
+
+  useEffect(() => {
+    setSearch(initialSearch);
+  }, [initialSearch]);
+
+  useEffect(() => {
+    setRegion(initialRegion);
+  }, [initialRegion]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useProvincesQuery } from '@/features/provinces/hooks';
 import { useLanguage } from '@/hooks/useLanguage';
@@ -19,15 +19,32 @@ const ALL = '__all__';
 export function TourListHeroSearch({
   onApply,
   className = '',
+  initialSearch = '',
+  initialDestinationId,
 }: {
   onApply: (params: { search?: string; destinationId?: string }) => void;
   className?: string;
+  /** Synced from URL / parent query (tour list editorial). */
+  initialSearch?: string;
+  initialDestinationId?: string;
 }) {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const { data: provinces } = useProvincesQuery();
-  const [search, setSearch] = useState('');
-  const [destinationId, setDestinationId] = useState(ALL);
+  const [search, setSearch] = useState(initialSearch);
+  const [destinationId, setDestinationId] = useState(
+    initialDestinationId && initialDestinationId !== '' ? initialDestinationId : ALL,
+  );
+
+  useEffect(() => {
+    setSearch(initialSearch);
+  }, [initialSearch]);
+
+  useEffect(() => {
+    setDestinationId(
+      initialDestinationId && initialDestinationId !== '' ? initialDestinationId : ALL,
+    );
+  }, [initialDestinationId]);
 
   const getLabel = (p: Province) =>
     p.name?.[language as 'vi' | 'en'] ?? p.name?.vi ?? p.name?.en ?? p.slug;

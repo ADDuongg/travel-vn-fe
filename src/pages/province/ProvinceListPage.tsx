@@ -1,27 +1,28 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { motion, useReducedMotion } from 'framer-motion';
 import { MainLayout } from '@/layout';
-import Container from '@/components/Container';
-import { PageHero } from '@/components/PageHero';
+import { ParallaxHero } from '@/components/home-editorial/ParallaxHero';
+import { Reveal } from '@/components/home-editorial/Reveal';
 import {
-  ProvinceCard,
-  ProvinceCardSkeleton,
-  ProvinceFilter,
-  ProvinceListHeroSearch,
+  ProvinceListAtlasToolbar,
+  ProvinceMagazineCard,
+  ProvinceMagazineCardSkeleton,
+  ProvincePopularStrip,
   defaultProvinceListQuery,
+  isDefaultProvinceQuery,
   type ProvinceListQuery,
 } from '@/sections/province';
-import { useProvincesListQuery } from '@/features/provinces/hooks';
+import { usePopularProvincesQuery, useProvincesListQuery } from '@/features/provinces/hooks';
+import { MOCK_PROVINCES_FALLBACK } from '@/features/provinces/mockProvinces';
+import type { ProvinceListItem } from '@/features/provinces/types';
 import { useTranslation } from 'react-i18next';
-import ServerPagination from '@/shared/pagination/ServerPagination';
-import { EnumDisplayItem } from '@/constants/commons';
-import DisplayItemType from '@/sections/shared/DisplayItemType';
-import DisplayContainer from '@/components/DisplayContainer';
+import { AtlasPagination } from '@/shared/pagination/AtlasPagination';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
 
-const HERO_VN =
-  'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1920&h=1080&auto=format&fit=crop&q=80';
+const HERO_IMAGE =
+  'https://images.unsplash.com/photo-1570077188670-e00b4fb6c7e9?ixlib=rb-4.1.0&auto=format&fit=crop&q=85&w=2400';
 const PAGE_SIZE = 9;
 
 function getQueryFromSearchParams(searchParams: URLSearchParams): ProvinceListQuery {
@@ -53,8 +54,8 @@ function getSearchParamsFromQuery(query: ProvinceListQuery, page: number) {
 
 export default function ProvinceListPage() {
   const { t } = useTranslation();
+  const reduceMotion = useReducedMotion();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [displayType, setDisplayType] = useState<EnumDisplayItem>(EnumDisplayItem.GRID);
   const [query, setQuery] = useState<ProvinceListQuery>(() => getQueryFromSearchParams(searchParams));
   const [currentPage, setCurrentPage] = useState(() => Number(searchParams.get('page')) || 1);
 
@@ -93,120 +94,122 @@ export default function ProvinceListPage() {
   }, [currentPage, query]);
 
   const { data, isLoading, error } = useProvincesListQuery(params);
+  const { data: popularProvinces = [] } = usePopularProvincesQuery();
+
   const items = data?.items ?? [];
   const pagination = data?.pagination;
   const total = pagination?.total ?? items.length;
   const totalPages = Math.max(1, pagination?.totalPages ?? 1);
-  const showingFrom = total ? (currentPage - 1) * PAGE_SIZE + 1 : 0;
-  const showingTo = Math.min(currentPage * PAGE_SIZE, total);
+
+  const useMockListFallback =
+    !isLoading && !error && items.length === 0 && isDefaultProvinceQuery(query, currentPage);
+
+  const displayItems: ProvinceListItem[] = useMockListFallback ? MOCK_PROVINCES_FALLBACK : items;
+
+  const totalForUi = useMockListFallback ? MOCK_PROVINCES_FALLBACK.length : total;
+  const showingFrom = totalForUi > 0 ? (currentPage - 1) * PAGE_SIZE + 1 : 0;
+  const showingTo = useMockListFallback
+    ? MOCK_PROVINCES_FALLBACK.length
+    : Math.min(currentPage * PAGE_SIZE, total);
+
+  const handleQueryChange = useCallback((next: ProvinceListQuery) => {
+    setCurrentPage(1);
+    setQuery(next);
+  }, []);
+
+  const atlasPaginationLabels = useMemo(
+    () => ({
+      showingRange: t('province.pagination.atlas_showing', {
+        from: showingFrom,
+        to: showingTo,
+        total: totalForUi,
+      }),
+      folioLabel: t('province.pagination.atlas_folio_prefix', 'Folio'),
+      prevSpread: t('province.pagination.prev_spread', 'Previous spread'),
+      nextSpread: t('province.pagination.next_spread', 'Next spread'),
+      spreadNavLabel: t('province.pagination.spread_nav', 'Spread navigation'),
+    }),
+    [showingFrom, showingTo, t, totalForUi],
+  );
 
   return (
     <MainLayout>
-      <PageHero
-        backgroundImage={HERO_VN}
-        title={t('province.hero_title', 'Discover Vietnam provinces')}
-        subtitle={t(
-          'province.hero_subtitle',
-          'Find the best destinations from mountains to coastlines with practical travel insights',
-        )}
-        badge={t('province.hero_badge', 'Vietnam - local destinations')}
-        contentClassName="min-h-[320px] justify-center pb-16 pt-24 md:min-h-[420px] md:pb-20 md:pt-32"
-        footerSlot={
-          <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-20 sm:h-28"
-            style={{
-              background:
-                'linear-gradient(180deg, transparent 0%, rgba(28,26,20,0.1) 22%, rgba(245,240,232,0.45) 58%, #ffffff 100%)',
-            }}
-            aria-hidden
-          />
-        }
-      >
-        <ProvinceListHeroSearch
-          onApply={({ search, region }) => {
-            setCurrentPage(1);
-            setQuery((prev) => ({
-              ...prev,
-              search: search ?? '',
-              region: region ?? 'ALL',
-            }));
-          }}
-        />
-      </PageHero>
+      <article>
+        <ParallaxHero image={HERO_IMAGE} heightClass="min-h-[min(92vh,900px)]">
+          <div className="flex flex-1 flex-col justify-end px-6 pb-14 pt-36 md:px-14 md:pb-20 md:pt-44">
+            <motion.div
+              initial={reduceMotion ? undefined : { opacity: 0, y: 28 }}
+              animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+              className="max-w-3xl space-y-5 text-sand-50"
+            >
+              <p className="text-[11px] uppercase tracking-[0.38em] text-sand-100/75">
+                {t('province.hero_kicker', 'Atlas · moods by latitude')}
+              </p>
+              <h1 className="font-display text-[clamp(2.6rem,6.8vw,4.85rem)] leading-[0.92]">
+                {t('province.hero_title', 'Discover Vietnam provinces')}
+              </h1>
+              <p className="max-w-2xl text-lg text-sand-100/85">
+                {t(
+                  'province.hero_subtitle',
+                  'Find destinations from highlands to delta coastlines — curated frames and practical filters.',
+                )}
+              </p>
+            </motion.div>
+          </div>
+        </ParallaxHero>
 
-      <div className="relative z-[3] -mt-3 sm:-mt-5">
-        <ProvinceFilter
+        <ProvinceListAtlasToolbar
           value={query}
-          onChange={(next) => {
-            setCurrentPage(1);
-            setQuery(next);
-          }}
+          onChange={handleQueryChange}
           onReset={() => {
             setQuery({ ...defaultProvinceListQuery });
             setCurrentPage(1);
           }}
         />
-      </div>
 
-      <div className="bg-[#F8F8F6] pb-16 pt-6 sm:pt-7">
-        <Container>
-          <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-            <div>
-              <p className="text-sm text-[rgba(28,26,20,0.6)]">
-                {isLoading
-                  ? t('common.loading')
-                  : t('province.list.showing', {
-                      from: showingFrom,
-                      to: showingTo,
-                      total,
-                      defaultValue: 'Showing {{from}}-{{to}} of {{total}} provinces',
-                    })}
-              </p>
-              <h2
-                className="mt-1 text-2xl font-bold tracking-[-0.02em] text-[#1c1a14] sm:text-3xl"
-                style={{ fontFamily: 'var(--font-dm-serif-display, "Playfair Display", Georgia, serif)' }}
-              >
-                {t('province.list.heading', 'Where to go next')}
-              </h2>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-[rgba(28,26,20,0.5)] sm:hidden">
-                {t('province.list.display', 'View')}
-              </span>
-              <DisplayItemType displayType={displayType} setDisplayType={setDisplayType} />
-            </div>
-          </div>
+        <ProvincePopularStrip items={popularProvinces} />
+
+        <section className="mx-auto max-w-6xl px-4 py-14 pb-24 md:px-10 md:py-20 md:pb-28">
+          <Reveal className="mb-14 max-w-[52ch] space-y-4">
+            <p className="text-[11px] uppercase tracking-[0.32em] text-forest">
+              {t('province.atlas.kicker', 'Immersive atlas')}
+            </p>
+            <p className="font-display text-3xl leading-tight text-charcoal md:text-4xl">
+              {t('province.atlas.title', 'Scroll as if paging a travel folio.')}
+            </p>
+            <p className="text-sm leading-relaxed text-mist">
+              {t(
+                'province.atlas.lead',
+                'Each province card is geography as temperament — mountains, coast, and delta stories.',
+              )}
+            </p>
+          </Reveal>
 
           {isLoading ? (
-            <DisplayContainer
-              displayType={displayType}
-              gridClassName="grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3"
-            >
+            <div className="grid gap-12 sm:gap-14 md:grid-cols-2">
               {Array.from({ length: PAGE_SIZE }).map((_, index) => (
-                <ProvinceCardSkeleton key={index} />
+                <ProvinceMagazineCardSkeleton key={index} />
               ))}
-            </DisplayContainer>
+            </div>
           ) : error ? (
-            <div className="rounded-2xl border border-dashed border-[rgba(200,16,46,0.3)] bg-[#fff7f7] px-6 py-16 text-center">
-              <h3 className="text-xl font-semibold text-[#1c1a14]">
+            <div className="rounded-2xl border border-dashed border-sunset-deep/40 bg-[var(--red-soft)] px-6 py-16 text-center">
+              <h3 className="font-display text-xl font-semibold text-charcoal">
                 {t('province.error_title', 'Unable to load provinces')}
               </h3>
-              <p className="mt-2 text-sm text-[rgba(28,26,20,0.6)]">
+              <p className="mt-2 text-sm text-mist">
                 {error instanceof Error
                   ? error.message
                   : t('province.error_desc', 'Please try again in a moment.')}
               </p>
             </div>
-          ) : items.length === 0 ? (
-            <div className="flex flex-col items-center rounded-2xl border border-dashed border-[rgba(28,26,20,0.2)] bg-[#faf7f2] px-6 py-20 text-center">
-              <Sparkles className="mb-4 size-10 text-[#c9922a]/80" aria-hidden />
-              <h3
-                className="text-xl font-semibold text-[#1c1a14]"
-                style={{ fontFamily: 'var(--font-dm-serif-display, Georgia, serif)' }}
-              >
+          ) : displayItems.length === 0 ? (
+            <div className="flex flex-col items-center rounded-2xl border border-dashed border-charcoal/20 bg-sand-100 px-6 py-20 text-center">
+              <Sparkles className="mb-4 size-10 text-sunset/90" aria-hidden />
+              <h3 className="font-display text-xl font-semibold text-charcoal">
                 {t('province.no_results', 'No provinces found')}
               </h3>
-              <p className="mt-2 max-w-md text-sm text-[rgba(28,26,20,0.6)]">
+              <p className="mt-2 max-w-md text-sm text-mist">
                 {t('province.empty_hint', 'Try another keyword, region, or sort option.')}
               </p>
               <Button
@@ -221,32 +224,39 @@ export default function ProvinceListPage() {
             </div>
           ) : (
             <>
-              <DisplayContainer
-                displayType={displayType}
-                gridClassName="grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3"
-              >
-                {items.map((item) => (
-                  <ProvinceCard key={item._id} item={item} />
+              {useMockListFallback ? (
+                <p
+                  className="mb-8 rounded-xl border border-charcoal/10 bg-sand-100 px-4 py-3 text-sm text-mist"
+                  role="status"
+                >
+                  {t(
+                    'province.demo_fallback_hint',
+                    'Sample provinces are shown until live data is available.',
+                  )}
+                </p>
+              ) : null}
+              <div className="grid gap-12 sm:gap-14 md:grid-cols-2">
+                {displayItems.map((item) => (
+                  <Reveal key={item._id}>
+                    <ProvinceMagazineCard item={item} />
+                  </Reveal>
                 ))}
-              </DisplayContainer>
+              </div>
 
-              {totalPages > 1 && (
-                <ServerPagination
-                  page={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={setCurrentPage}
-                  className="mt-10"
-                  labels={{
-                    previous: t('common.previous', 'Previous'),
-                    next: t('common.next', 'Next'),
-                    pageAriaLabel: t('province.pagination.page', 'Page'),
-                  }}
-                />
-              )}
+              {!useMockListFallback && totalPages > 1 ? (
+                <div className="mt-16 border-t border-charcoal/10 pt-14">
+                  <AtlasPagination
+                    page={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                    labels={atlasPaginationLabels}
+                  />
+                </div>
+              ) : null}
             </>
           )}
-        </Container>
-      </div>
+        </section>
+      </article>
     </MainLayout>
   );
 }

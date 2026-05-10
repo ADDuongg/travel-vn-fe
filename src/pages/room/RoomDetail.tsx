@@ -76,16 +76,10 @@ const RoomDetailPage = () => {
               <div className="mb-6 space-y-10 border-t border-[rgba(28,26,20,0.1)] pt-8">
                 <RoomRelated currentRoomId={room._id} />
                 <section id="reviews" className="scroll-mt-40">
-                  <h2
-                    className="mb-4 font-['Playfair_Display',serif] text-2xl font-bold text-[#1c1a14] sm:mb-6 sm:text-3xl"
-                    style={{
-                      fontFamily:
-                        'var(--font-dm-serif-display, "Playfair Display", Georgia, serif)',
-                    }}
-                  >
+                  <h2 className="mb-4 font-display text-2xl font-semibold tracking-tight text-charcoal sm:mb-6 sm:text-3xl md:text-4xl">
                     {t('room.detail.reviews_block_title', 'Guest reviews')}
                   </h2>
-                  <div className="rounded-2xl border border-[rgba(28,26,20,0.1)] bg-white p-4 shadow-[var(--shadow-card)] sm:p-6">
+                  <div className="rounded-[2rem] border border-charcoal/10 bg-sand-50/90 p-4 shadow-[var(--shadow-soft)] sm:p-6 md:p-8">
                     <EntityReviewSection
                       entityType={ReviewEntityType.ROOM}
                       entityId={id ?? ''}

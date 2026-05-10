@@ -1,226 +1,417 @@
-import { MainLayout } from '@/layout';
-import Container from '@components/Container';
-import { PageHero } from '@components/PageHero';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@components/ui/accordion';
-import { Button } from '@components/ui/button';
-import { Card, CardContent } from '@components/ui/card';
-import { Input } from '@components/ui/input';
-import { Label } from '@components/ui/label';
-import { ResponsiveH2, ResponsiveH4 } from '@components/ui/typography';
+import { ParallaxHero } from '@/components/home-editorial/ParallaxHero';
+import { Reveal, RevealItem, Stagger } from '@/components/home-editorial/Reveal';
 import { ROUTES } from '@/constants/router';
-import { SectionReveal } from '@/sections/home/SectionReveal';
+import { MainLayout } from '@/layout';
+import { motion, useReducedMotion } from 'framer-motion';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { MapPin, Phone, Mail, ExternalLink, ArrowRight, Clock } from 'lucide-react';
 
-const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=1920&h=1080&auto=format&fit=crop';
+const u = (id: string) =>
+  `https://images.unsplash.com/${id}?ixlib=rb-4.1.0&auto=format&fit=crop&q=85&w=2400`;
 
-const faqKeys = ['faq1', 'faq2', 'faq3', 'faq4'] as const;
+const visuals = {
+  hero: u('photo-1506905925346-21bda4d32df4'),
+  formSide: u('photo-1517248135467-4c7edcad34c4'),
+  rain: u('photo-1515694346937-94d85e41e6f0'),
+  lanterns: u('photo-1559827260-dc66d52bef19'),
+  coffee: u('photo-1495474472287-4d71bcdd2085'),
+  train: u('photo-1583417319070-4a69db38a482'),
+  coast: u('photo-1469474968028-56623f02e42e'),
+  fog: u('photo-1464822759023-fed622ff2c3b'),
+  closing: u('photo-1528127269322-539801943592'),
+};
+
+const conversationIds = [
+  'stories',
+  'local',
+  'inspiration',
+  'hidden',
+  'culture',
+  'partnership',
+] as const;
+
+type ConversationId = (typeof conversationIds)[number];
+
+const atmosphereFrames = [
+  { id: 'rain' as const, src: visuals.rain },
+  { id: 'lanterns' as const, src: visuals.lanterns },
+  { id: 'coffee' as const, src: visuals.coffee },
+  { id: 'train' as const, src: visuals.train },
+  { id: 'coast' as const, src: visuals.coast },
+  { id: 'fog' as const, src: visuals.fog },
+];
+
+const RESET_SENT_MS = 5200;
 
 const ContactPage = () => {
   const { t } = useTranslation();
+  const reduceMotion = useReducedMotion();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [journeyInterest, setJourneyInterest] = useState('');
+  const [message, setMessage] = useState('');
+  const [focusKind, setFocusKind] = useState<ConversationId | null>(null);
+  const [sent, setSent] = useState(false);
+  const resetTimer = useRef<number | null>(null);
 
-  const contactItems = [
-    { label: t('contact.info_address'), value: 'Hà Nội, Việt Nam', Icon: MapPin },
-    { label: t('contact.info_phone'), value: '+84 123 456 789', Icon: Phone },
-    { label: t('contact.info_email'), value: 'hello@travelvn.com', Icon: Mail },
-  ];
+  useEffect(() => {
+    return () => {
+      if (resetTimer.current) window.clearTimeout(resetTimer.current);
+    };
+  }, []);
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    if (resetTimer.current) window.clearTimeout(resetTimer.current);
+    setSent(true);
+    resetTimer.current = window.setTimeout(() => {
+      resetTimer.current = null;
+      setSent(false);
+      setName('');
+      setEmail('');
+      setJourneyInterest('');
+      setMessage('');
+      setFocusKind(null);
+    }, RESET_SENT_MS);
+  }
+
+  function handleConversationClick(id: ConversationId) {
+    setFocusKind(id);
+    setJourneyInterest(t(`contact_editorial.conversation.${id}.title`));
+  }
 
   return (
     <MainLayout>
-      <PageHero
-        id="contact-hero-heading"
-        backgroundImage={HERO_IMAGE}
-        badge={t('contact.badge')}
-        title={t('contact.hero_title')}
-        subtitle={t('contact.hero_subtitle')}
-      />
+      <div className="pb-6">
+        <ParallaxHero
+          image={visuals.hero}
+          overlayClass="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/45 to-charcoal/25"
+        >
+          <div className="flex min-h-[92vh] flex-col justify-end px-6 pb-16 pt-36 md:px-14 md:pb-24 md:pt-44">
+            <motion.div
+              initial={reduceMotion ? false : { opacity: 0, y: 36 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : { duration: 0.85, ease: [0.22, 1, 0.36, 1] }
+              }
+              className="mx-auto flex w-full max-w-5xl flex-col gap-8 text-center text-sand-50"
+            >
+              <p className="text-[11px] uppercase tracking-[0.38em] text-sand-100/78">
+                {t('contact_editorial.hero.eyebrow')}
+              </p>
+              <h1 className="font-display text-[clamp(2.45rem,7.2vw,5.5rem)] leading-[0.95] tracking-[-0.01em]">
+                {t('contact_editorial.hero.title')}
+              </h1>
+              <p className="mx-auto max-w-2xl text-base leading-relaxed text-sand-100/88 md:text-lg">
+                {t('contact_editorial.hero.subtitle')}
+              </p>
+            </motion.div>
+            <motion.div
+              aria-hidden
+              className="mx-auto mt-14 flex items-center justify-center gap-3 text-[11px] uppercase tracking-[0.34em] text-sand-50/50"
+              animate={
+                reduceMotion ? undefined : { opacity: [0.4, 0.9, 0.4] }
+              }
+              transition={
+                reduceMotion
+                  ? undefined
+                  : { duration: 5.2, repeat: Infinity }
+              }
+            >
+              <span className="h-px w-12 bg-sand-50/35" />
+              {t('contact_editorial.hero.scroll_hint')}
+            </motion.div>
+          </div>
+        </ParallaxHero>
 
-      <section className="border-b border-border/40 bg-background py-20 md:py-28">
-        <SectionReveal>
-          <Container>
-            <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-5 lg:gap-10">
-              <Card className="border border-border/60 bg-card shadow-[var(--shadow-card)] lg:col-span-2">
-                <CardContent className="p-6 sm:p-8">
-                  <ResponsiveH4 className="mb-6 text-foreground">{t('contact.info_title')}</ResponsiveH4>
-                  <ul className="space-y-0 divide-y divide-border/50">
-                    {contactItems.map(({ label, value, Icon }) => (
-                      <li key={label} className="flex gap-4 py-5 first:pt-0 last:pb-0">
-                        <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                          <Icon className="size-5" aria-hidden />
-                        </div>
-                        <div>
-                          <span className="block text-sm font-medium text-foreground">{label}</span>
-                          <span className="mt-0.5 block text-sm text-muted-foreground sm:text-base">
-                            {value}
-                          </span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="mt-2 flex items-start gap-2 border-t border-border/50 pt-4 text-xs text-muted-foreground">
-                    <Clock className="mt-0.5 size-4 shrink-0 text-primary/70" aria-hidden />
-                    <span>{t('contact.working_hours')}</span>
+        <section className="mx-auto max-w-6xl px-4 py-20 md:px-10 md:py-28">
+          <Reveal className="max-w-3xl space-y-6">
+            <p className="text-[11px] uppercase tracking-[0.32em] text-forest">
+              {t('contact_editorial.intro.eyebrow')}
+            </p>
+            <h2 className="font-display text-4xl text-charcoal md:text-[2.85rem]">
+              {t('contact_editorial.intro.title')}
+            </h2>
+            <div className="space-y-5 text-[1.05rem] leading-relaxed text-mist md:text-lg">
+              <p>
+                {t('contact_editorial.intro.p1_before')}
+                <span className="text-charcoal/92">
+                  {t('contact_editorial.intro.p1_emphasis')}
+                </span>
+                {t('contact_editorial.intro.p1_after')}
+              </p>
+              <p>{t('contact_editorial.intro.p2')}</p>
+            </div>
+          </Reveal>
+        </section>
+
+        <section className="border-y border-charcoal/10 bg-sand-100/80 py-16 md:py-24">
+          <div className="mx-auto max-w-6xl px-4 md:px-10">
+            <div className="grid items-stretch gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+              <Reveal>
+                <motion.div
+                  whileHover={{ y: -3 }}
+                  transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+                  className="relative overflow-hidden rounded-[1.85rem] shadow-soft"
+                >
+                  <div className="relative aspect-[4/5] md:aspect-[16/13] lg:aspect-auto lg:min-h-[560px]">
+                    <img
+                      src={visuals.formSide}
+                      alt=""
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-tr from-charcoal/55 via-charcoal/15 to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 px-8 pb-10 pt-16 md:px-10">
+                      <p className="text-[11px] uppercase tracking-[0.34em] text-sand-100/75">
+                        {t('contact_editorial.form_side.eyebrow')}
+                      </p>
+                      <p className="mt-4 max-w-md font-display text-3xl leading-tight text-sand-50 md:text-[2.35rem]">
+                        {t('contact_editorial.form_side.quote')}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              </Reveal>
+
+              <Reveal delay={0.06} className="flex flex-col justify-center">
+                <div className="rounded-[1.85rem] border border-charcoal/10 bg-sand-50/75 p-8 shadow-soft backdrop-blur-md md:p-10">
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-charcoal/45">
+                    {t('contact_editorial.form.eyebrow')}
                   </p>
-                  <p className="mt-4 text-xs text-muted-foreground">{t('contact.info_note')}</p>
-                </CardContent>
-              </Card>
+                  <h3 className="mt-3 font-display text-3xl text-charcoal md:text-[2.35rem]">
+                    {t('contact_editorial.form.title')}
+                  </h3>
+                  <p className="mt-4 text-sm leading-relaxed text-mist md:text-[0.95rem]">
+                    {t('contact_editorial.form.intro')}
+                  </p>
 
-              <Card className="border border-border/60 bg-card shadow-[var(--shadow-card)] lg:col-span-3">
-                <CardContent className="p-6 sm:p-8">
-                  <ResponsiveH4 className="mb-2 text-foreground">{t('contact.form_send')}</ResponsiveH4>
-                  <p className="mb-6 text-sm text-muted-foreground">{t('contact.form_intro')}</p>
-                  <form className="grid gap-4 sm:gap-5" onSubmit={(e) => e.preventDefault()}>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <div className="space-y-2">
-                        <Label htmlFor="contact-name" className="text-foreground">
-                          {t('contact.form_name')}
-                        </Label>
-                        <Input
-                          id="contact-name"
-                          placeholder={t('contact.form_name')}
-                          className="w-full border-border/80 bg-surface-100"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="contact-email" className="text-foreground">
-                          {t('contact.form_email')}
-                        </Label>
-                        <Input
-                          id="contact-email"
-                          type="email"
-                          placeholder={t('contact.form_email')}
-                          className="w-full border-border/80 bg-surface-100"
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="contact-subject" className="text-foreground">
-                        {t('contact.form_subject')}
-                      </Label>
-                      <Input
-                        id="contact-subject"
-                        placeholder={t('contact.form_subject')}
-                        className="w-full border-border/80 bg-surface-100"
+                  <form className="mt-10 space-y-6" onSubmit={handleSubmit}>
+                    <label className="block space-y-2">
+                      <span className="text-[11px] uppercase tracking-[0.22em] text-charcoal/40">
+                        {t('contact_editorial.form.label_name')}
+                      </span>
+                      <input
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        autoComplete="name"
+                        className="w-full rounded-2xl border border-charcoal/12 bg-sand-50/65 px-4 py-3 text-[0.95rem] text-charcoal shadow-inner outline-none ring-forest/0 transition placeholder:text-charcoal/35 focus:border-forest/35 focus:ring-2 focus:ring-forest/15"
+                        placeholder={t('contact_editorial.form.placeholder_name')}
                       />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="contact-message" className="text-foreground">
-                        {t('contact.form_message')}
-                      </Label>
+                    </label>
+                    <label className="block space-y-2">
+                      <span className="text-[11px] uppercase tracking-[0.22em] text-charcoal/40">
+                        {t('contact_editorial.form.label_email')}
+                      </span>
+                      <input
+                        required
+                        type="email"
+                        dir="ltr"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        autoComplete="email"
+                        className="w-full rounded-2xl border border-charcoal/12 bg-sand-50/65 px-4 py-3 text-[0.95rem] text-charcoal shadow-inner outline-none ring-forest/0 transition placeholder:text-charcoal/35 focus:border-forest/35 focus:ring-2 focus:ring-forest/15"
+                        placeholder={t('contact_editorial.form.placeholder_email')}
+                      />
+                    </label>
+                    <label className="block space-y-2">
+                      <span className="text-[11px] uppercase tracking-[0.22em] text-charcoal/40">
+                        {t('contact_editorial.form.label_journey')}
+                      </span>
+                      <input
+                        value={journeyInterest}
+                        onChange={(e) => setJourneyInterest(e.target.value)}
+                        className="w-full rounded-2xl border border-charcoal/12 bg-sand-50/65 px-4 py-3 text-[0.95rem] text-charcoal shadow-inner outline-none ring-forest/0 transition placeholder:text-charcoal/35 focus:border-forest/35 focus:ring-2 focus:ring-forest/15"
+                        placeholder={t(
+                          'contact_editorial.form.placeholder_journey',
+                        )}
+                      />
+                    </label>
+                    <label className="block space-y-2">
+                      <span className="text-[11px] uppercase tracking-[0.22em] text-charcoal/40">
+                        {t('contact_editorial.form.label_message')}
+                      </span>
                       <textarea
-                        id="contact-message"
-                        rows={4}
-                        placeholder={t('contact.form_message')}
-                        className="w-full rounded-md border border-border/80 bg-surface-100 px-3 py-2 text-sm text-foreground ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        required
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        rows={5}
+                        className="w-full resize-y rounded-2xl border border-charcoal/12 bg-sand-50/65 px-4 py-3 text-[0.95rem] leading-relaxed text-charcoal shadow-inner outline-none ring-forest/0 transition placeholder:text-charcoal/35 focus:border-forest/35 focus:ring-2 focus:ring-forest/15"
+                        placeholder={t(
+                          'contact_editorial.form.placeholder_message',
+                        )}
                       />
-                    </div>
-                    <div className="pt-1">
-                      <Button
+                    </label>
+
+                    <div className="flex flex-wrap items-center gap-4 pt-2">
+                      <button
                         type="submit"
-                        size="lg"
-                        className="w-full cursor-pointer sm:w-auto sm:min-w-[160px]"
+                        className="rounded-full bg-charcoal px-8 py-3 text-sm font-semibold text-sand-50 shadow-soft transition hover:bg-charcoal/90"
                       >
-                        {t('contact.form_send')}
-                      </Button>
+                        {t('contact_editorial.form.submit')}
+                      </button>
+                      {sent ? (
+                        <motion.p
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="text-sm text-forest"
+                        >
+                          {t('contact_editorial.form.sent_message')}
+                        </motion.p>
+                      ) : (
+                        <p className="text-xs leading-relaxed text-charcoal/45">
+                          {t('contact_editorial.form.helper')}
+                        </p>
+                      )}
                     </div>
                   </form>
-                </CardContent>
-              </Card>
+                </div>
+              </Reveal>
             </div>
-          </Container>
-        </SectionReveal>
-      </section>
+          </div>
+        </section>
 
-      <section className="border-b border-border/40 bg-surface-300 py-20 md:py-28">
-        <SectionReveal>
-          <Container>
-            <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl border border-border/60 bg-card p-6 shadow-[var(--shadow-card)] sm:p-8">
-              <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <MapPin className="size-6" aria-hidden />
-              </div>
-              <ResponsiveH4 className="mb-2 text-foreground">{t('contact.map_title')}</ResponsiveH4>
-              <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
-                {t('contact.map_desc')}
+        <section className="relative isolate overflow-hidden py-20 md:py-28">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,oklch(92%_0.05_145/0.18),transparent_45%),radial-gradient(circle_at_82%_32%,oklch(88%_0.06_45/0.12),transparent_42%)]" />
+          <div className="relative mx-auto max-w-6xl px-4 md:px-10">
+            <Reveal className="mb-14 max-w-3xl space-y-4">
+              <p className="text-[11px] uppercase tracking-[0.32em] text-forest">
+                {t('contact_editorial.conversation.eyebrow')}
               </p>
-              <a
-                href={t('contact.map_link')}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-primary transition-colors hover:underline"
-              >
-                <span>{t('contact.map_embed_label')}</span>
-                <ExternalLink className="size-4" aria-hidden />
-              </a>
-            </div>
-          </Container>
-        </SectionReveal>
-      </section>
-
-      <section className="border-b border-border/40 bg-background py-20 md:py-28">
-        <SectionReveal>
-          <Container>
-            <div className="mb-8 text-center">
-              <ResponsiveH2 className="text-foreground">{t('contact.faq_title')}</ResponsiveH2>
-              <p className="mt-2 text-sm text-muted-foreground sm:text-base">{t('contact.faq_subtitle')}</p>
-            </div>
-            <div className="mx-auto max-w-2xl rounded-2xl border border-border/60 bg-card p-2 shadow-sm sm:p-4">
-              <Accordion type="single" collapsible className="w-full">
-                {faqKeys.map((k) => (
-                  <AccordionItem key={k} value={k} className="border-border/50 px-2">
-                    <AccordionTrigger className="text-left text-foreground">
-                      {t(`contact.${k}_q` as const)}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground">
-                      {t(`contact.${k}_a` as const)}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
-          </Container>
-        </SectionReveal>
-      </section>
-
-      <section className="bg-surface-300 py-20 md:py-28">
-        <SectionReveal>
-          <Container>
-            <div className="mx-auto max-w-3xl overflow-hidden rounded-2xl bg-primary px-6 py-10 text-center text-primary-foreground shadow-md sm:px-10 sm:py-12 md:py-14">
-              <ResponsiveH2 className="mb-3 text-balance text-primary-foreground">
-                {t('contact.cta_explore_title')}
-              </ResponsiveH2>
-              <p className="mb-8 text-base text-primary-foreground/90 sm:text-lg">
-                {t('contact.cta_explore_subtitle')}
+              <h2 className="font-display text-4xl text-charcoal md:text-[2.85rem]">
+                {t('contact_editorial.conversation.title')}
+              </h2>
+              <p className="text-mist md:text-lg">
+                {t('contact_editorial.conversation.intro')}
               </p>
-              <div className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
-                <Button
-                  asChild
-                  size="lg"
-                  variant="secondary"
-                  className="h-12 min-h-12 cursor-pointer rounded-xl bg-primary-foreground text-primary"
+            </Reveal>
+
+            <Stagger className="grid gap-6 md:grid-cols-2" stagger={0.07}>
+              {conversationIds.map((id) => {
+                const active = focusKind === id;
+                return (
+                  <RevealItem key={id}>
+                    <motion.button
+                      type="button"
+                      whileHover={{ y: -4 }}
+                      transition={{
+                        duration: 0.34,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      onClick={() => handleConversationClick(id)}
+                      className={[
+                        'w-full rounded-3xl border p-8 text-start shadow-soft backdrop-blur-[2px] transition',
+                        active
+                          ? 'border-forest/35 bg-sand-50/90'
+                          : 'border-charcoal/10 bg-sand-50/70 hover:border-charcoal/18',
+                      ].join(' ')}
+                    >
+                      <p className="font-display text-2xl text-charcoal">
+                        {t(`contact_editorial.conversation.${id}.title`)}
+                      </p>
+                      <p className="mt-3 text-sm leading-relaxed text-mist">
+                        {t(`contact_editorial.conversation.${id}.line`)}
+                      </p>
+                      {active ? (
+                        <p className="mt-5 text-[11px] uppercase tracking-[0.26em] text-forest">
+                          {t('contact_editorial.conversation.echoed')}
+                        </p>
+                      ) : null}
+                    </motion.button>
+                  </RevealItem>
+                );
+              })}
+            </Stagger>
+          </div>
+        </section>
+
+        <section className="border-t border-charcoal/10 bg-charcoal px-4 py-20 text-sand-50 md:px-10 md:py-28">
+          <div className="mx-auto max-w-6xl space-y-14">
+            <Reveal className="max-w-2xl space-y-4">
+              <p className="text-[11px] uppercase tracking-[0.34em] text-sand-100/65">
+                {t('contact_editorial.atmosphere.eyebrow')}
+              </p>
+              <h2 className="font-display text-4xl leading-tight md:text-[2.75rem]">
+                {t('contact_editorial.atmosphere.title')}
+              </h2>
+              <p className="text-sand-100/76 md:text-[1.05rem] md:leading-relaxed">
+                {t('contact_editorial.atmosphere.intro')}
+              </p>
+            </Reveal>
+
+            <Stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" stagger={0.08}>
+              {atmosphereFrames.map((frame) => (
+                <RevealItem key={frame.id}>
+                  <motion.div
+                    whileHover={{ y: -3 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 260,
+                      damping: 26,
+                    }}
+                    className="overflow-hidden rounded-[1.6rem]"
+                  >
+                    <div className="relative aspect-[16/11]">
+                      <img
+                        src={frame.src}
+                        alt=""
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-charcoal/78 via-charcoal/12 to-transparent" />
+                      <p className="absolute inset-x-0 bottom-5 px-5 font-display text-xl leading-snug text-sand-50 md:text-[1.35rem]">
+                        {t(`contact_editorial.atmosphere.${frame.id}`)}
+                      </p>
+                    </div>
+                  </motion.div>
+                </RevealItem>
+              ))}
+            </Stagger>
+          </div>
+        </section>
+
+        <ParallaxHero
+          image={visuals.closing}
+          overlayClass="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/5 to-charcoal/35"
+        >
+          <div className="flex min-h-[86vh] flex-col justify-end px-6 pb-16 pt-32 md:px-14 md:pb-24 md:pt-40">
+            <Reveal className="max-w-2xl space-y-7 text-sand-50">
+              <p className="text-[11px] uppercase tracking-[0.36em] text-sand-100/75">
+                {t('contact_editorial.closing.eyebrow')}
+              </p>
+              <h2 className="font-display text-[clamp(2.15rem,5.2vw,3.6rem)] leading-[1.06]">
+                {t('contact_editorial.closing.title')}
+              </h2>
+              <p className="text-base leading-relaxed text-sand-100/86 md:text-lg">
+                {t('contact_editorial.closing.body')}
+              </p>
+              <div className="flex flex-wrap gap-4 pt-1">
+                <Link
+                  to={ROUTES.PROVINCE.INDEX}
+                  className="rounded-full bg-sunset px-7 py-3 text-sm font-semibold text-sand-50 shadow-soft transition hover:bg-sunset-deep"
                 >
-                  <Link to={ROUTES.TOUR.INDEX} className="inline-flex items-center justify-center gap-2">
-                    {t('gallery.cta_tours')}
-                    <ArrowRight className="size-4" aria-hidden />
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="h-12 min-h-12 cursor-pointer rounded-xl border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10"
+                  {t('contact_editorial.closing.cta_provinces')}
+                </Link>
+                <Link
+                  to={ROUTES.ABOUT_US}
+                  className="rounded-full border border-sand-50/35 px-7 py-3 text-sm font-medium text-sand-50 transition hover:border-sand-50 hover:bg-sand-50/10"
                 >
-                  <Link to={ROUTES.LIST_ROOMS} className="inline-flex items-center justify-center gap-2">
-                    {t('gallery.cta_rooms')}
-                    <ArrowRight className="size-4" aria-hidden />
-                  </Link>
-                </Button>
+                  {t('contact_editorial.closing.cta_about')}
+                </Link>
               </div>
-            </div>
-          </Container>
-        </SectionReveal>
-      </section>
+            </Reveal>
+          </div>
+        </ParallaxHero>
+      </div>
     </MainLayout>
   );
 };

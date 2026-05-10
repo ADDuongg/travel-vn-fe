@@ -42,16 +42,20 @@ export default function EntityReviewSection({
 
   if (isLoading) {
     return (
-      <div className="space-y-4 py-1" aria-busy aria-label="Loading reviews">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <Skeleton className="h-6 w-40" />
-          <div className="flex gap-3">
-            <Skeleton className="h-9 w-44" />
-            <Skeleton className="h-9 w-28" />
+      <div className="space-y-10 py-1" aria-busy aria-label="Loading reviews">
+        <div className="flex flex-col gap-6 rounded-[2rem] border border-charcoal/10 bg-sand-50/90 p-6 shadow-[var(--shadow-soft)] md:flex-row md:items-center md:justify-between md:p-10">
+          <div className="space-y-3">
+            <Skeleton className="h-14 w-24 rounded-xl md:h-16 md:w-28" />
+            <Skeleton className="h-5 w-32" />
+            <Skeleton className="h-4 w-48 max-w-full" />
+          </div>
+          <div className="flex w-full flex-col gap-4 sm:flex-row sm:justify-end md:w-auto">
+            <Skeleton className="h-[52px] min-w-[200px] rounded-2xl" />
+            <Skeleton className="h-[52px] min-w-[140px] rounded-2xl" />
           </div>
         </div>
-        <Skeleton className="h-24 w-full" />
-        <Skeleton className="h-24 w-full" />
+        <Skeleton className="min-h-[200px] w-full rounded-[1.75rem]" />
+        <Skeleton className="min-h-[200px] w-full rounded-[1.75rem]" />
       </div>
     );
   }

@@ -159,8 +159,8 @@ const TourCard: React.FC<TourCardProps> = ({ item, lang = 'vi', variant = 'defau
           )}
           {rating > 0 && (
             <div className="absolute bottom-3 left-3 z-[1]">
-              <span className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/90 px-2 py-0.5 text-xs font-semibold text-[#1c1a14] backdrop-blur-sm">
-                <Star className="size-3.5 fill-[#c9922a] text-[#c9922a]" aria-hidden />
+              <span className="inline-flex items-center gap-0.5 rounded-full border border-white/15 bg-white/80 px-1.5 py-0.5 text-[10px] font-medium text-charcoal/80 backdrop-blur-sm">
+                <Star className="size-3 fill-[#c9922a]/90 text-[#c9922a]/90" aria-hidden />
                 {rating.toFixed(1)}
               </span>
             </div>
@@ -197,28 +197,30 @@ const TourCard: React.FC<TourCardProps> = ({ item, lang = 'vi', variant = 'defau
             ) : null}
           </div>
           {reviewCount > 0 && (
-            <div className="mt-2 flex items-center gap-1.5 text-xs text-[rgba(28,26,20,0.5)]">
-              <span className="text-[#c9922a]">★</span>
+            <div className="mt-2 flex items-center gap-1 text-[11px] text-charcoal/45">
+              <span className="text-[#c9922a]/80">★</span>
               <span>
                 {rating.toFixed(1)} · {t('tour.card.reviews_count', { count: reviewCount })}
               </span>
             </div>
           )}
-          <div className="mt-4 flex flex-wrap items-baseline justify-between gap-2 border-t border-[rgba(28,26,20,0.08)] pt-4">
-            <div className="flex items-baseline gap-2">
-              {salePrice != null && (
-                <span className="text-sm text-[rgba(28,26,20,0.4)] line-through">
-                  {fmtMoney(basePrice)}
-                </span>
-              )}
-              <span
-                className="text-2xl font-bold leading-none text-[#c8102e]"
-                style={{ fontFamily: 'var(--font-dm-serif-display, Playfair Display, Georgia, serif)' }}
-              >
-                {fmtMoney(salePrice ?? basePrice)}
+          <div className="mt-4 flex flex-wrap items-end justify-between gap-2 border-t border-charcoal/10 pt-3">
+            <div className="flex min-w-0 flex-col gap-0.5">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-mist">
+                {t('tour.card.price_from', 'From')}
               </span>
+              <div className="flex flex-wrap items-baseline gap-2">
+                {salePrice != null && (
+                  <span className="text-xs text-charcoal/35 line-through">
+                    {fmtMoney(basePrice)}
+                  </span>
+                )}
+                <span className="text-lg font-semibold tabular-nums leading-none text-charcoal/75">
+                  {fmtMoney(salePrice ?? basePrice)}
+                </span>
+              </div>
             </div>
-            <span className="text-xs text-[rgba(28,26,20,0.5)]">
+            <span className="text-[10px] text-mist">
               {t('tour.card.per_person', '/ guest')}
             </span>
           </div>

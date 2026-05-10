@@ -29,18 +29,139 @@
     "search": "Tìm kiếm",
     "search_placeholder": "Tìm tỉnh thành...",
     "filter_title": "Bộ lọc",
+    "reset_filter": "Đặt lại",
     "region": "Miền",
     "region_north": "Miền Bắc",
     "region_central": "Miền Trung",
     "region_south": "Miền Nam",
     "popular_only": "Chỉ nổi bật",
     "sort": "Sắp xếp",
-    "sort_name": "Tên",
+    "sort_name": "Tên (A–Z)",
     "sort_display_order": "Thứ tự hiển thị",
     "sort_newest": "Mới nhất",
     "no_results": "Không tìm thấy tỉnh thành.",
     "showing_count": "Hiển thị {{count}} / {{total}} tỉnh thành",
-    "popular_badge": "Nổi bật"
+    "popular_badge": "Nổi bật",
+    "demo_fallback_hint": "Đang hiển thị tỉnh thành minh họa khi chưa có dữ liệu từ máy chủ.",
+    "hero_kicker": "Atlas · sắc thái theo vĩ độ",
+    "hero_title": "Khám phá các tỉnh thành Việt Nam",
+    "hero_subtitle": "Từ cao nguyên đến đồng bằng và biển — khung hình tuyển chọn cùng bộ lọc thực tế.",
+    "hero_badge": "Việt Nam — điểm đến địa phương",
+    "error_title": "Không thể tải danh sách tỉnh thành",
+    "error_desc": "Vui lòng thử lại sau ít phút.",
+    "empty_hint": "Thử từ khóa, miền hoặc kiểu sắp xếp khác.",
+    "magazine_cta": "Mở hồ sơ",
+    "magazine_fallback_lead": "Một điểm đến đáng khám phá trên hành trình của bạn.",
+    "magazine_stats_line": "{{guides}} hướng dẫn · {{tours}} tour · {{hotels}} khách sạn",
+    "list": {
+      "heading": "Gợi ý điểm đến",
+      "showing": "Hiển thị {{from}}–{{to}} trên {{total}} tỉnh thành",
+      "display": "Xem",
+      "clear_cta": "Đặt lại bộ lọc"
+    },
+    "pagination": {
+      "page": "Trang",
+      "atlas_showing": "Hiển thị {{from}}–{{to}} trên {{total}} tỉnh thành",
+      "atlas_folio_prefix": "Quyển",
+      "prev_spread": "Quyển trước",
+      "next_spread": "Quyển sau",
+      "spread_nav": "Phân trang atlas tỉnh thành"
+    },
+    "strip": {
+      "kicker": "Điểm đến được yêu thích",
+      "title": "Những tỉnh thành du khách quay lại"
+    },
+    "atlas": {
+      "kicker": "Atlas đắm chìm",
+      "title": "Cuộn như lật từng trang sổ du lịch.",
+      "lead": "Mỗi thẻ là địa lý như tính cách — núi, biển và chuyện đồng bằng.",
+      "search_label": "Tìm tỉnh thành",
+      "all_regions": "Tất cả miền",
+      "region_north_short": "Bắc",
+      "region_central_short": "Trung",
+      "region_south_short": "Nam",
+      "popular_focus": "Ưu tiên nổi bật",
+      "popular_unlocked": "Đang lọc nổi bật"
+    },
+    "not_found": "Không tìm thấy tỉnh thành",
+    "not_found_desc": "Tỉnh thành có thể đã gỡ hoặc đường dẫn không đúng.",
+    "default_description": "Khám phá vẻ đẹp của tỉnh thành Việt Nam này.",
+    "detail": {
+      "nav_aria": "Mục trong trang chi tiết tỉnh thành",
+      "nav_intro": "Mở đầu",
+      "nav_story": "Câu chuyện",
+      "nav_highlights": "Điểm nhấn",
+      "nav_gallery": "Thư viện ảnh",
+      "nav_atmosphere": "Không khí",
+      "nav_wards": "Phường xã",
+      "nav_insights": "Con số",
+      "nav_timing": "Mùa đẹp",
+      "nav_journeys": "Hành trình",
+      "highlights_empty": "Chưa có điểm nhấn biên tập cho tỉnh này — quay lại khi atlas được bổ sung.",
+      "gallery_empty": "Chưa có khung ảnh trong thư viện cho tỉnh này.",
+      "atmosphere_empty": "Khối không khí miền chỉ hiển thị khi tỉnh được gán miền Bắc / Trung / Nam.",
+      "wards_empty": "Chưa có danh sách phường/xã cho mục này.",
+      "insights_empty": "Chưa có thống kê công khai về khách sạn, tour hoặc hướng dẫn viên.",
+      "timing_empty": "Chưa có ghi chú thời điểm đẹp — có thể hỏi tại chỗ hoặc quay lại sau.",
+      "hero_population_label": "Dân số (quy mô)",
+      "hero_population_suffix": "người",
+      "hero_area_label": "Diện tích",
+      "hero_area_suffix": "km²",
+      "intro_kicker": "Giới thiệu không khí",
+      "intro_title": "Ánh sớm trên {{name}}",
+      "story_kicker": "Kể chuyện địa phương",
+      "story_title": "Bài viết gọn, không như bách khoa",
+      "highlights_kicker": "Trải nghiệm nổi bật",
+      "highlights_title": "Cảnh ghép từ ghi chép đồng ruộng",
+      "gallery_kicker": "Thư viện điện ảnh",
+      "gallery_title": "Khung hình không phẳng như bưu thiếp",
+      "atmosphere_kicker": "Không khí miền",
+      "atmosphere_quote": "“Tâm trạng trước dữ liệu — {{name}} có tiết trời riêng.”",
+      "wards_kicker": "Khám phá địa phương · phường xã",
+      "wards_title": "Khu phố như vi khí hậu nhỏ",
+      "wards_lead": "{{count}} đơn vị hành chính tại {{province}} (theo dữ liệu công khai). Ghim trên sơ đồ chỉ để nhảy nhanh xuống vài mục đầu trong danh sách.",
+      "wards_atlas_caption": "Atlas trừu tượng — điểm cảm xúc, không phải ranh khảo sát",
+      "wards_atlas_pins_note": "Ghim hiển thị {{shown}} / {{total}} — chỉ mang tính minh họa.",
+      "wards_pagination_showing": "Hiển thị {{from}}–{{to}} trên {{total}} phường/xã",
+      "wards_spread_nav": "Phân trang danh sách phường/xã",
+      "ward_pin_label": "Chuyển tới phường {{name}}",
+      "ward_vignette_label": "Phường {{index}}",
+      "insights_kicker": "Góc nhìn du lịch",
+      "insights_title": "Con số trung thực",
+      "insights_lead": "Các con số dưới đây là ngữ cảnh biên tập — không phải lưới bán hàng.",
+      "insights_hotels_dt": "Lưu trú trong dữ liệu · khách sạn",
+      "insights_hotels_dd": "Số mái được thống kê công khai — tò mò, không phải giỏ hàng.",
+      "insights_tours_dt": "Tour được trích dẫn",
+      "insights_tours_dd": "Cách người lạ kể chuyện phố phường — tinh chế, không chào mời.",
+      "insights_guides_dt": "Người kể · hướng dẫn viên",
+      "insights_guides_dd": "Giọng người góp thành mật độ văn hóa, không phải SKU.",
+      "timing_kicker": "Thời điểm đẹp",
+      "timing_title": "Khi vùng đất dịu lại với bạn",
+      "journeys_kicker": "Nhịp điệu liên quan",
+      "journeys_title": "Hành trình cộng hưởng với tỉnh này",
+      "journeys_lead": "Lịch trình gợi ý — xem tour phù hợp điểm đến.",
+      "journeys_empty_title": "Tour đồng hành được tuyển trong danh mục.",
+      "journeys_empty_desc": "Mở danh sách tour để chọn hành trình phù hợp.",
+      "journeys_browse_tours": "Xem danh sách tour →",
+      "journeys_nearby_title": "Tỉnh thành cùng miền",
+      "journeys_full_atlas": "Toàn bộ atlas tỉnh thành",
+      "journeys_back_atlas": "Về atlas tỉnh thành",
+      "journeys_home": "Trang chủ",
+      "atmosphere": {
+        "NORTH": {
+          "title": "Khí chất miền Bắc",
+          "body": "Độ cao viết kịch bản — sương ôm sườn núi, xe máy chở hơi phở lên dốc, chiều tan trong tiếng còi tàu. Sắc thường mát; điểm nhấn như hơi thông và khói lò."
+        },
+        "CENTRAL": {
+          "title": "Điệu miền Trung",
+          "body": "Muối biển khâu vải với đèn lồng; sa thạch hút nóng rồi thở ra lúc hoàng hôn. Hoài bình ngang; bảng màu ấm về phía đồng."
+        },
+        "SOUTH": {
+          "title": "Vang miền Nam",
+          "body": "Nhiệt đới chậm gặp nhịp điệu — nhài tranh đèn LED, đồng bằng kiên nhẫn với thương mại. Chữ có thể cao hơn; lớp phủ hoàng hôn không gào bán."
+        }
+      }
+    }
   },
   "blog": {
     "hero_title": "Cẩm nang du lịch và góc nhìn địa phương",
@@ -322,8 +443,114 @@
     "user": "Người dùng",
     "guest": "Khách"
   },
+  "editorial": {
+    "brand": "Đất Việt",
+    "hero": {
+      "eyebrow": "Việt Nam tuyển chọn · Đặt chỗ khi bạn sẵn sàng",
+      "title": "Đuổi theo gánh phở trong ngõ, hoàng hôn đèn lồng và sương vách đá.",
+      "subtitle": "Đất Việt đọc như một tạp chí du lịch bạn có thể chạm tới — những tuyến cảm quan qua phố, chợ đêm và đường ven biển, vẫn có chỗ cho đặt phòng và tour khi bạn chọn.",
+      "cta_cities": "Khám phá điểm đến",
+      "cta_journeys": "Tour tuyển chọn",
+      "cta_collections": "Bộ sưu tập câu chuyện",
+      "scroll_hint": "Cuộn · nhịp điện điện ảnh"
+    },
+    "featured": {
+      "eyebrow": "Thành phố nổi bật",
+      "title": "Năm sắc thái Việt Nam",
+      "cta_atlas": "Mở atlas đầy đủ →"
+    },
+    "food": {
+      "eyebrow": "Ẩm thực địa phương",
+      "title": "Nồng cay, thảo mộc và quán trả lời bằng khói",
+      "subtitle": "Việt Nam mời bạn ăn trước khi giới thiệu — ghế nhựa trở thành sân khấu cho nướng than và cà phê nhỏ giọt.",
+      "stories": {
+        "0": {
+          "title": "Nướng đêm & bánh tráng",
+          "body": "Ghế nhựa dưới bóng đèn — xiên thịt xèo xèo bên khay chả cá thì là."
+        },
+        "1": {
+          "title": "Sáng chợ",
+          "body": "Lá chuối gói xôi dẻo; người bán thái rau theo nhịp quen."
+        },
+        "2": {
+          "title": "Cà phê như nghi lễ",
+          "body": "Phin nhỏ giọt làm chậm thời gian — sữa đặc lớp lớp trong khi xe máy mờ ngoài phố."
+        }
+      }
+    },
+    "trending": {
+      "0": {
+        "label": "Ruộng bậc thang Sa Pa",
+        "detail": "Sương bám như thang lên sườn đá vôi."
+      },
+      "1": {
+        "label": "Vòng Hà Giang",
+        "detail": "Vách đá ôm cạnh đồng gai."
+      },
+      "2": {
+        "label": "Hang Phong Nha",
+        "detail": "Sông ngầm nuốt ánh đèn đội đầu."
+      },
+      "eyebrow": "Điểm đến đang hot",
+      "title": "Ngoài nhịp thủ đô"
+    },
+    "navigate": {
+      "eyebrow": "Định hướng",
+      "title": "Bản đồ Việt Nam tương tác",
+      "subtitle": "Chạm vào các điểm nhấp nháy — mở gợi ý khám phá thay vì ô trống chung chung."
+    },
+    "map": {
+      "aria_map": "Bản đồ Việt Nam minh họa với các điểm neo thành phố",
+      "tap_hint": "Chạm điểm nhấp nháy · Khám phá điểm đến",
+      "side_eyebrow": "Atlas tương tác",
+      "side_title": "Theo dõi sắc thái theo vĩ độ — làng sương đến đồng bằng neon.",
+      "side_body": "Khoảng cách ngắn lại khi bạn đi theo cảm giác thay vì checklist. Dùng bản đồ minh họa như la bàn hướng tới các đối lập cảm quan — mỗi nhấp mở ý tưởng cho vùng đó.",
+      "hotspots": {
+        "hanoi": "Hà Nội",
+        "danang": "Đà Nẵng",
+        "hoian": "Hội An",
+        "hcmc": "TP.HCM",
+        "dalat": "Đà Lạt"
+      }
+    },
+    "collections": {
+      "0": {
+        "title": "Phố đèn sau mưa",
+        "subtitle": "Phản chiếu, tia xe, sơn mài ướt."
+      },
+      "1": {
+        "title": "Đèo & sương dải ruy-băng",
+        "subtitle": "Khúc cua khâu trên thửa chè."
+      },
+      "2": {
+        "title": "Sáng đảo đá vôi",
+        "subtitle": "Thuyền neo cho đến khi sương tan."
+      },
+      "eyebrow": "Bộ sưu tập câu chuyện",
+      "title": "Những thước phim bạn đi xuyên qua"
+    },
+    "seasonal": {
+      "eyebrow": "Gợi ý theo mùa",
+      "title": "Sương tháng Tư trên bậc thang · Biển phát quang tháng Tám",
+      "body": "Chọn mùa vai để vòm đá vôi bóng sau mưa hay ruộng lấy nước như gương — ít đông, ảnh sắc nét, bát nóng sau chuyến xe chiều.",
+      "rows": {
+        "0": {
+          "left": "Cao nguyên phía Bắc",
+          "right": "Sương Sep–Nov"
+        },
+        "1": {
+          "left": "Duyên hải miền Trung",
+          "right": "Đèn lồng Feb–Jul"
+        },
+        "2": {
+          "left": "Đồng bằng Mekong",
+          "right": "Sông cạn Nov–Jan"
+        }
+      }
+    }
+  },
   "footer": {
-    "brand": "Travel Tour",
+    "brand": "Đất Việt",
     "contact": "Liên hệ",
     "useful_links": "Liên kết hữu ích",
     "travel_blog_tips": "Blog & Mẹo du lịch",
@@ -331,7 +558,17 @@
     "be_our_partner": "Trở thành đối tác",
     "pay_safely": "Thanh toán an toàn",
     "pay_safely_desc": "Thanh toán được mã hóa và truyền an toàn bằng giao thức SSL.",
-    "copyright": "Bản quyền © 2025 GoodLayers. Đã đăng ký."
+    "copyright": "Bản quyền © 2025 GoodLayers. Đã đăng ký.",
+    "tagline": "Tạp chí tuyển chọn cho người thích gánh hàng trong ngõ, xe máy nửa đêm và sương thông trên đỉnh đồi — tour và lưu trú khi bạn sẵn sàng.",
+    "column_explore": "Khám phá",
+    "link_tours": "Tour tuyển chọn",
+    "link_provinces": "Atlas tỉnh thành",
+    "link_destination": "Tìm điểm đến",
+    "link_blog": "Cẩm nang du lịch",
+    "column_note": "Lưu ý",
+    "note_body": "Ảnh minh họa công nhận nhiếp ảnh qua Unsplash. Vui lòng xác nhận giờ mở cửa tại chỗ trước khi khởi hành sớm.",
+    "bottom_tagline": "Sẵn sàng đặt chỗ · Xây để khám phá như phim",
+    "magazine_badge": "Tạp chí · Cẩm nang"
   },
   "header": {
     "dashboard": "Bảng điều khiển",
@@ -382,7 +619,6 @@
     "room_2": "Phòng 2"
   },
   "list": "Danh sách",
-  
   "hotel_list": "Khách sạn",
   "hotel_search": "Tìm khách sạn",
   "list_page": {
@@ -479,13 +715,26 @@
       "heading": "Tour Việt Nam được chọn lọc",
       "display": "Xem dạng",
       "empty_hint": "Hãy thử điều chỉnh bộ lọc hoặc tìm điểm đến khác.",
-      "clear_cta": "Xóa bộ lọc"
+      "clear_cta": "Xóa bộ lọc",
+      "hero_kicker": "Hành trình · tuyến đường như một câu chuyện",
+      "hero_title": "Chuyến đi Việt Nam, không vội",
+      "hero_subtitle": "Cuộn như đọc một bài feature — lọc khi cần rõ ràng, rồi chọn tuyến hợp nhịp của bạn.",
+      "atlas_kicker": "Danh mục biên tập",
+      "atlas_title": "Mỗi lịch trình là một bức thư từ đường.",
+      "atlas_lead": "Giá và thời lượng vẫn đọc được nhưng dịu — tên tour và địa danh dẫn khung hình."
     },
     "search": {
       "results": "Tìm thấy {{count}} tour",
       "noResults": "Không tìm thấy tour"
     },
-    "pagination": { "page": "Trang" },
+    "pagination": {
+      "page": "Trang",
+      "atlas_showing": "Hiển thị {{from}}–{{to}} trên tổng {{total}} hành trình",
+      "atlas_folio_prefix": "Tập",
+      "prev_spread": "Trang trước",
+      "next_spread": "Trang sau",
+      "spread_nav": "Điều hướng trang"
+    },
     "filter": {
       "title": "Lọc Tour",
       "all_destinations": "Mọi điểm đến",
@@ -538,8 +787,11 @@
       "duration_desc": "Thời lượng: Dài nhất",
       "rating": "Đánh giá"
     },
+    "error_title": "Không tải được danh sách tour",
+    "error_desc": "Vui lòng thử lại sau giây lát.",
     "card": {
       "duration": "{{days}} ngày / {{nights}} đêm",
+      "price_from": "Từ",
       "badge_vietnam": "Việt Nam",
       "badge_featured": "Nổi bật",
       "off_percent": "-{{percent}}%",
@@ -587,6 +839,113 @@
       "faq_5_q": "Có bao gồm bảo hiểm không?",
       "faq_5_a": "Một số gói có bảo hiểm cơ bản. Chi tiết nằm trong mục bao gồm; bạn có thể mua thêm bảo hiểm du lịch."
     },
+    "journey": {
+      "nav": {
+        "aria": "Điều hướng mục",
+        "story": "Câu chuyện",
+        "essentials": "Tiện ích",
+        "rhythm": "Nhịp khởi hành",
+        "itinerary": "Lịch trình",
+        "gallery": "Thư viện ảnh",
+        "context": "Bối cảnh",
+        "map": "Bản đồ",
+        "faq": "FAQ",
+        "plan": "Đặt chỗ",
+        "reviews": "Đánh giá",
+        "more": "Thêm"
+      },
+      "meta": {
+        "region": "Vùng miền",
+        "duration": "Thời gian di chuyển",
+        "planning": "Tham khảo giá",
+        "travelers": "Trải nghiệm du khách",
+        "review_notes": "{{count}} ghi chú"
+      },
+      "rhythm": {
+        "departure_days_line": "Khởi hành thường gặp: {{days}}",
+        "window_note": "{{count}} chỗ · {{status}}",
+        "cadence_heading": "Nhịp & khởi hành",
+        "windows_heading": "Khung thời gian gợi ý",
+        "kicker": "Nhịp khởi hành",
+        "section_title": "Khi hành trình có nhịp riêng"
+      },
+      "story": {
+        "kicker": "Biên tập",
+        "title": "Vì sao cung đường này đáng đi"
+      },
+      "essentials": {
+        "kicker": "Đồng hành cùng bạn",
+        "section_title": "Điều đã gồm & ranh giới rõ ràng",
+        "included_heading": "Đã bao gồm",
+        "excluded_heading": "Không bao gồm"
+      },
+      "itinerary": {
+        "kicker": "Lịch trình",
+        "section_title": "Một vòng cung chừng mực",
+        "no_detail": "Chi tiết sẽ được cập nhật."
+      },
+      "gallery": {
+        "kicker": "Thư viện ảnh",
+        "section_title": "Khoảnh khắc cùng không khí",
+        "alt": "Ảnh tour"
+      },
+      "context": {
+        "kicker": "Địa danh & văn hóa",
+        "section_title": "Ngữ cảnh gọn nhẹ",
+        "point_label": "Ghi chú {{num}}"
+      },
+      "map": {
+        "kicker": "Tuyến đường"
+      },
+      "faq": {
+        "kicker": "Thắc mắc thường gặp"
+      },
+      "plan": {
+        "kicker": "Tư thế lên kế hoạch",
+        "kicker_section": "Đầu tư cho hành trình",
+        "section_title": "Lên kế hoạch cùng chúng tôi",
+        "copy_default": "Cho chúng tôi biết nhịp độ, khẩu vị và dịp đặc biệt — chúng tôi xếp lịch theo chỗ thực tế.",
+        "disclaimer": "Giá và chỗ theo tồn kho thời gian thực — đội ngũ xác nhận trước thanh toán.",
+        "from_label": "Giá tham khảo từ",
+        "cta_book": "Đặt hành trình này",
+        "cta_contact": "Muốn nhắn trước — liên hệ chúng tôi"
+      },
+      "reviews": {
+        "kicker": "Tín hiệu thật"
+      },
+      "more": {
+        "kicker": "Gợi ý tiếp theo",
+        "section_title": "Giữ cùng một nhịp",
+        "back_tours": "Về danh sách tour",
+        "browse_destinations": "Khám phá điểm đến"
+      },
+      "share": {
+        "aria": "Chia sẻ tour",
+        "label": "Chia sẻ"
+      },
+      "mobile": {
+        "note": "Nhắn",
+        "book": "Đặt"
+      },
+      "booking": {
+        "kicker": "Giữ ngày",
+        "title": "Yêu cầu giữ chỗ",
+        "subtitle": "Cùng luồng đặt tour trực tiếp — chọn ngày và chúng tôi xác nhận."
+      },
+      "mood": {
+        "tour_type": {
+          "DOMESTIC": "Tour trong nước",
+          "INTERNATIONAL": "Tour quốc tế",
+          "DAILY": "Tour trong ngày"
+        },
+        "difficulty": {
+          "EASY": "Nhịp nhẹ",
+          "MODERATE": "Vừa phải",
+          "CHALLENGING": "Thử thách",
+          "DIFFICULT": "Gắt gao"
+        }
+      }
+    },
     "booking": {
       "from": "Từ",
       "book_now": "Đặt ngay",
@@ -619,8 +978,6 @@
       "noResults": "Không tìm thấy phòng"
     },
     "view_details": "Xem chi tiết",
-    "guests": "Khách",
-    "reviews": "đánh giá",
     "check_availability": "Kiểm tra phòng trống",
     "filter": {
       "no_hotels_in_province": "Không có khách sạn trong tỉnh này"
@@ -943,7 +1300,14 @@
   "entityReview": {
     "title_new": "Viết đánh giá",
     "submit": "Gửi đánh giá",
+    "label_comment": "Nội dung",
     "placeholder_comment": "Chia sẻ trải nghiệm của bạn…",
+    "composer_kicker": "Góc chia sẻ",
+    "your_rating": "Điểm của bạn",
+    "filter_by": "Lọc theo sao",
+    "anonymous_display": "Khách",
+    "stars_avg_aria": "Trung bình {{rating}} trên 5 sao",
+    "stars_row_aria": "{{rating}} trên 5 sao",
     "sort_rating_desc": "Điểm (cao → thấp)",
     "sort_rating_asc": "Điểm (thấp → cao)",
     "sort_date_desc": "Ngày (mới nhất)",
@@ -965,8 +1329,8 @@
     "error_submit_generic": "Không gửi được đánh giá. Vui lòng thử lại.",
     "error_edit_forbidden": "Không thể chỉnh sửa đánh giá ở trạng thái hiện tại.",
     "error_edit_generic": "Không lưu được thay đổi. Vui lòng thử lại.",
-    "edit": "Sửa đánh giá",
-    "delete": "Xóa đánh giá",
+    "edit": "Sửa",
+    "delete": "Xóa",
     "save": "Lưu",
     "cancel": "Hủy"
   },
@@ -1095,6 +1459,46 @@
     "no_results": "Chưa có hướng dẫn viên phù hợp",
     "page": "Trang",
     "not_found": "Không tìm thấy hướng dẫn viên",
+    "not_found_desc": "Hồ sơ có thể đã gỡ hoặc đường dẫn không đúng.",
+    "hero_kicker": "Atlas · tiếng nói trên đường",
+    "hero_title": "Hướng dẫn viên du lịch",
+    "hero_subtitle": "Những người đồng hành địa phương — ánh sáng, ngôn ngữ và nhịp đường thật của chuyến đi.",
+    "hero_profile_kicker": "Hướng dẫn viên · Việt Nam",
+    "card_no_bio": "Mở trang để đọc câu chuyện của họ.",
+    "chapter_about_kicker": "Chân dung",
+    "field_notes_kicker": "Ghi chép hiện trường",
+    "specialties_kicker": "Nghề",
+    "gallery_chapter_kicker": "Khung hình",
+    "gallery_chapter_title": "Khoảnh khắc trên đường",
+    "gallery_chapter_lead": "Ánh sáng, thời tiết và phố phường — chất liệu phía sau lịch trình.",
+    "reviews_chapter_kicker": "Tiếng nói",
+    "reviews_chapter_lead": "Khách đã từng đi cùng HDV — ghi chép thật, không khẩu hiệu.",
+    "sidebar_folio_kicker": "Tờ phụ",
+    "error_title": "Không tải được danh sách HDV",
+    "error_desc": "Vui lòng thử lại sau giây lát.",
+    "filter_province": "Tất cả tỉnh thành",
+    "all_guides": "Mọi HDV",
+    "detail": {
+      "nav_aria": "Các mục hồ sơ hướng dẫn viên"
+    },
+    "pagination": {
+      "atlas_showing": "Hiển thị {{from}}–{{to}} / {{total}} hướng dẫn viên",
+      "atlas_folio_prefix": "Số tờ",
+      "prev_spread": "Tờ trước",
+      "next_spread": "Tờ sau",
+      "spread_nav": "Chuyển tờ"
+    },
+    "atlas": {
+      "kicker": "Hướng dẫn viên",
+      "title": "Tìm người đồng hành cho chuyến đi",
+      "lead": "Mỗi hồ sơ dành cho nhịp đi bộ — ngôn ngữ, vùng miền, và sự hiện diện đã xác minh."
+    },
+    "list": {
+      "showing": "Hiển thị {{from}}–{{to}} / {{total}} hướng dẫn viên",
+      "display": "Xem",
+      "empty_hint": "Thử đổi điểm đến, ngôn ngữ hoặc bộ lọc xác minh.",
+      "clear_cta": "Xóa bộ lọc"
+    },
     "about": "Giới thiệu",
     "language_and_area": "Ngôn ngữ & Khu vực",
     "specialties": "Chuyên môn",
@@ -1108,6 +1512,7 @@
     "contact_for_booking": "Vui lòng liên hệ đặt tour để được báo giá và thông tin liên hệ HDV.",
     "filter_title": "Lọc HDV",
     "search_placeholder": "Tên hướng dẫn viên...",
+    "search_label": "Tìm hướng dẫn viên",
     "province_specialty": "Tỉnh / Thành chuyên dẫn",
     "select_province": "Chọn tỉnh",
     "language": "Ngôn ngữ",
@@ -1182,5 +1587,538 @@
     "searching_hotels": "Đang tìm khách sạn...",
     "searching_tours": "Đang tìm tour...",
     "searching_food": "Đang tìm món ăn..."
+  },
+  "about_editorial": {
+    "hero": {
+      "eyebrow": "Đất Việt · Ghi chú biên tập",
+      "title": "Một tuyên ngôn gấp trong sương, đèn lồng và tiếng thìa khẽ trên lon.",
+      "subtitle": "Chúng tôi không phải quầy đặt chỗ. Chúng tôi là người đồng hành mang tinh thần tạp chí — dành cho những ai muốn Việt Nam mở ra như một phim tài liệu viết bằng độ ẩm và ánh sáng: chậm, chạm tay, và rất đời.",
+      "scroll_hint": "Đọc chậm · không khí trước tiên"
+    },
+    "philosophy": {
+      "eyebrow": "Vì sao chúng tôi đi theo cách này",
+      "title": "Khám phá Việt Nam một cách điềm tĩnh, có chủ đích",
+      "p1": "Đất nước không chịu một kịch bản duy nhất. Bếp hẻm đan với hoàng hôn đèn lồng; sương núi rửa ruộng bậc thang đến khi giống phác thảo chì; xa lộ ven biển vang tiếng muối và karaoke thoát ra từ cửa hiệu.",
+      "p1_emphasis": "Đất Việt chọn sự chậm: để địa điểm đến trước lịch trình; coi ẩm thực là cái bắt tay đầu tiên của văn hóa; giữ những ngõ ẩn cho đến khi bạn đến bằng bước chân.",
+      "p2": "Du lịch điện ảnh, với chúng tôi, không phải phô trương — mà là trung thực với cảm giác thật. Tiếng ồn, mưa phùn, hương trầm, trà nhài trong chén nhỏ — bảng màu của sự đắm chìm vốn bình thường cho đến khi bạn chọn lắng nghe."
+    },
+    "storytelling": {
+      "eyebrow": "Cách chúng tôi nhìn kho lưu trữ",
+      "title": "Atlas chọn lọc, nhật ký điện ảnh"
+    },
+    "block1": {
+      "eyebrow": "Khám phá được chọn lọc",
+      "title": "Lộ trình chọn vì sắc thái, không phải checklist",
+      "body": "Hành trình đọc như những trang tạp chí gấp — thoáng nhìn qua hơi bếp, xe máy len lỏi chợ, dãy núi ửng khi hoàng hôn. Thương mại không lái chúng tôi; điều khao khát mới lái.",
+      "link": "Mở những hành trình được chọn →"
+    },
+    "block2": {
+      "eyebrow": "Nhật ký hình ảnh",
+      "title": "Ảnh như chữ viết tay, chú thích như thì thầm",
+      "body": "Ở đây nhiếp ảnh là nhịp điệu: góc rộng cho nỗi nhớ, khung chặt khi chi tiết quan trọng — khớp tay trên phin phê, nước mưa đọng trên mép bạt. Chữ giữ lời kể con người; giao diện lùi xa để không khí được dẫn.",
+      "link": "Dạo các thành phố · năm sắc thái →"
+    },
+    "sensory_section": {
+      "eyebrow": "Atlas cảm giác",
+      "title": "Việt Nam qua những cảm nhận",
+      "intro": "Đây không phải “tính năng”. Đây là những nốt âm chúng tôi luôn quay lại khi chỉnh ánh sáng, chữ và chuyển động — bằng chứng rằng du lịch nơi đây là dàn nhạc, không phẳng."
+    },
+    "sensory": {
+      "alley_kitchens": {
+        "label": "Bếp hẻm",
+        "line": "Tiếng than khẹt sau cánh cửa sóng — bữa tối trước cả lời giới thiệu."
+      },
+      "lantern_streets": {
+        "label": "Phố đèn lồng",
+        "line": "Ánh lụa trải trên đá, khiến cuộc trò chuyện chậm lại nhịp nhàng."
+      },
+      "coffee_culture": {
+        "label": "Văn hóa cà phê",
+        "line": "Trứng đánh bọt, phin nhỏ giọt, hơi nước trên ly — khoảng lặng giữa các chương."
+      },
+      "mountain_fog": {
+        "label": "Sương núi",
+        "line": "Ruộng bậc thang xóa rồi vẽ lại bằng hơi thở; dãy núi hiện như mực thấm giấy."
+      },
+      "coastal_roads": {
+        "label": "Đường ven biển",
+        "line": "Muối trên da, xe máy ôm cua giữa mùi chợ cá buổi trưa."
+      },
+      "local_markets": {
+        "label": "Chợ địa phương",
+        "line": "Lá ướt, trái gọt vỏ, giá gọi — điệu múa không nhạc trưởng."
+      },
+      "train_street_tempo": {
+        "label": "Nhịp phố tàu",
+        "line": "Đường ray như hành lang; nhà nghiêng vào nhau cho đến khi còi kéo thẳng mọi thứ."
+      },
+      "night_lights_rain": {
+        "label": "Đèn đêm & mưa",
+        "line": "Neon loang trên vũng nước, bạt che giật — kết cấu mà tai cũng nghe được."
+      }
+    },
+    "sensory_split": {
+      "coast_caption": "Bờ biển như bản thảo chuyển động",
+      "night_caption": "Điện đô thị, quy mô con người"
+    },
+    "values_section": {
+      "eyebrow": "Điều chúng tôi giữ",
+      "title": "Lời hứa biên tập — không phải KPI",
+      "intro": "Giữ ranh giới để trải nghiệm vẫn là con người: không khí trước chuyển đổi; gần gũi trước quy mô; khao khát trước hậu cần."
+    },
+    "values": {
+      "slowness": {
+        "title": "Chậm",
+        "body": "Chúng tôi ưu tiên ở lại hơn là liệt kê — những hành lang đáng đi hai lần."
+      },
+      "atmosphere": {
+        "title": "Không khí",
+        "body": "Tâm trạng đến trước địa lý; độ ẩm, âm thanh và màu cũng là địa lý."
+      },
+      "authenticity": {
+        "title": "Chân thực",
+        "body": "Bám sát cảm giác nơi chốn đang sống — không hoàn hảo, có mùi, có tiếng."
+      },
+      "visual_storytelling": {
+        "title": "Kể chuyện bằng hình",
+        "body": "Ảnh mang cốt truyện; chữ thì thầm lời dẫn; khoảng trắng là nhịp."
+      },
+      "emotional_discovery": {
+        "title": "Khám phá cảm xúc",
+        "body": "Tò mò đi qua cảm xúc — ngỡ ngàng, dịu dàng, hoàng hôn chạnh lòng."
+      },
+      "local_immersion": {
+        "title": "Đắm chìm địa phương",
+        "body": "Những góc không diễn cho brochure; nhịp sống không chịu vội."
+      }
+    },
+    "manifesto": {
+      "eyebrow": "Tuyên ngôn hành trình",
+      "quote_lead": "Du lịch nợ bạn ký ức, không phải vận tốc. Việt Nam thưởng người tò mò chấp nhận độ ẩm như dấu ngắt, đường vòng như nốt trang trí, và tiếng đũa khách lạ gõ nhịp trên bát thiếc như nhạc đêm.",
+      "quote_body": "Vùng đất này xứng đáng kiên nhẫn điện ảnh — đèn lồng đo bằng chỗ thở; núi được phép che rồi lộ; câu chuyện thừa nhận thương mại chỉ ngoại vi của khẩu vị, âm thanh, mộ đạo và hoàng hôn.",
+      "quote_emphasis": "Chúng tôi giữ khám phá lành mạnh: không dashboard giả làm thơ, không tiếng máy nơi cần thì thầm."
+    },
+    "closing": {
+      "eyebrow": "Quay lại atlas",
+      "title": "Ở lại lề lâu hơn sân khấu chính.",
+      "body": "Để hơi bếp viết chú thích cho bạn. Theo núi đến khi ửng hồng. Mang tinh thần tạp chí vào những đêm chợ không diễn tập — chúng tôi dựng Đất Việt để những đêm ấy có bản đồ êm hơn.",
+      "cta_provinces": "Atlas tỉnh thành",
+      "cta_journeys": "Hành trình chọn lọc",
+      "cta_home": "Trang chủ →"
+    }
+  },
+  "contact_editorial": {
+    "hero": {
+      "eyebrow": "Đất Việt · Thư tín",
+      "title": "Mọi hành trình bắt đầu bằng một cuộc trò chuyện.",
+      "subtitle": "Để Việt Nam nói qua câu chuyện — không phải vé. Viết như ghi lề một nhật ký đi đường mà ta vẫn đang viết cùng nhau.",
+      "scroll_hint": "Trả lời điềm tĩnh · nhịp con người"
+    },
+    "intro": {
+      "eyebrow": "Vì sao chúng tôi mở hòm thư",
+      "title": "Một studio khám phá điện ảnh — không phải quầy trợ giúp",
+      "p1_before": "Đất Việt được dựng như ",
+      "p1_emphasis": "một khám phá Việt Nam được chọn lọc — một phần tạp chí, một phần atlas, một phần thư tình gửi hơi bếp hẻm và sương núi.",
+      "p1_after": " Khi bạn viết, bạn không mở ticket; bạn nối một sợi chỉ về không khí, khẩu vị và những câu chuyện bản đồ hay quên.",
+      "p2": "Đây là kho lưu trữ thị giác và cảm xúc của du lịch — săn tìm chậm, sự thật cảm quan, và chừng mực biên tập. Hãy kể điều đã chạm đến bạn, điều bạn đang mơ về, hay góc đất nào cứ kéo tò mò của bạn."
+    },
+    "form_side": {
+      "eyebrow": "Vươn ra ngoài lịch trình",
+      "quote": "Chúng tôi đọc từng dòng trong ánh đèn mờ — như bạn nghe lại tin nhắn thoại từ một đêm chợ."
+    },
+    "form": {
+      "eyebrow": "Gửi một dòng",
+      "title": "Bắt đầu sợi chỉ",
+      "intro": "Ô nhẹ nhàng, nhịp chậm — cho biết bạn là ai, đang vòng quanh điều gì, và sắc thái hành trình trong đầu bạn.",
+      "label_name": "Tên",
+      "label_email": "Email",
+      "label_journey": "Hành trình bạn quan tâm",
+      "label_message": "Nội dung",
+      "placeholder_name": "Chúng tôi xưng hô với bạn thế nào",
+      "placeholder_email": "ban@domain.com",
+      "placeholder_journey": "Cao nguyên sương, phố cổ đèn lòng, ngõ phở nửa đêm…",
+      "placeholder_message": "Một đoạn là đủ — tâm trạng, tham chiếu, câu hỏi không buông được.",
+      "submit": "Gửi",
+      "sent_message": "Đã nhận — cảm ơn bạn. Đây là hộp thư demo; chữ sẽ xóa để bạn tiếp tục nháp.",
+      "helper": "Không gấp — chúng tôi trả lời như biên tập viên, không phải máy."
+    },
+    "conversation": {
+      "eyebrow": "Những kiểu thư tín",
+      "title": "Điều bạn có thể đang vòng quanh",
+      "intro": "Chọn sắc thái — không phải phòng ban. Chạm một thẻ để gợi vào ô “hành trình”; chúng tôi nối chuyện tự nhiên.",
+      "echoed": "Đã gợi vào ô hành trình quan tâm",
+      "stories": {
+        "title": "Hợp tác câu chuyện",
+        "line": "Đồng sáng tạo bài, ảnh essay hay bản tin chậm — chúng tôi lắng nghe trước khi khung hình."
+      },
+      "local": {
+        "title": "Gợi ý địa phương",
+        "line": "Ngõ thì thầm, chợ bình minh, những bếp không lên brochure."
+      },
+      "inspiration": {
+        "title": "Cảm hứng du lịch",
+        "line": "Khi bạn biết tâm trạng nhưng chưa biết vĩ độ — ta đổi tham chiếu, không đổi khuôn."
+      },
+      "hidden": {
+        "title": "Điểm đến ẩn",
+        "line": "Sườn núi, vịnh và hẻm xứng đáng kiên nhẫn hơn đám đông."
+      },
+      "culture": {
+        "title": "Đối thoại văn hóa",
+        "line": "Nghi lễ, âm thanh và ẩm thực là bản đồ thật — đối thoại, không kịch bản."
+      },
+      "partnership": {
+        "title": "Hợp tác",
+        "line": "Thẳng hàng biên tập trước; phần thương mại luôn sau không khí."
+      }
+    },
+    "atmosphere": {
+      "eyebrow": "Không khí ở lề",
+      "title": "Thời tiết của một câu trả lời",
+      "intro": "Trước khi viết lại, chúng tôi giữ những cảnh này — ngữ pháp cảm quan khiến Việt Nam không thể dẹt thành brochure.",
+      "rain": "Phản chiếu mưa — kính và nhựa đường như một tiếng thở dài.",
+      "lanterns": "Phố đèn lồng — ánh lụa trải nơi xe máy chậm lại.",
+      "coffee": "Góc cà phê — hơi phin đánh dấu thời gian giữa các chương.",
+      "train": "Không khí phố tàu — nhà nghiêng vào nhau cho đến khi thép rít qua.",
+      "coast": "Đường ven biển — muốn trên da, trời mở, cua như thở ra.",
+      "fog": "Sườn sương — ruộng bậc thang xóa rồi vẽ lại bằng hơi thở."
+    },
+    "closing": {
+      "eyebrow": "Ở trong ánh sáng chậm",
+      "title": "Kết nối — không phải thanh toán.",
+      "body": "Dạo atlas trong lúc chờ — tỉnh thành, đô thị và hành trình cùng một hơi biên tập. Ta gặp nhau trong câu chuyện, không phải hàng chờ.",
+      "cta_provinces": "Atlas tỉnh thành",
+      "cta_about": "Tuyên ngôn của chúng tôi"
+    }
+  },
+  "team_editorial": {
+    "scene_prefix": "Cảnh",
+    "hero": {
+      "eyebrow": "Đất Việt · Nhân chứng hiện trường",
+      "title": "Những người bước đủ chậm để Việt Nam nói trọn câu.",
+      "subtitle": "Một ống kính phim tài liệu về những người kể chuyện phía sau atlas này — không phải sơ đồ tổ chức, không phải ảnh profile cho nhà đầu tư — mà là chân dung của kiên nhẫn, cảm giác thèm khám phá, và lòng trung thành với không khí.",
+      "scroll_hint": "Ấm áp trước · không cần chứng chỉ"
+    },
+    "intro": {
+      "eyebrow": "Vì sao con người dẫn bản đồ",
+      "title": "Khám phá được dựng như phim — từng cảnh, nhịp thở, chất liệu",
+      "p1_lead": "Việt Nam không chịu gói gọn thành gạch đầu dòng. ",
+      "p1_strong": "Những giọng nói ở đây không phải ‘nhân viên’ — họ là thợ thủ công coi du lịch như đạo đức của giác quan: lắng lâu hơn lịch trình cho phép, ăn nơi hơi nước thay biển chỉ dẫn, ghi lại mà không cướp phẩm giá của ai.",
+      "p2": "Đọc các chương này như phỏng vấn không micro — gương mặt sáng trong hơi bếp, bờ biển vọng qua tai nghe rẻ, sổ tay mềm vì độ ẩm. Đây là đội ngũ đằng sau cảm xúc bạn gặp trên mỗi tuyến đường chúng tôi đăng tải."
+    },
+    "interlude": {
+      "eyebrow": "Hoãn nhịp · lời thề chung",
+      "quote": "Chúng tôi không ‘dẫn dắt’ Việt Nam từ slide — chúng tôi đi theo nó với sổ tay mờ vì hơi phở, micro ám muối biển, và ống kính lau bằng vạt áo vì khoảnh khắc không chờ."
+    },
+    "parallax_mid": {
+      "eyebrow": "Khung hiện trường",
+      "title": "Sương mù là cộng sự — không phải thời tiết để chống lại.",
+      "body": "Đội ngũ quay lại núi vì im lặng ở đó trung thực — dãy núi xóa khoảng cách cho đến khi kiên nhẫn trở nên nhìn thấy được. Khung hình này nhắc: du lịch điện ảnh tôn trọng sự chờ đợi."
+    },
+    "values_section": {
+      "eyebrow": "Nhịp điệu chúng tôi giữ",
+      "title": "Câu chuyện trước — thứ bậc sau",
+      "intro": "Bạn sẽ không thấy sơ đồ báo cáo ở đây — chỉ có sự gắn bó chung với hơi ngõ, muối biển, và mưa đêm phản chiếu qua neon. Chúng tôi tranh luận như biên tập viên, lang thang như học trò, trở lại như người địa phương đang tập làm quen."
+    },
+    "values": {
+      "patience": {
+        "title": "Kiên nhẫn",
+        "body": "Cảnh được phép dài — không montage ở nơi một nhịp dừng tôn trọng tiếng cười của người bán."
+      },
+      "proximity": {
+        "title": "Khoảng cách gần",
+        "body": "Micro và sổ tay sát bát phở và mép nước — thân mật không xâm phạm."
+      },
+      "texture": {
+        "title": "Chất liệu",
+        "body": "Độ ẩm, dầu mỡ, tiếng sỏi — không khí được coi như dữ liệu trung thực."
+      },
+      "trust": {
+        "title": "Tin cậy",
+        "body": "Con người trước màn nhạo báng; người đóng góp được ghi nhận bằng tinh thần dù đôi khi tên không xuất hiện công khai."
+      }
+    },
+    "closing": {
+      "eyebrow": "Đi cùng chúng tôi",
+      "title": "Chào một tiếng — chúng tôi trả lời như lữ khách, không như quầy lạnh.",
+      "body": "Nếu atlas của chúng tôi đọc như phim, là vì con người đã mang hơi ẩm của nó qua bản thảo và thủy triều. Hãy liên hệ khi bạn muốn tuyến đường tôn trọng im lặng cũng như phô trương.",
+      "cta_contact": "Viết cho chúng tôi",
+      "cta_tours": "Hành trình tuyển chọn",
+      "cta_about": "Tuyên ngôn →"
+    },
+    "chapters": {
+      "s01": {
+        "scene": "01",
+        "givenName": "Lan",
+        "descriptor": "Lắng qua ống kính cho đến khi sương chịu ở lại thêm chút nữa.",
+        "verse": "Núi dạy kiên nhẫn cho ai đủ can đảm chờ mà không nhìn đồng hồ.",
+        "vietnam_anchor": "Chủ yếu vẽ dọc ruộng bậc thang Sapa — sương như đồng đạo diễn, giày không bao giờ sạch.",
+        "p1": "Lan chụp như ghi âm hiện trường: chân máy thấp, hơi thở chậm hơn màn trập, chờ cho đến khi sườn núi thôi giả làm bưu thiếp. Người ta xin ‘golden hour’; cô chờ giờ vàng ngại ngùng — khi mây bầm sườn núi và tấm bạt nông dân giật như chũm choẹ nhẹ.",
+        "p2": "Việt Nam của Lan không phải biểu tượng. Là hơi nước trên kính xe buýt, ghế nhựa xếp trước bình minh, sự im lặng lịch sự giữa hai xe máy ôm cua chỗ không nên tồn tại. Kho lưu trữ cô để lại ấm vì cô từ chối cướp phẩm giá để lấy tương phản.",
+        "portrait_alt": "Lan ngoài trời dưới ánh sáng mềm, ôm máy ảnh trước ngực.",
+        "secondary_alt": "Sương sông lúc bình minh dọc bờ kè."
+      },
+      "s02": {
+        "scene": "02",
+        "givenName": "Minh",
+        "descriptor": "Viết bằng cảm giác thèm — câu được nêm trước địa lý.",
+        "verse": "Bếp hẻm không chịu trừu tượng; hơi nước khăng khăng đòi cụ thể.",
+        "vietnam_anchor": "Bếp Sài Gòn và Huế — than reo, phở làm kính mờ, phỏng vấn thì thầm giữa các mẻ.",
+        "p1": "Minh đến như khách từ chối kể từ trên cao. Anh ngồi chỗ bát làm sổ tay đóng lại; học tên trước món ăn. Các chương Việt Nam của anh bằng động từ — chiên, gấp, cười vì lỗi — vì hiếu khách ở đây chỉnh dáng người trước lịch trình.",
+        "p2": "Khám phá với anh không phải chinh phục. Là để nơi chốn cắt ngang sự thông minh của bạn. Khi anh viết về Việt Nam, bạn nếm thìa kim loại, nghe rèm nhựa vỗ mưa, cảm ơn kín đáo khi ai đó kéo ghế gần hơn mà không hỏi phép.",
+        "portrait_alt": "Minh mỉm cười nhẹ, ngồi trong ánh sáng ấm trong nhà.",
+        "secondary_alt": "Phố chiều với đèn lồng và motion blur."
+      },
+      "s03": {
+        "scene": "03",
+        "givenName": "Hải",
+        "descriptor": "Thu âm như người ta sưu tầm tem — bằng chứng của chuyển động thật.",
+        "verse": "Biển giữ nhịp bằng lưới và thủy triều, không phải thông báo.",
+        "vietnam_anchor": "Micro đi qua chợ Phú Yên lúc bình minh và đường ven biển Trung — muối như nhịc percussion.",
+        "p1": "Hải đi với micro như ánh đèn lồng: đủ gần để nghe thân mật, đủ kính trọng để không dựng cảnh. Xe máy thành hợp âm; sóng thành lặng; tiếng rao chồng lên như jazz lịch sự. Việt Nam của anh nghe được trước khi thấy — bạn nhận ra nơi chốn khi ngực học nhịp của nó.",
+        "p2": "Anh ghét chữ ‘immersive’ làm marketing. Immersion với anh là độ ẩm trong lọc gió mic, tiếng cười bị gió hỏng, chó sủa đúng nhịp. Khi chúng tôi ghép hành trình, âm thanh của anh nhắc: khám phá là độ trung thực của giác quan — không phải lời hứa thương hiệu.",
+        "portrait_alt": "Hải nhìn qua ống kính, trầm tư dưới ánh sáng tự nhiên."
+      },
+      "s04": {
+        "scene": "04",
+        "givenName": "Thu",
+        "descriptor": "Án cảm xúc lên địa lý cho đến khi cả hai thừa nhận là cùng một câu chuyện.",
+        "verse": "Mưa sắp xếp lại thành phố theo cảm xúc trước khi sắp xếp giao thông.",
+        "vietnam_anchor": "Đêm Đà Nẵng và Hội An — neon kéo qua vũng nước, cầu như bản lề cảm xúc.",
+        "p1": "Thu biên tập atlas như phim: nhịp quan trọng hơn độ phủ. Cô từ chối là phẳng tỉnh thành thành gạch đầu dòng; để sông mang đoạn văn, đèo cắt chương để thở gấp nơi chân từng rát. Việt Nam của cô thưởng cho tò mò mà không đòi tốc độ.",
+        "p2": "Cô tin du khách xứng đáng gần gũi không giám sát — gợi ý thay lệnh, lề thay biển quảng cáo. Nếu Đất Việt đọc như phim, vì Thu giữ cho mỗi tuyến chỗ cho cảnh không lên lịch: câu đùa của dì, khúc rẽ nhầm thành câu chuyện.",
+        "portrait_alt": "Thu nghiêng về phía ánh sáng ấm, chân dung trầm.",
+        "secondary_alt": "Phố đêm đô thị, mặt đường ướt phản chiếu."
+      }
+    }
+  },
+  "our_services_editorial": {
+    "hero": {
+      "eyebrow": "Đất Việt · Dịch vụ",
+      "title": "Hành trình được thiết kế qua bầu không khí — không bán lịch trình như hàng tồn kho.",
+      "subtitle": "Trải nghiệm Việt Nam vượt bảng tính: khám phá tuyển chọn, nhịp điệu như phim, và kể chuyện bằng giác quan dệt qua thành phố, bờ biển, và những con hẻm chưa từng làm mẫu cho brochure.",
+      "scroll_hint": "Dịch vụ biên tập · nhịp con người"
+    },
+    "intro": {
+      "eyebrow": "Điều chúng tôi cùng kiến tạo",
+      "title": "Dịch vụ khám phá — tưởng tượng như những mảnh tạp chí",
+      "p1_prefix": "Hãy coi các gói này là ",
+      "p1_emphasis": "hành trình khám phá mang tính điện ảnh: kể chuyện địa phương đắm mình, lang thang theo cảm giác thèm ăn, và hướng dẫn ưu tiên không khí",
+      "p1_suffix": " — không phải sổ cái đặt chỗ bọc lớp chrome đẹp hơn.",
+      "p2": "Mỗi phần tôn trọng du lịch chậm, độ trung thực của giác quan, và đắm chìm cảm xúc. Thương mại ở ngoài rìa; khát khao dẫn đường — dù bạn đuổi sương trên dốc thông hay neon loang trên đường ướt nửa đêm."
+    },
+    "immersive": {
+      "eyebrow": "Chương đắm mình",
+      "title": "Bảy bầu không khí chúng tôi giữ",
+      "subtitle": "Như bưu thiếp — hình mang cốt chuyện; chữ giữ nhịp thì thầm. Bấm link như chú thích, không phải quầy thanh toán."
+    },
+    "offers": {
+      "city_journey": {
+        "eyebrow": "Nhịp phố",
+        "title": "Hành trình đô thị tuyển chọn",
+        "body": "Từng block như cuốn phim — phố tàu im ắng, ban công thuộc địa hứng hoàng hôn, xe máy kết neon vào độ ẩm. Chúng tôi dàn dựng tâm trạng trước khi tính kilomet.",
+        "link_label": "Khám phá tỉnh thành · năm sắc thái →"
+      },
+      "food": {
+        "eyebrow": "Cảm giác thèm làm la bàn",
+        "title": "Trải nghiệm khám phá ẩm thực",
+        "body": "Hơi nước trở thành lời kể: nước dù trong, kéo kéo rau như nhịp, ghế nhựa xếp như khán đài. Không checklist đói — chỉ những vòng cảm giác đáng ở lại.",
+        "link_label": "Hành trình theo vị giác →"
+      },
+      "hidden": {
+        "eyebrow": "Viền có chủ đích",
+        "title": "Khám phá địa phương ẩn",
+        "body": "Hẻm siết đến khi tiếng nhỏ lại, góc sân phơi quần áo như vẽ gió, cầu thang thoảng trà lài. Địa lý lộ ra qua kiên nhẫn, không qua ghim bản đồ.",
+        "link_label": "Atlas tỉnh thành →"
+      },
+      "cultural": {
+        "eyebrow": "Nghi lễ & vang vọng",
+        "title": "Tuyến kể chuyện văn hóa",
+        "body": "Hương chùa xuyên sương, trống lễ làm dịu nhịp mái tôn — tuyến được biên tập để niềm tin và lễ hội là không khí, không phải slide nhân chủng học.",
+        "link_label": "Vòng cung văn hóa →"
+      },
+      "coffee_night": {
+        "eyebrow": "Đêm rì rầm",
+        "title": "Cà phê & chợ đêm",
+        "body": "Phin nhỏ giọt làm chậm đồng hồ; dãy đèn huỳnh quang nơi dao cắt trái mặc cả lịch sự. Chúng tôi ghép kiên nhẫn caffeine với ánh sodium — hai ngôn ngữ của đêm Việt.",
+        "link_label": "Ngõ đêm →"
+      },
+      "cinematic_guidance": {
+        "eyebrow": "Khung & sương",
+        "title": "Hướng dẫn du lịch điện ảnh",
+        "body": "Ánh sáng như lòng tốt — khi leo để sương tan, khi xuống để chìm vào vùng đèn lồng. Hướng dẫn như quay phim thì thầm, không như điều phối xe.",
+        "link_label": "Lời hứa biên tập →"
+      },
+      "atmosphere": {
+        "eyebrow": "Tuyển tập",
+        "title": "Lưu trữ bầu không khí địa phương",
+        "body": "Mood board đan từ độ ẩm, tiếng còi, nhịp mưa trên mái tôn — những gói không khí để lang thang, không phải để thanh toán.",
+        "link_label": "Tuyển theo mùa →"
+      }
+    },
+    "showcase": {
+      "eyebrow": "Atlas thị giác",
+      "title": "Cảnh chúng tôi thiết kế hành trình quanh",
+      "subtitle": "Hình chiếm cấu trúc — mỗi khung là lời mời, không phải họa tiết. Hover nhẹ; nhịp vẫn như phim.",
+      "lines": {
+        "mountain": "Đường núi — ruộng bậc xóa rồi vẽ lại bằng hơi sương.",
+        "lanterns": "Phố đèn lồng — ánh lụa làm chậm mọi thương lượng.",
+        "coastal": "Đường ven biển — lớp muối, chân trời mở, khúc ngoặt như thở ra.",
+        "fog": "Sáng sương — sườn núi mượn nét chì của mây.",
+        "cafe": "Quán địa phương — ngữ pháp hơi nước trên ly chậm.",
+        "alley": "Bếp hẻm — than reo sau cánh cửa khiêm tốn.",
+        "district": "Phố văn hóa — di sản dệt vào buôn bán hàng ngày."
+      }
+    },
+    "philosophy": {
+      "eyebrow": "Triết lý khám phá",
+      "title": "Du lịch chậm, trung thực giác quan, không khí trước hậu cần",
+      "p1": "Chúng tôi kháng ngôn ngữ tối ưu — không phễu đội lốt thơ. Dịch vụ thở qua đắm chìm cảm xúc: sương là dấu câu, hơi phở là phương hướng, đèn lồng là đồng hồ.",
+      "p2_lead": "Khám phá chân thật là trao cho nơi chốn nhịp không đều — xe máy cãi nhau ở ngã tư, mưa đột ngột làm dàn hợp xướng mái tôn, cụ già chiếm vỉa hè bằng ghế nhựa thấp.",
+      "p2_emphasis": "Kể chuyện bằng giác quan là kim chỉ nam; mọi thứ mang tính giao dịch phải im hơn những bếp hẻm chúng tôi ca ngợi."
+    },
+    "flow": {
+      "eyebrow": "Nhịp tuyển chọn",
+      "title": "Sự hiện diện mở ra thế nào",
+      "subtitle": "Không phải sơ đồ — một câu nói trong năm nhịp thở. Mỗi nhịp là nhịp biên tập, không phải jargon pipeline.",
+      "steps": {
+        "discover": {
+          "word": "Khám phá",
+          "line": "Để tiêu đề tan vào độ ẩm — bản đồ gợi ý, không ra lệnh."
+        },
+        "wander": {
+          "word": "Lang thang",
+          "line": "Bước chân biên tập ngày; đường vòng có typography riêng."
+        },
+        "immerse": {
+          "word": "Đắm mình",
+          "line": "Âm thanh, hơi nước, màu trở thành phương hướng — không phải icon trên kính."
+        },
+        "connect": {
+          "word": "Kết nối",
+          "line": "Chuyện trò qua quầy; mắt gặp nhau qua hơi phở."
+        },
+        "remember": {
+          "word": "Ghi nhớ",
+          "line": "Mang theo cảnh như phim âm bản — chạm được, không hoàn hảo, thật."
+        }
+      }
+    },
+    "closing": {
+      "eyebrow": "Lời mời, không phải hóa đơn",
+      "title": "Mang Việt Nam như bầu không khí — sau khi màn hình tắt.",
+      "body": "Lang thang tỉnh thành để lấy bản đồ tâm trạng, thành phố để lấy thời tiết tính cách, tour để lấy vòng cung giác quan. Khi bạn sẵn sàng trao đổi, chúng tôi lắng như biên tập viên — điềm, người, không vội.",
+      "cta_tours": "Hành trình tuyển chọn",
+      "cta_contact": "Bắt đầu trò chuyện",
+      "cta_home": "Trang chủ →"
+    }
+  },
+  "gallery_editorial": {
+    "chapter_label": "Chương",
+    "hero": {
+      "eyebrow": "Đất Việt · Kho thị giác",
+      "title": "Mảnh Việt Nam — ánh sáng, khói, mưa và đất nước giữa các khoảnh khắc.",
+      "subtitle": "Câu chuyện giữ trong khung tĩnh: không phải thư viện stock, không phải lưới portfolio — một bước chậm qua ký ức không khí, biên tập như bài du ký bạn có thể thở bên trong.",
+      "scroll_hint": "Xem chậm · tâm trạng trước phân loại"
+    },
+    "intro": {
+      "eyebrow": "Bộ sưu tập ký ức điện ảnh",
+      "title": "Không khí trước — chú thích chỉ thì thầm",
+      "p1_prefix": "Bộ sưu tập này như sổ tay hiện trường phóng lớn: hành trình giác quan qua ",
+      "p1_emphasis": "ánh đèn lồng, hơi núi, hơi bếp hẻm, và neon loang trong mưa",
+      "p1_suffix": " — xếp theo chương, không phải SKU.",
+      "p2": "Để nhịp thay đổi; để khoảng trống là một phần của hình. Tránh lưới chen chúc — trình tự nên như lật tạp chí dày, không như quét catalog."
+    },
+    "featured1": {
+      "eyebrow": "Khung nổi bật",
+      "title": "Phim tài liệu — thủy tinh đèn lồng giữ hơi thở.",
+      "body": "Một số hình cần cả sân khấu. Không phải câu chuyện nào cũng vừa ô vuông — có câu chiếm tầm nhìn ngoại vi cho đến khi bạn chậm lại đủ để nghe âm thanh trong ánh sáng."
+    },
+    "featured2": {
+      "eyebrow": "Khung tĩnh · chất đêm",
+      "title": "Bếp hẻm sau tối — hơi nước là lời kể.",
+      "body": "Than, neon rỉ từ biển hiệu — một khung đủ lớn có thể chứa cả thành phố thèm ăn."
+    },
+    "story_strip": {
+      "eyebrow": "Bài luận thị giác · mảnh vỡ",
+      "title": "Chú thích giác quan — ba khung, ba con sóng",
+      "subtitle": "Hình, chữ và nhịp chồng lên nhau không vội. Để mỗi khung thở; để mắt đi theo tốc độ bước chân, không phải tốc độ cuộn."
+    },
+    "story_stills": {
+      "ss1": "Xe máy mờ — phố rì rầm trong thiếu kiên nhẫn lịch sự.",
+      "ss2": "Chợ đồng — dao cắt trái mặc cả nhẹ nhàng.",
+      "ss3": "Ruộng bậc thang — bậc than chì được nắng rửa thoáng qua."
+    },
+    "closing": {
+      "eyebrow": "Tan nhẹ",
+      "title": "Mang theo các khung — rồi tự tạo thời tiết của bạn trên phố.",
+      "body": "Kho lưu trữ kết thúc nơi bước chân bạn bắt đầu. Lang thang tỉnh thành để lấy bản đồ tâm trạng, thành phố để lấy thời tiết tính cách, tour để lấy vòng cung giác quan — để Việt Nam vẫn điện ảnh, con người, và đẹp vì chưa trọn.",
+      "cta_provinces": "Atlas tỉnh thành",
+      "cta_tours": "Hành trình tuyển chọn",
+      "cta_home": "Trang chủ →"
+    },
+    "chapters": {
+      "ch01": {
+        "scene": "01",
+        "title": "Đêm đèn lồng",
+        "verse": "Ánh lụa thương lượng với bóng cho đến khi phố quên vội.",
+        "body": "Một chương viết bằng hồng và đồng — phản chiếu trên nước, người bán khựng giữa câu, nguyên âm ẩm của chiều dịu vào hổ phách."
+      },
+      "ch02": {
+        "scene": "02",
+        "title": "Sương & thông",
+        "verse": "Núi mượn nét chì của mây; ruộng bậc xóa rồi trở lại.",
+        "body": "Nhựa thông và mưa bụi thành một mùi. Đường hẹp đến khi đèn pha như hội thoại — một vệt thừa nhận vệt kia qua ngữ pháp câm của sương."
+      },
+      "ch03": {
+        "scene": "03",
+        "title": "Bếp hẻm",
+        "verse": "Than reo sau cánh cửa khiêm tốn — bữa trước lời giới thiệu.",
+        "body": "Hơi nước mang cốt truyện: hành mồ hôi, nước mắm làm sáng không khí, ghế nhựa chiếm vỉa hè như dấu câu thật. Ồn là thân mật; cảm giác thèm là phương hướng."
+      },
+      "ch04": {
+        "scene": "04",
+        "title": "Im biển",
+        "verse": "Muối viết nét mảnh trên da; chân trời từ chối deadline.",
+        "body": "Vòng câu lưới lúc bình minh, mái che chào nhẹ, xe máy ôm cua chỗ thoảng mùi cá buổi trưa — bờ biển như thở ra, nhịp đo bằng thủy triều chứ không phải đồng hồ."
+      },
+      "ch05": {
+        "scene": "05",
+        "title": "Mưa neon",
+        "verse": "Màu loang trong vũng — thành phố như bản thảo ướt.",
+        "body": "Mưa hợp tác với đèn huỳnh quang; xe máy vẽ vệt sáng; mái tôn gõ nhịp bạn bước vào. Không gì vô trùng — chất liệu đến cùng âm thanh.",
+        "hint": "Mưa phố, biển loang màu, gợi chuyển động — không phải phô trương vì phô trương."
+      },
+      "ch06": {
+        "scene": "06",
+        "title": "Góc cà phê",
+        "verse": "Phin nhỏ giọt làm chậm đồng hồ; hơi nước là dấu câu riêng.",
+        "body": "Trứng bọt, ly chậm, gạch ghi vết ghế kéo suốt thập kỷ — quán như phòng biên tập nơi Việt Nam sửa chiều thành kiên nhẫn, hài và ngọt nhỏ."
+      },
+      "ch07": {
+        "scene": "07",
+        "title": "Ánh sông",
+        "verse": "Buổi sáng nhấc lên từng lớp mỏng — nước giữ trời cho đến khi cả hai đồng ý.",
+        "body": "Bờ kè mù sương, dây phơi vọng cầu, thuyền khâu dòng bằng kiên nhẫn diesel — sông sắp xếp thành phố theo cảm xúc trước khi sắp xếp bằng địa lý."
+      },
+      "ch08": {
+        "scene": "08",
+        "title": "Sân ẩn",
+        "verse": "Ngưỡng đổi được im — sân rung thời tiết riêng.",
+        "body": "Tường cups âm khác phố; bonsai và quần áo thương lượng nắng; trà nguội trong khi hàng xóm đổi tin qua giếng bóng — thần thoại mái ấm giữ trong gạch."
+      },
+      "ch09": {
+        "scene": "09",
+        "title": "Vọng phố tàu",
+        "verse": "Kim loại là hành lang; nhà nghiêng vào nhau đến khi còi tàu chỉnh lại không gian.",
+        "body": "Ghế gập, im bất ngờ, hơi thở chung người lạ — khoảng cách dựng mà không diễn. Tàu qua; đời thường trở lại như thủy triều."
+      },
+      "ch10": {
+        "scene": "10",
+        "title": "Đường núi",
+        "verse": "Cua dạy khiêm nhường; tầm nhìn đền bằng im lặng có thể mang trên người.",
+        "body": "Đèo phác thần kinh trước cái đẹp — ruộng bậc, đá vôi, sương xóa khoảng cách đến khi khúc sau giới thiệu lại thế giới với tương phản dịu hơn."
+      }
+    }
   }
 }

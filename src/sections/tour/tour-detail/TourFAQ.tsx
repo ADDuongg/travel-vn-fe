@@ -11,17 +11,23 @@ import { Minus, Plus } from 'lucide-react';
 
 const FAQ_IDS = ['faq_1', 'faq_2', 'faq_3', 'faq_4', 'faq_5'] as const;
 
-const TourFAQ: React.FC = () => {
+type TourFAQProps = {
+  embedded?: boolean;
+  omitHeading?: boolean;
+};
+
+const TourFAQ: React.FC<TourFAQProps> = ({ embedded, omitHeading }) => {
   const { t } = useTranslation();
-  return (
-    <section id="faq" className="scroll-mt-40">
+  const inner = (
       <Card className="border border-[rgba(28,26,20,0.1)] bg-white p-6 shadow-[var(--shadow-card)] sm:p-8">
-        <h2
-          className="mb-4 font-['Playfair_Display',serif] text-2xl font-bold text-[#1c1a14]"
-          style={{ fontFamily: 'var(--font-dm-serif-display, Georgia, serif)' }}
-        >
-          {t('tour.detail.faq_title', 'Common questions')}
-        </h2>
+        {!omitHeading ? (
+          <h2
+            className="mb-4 font-['Playfair_Display',serif] text-2xl font-bold text-[#1c1a14]"
+            style={{ fontFamily: 'var(--font-dm-serif-display, Georgia, serif)' }}
+          >
+            {t('tour.detail.faq_title', 'Common questions')}
+          </h2>
+        ) : null}
         <Accordion type="single" collapsible className="w-full">
           {FAQ_IDS.map((id) => (
             <AccordionItem
@@ -44,6 +50,15 @@ const TourFAQ: React.FC = () => {
           ))}
         </Accordion>
       </Card>
+  );
+
+  if (embedded) {
+    return inner;
+  }
+
+  return (
+    <section id="faq" className="scroll-mt-40">
+      {inner}
     </section>
   );
 };

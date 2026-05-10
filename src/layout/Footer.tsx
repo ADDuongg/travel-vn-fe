@@ -1,6 +1,8 @@
 import { DropdownLanguage } from '@components/DropdownLanguage';
+import { ROUTES } from '@/constants/router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 const paymentIcons = [
   '/images/paypal.png',
@@ -11,76 +13,78 @@ const paymentIcons = [
 
 const Footer: React.FC = () => {
   const { t } = useTranslation();
+
   return (
-    <footer className="bg-[#181818] text-gray-200 pt-12 pb-0">
-      <div className="max-w-[1400px] mx-auto px-4 md:px-8 lg:px-16 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-8">
-        {/* Brand */}
-        <div>
-          <h2 className="font-dm-serif-display text-2xl font-bold mb-6">
-            {t('footer.brand')}
-          </h2>
-          <div className="mb-6">
+    <footer className="border-t border-charcoal/10 bg-sand-100 px-4 py-16 md:px-10">
+      <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="space-y-4">
+          <p className="font-display text-3xl text-charcoal">{t('footer.brand')}</p>
+          <p className="max-w-sm text-sm leading-relaxed text-mist">{t('footer.tagline')}</p>
+          <div className="pt-2">
             <DropdownLanguage />
           </div>
         </div>
-        {/* Contact */}
-        <div>
-          <h3 className="font-dm-serif-display text-xl font-bold mb-6">
-            {t('footer.contact')}
-          </h3>
-          <div className="mb-2">T: 1-634-567-34</div>
-          <div className="mb-4">E: contact@traveltourtheme.co</div>
-          <div className="flex gap-4 text-xl">
-            <span className="cursor-pointer">&#xf09a;</span>
-            <span className="cursor-pointer">&#xf099;</span>
-            <span className="cursor-pointer">&#xf0d2;</span>
-            <span className="cursor-pointer">&#xe07b;</span>
-          </div>
+
+        <div className="space-y-3 text-sm">
+          <p className="text-[11px] uppercase tracking-[0.26em] text-charcoal/45">
+            {t('footer.column_explore')}
+          </p>
+          <Link className="block hover:text-sunset-deep" to={ROUTES.TOUR.INDEX}>
+            {t('footer.link_tours')}
+          </Link>
+          <Link className="block hover:text-sunset-deep" to={ROUTES.PROVINCE.INDEX}>
+            {t('footer.link_provinces')}
+          </Link>
+          <Link className="block hover:text-sunset-deep" to={ROUTES.DESTINATION.SEARCH}>
+            {t('footer.link_destination')}
+          </Link>
+          <Link className="block hover:text-sunset-deep" to={ROUTES.BLOG.INDEX}>
+            {t('footer.link_blog')}
+          </Link>
+          <Link className="block hover:text-sunset-deep" to={ROUTES.HOME}>
+            {t('home')}
+          </Link>
         </div>
-        {/* Useful Links */}
-        <div>
-          <h3 className="font-dm-serif-display text-xl font-bold mb-6">
-            {t('footer.useful_links')}
-          </h3>
-          <ul className="space-y-2">
-            <li>{t('footer.travel_blog_tips')}</li>
-            <li>{t('footer.working_with_us')}</li>
-            <li>{t('footer.be_our_partner')}</li>
-          </ul>
-        </div>
-        {/* Pay Safely */}
-        <div>
-          <h3 className="font-dm-serif-display text-xl font-bold mb-6">
+
+        <div className="space-y-3 text-sm">
+          <p className="text-[11px] uppercase tracking-[0.26em] text-charcoal/45">
+            {t('footer.column_note')}
+          </p>
+          <p className="text-mist">{t('footer.note_body')}</p>
+          <p className="text-[11px] uppercase tracking-[0.22em] text-charcoal/45">
             {t('footer.pay_safely')}
-          </h3>
-          <div className="mb-4 text-gray-400 text-base">
-            {t('footer.pay_safely_desc')}
-          </div>
-          <div className="flex gap-3">
+          </p>
+          <p className="text-sm text-mist">{t('footer.pay_safely_desc')}</p>
+          <div className="flex flex-wrap gap-3 pt-2">
             {paymentIcons.map((src, idx) => (
-              <img key={idx} src={src} alt="Payment" className="h-7 w-auto" />
+              <img key={idx} src={src} alt="" className="h-7 w-auto opacity-90" />
             ))}
           </div>
         </div>
       </div>
-      {/* Bottom bar */}
-      <div className="bg-[#111] py-4 px-4 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
-        <nav className="flex gap-6 mb-2 md:mb-0">
-          <a href="#" className="hover:text-white">
+
+      <div className="mx-auto mt-14 flex max-w-6xl flex-col items-center justify-between gap-4 border-t border-charcoal/10 pt-8 text-sm text-charcoal/45 md:flex-row md:items-start">
+        <nav className="flex flex-wrap justify-center gap-6 md:justify-start">
+          <Link to={ROUTES.HOME} className="transition-colors hover:text-sunset-deep">
             {t('home')}
-          </a>
-          <a href="#" className="hover:text-white">
-            {t('about_us')}
-          </a>
-          <a href="#" className="hover:text-white">
+          </Link>
+          <Link to={ROUTES.ABOUT_US} className="transition-colors hover:text-sunset-deep">
+            {t('nav.about_us')}
+          </Link>
+          <Link to={ROUTES.BLOG.INDEX} className="transition-colors hover:text-sunset-deep">
             {t('nav.blog')}
-          </a>
-          <a href="#" className="hover:text-white">
-            {t('contact')}
-          </a>
+          </Link>
+          <Link to={ROUTES.CONTACT} className="transition-colors hover:text-sunset-deep">
+            {t('nav.contact')}
+          </Link>
         </nav>
-        <div className="text-center md:text-right">{t('footer.copyright')}</div>
+        <p className="text-center text-[11px] uppercase tracking-[0.34em] text-charcoal/35 md:text-right">
+          {t('footer.bottom_tagline')}
+        </p>
       </div>
+      <p className="mx-auto mt-6 max-w-6xl text-center text-xs text-charcoal/40">
+        {t('footer.copyright')}
+      </p>
     </footer>
   );
 };

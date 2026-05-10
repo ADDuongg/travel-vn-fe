@@ -1,6 +1,8 @@
+import { motion, useReducedMotion } from 'framer-motion';
+import { forwardRef } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Ratings } from '@/components/ui/rating';
-import Container from '@/components/Container';
+import { ParallaxHero } from '@/components/home-editorial/ParallaxHero';
 import { FavoriteButton } from '@/features/favorites/FavoriteButton';
 import { FavoriteEntityType } from '@/features/favorites/types';
 import type { TourGuide } from '@/features/tour-guide/types';
@@ -17,90 +19,100 @@ type TourGuideHeaderProps = {
   reviewCount: number;
 };
 
-export function TourGuideHeader({
-  guide,
-  name,
-  avatar,
-  coverImage,
-  shortBio,
-  rating,
-  reviewCount,
-}: TourGuideHeaderProps) {
-  const { t } = useTranslation();
+export const TourGuideHeader = forwardRef<HTMLElement, TourGuideHeaderProps>(
+  function TourGuideHeader(
+    { guide, name, avatar, coverImage, shortBio, rating, reviewCount },
+    heroRef,
+  ) {
+    const { t } = useTranslation();
+    const reduceMotion = useReducedMotion();
 
-  return (
-    <section className="relative h-[320px] w-full overflow-hidden bg-slate-800 md:h-[380px]">
-      <img
-        src={coverImage}
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover opacity-70"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-      <div className="relative flex h-full flex-col justify-end px-4 pb-8 md:px-6 md:pb-10">
-        <Container className="flex flex-col md:flex-row md:items-end md:gap-8">
-          <img
-            src={avatar}
-            alt={name}
-            className="h-24 w-24 shrink-0 rounded-2xl border-4 border-white object-cover shadow-xl md:h-32 md:w-32"
-          />
-          <div className="mt-4 md:mt-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-2xl font-bold text-white md:text-3xl">{name}</h1>
-              <FavoriteButton
-                entityType={FavoriteEntityType.GUIDE}
-                entityId={guide._id}
-                initialIsFavorited={guide.isFavorited}
-                size="icon"
-                className="h-10 w-10 rounded-full border-white/20 bg-white/10 text-white hover:bg-white/15"
+    return (
+      <ParallaxHero
+        ref={heroRef}
+        image={coverImage}
+        heightClass="min-h-[min(92vh,900px)]"
+      >
+        <div className="flex flex-1 flex-col justify-end px-6 pb-16 pt-36 md:px-14 md:pb-24 md:pt-44">
+          <div className="mx-auto w-full max-w-7xl">
+            <motion.div
+              initial={reduceMotion ? undefined : { opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col gap-10 md:flex-row md:items-end md:gap-12"
+            >
+              <img
+                src={avatar}
+                alt={name}
+                className="h-40 w-40 shrink-0 rounded-[1.5rem] border-4 border-sand-50/90 object-cover shadow-[var(--shadow-soft)] md:h-44 md:w-44"
               />
-              {guide.isVerified && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/90 px-2.5 py-1 text-xs font-medium text-white">
-                  <FaCircleCheck className="h-3.5 w-3.5" />
-                  {t('tour_guide.verified')}
-                </span>
-              )}
-              <Badge
-                variant={guide.isAvailable ? 'default' : 'secondary'}
-                className={
-                  guide.isAvailable
-                    ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                    : 'bg-slate-500'
-                }
-              >
-                {guide.isAvailable
-                  ? t('tour_guide.available')
-                  : t('tour_guide.not_available')}
-              </Badge>
-            </div>
-            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-white/95">
-              {(rating > 0 || reviewCount > 0) && (
-                <div className="flex items-center gap-2">
-                  <Ratings
-                    rating={rating}
-                    variant="yellow"
-                    totalStars={5}
-                    readOnly
-                    size={18}
+              <div className="min-w-0 flex-1 space-y-5 text-sand-50">
+                <p className="text-[11px] uppercase tracking-[0.34em] text-sand-100/75">
+                  {t('tour_guide.hero_profile_kicker', 'Guide · Vietnam')}
+                </p>
+                <div className="flex flex-wrap items-end gap-3">
+                  <h1 className="font-display text-[clamp(2.35rem,5.8vw,3.85rem)] leading-[0.95] tracking-tight">
+                    {name}
+                  </h1>
+                  <FavoriteButton
+                    entityType={FavoriteEntityType.GUIDE}
+                    entityId={guide._id}
+                    initialIsFavorited={guide.isFavorited}
+                    size="icon"
+                    className="h-10 w-10 shrink-0 rounded-full border border-sand-100/25 bg-sand-50/10 text-sand-50 hover:bg-sand-50/18"
                   />
-                  <span className="text-sm font-medium">
-                    {rating.toFixed(1)} ({reviewCount} {t('tour_guide.reviews_count')})
-                  </span>
                 </div>
-              )}
-              {guide.yearsOfExperience != null && guide.yearsOfExperience > 0 && (
-                <span className="text-sm font-medium">
-                  {guide.yearsOfExperience} {t('tour_guide.years_experience')}
-                </span>
-              )}
-            </div>
-            {shortBio && (
-              <p className="mt-2 max-w-2xl text-sm text-white/90 line-clamp-2 md:text-base">
-                {shortBio}
-              </p>
-            )}
+
+                <div className="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-sand-100/90">
+                  {guide.isVerified ? (
+                    <span className="inline-flex items-center gap-1 rounded-full border border-sand-100/25 bg-forest/90 px-2.5 py-1.5 text-sand-50">
+                      <FaCircleCheck className="h-3 w-3" aria-hidden />
+                      {t('tour_guide.verified')}
+                    </span>
+                  ) : null}
+                  <Badge
+                    variant={guide.isAvailable ? 'default' : 'secondary'}
+                    className={
+                      guide.isAvailable
+                        ? 'border border-sand-100/20 bg-forest text-sand-50 hover:bg-forest/90'
+                        : 'border border-charcoal/20 bg-charcoal/60 text-sand-100'
+                    }
+                  >
+                    {guide.isAvailable
+                      ? t('tour_guide.available')
+                      : t('tour_guide.not_available')}
+                  </Badge>
+                  {(rating > 0 || reviewCount > 0) && (
+                    <span className="inline-flex items-center gap-2 text-sand-100/95">
+                      <Ratings
+                        rating={rating}
+                        variant="yellow"
+                        totalStars={5}
+                        readOnly
+                        size={16}
+                      />
+                      <span>
+                        {rating.toFixed(1)} · {reviewCount} {t('tour_guide.reviews_count')}
+                      </span>
+                    </span>
+                  )}
+                  {guide.yearsOfExperience != null && guide.yearsOfExperience > 0 ? (
+                    <span>
+                      {guide.yearsOfExperience} {t('tour_guide.years_experience')}
+                    </span>
+                  ) : null}
+                </div>
+
+                {shortBio ? (
+                  <p className="max-w-[52ch] text-base leading-relaxed text-sand-100/88 md:text-lg">
+                    {shortBio}
+                  </p>
+                ) : null}
+              </div>
+            </motion.div>
           </div>
-        </Container>
-      </div>
-    </section>
-  );
-}
+        </div>
+      </ParallaxHero>
+    );
+  },
+);
