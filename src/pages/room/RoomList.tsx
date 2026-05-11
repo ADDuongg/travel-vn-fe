@@ -1,38 +1,46 @@
-import { useMemo, useState } from 'react';
-import { MainLayout } from '@/layout';
-import Container from '@/components/Container';
-import { PageHero } from '@/components/PageHero';
+import { motion, useReducedMotion } from 'framer-motion';
+import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { MainLayout } from '@/layout';
+import { ParallaxHero } from '@/components/home-editorial/ParallaxHero';
+import { Reveal } from '@/components/home-editorial/Reveal';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/hooks/useLanguage';
-import { useRoomsQuery } from '@/features/rooms/hooks';
-import RoomCard, {
-  RoomCardSkeleton,
-} from '@/sections/room/components/RoomCard';
-import RoomFilter from '@/sections/room/components/RoomFilter';
-import { RoomListHeroSearch } from '@/sections/room/components/RoomListHeroSearch';
-import DisplayItemType from '@/sections/shared/DisplayItemType';
-import DisplayContainer from '@/components/DisplayContainer';
-import { EnumDisplayItem } from '@/constants/commons';
-import type { RoomQueryParams } from '@/features/rooms/types';
+import {
+  useRoomsInfiniteQuery,
+  type RoomsInfiniteListParams,
+} from '@/features/rooms/hooks';
 import {
   defaultRoomListQuery,
   type RoomListQuery,
 } from '@/sections/room/room-list-query';
-import { Button } from '@/components/ui/button';
-import { MapPin, Sparkles } from 'lucide-react';
-import ServerPagination from '@/shared/pagination/ServerPagination';
+import RoomFilter from '@/sections/room/components/RoomFilter';
+import {
+  RoomEditorialListCard,
+  RoomEditorialListCardSkeleton,
+} from '@/sections/room/components/RoomEditorialListCard';
+import { RoomEditorialListFilters } from '@/sections/room/components/RoomEditorialListFilters';
+import { ROUTES } from '@/constants/router';
 
-const HERO_VN =
-  'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1920&h=1080&auto=format&fit=crop&q=80';
+const HERO_IMAGE =
+  'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-4.1.0&auto=format&fit=crop&q=85&w=2400';
 
-function toQueryParams(value: RoomListQuery, page: number, language: string): RoomQueryParams {
-  const params: RoomQueryParams = {
-    page,
-    limit: 12,
+const PAGE_SIZE = 12;
+
+function toInfiniteParams(
+  value: RoomListQuery,
+  language: string,
+  debouncedSearch: string,
+): RoomsInfiniteListParams {
+  const params: RoomsInfiniteListParams = {
+    limit: PAGE_SIZE,
     lang: language,
     sortBy: value.sortBy,
   };
-  if (value.search.trim()) params.keyword = value.search.trim();
+  if (debouncedSearch.trim()) params.keyword = debouncedSearch.trim();
   if (value.provinceId) params.provinceId = value.provinceId;
   if (value.minPrice && !Number.isNaN(Number(value.minPrice))) {
     params.minPrice = Number(value.minPrice);
@@ -53,174 +61,210 @@ function toQueryParams(value: RoomListQuery, page: number, language: string): Ro
 const RoomListPage = () => {
   const { t } = useTranslation();
   const { language } = useLanguage();
-  const [displayType, setDisplayType] = useState<EnumDisplayItem>(
-    EnumDisplayItem.GRID,
-  );
-  const [query, setQuery] = useState<RoomListQuery>(defaultRoomListQuery);
-  const [currentPage, setCurrentPage] = useState(1);
+  const reduceMotion = useReducedMotion();
+  const [query, setQuery] = useState<RoomListQuery>({ ...defaultRoomListQuery });
+  const [debouncedSearch, setDebouncedSearch] = useState(query.search);
 
-  const roomQuery = useMemo(
-    () => toQueryParams(query, currentPage, language),
-    [query, currentPage, language],
-  );
-  const { data, isLoading } = useRoomsQuery(roomQuery);
+  useEffect(() => {
+    if (query.search === '') {
+      setDebouncedSearch('');
+      return;
+    }
+    const id = window.setTimeout(() => {
+      setDebouncedSearch(query.search);
+    }, 380);
+    return () => window.clearTimeout(id);
+  }, [query.search]);
 
-  const items = data?.items ?? [];
-  const pagination = data?.pagination;
-  const total = pagination?.total ?? items.length;
-  const totalPages = Math.max(1, pagination?.totalPages ?? 1);
-  const showingFrom = total ? (currentPage - 1) * (roomQuery.limit ?? 12) + 1 : 0;
-  const showingTo = Math.min(currentPage * (roomQuery.limit ?? 12), total);
+  const infiniteParams = useMemo(
+    () => toInfiniteParams(query, language, debouncedSearch),
+    [query, language, debouncedSearch],
+  );
+
+  const {
+    data,
+    isLoading,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useRoomsInfiniteQuery(infiniteParams);
+
+  const items = useMemo(
+    () => data?.pages.flatMap((p) => p.items) ?? [],
+    [data?.pages],
+  );
+
+  const totalCategories = data?.pages[0]?.pagination.total ?? items.length;
+
+  const showInitialSkeleton = isLoading && !data;
 
   return (
     <MainLayout>
-      <PageHero
-        backgroundImage={HERO_VN}
-        title={t('room.page.title', 'Find your perfect room')}
-        subtitle={t(
-          'room.page.subtitle',
-          'Comfortable stays, flexible options, and trusted room quality across Vietnam',
-        )}
-        badge={t('room.page.badge', 'Vietnam - curated room stays')}
-        contentClassName="min-h-[320px] justify-center pb-16 pt-24 md:min-h-[420px] md:pb-20 md:pt-32"
-        footerSlot={
-          <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-20 sm:h-28"
-            style={{
-              background:
-                'linear-gradient(180deg, transparent 0%, rgba(28,26,20,0.1) 22%, rgba(245,240,232,0.45) 58%, #ffffff 100%)',
-            }}
-            aria-hidden
-          />
-        }
-      >
-        <RoomListHeroSearch
-          onApply={({ search, provinceId }) => {
-            setCurrentPage(1);
-            setQuery((prev) => ({
-              ...prev,
-              search: search ?? '',
-              provinceId: provinceId ?? '',
-            }));
-          }}
-        />
-      </PageHero>
-
-      <div className="relative z-[3] -mt-3 sm:-mt-5">
-        <RoomFilter
-          value={query}
-          onChange={(next) => {
-            setCurrentPage(1);
-            setQuery(next);
-          }}
-          onReset={() => {
-            setCurrentPage(1);
-            setQuery(defaultRoomListQuery);
-          }}
-        />
-      </div>
-
-      <div className="bg-[#F8F8F6] pb-16 pt-6 sm:pt-7">
-        <Container>
-          <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-            <div>
-              <p className="text-sm text-[rgba(28,26,20,0.6)]">
-                {isLoading
-                  ? t('common.loading')
-                  : t('room.list.showing', {
-                      from: showingFrom,
-                      to: showingTo,
-                      total,
-                      defaultValue:
-                        'Showing {{from}}-{{to}} of {{total}} rooms',
-                    })}
-              </p>
-              <h2
-                className="mt-1 text-2xl font-bold tracking-[-0.02em] text-[#1c1a14] sm:text-3xl"
-                style={{
-                  fontFamily:
-                    'var(--font-dm-serif-display, "Playfair Display", Georgia, serif)',
-                }}
-              >
-                {t('room.list.heading', 'Handpicked rooms for your trip')}
-              </h2>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="hidden size-4 text-[#2d6a4f] sm:block" aria-hidden />
-              <span className="text-sm text-[rgba(28,26,20,0.5)] sm:hidden">
-                {t('room.list.display', 'View')}
-              </span>
-              <DisplayItemType
-                displayType={displayType}
-                setDisplayType={setDisplayType}
-              />
-            </div>
-          </div>
-
-          {isLoading ? (
-            <DisplayContainer
-              displayType={displayType}
-              gridClassName="grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3"
+      <article>
+        <ParallaxHero image={HERO_IMAGE}>
+          <div className="flex flex-1 flex-col justify-end px-6 pb-14 pt-36 md:px-14 md:pb-20 md:pt-44">
+            <motion.div
+              initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : { duration: 0.75, ease: [0.22, 1, 0.36, 1] }
+              }
+              className="max-w-3xl space-y-5 text-sand-50"
             >
-              {Array.from({ length: 9 }).map((_, index) => (
-                <RoomCardSkeleton key={index} />
-              ))}
-            </DisplayContainer>
-          ) : items.length === 0 ? (
-            <div className="flex flex-col items-center rounded-2xl border border-dashed border-[rgba(28,26,20,0.2)] bg-[#faf7f2] px-6 py-20 text-center">
-              <Sparkles className="mb-4 size-10 text-[#c9922a]/80" aria-hidden />
-              <h3
-                className="text-xl font-semibold text-[#1c1a14]"
-                style={{
-                  fontFamily: 'var(--font-dm-serif-display, Georgia, serif)',
-                }}
-              >
-                {t('room.search.noResults', 'No rooms found')}
-              </h3>
-              <p className="mt-2 max-w-md text-sm text-[rgba(28,26,20,0.6)]">
+              <p className="text-[11px] uppercase tracking-[0.38em] text-sand-100/75">
                 {t(
-                  'room.list.empty_hint',
-                  'Try adjusting your filters or searching a different destination.',
+                  'room.editorial.hero_kicker',
+                  'Inventory · correspondence first',
                 )}
               </p>
+              <h1 className="font-display text-[clamp(2.5rem,6.5vw,4.5rem)] leading-[0.95]">
+                {t(
+                  'room.editorial.hero_title',
+                  'Rooms as typed inventory',
+                )}
+              </h1>
+              <p className="max-w-2xl text-lg text-sand-100/85">
+                {t(
+                  'room.editorial.hero_subtitle',
+                  'Same fields as the live catalog: nights, capacity, weekend tiers. Filters stay soft; holds stay human.',
+                )}
+              </p>
+            </motion.div>
+          </div>
+        </ParallaxHero>
+
+        <section className="mx-auto max-w-6xl px-4 py-14 md:px-10 md:py-20">
+          <Reveal className="mb-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            <div className="space-y-3">
+              <p className="text-[11px] uppercase tracking-[0.32em] text-forest">
+                {t('room.editorial.search_kicker', 'Search')}
+              </p>
+              <h2 className="font-display text-3xl text-charcoal md:text-4xl">
+                {t(
+                  'room.editorial.search_title',
+                  'Room, type, or property name',
+                )}
+              </h2>
+            </div>
+            <div className="w-full max-w-md space-y-2">
+              <Label htmlFor="room-editorial-search" className="text-charcoal/80">
+                {t('room.editorial.search_label', 'Find a room')}
+              </Label>
+              <Input
+                id="room-editorial-search"
+                value={query.search}
+                onChange={(e) =>
+                  setQuery((q) => ({ ...q, search: e.target.value }))
+                }
+                placeholder={t(
+                  'room.editorial.search_placeholder',
+                  'e.g. Indigo, courtyard, Huế…',
+                )}
+                autoComplete="off"
+                className="rounded-2xl border-charcoal/12 bg-sand-50/90 h-12 px-4"
+              />
+              <p className="text-xs text-mist">
+                {t(
+                  'room.editorial.search_hint',
+                  'Matches room name, type, property title, or address fragment.',
+                )}
+              </p>
+            </div>
+          </Reveal>
+        </section>
+
+        <RoomEditorialListFilters
+          value={query}
+          onChange={(next) => setQuery(next)}
+        />
+
+        <section className="mx-auto max-w-6xl px-4 py-10 md:px-10 md:py-12">
+          <Reveal className="mb-8 space-y-2">
+            <p className="text-[11px] uppercase tracking-[0.32em] text-forest">
+              {t('room.editorial.advanced_kicker', 'More filters')}
+            </p>
+            <p className="text-sm text-mist">
+              {t(
+                'room.editorial.advanced_hint',
+                'Dates, guests, amenities, and rating use the same API fields as before.',
+              )}
+            </p>
+          </Reveal>
+          <RoomFilter
+            embedded
+            value={query}
+            onChange={(next) => setQuery(next)}
+            onReset={() => setQuery({ ...defaultRoomListQuery })}
+          />
+        </section>
+
+        <section className="mx-auto max-w-6xl px-4 py-16 md:px-10 md:py-24">
+          <Reveal className="mb-12 space-y-3">
+            <p className="text-[11px] uppercase tracking-[0.32em] text-forest">
+              {t('room.editorial.catalog_kicker', 'Catalog')}
+            </p>
+            <h2 className="font-display text-4xl text-charcoal md:text-[2.75rem]">
+              {t('room.editorial.catalog_title', {
+                count: totalCategories,
+                defaultValue: '{{count}} room categories',
+              })}
+            </h2>
+          </Reveal>
+
+          <div className="grid gap-8 md:grid-cols-2">
+            {showInitialSkeleton
+              ? Array.from({ length: 4 }).map((_, i) => (
+                  <RoomEditorialListCardSkeleton key={i} />
+                ))
+              : items.map((room, i) => (
+                  <RoomEditorialListCard
+                    key={room._id}
+                    room={room}
+                    index={i}
+                    lang={language}
+                  />
+                ))}
+          </div>
+
+          {!showInitialSkeleton && items.length === 0 && !isFetching ? (
+            <p className="mt-16 text-center text-mist">
+              {t(
+                'room.editorial.empty',
+                'Nothing in this pairing: loosen price band or clear search.',
+              )}
+            </p>
+          ) : null}
+
+          {!showInitialSkeleton && hasNextPage ? (
+            <div className="mt-16 flex flex-col items-center gap-3">
               <Button
-                className="mt-6 cursor-pointer"
-                onClick={() => {
-                  setCurrentPage(1);
-                  setQuery(defaultRoomListQuery);
-                }}
+                type="button"
+                variant="outline"
+                className="cursor-pointer rounded-full border-charcoal/20 px-8 py-6 text-sm font-semibold text-charcoal hover:border-forest/40 hover:bg-sand-50"
+                disabled={isFetchingNextPage}
+                onClick={() => void fetchNextPage()}
               >
-                {t('room.list.clear_cta', 'Reset filters')}
+                {isFetchingNextPage
+                  ? t('room.editorial.load_more_loading', 'Loading…')
+                  : t('room.editorial.load_more', 'Load more rooms')}
               </Button>
             </div>
-          ) : (
-            <>
-              <DisplayContainer
-                displayType={displayType}
-                gridClassName="grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3"
-              >
-                {items.map((room) => (
-                  <RoomCard key={room._id} item={room} lang={language} />
-                ))}
-              </DisplayContainer>
+          ) : null}
 
-              {pagination && totalPages > 1 && (
-                <ServerPagination
-                  page={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={setCurrentPage}
-                  className="mt-10"
-                  labels={{
-                    previous: t('common.previous', 'Previous'),
-                    next: t('common.next', 'Next'),
-                    pageAriaLabel: t('room.pagination.page', 'Page'),
-                  }}
-                />
-              )}
-            </>
-          )}
-        </Container>
-      </div>
+          <Reveal className="mt-20">
+            <Link
+              to={ROUTES.HOTEL.INDEX}
+              className="inline-flex items-center gap-2 border-b border-charcoal/25 pb-0.5 text-sm font-semibold text-charcoal transition hover:border-forest/50 hover:text-sunset-deep"
+            >
+              {t('room.editorial.hotels_cta', 'Browse whole properties instead')}
+              <span aria-hidden>→</span>
+            </Link>
+          </Reveal>
+        </section>
+      </article>
     </MainLayout>
   );
 };

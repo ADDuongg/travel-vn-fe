@@ -3,19 +3,42 @@ import { ReviewEntityType } from '@/features/review/types';
 import EntityReviewSection from '@/components/EntityReviewSection/EntityReviewSection';
 import { useTranslation } from 'react-i18next';
 import { Star } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const HotelReviews = ({
   hotel,
   paramId,
+  variant = 'default',
 }: {
   hotel: Hotel;
   paramId?: string;
+  variant?: 'default' | 'editorial';
 }) => {
   const { t } = useTranslation();
   const entityId = hotel._id || (hotel as { id?: string }).id || paramId || '';
   const total = hotel.ratingSummary?.total;
 
   if (!entityId) return null;
+
+  const inner = (
+    <div
+      className={cn(
+        variant === 'editorial'
+          ? 'rounded-[1.35rem] border border-charcoal/10 bg-sand-50 p-4 shadow-soft sm:p-6 md:p-8'
+          : 'rounded-2xl border border-[rgba(28,26,20,0.1)] p-4 shadow-sm sm:p-6 md:p-8',
+      )}
+    >
+      <EntityReviewSection
+        entityType={ReviewEntityType.HOTEL}
+        entityId={entityId}
+        ratingSummary={hotel.ratingSummary ?? undefined}
+      />
+    </div>
+  );
+
+  if (variant === 'editorial') {
+    return inner;
+  }
 
   return (
     <section id="reviews" className="scroll-mt-36 py-12 lg:py-16">
@@ -43,13 +66,7 @@ const HotelReviews = ({
           )}
         </div>
       </div>
-      <div className="rounded-2xl border border-[rgba(28,26,20,0.1)] p-4 shadow-sm sm:p-6 md:p-8">
-        <EntityReviewSection
-          entityType={ReviewEntityType.HOTEL}
-          entityId={entityId}
-          ratingSummary={hotel.ratingSummary ?? undefined}
-        />
-      </div>
+      {inner}
     </section>
   );
 };

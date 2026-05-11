@@ -26,7 +26,7 @@ const RoomRelated: React.FC<RoomRelatedProps> = ({ currentRoomId }) => {
   if (!items.length && !isLoading) return null;
 
   return (
-    <section>
+    <section id="related" className="scroll-mt-28 md:scroll-mt-32">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-2">
         <h2
           className="font-['Playfair_Display',serif] text-2xl font-bold text-[#1c1a14] sm:text-3xl"

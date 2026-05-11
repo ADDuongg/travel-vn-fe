@@ -3,14 +3,14 @@ import { Reveal, RevealItem, Stagger } from '@/components/home-editorial/Reveal'
 import { ROUTES } from '@/constants/router';
 import { MainLayout } from '@/layout';
 import { motion, useReducedMotion } from 'framer-motion';
-import {
-  useEffect,
-  useRef,
-  useState,
-  type FormEvent,
-} from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import { useTourGuideQuery } from '@/features/tour-guide/hooks';
+import {
+  ContactEditorialInquiryForm,
+  type ContactEditorialConversationPick,
+} from '@/sections/shared/ContactEditorialInquiryForm';
 
 const u = (id: string) =>
   `https://images.unsplash.com/${id}?ixlib=rb-4.1.0&auto=format&fit=crop&q=85&w=2400`;
@@ -47,43 +47,30 @@ const atmosphereFrames = [
   { id: 'fog' as const, src: visuals.fog },
 ];
 
-const RESET_SENT_MS = 5200;
-
 const ContactPage = () => {
   const { t } = useTranslation();
   const reduceMotion = useReducedMotion();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [journeyInterest, setJourneyInterest] = useState('');
-  const [message, setMessage] = useState('');
+  const [searchParams] = useSearchParams();
+  const guideIdFromQuery = searchParams.get('guide');
+  const { data: linkedGuide } = useTourGuideQuery(guideIdFromQuery ?? undefined, {
+    enabled: !!guideIdFromQuery,
+  });
   const [focusKind, setFocusKind] = useState<ConversationId | null>(null);
-  const [sent, setSent] = useState(false);
-  const resetTimer = useRef<number | null>(null);
+  const [conversationPick, setConversationPick] =
+    useState<ContactEditorialConversationPick | null>(null);
 
-  useEffect(() => {
-    return () => {
-      if (resetTimer.current) window.clearTimeout(resetTimer.current);
-    };
-  }, []);
-
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (resetTimer.current) window.clearTimeout(resetTimer.current);
-    setSent(true);
-    resetTimer.current = window.setTimeout(() => {
-      resetTimer.current = null;
-      setSent(false);
-      setName('');
-      setEmail('');
-      setJourneyInterest('');
-      setMessage('');
-      setFocusKind(null);
-    }, RESET_SENT_MS);
-  }
+  const guideJourneyPrefill = useMemo(() => {
+    const gName = linkedGuide?.user?.fullName?.trim();
+    if (!gName) return undefined;
+    return t('tour_guide.detail.contact_prefill', { name: gName });
+  }, [linkedGuide, t]);
 
   function handleConversationClick(id: ConversationId) {
     setFocusKind(id);
-    setJourneyInterest(t(`contact_editorial.conversation.${id}.title`));
+    setConversationPick({
+      nonce: Date.now(),
+      title: t(`contact_editorial.conversation.${id}.title`),
+    });
   }
 
   return (
@@ -183,98 +170,11 @@ const ContactPage = () => {
               </Reveal>
 
               <Reveal delay={0.06} className="flex flex-col justify-center">
-                <div className="rounded-[1.85rem] border border-charcoal/10 bg-sand-50/75 p-8 shadow-soft backdrop-blur-md md:p-10">
-                  <p className="text-[11px] uppercase tracking-[0.3em] text-charcoal/45">
-                    {t('contact_editorial.form.eyebrow')}
-                  </p>
-                  <h3 className="mt-3 font-display text-3xl text-charcoal md:text-[2.35rem]">
-                    {t('contact_editorial.form.title')}
-                  </h3>
-                  <p className="mt-4 text-sm leading-relaxed text-mist md:text-[0.95rem]">
-                    {t('contact_editorial.form.intro')}
-                  </p>
-
-                  <form className="mt-10 space-y-6" onSubmit={handleSubmit}>
-                    <label className="block space-y-2">
-                      <span className="text-[11px] uppercase tracking-[0.22em] text-charcoal/40">
-                        {t('contact_editorial.form.label_name')}
-                      </span>
-                      <input
-                        required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        autoComplete="name"
-                        className="w-full rounded-2xl border border-charcoal/12 bg-sand-50/65 px-4 py-3 text-[0.95rem] text-charcoal shadow-inner outline-none ring-forest/0 transition placeholder:text-charcoal/35 focus:border-forest/35 focus:ring-2 focus:ring-forest/15"
-                        placeholder={t('contact_editorial.form.placeholder_name')}
-                      />
-                    </label>
-                    <label className="block space-y-2">
-                      <span className="text-[11px] uppercase tracking-[0.22em] text-charcoal/40">
-                        {t('contact_editorial.form.label_email')}
-                      </span>
-                      <input
-                        required
-                        type="email"
-                        dir="ltr"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        autoComplete="email"
-                        className="w-full rounded-2xl border border-charcoal/12 bg-sand-50/65 px-4 py-3 text-[0.95rem] text-charcoal shadow-inner outline-none ring-forest/0 transition placeholder:text-charcoal/35 focus:border-forest/35 focus:ring-2 focus:ring-forest/15"
-                        placeholder={t('contact_editorial.form.placeholder_email')}
-                      />
-                    </label>
-                    <label className="block space-y-2">
-                      <span className="text-[11px] uppercase tracking-[0.22em] text-charcoal/40">
-                        {t('contact_editorial.form.label_journey')}
-                      </span>
-                      <input
-                        value={journeyInterest}
-                        onChange={(e) => setJourneyInterest(e.target.value)}
-                        className="w-full rounded-2xl border border-charcoal/12 bg-sand-50/65 px-4 py-3 text-[0.95rem] text-charcoal shadow-inner outline-none ring-forest/0 transition placeholder:text-charcoal/35 focus:border-forest/35 focus:ring-2 focus:ring-forest/15"
-                        placeholder={t(
-                          'contact_editorial.form.placeholder_journey',
-                        )}
-                      />
-                    </label>
-                    <label className="block space-y-2">
-                      <span className="text-[11px] uppercase tracking-[0.22em] text-charcoal/40">
-                        {t('contact_editorial.form.label_message')}
-                      </span>
-                      <textarea
-                        required
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        rows={5}
-                        className="w-full resize-y rounded-2xl border border-charcoal/12 bg-sand-50/65 px-4 py-3 text-[0.95rem] leading-relaxed text-charcoal shadow-inner outline-none ring-forest/0 transition placeholder:text-charcoal/35 focus:border-forest/35 focus:ring-2 focus:ring-forest/15"
-                        placeholder={t(
-                          'contact_editorial.form.placeholder_message',
-                        )}
-                      />
-                    </label>
-
-                    <div className="flex flex-wrap items-center gap-4 pt-2">
-                      <button
-                        type="submit"
-                        className="rounded-full bg-charcoal px-8 py-3 text-sm font-semibold text-sand-50 shadow-soft transition hover:bg-charcoal/90"
-                      >
-                        {t('contact_editorial.form.submit')}
-                      </button>
-                      {sent ? (
-                        <motion.p
-                          initial={{ opacity: 0, y: 6 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="text-sm text-forest"
-                        >
-                          {t('contact_editorial.form.sent_message')}
-                        </motion.p>
-                      ) : (
-                        <p className="text-xs leading-relaxed text-charcoal/45">
-                          {t('contact_editorial.form.helper')}
-                        </p>
-                      )}
-                    </div>
-                  </form>
-                </div>
+                <ContactEditorialInquiryForm
+                  mode="page"
+                  guideJourneyPrefill={guideJourneyPrefill}
+                  conversationPick={conversationPick}
+                />
               </Reveal>
             </div>
           </div>

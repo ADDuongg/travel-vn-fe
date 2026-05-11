@@ -4,3 +4,8 @@ export { HotelMapSection } from './HotelMapSection';
 export { default as HotelReviews } from './HotelReviews';
 export { default as HotelRooms } from './HotelRooms';
 export { HotelFloatingContactBar } from './HotelFloatingContactBar';
+export { HotelEditorialMetaStrip } from './HotelEditorialMetaStrip';
+export { HotelEditorialStorySection } from './HotelEditorialStorySection';
+export { HotelEditorialGalleryGrid } from './HotelEditorialGalleryGrid';
+export { HotelEditorialPoliciesSection } from './HotelEditorialPoliciesSection';
+export { HotelEditorialPlanSection } from './HotelEditorialPlanSection';

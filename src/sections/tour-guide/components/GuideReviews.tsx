@@ -7,11 +7,30 @@ import type { TourGuide } from '@/features/tour-guide/types';
 
 interface GuideReviewsProps {
   guide: TourGuide | null | undefined;
+  /** Omit outer editorial shell when the page provides its own section heading (Open Design detail). */
+  embedded?: boolean;
 }
 
-const GuideReviews: React.FC<GuideReviewsProps> = ({ guide }) => {
+const GuideReviews: React.FC<GuideReviewsProps> = ({
+  guide,
+  embedded = false,
+}) => {
   const { t } = useTranslation();
   if (!guide?._id) return null;
+
+  const inner = (
+    <div className="rounded-[1.35rem] border border-charcoal/10 bg-sand-50/95 p-4 shadow-[var(--shadow-soft)] sm:p-6 md:p-8">
+      <EntityReviewSection
+        entityType={ReviewEntityType.GUIDE}
+        entityId={guide._id}
+        ratingSummary={guide.ratingSummary ?? undefined}
+      />
+    </div>
+  );
+
+  if (embedded) {
+    return inner;
+  }
 
   return (
     <div className="rounded-[2rem] border border-charcoal/12 bg-charcoal/[0.025] px-4 py-12 sm:px-8 sm:py-14 md:px-10 md:py-16">
@@ -28,14 +47,7 @@ const GuideReviews: React.FC<GuideReviewsProps> = ({ guide }) => {
           )}
         </p>
       </MagazineSectionHeading>
-
-      <div className="rounded-[1.35rem] border border-charcoal/10 bg-sand-50/95 p-4 shadow-[var(--shadow-soft)] sm:p-6 md:p-8">
-        <EntityReviewSection
-          entityType={ReviewEntityType.GUIDE}
-          entityId={guide._id}
-          ratingSummary={guide.ratingSummary ?? undefined}
-        />
-      </div>
+      {inner}
     </div>
   );
 };

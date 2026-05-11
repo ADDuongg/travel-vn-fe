@@ -10,11 +10,14 @@ export type TourGuideDetailNavItem = FloatingSectionNavItem;
 type TourGuideDetailFloatingNavProps = {
   visible: boolean;
   items: TourGuideDetailNavItem[];
+  /** Override fixed offset under main header (Open Design uses ~4.5rem / 5.5rem). */
+  stickyTopClassName?: string;
 };
 
 export function TourGuideDetailFloatingNav({
   visible,
   items,
+  stickyTopClassName,
 }: TourGuideDetailFloatingNavProps) {
   const { t } = useTranslation();
 
@@ -24,9 +27,12 @@ export function TourGuideDetailFloatingNav({
       items={items}
       ariaLabel={t('tour_guide.detail.nav_aria')}
       onNavigate={scrollToSectionAnchor}
-      navClassName="bg-sand-50/82"
-      buttonsRowClassName="max-h-[52vh] px-2 md:gap-1.5"
-      buttonClassName="sm:text-[10px]"
+      stickyTopClassName={
+        stickyTopClassName ?? 'top-[4.5rem] md:top-[5.5rem]'
+      }
+      navClassName="bg-sand-50/85"
+      buttonsRowClassName="max-h-[44vh] px-2 md:gap-2"
+      buttonClassName="md:px-3 md:text-[10px]"
     />
   );
 }

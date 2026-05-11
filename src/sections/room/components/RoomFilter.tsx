@@ -34,9 +34,16 @@ type RoomFilterProps = {
   value: RoomListQuery;
   onChange: (next: RoomListQuery) => void;
   onReset: () => void;
+  /** When true, drops sticky positioning for use inside editorial room list. */
+  embedded?: boolean;
 };
 
-const RoomFilter = ({ value, onChange, onReset }: RoomFilterProps) => {
+const RoomFilter = ({
+  value,
+  onChange,
+  onReset,
+  embedded = false,
+}: RoomFilterProps) => {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const { data: provinces } = useProvincesQuery();
@@ -80,7 +87,13 @@ const RoomFilter = ({ value, onChange, onReset }: RoomFilterProps) => {
   }, [t, value.sortBy]);
 
   return (
-    <div className="sticky top-[136px] z-30 w-full overflow-hidden rounded-t-2xl border border-[rgba(28,26,20,0.07)] border-b-[rgba(28,26,20,0.08)] border-t-white/55 bg-white/95 shadow-[0_-6px_32px_rgba(0,0,0,0.06),0_12px_40px_rgba(28,26,20,0.07)] backdrop-blur-md sm:rounded-t-3xl">
+    <div
+      className={
+        embedded
+          ? 'relative z-10 w-full overflow-hidden rounded-2xl border border-charcoal/10 bg-sand-50/95 shadow-soft backdrop-blur-md'
+          : 'sticky top-[136px] z-30 w-full overflow-hidden rounded-t-2xl border border-[rgba(28,26,20,0.07)] border-b-[rgba(28,26,20,0.08)] border-t-white/55 bg-white/95 shadow-[0_-6px_32px_rgba(0,0,0,0.06),0_12px_40px_rgba(28,26,20,0.07)] backdrop-blur-md sm:rounded-t-3xl'
+      }
+    >
       <div className="mx-auto max-w-7xl px-3 py-2.5 sm:px-6 sm:py-3">
         <div className="mb-2 flex min-w-0 items-center justify-between gap-2 sm:mb-0 sm:hidden">
           <div className="flex items-center gap-1.5 text-sm font-semibold text-[#1c1a14]">

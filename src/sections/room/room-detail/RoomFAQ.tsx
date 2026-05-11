@@ -25,7 +25,7 @@ const RoomFAQ = ({ room }: RoomFAQProps) => {
   if (!faqs.length) return null;
 
   return (
-    <section id="faq" className="scroll-mt-40">
+    <section id="faq" className="scroll-mt-28 md:scroll-mt-32">
       <Card className="border border-[rgba(28,26,20,0.1)] bg-white p-6 shadow-[var(--shadow-card)] sm:p-8">
         <h2
           className="mb-6 font-['Playfair_Display',serif] text-2xl font-bold text-[#1c1a14]"

@@ -26,14 +26,18 @@ export const reviewKeys = {
     [...reviewKeys.all, 'meList', params] as const,
 };
 
-export function useReviewsQuery(params: {
-  entityType: ReviewEntityType;
-  entityId: string;
-}) {
+export function useReviewsQuery(
+  params: {
+    entityType: ReviewEntityType;
+    entityId: string;
+  },
+  options?: { enabled?: boolean },
+) {
   return useQuery<Review[]>({
     queryKey: reviewKeys.list(params),
     queryFn: () => getReviews(params),
-    enabled: !!params.entityId,
+    enabled:
+      !!params.entityId && (options?.enabled !== false),
     staleTime: 5 * 60 * 1000,
   });
 }

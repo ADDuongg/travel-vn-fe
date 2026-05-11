@@ -9,9 +9,15 @@ import { cn } from '@/lib/utils';
 type HotelMapSectionProps = {
   hotel: Hotel;
   className?: string;
+  /** When true, render map grid only (no outer section or H2 — parent supplies headings). */
+  embedded?: boolean;
 };
 
-export function HotelMapSection({ hotel, className }: HotelMapSectionProps) {
+export function HotelMapSection({
+  hotel,
+  className,
+  embedded = false,
+}: HotelMapSectionProps) {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const lat = hotel.location?.lat;
@@ -43,27 +49,13 @@ export function HotelMapSection({ hotel, className }: HotelMapSectionProps) {
     });
   };
 
-  return (
-    <section
-      id="location"
-      className={cn('scroll-mt-36 border-b border-[rgba(28,26,20,0.08)] py-12 lg:py-16', className)}
+  const grid = (
+    <div
+      className={cn(
+        'grid gap-6 lg:grid-cols-12',
+        embedded ? className : undefined,
+      )}
     >
-      <h2
-        className="mb-2 text-2xl font-semibold text-[#1c1a14] sm:text-3xl"
-        style={{
-          fontFamily: 'var(--font-dm-serif-display, Georgia, serif)',
-        }}
-      >
-        {t('hotel.detail.location_title', 'Location')}
-      </h2>
-      <p className="mb-6 text-sm text-[rgba(28,26,20,0.65)]">
-        {t(
-          'hotel.detail.location_sub',
-          'See where you will stay and plan how to get there.',
-        )}
-      </p>
-
-      <div className="grid gap-6 lg:grid-cols-12">
         <div className="overflow-hidden rounded-2xl border border-[rgba(28,26,20,0.1)] bg-[#faf7f2] shadow-[var(--shadow-card)] lg:col-span-8">
           <iframe
             title={t('hotel.detail.map_frame_title', {
@@ -116,6 +108,35 @@ export function HotelMapSection({ hotel, className }: HotelMapSectionProps) {
           </div>
         </div>
       </div>
+  );
+
+  if (embedded) {
+    return grid;
+  }
+
+  return (
+    <section
+      id="location"
+      className={cn(
+        'scroll-mt-36 border-b border-[rgba(28,26,20,0.08)] py-12 lg:py-16',
+        className,
+      )}
+    >
+      <h2
+        className="mb-2 text-2xl font-semibold text-[#1c1a14] sm:text-3xl"
+        style={{
+          fontFamily: 'var(--font-dm-serif-display, Georgia, serif)',
+        }}
+      >
+        {t('hotel.detail.location_title', 'Location')}
+      </h2>
+      <p className="mb-6 text-sm text-[rgba(28,26,20,0.65)]">
+        {t(
+          'hotel.detail.location_sub',
+          'See where you will stay and plan how to get there.',
+        )}
+      </p>
+      {grid}
     </section>
   );
 }
