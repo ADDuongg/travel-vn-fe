@@ -6,7 +6,9 @@ export type NotifyMsg =
   | { titleKey: string; titleParams?: Record<string, unknown> };
 
 function resolve(m: NotifyMsg): string {
-  return typeof m === 'string' ? m : i18n.t(m.titleKey, m.titleParams);
+  return typeof m === 'string'
+    ? i18n.t(m)
+    : i18n.t(m.titleKey, m.titleParams);
 }
 
 export const notify = {

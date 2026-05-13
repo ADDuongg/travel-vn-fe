@@ -1,3 +1,4 @@
+import { resolveApiMessage } from '@/lib/api-message';
 import { notify } from '@/lib/notify';
 import {
   useMutation,
@@ -27,12 +28,22 @@ export type CreateMutationNotifyConfig = {
 };
 
 export function getMutationErrorDescription(err: unknown): string | undefined {
-  if (err && typeof err === 'object' && 'message' in err) {
-    const m = (err as { message: unknown }).message;
-    if (typeof m === 'string' && m.trim()) return m;
-    if (Array.isArray(m)) return m.map(String).join(', ');
+  if (!err || typeof err !== 'object') return undefined;
+
+  const o = err as Record<string, unknown>;
+  const messageKey =
+    typeof o.messageKey === 'string' && o.messageKey.trim()
+      ? o.messageKey.trim()
+      : undefined;
+
+  let raw: string | undefined;
+  if ('message' in o) {
+    const m = o.message;
+    if (typeof m === 'string' && m.trim()) raw = m;
+    else if (Array.isArray(m)) raw = m.map(String).join(', ');
   }
-  return undefined;
+
+  return resolveApiMessage(messageKey, raw);
 }
 
 type UseNotifyMutationOptions<TData, TError, TVariables, TContext> =

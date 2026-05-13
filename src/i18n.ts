@@ -14,7 +14,7 @@ i18n
 
     defaultNS: 'translation',
     /** Load with translation so notification keys resolve (nested paths use keySeparator). */
-    ns: ['translation', 'notification'],
+    ns: ['translation', 'notification', 'api'],
 
     detection: {
       order: ['localStorage', 'navigator'],

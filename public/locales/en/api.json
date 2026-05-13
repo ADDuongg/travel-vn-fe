@@ -1,0 +1,143 @@
+{
+  "common": {
+    "success": "Success",
+    "created": "Created",
+    "updated": "Updated",
+    "deleted": "Deleted",
+    "domain_error": "Request could not be completed",
+    "bad_request": "Invalid request",
+    "unauthorized": "Unauthorized",
+    "forbidden": "Forbidden",
+    "not_found": "Not found",
+    "conflict": "Conflict",
+    "validation_failed": "Validation failed",
+    "internal_error": "Internal server error",
+    "rate_limited": "Too many requests. Please try again later."
+  },
+  "auth": {
+    "login": {
+      "success": "Logged in successfully"
+    },
+    "register": {
+      "success": "Registered successfully",
+      "password_confirm_mismatch": "Password confirmation does not match",
+      "username_exists": "Username already exists"
+    },
+    "reset": {
+      "user_not_found": "User not found",
+      "user_no_email": "User does not have an email",
+      "password_too_short": "New password is too short",
+      "invalid_expired_token": "Invalid or expired reset token",
+      "invalid_token": "Invalid reset token",
+      "invalid_or_used_token": "Invalid or already used reset token",
+      "email_sent": "Password reset email sent",
+      "success": "Password has been reset successfully"
+    },
+    "token": {
+      "invalid_type": "Invalid token type"
+    },
+    "refresh": {
+      "token_not_found": "Refresh token not found",
+      "token_reuse": "Token reuse detected",
+      "expired": "Refresh token expired",
+      "invalid": "Invalid refresh token",
+      "success": "Session refreshed successfully"
+    },
+    "unauthorized": "Unauthorized",
+    "me": {
+      "user_not_found": "User not found",
+      "success": "Profile loaded"
+    },
+    "logout": {
+      "session_logged_out": "Session already logged out",
+      "success": "Logged out successfully",
+      "already": "Already logged out"
+    },
+    "logout_all": {
+      "success": "All sessions logged out successfully"
+    }
+  },
+  "user": {
+    "admin_portal_required": "Admin access required",
+    "account_inactive": "Account inactive",
+    "duplicate_username_email": "Username or email already exists",
+    "profile": {
+      "updated": "Profile updated successfully"
+    },
+    "created": "User created"
+  },
+  "language": {
+    "code_already_exists": "Language code already exists",
+    "not_found": "Language not found",
+    "created": "Language created successfully",
+    "updated": "Language updated successfully",
+    "deleted": "Language deleted successfully"
+  },
+  "booking": {
+    "room_not_found": "Room not found",
+    "invalid_check_in_out": "Invalid check-in / check-out",
+    "min_nights": "Minimum stay not met",
+    "max_nights": "Maximum stay exceeded",
+    "inventory_not_configured": "Room inventory is not configured",
+    "room_not_available": "Room not available",
+    "rooms_available_limit": "Not enough rooms available",
+    "exceed_max_guests": "Exceed max guests per room",
+    "exceed_max_adults": "Exceed max adults per room",
+    "exceed_max_children": "Exceed max children per room",
+    "not_found": "Booking not found",
+    "paid_cannot_update": "Paid booking cannot be updated",
+    "cancel_forbidden": "Only the booking owner or admin can cancel this booking",
+    "paid_must_refund_before_cancel": "Paid booking must be refunded before cancel",
+    "receipt_required": "Receipt image is required",
+    "already_paid_or_expired": "Booking already paid or expired",
+    "receipt_uploaded": "Receipt uploaded successfully",
+    "no_receipt": "No receipt",
+    "created": "Booking created successfully",
+    "updated": "Booking updated successfully",
+    "cancelled": "Booking cancelled successfully",
+    "receipt_verified": "Receipt verified successfully"
+  },
+  "tour": {
+    "slug_already_exists": "Tour slug already exists",
+    "code_already_exists": "Tour code already exists",
+    "invalid_departure_province": "Invalid departure province",
+    "invalid_destination_provinces": "Invalid destination province(s)",
+    "invalid_id": "Invalid tour ID",
+    "not_found": "Tour not found",
+    "created": "Tour created successfully",
+    "updated": "Tour updated successfully"
+  },
+  "payment": {
+    "bad_request": "Payment request could not be processed",
+    "booking_not_found": "Booking not found",
+    "not_found": "Payment not found",
+    "tour_booking_not_found": "Tour booking not found"
+  },
+  "pipe": {
+    "bad_request": "Invalid input"
+  },
+  "guards": {
+    "forbidden": "Access denied"
+  },
+  "rbac": {
+    "role_not_found": "Role not found",
+    "super_admin_immutable": "Role super_admin does not use role_permissions; use User.isSuperAdmin",
+    "bad_request": "Invalid RBAC request"
+  },
+  "blog": {
+    "not_found": "Blog post not found"
+  },
+  "room": {
+    "not_found": "Room not found"
+  },
+  "amenities": {
+    "not_found": "Amenity not found"
+  },
+  "otp": {
+    "bad_request": "Invalid OTP request",
+    "rate_limited": "OTP recently sent, please wait before requesting again"
+  },
+  "idempotency": {
+    "conflict": "Duplicate or conflicting idempotency request"
+  }
+}

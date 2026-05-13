@@ -1,3 +1,11 @@
+/** Shape of API error envelope (axios interceptor forwards these on rejected errors). */
+export type ApiErrorEnvelope = {
+  message: string;
+  messageKey?: string;
+  errorCode?: string;
+  requestId?: string;
+};
+
 export type ApiListResponse<T> = {
   data: T[];
   meta: PageMeta;

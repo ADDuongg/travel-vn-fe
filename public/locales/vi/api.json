@@ -1,0 +1,143 @@
+{
+  "common": {
+    "success": "Thành công",
+    "created": "Đã tạo",
+    "updated": "Đã cập nhật",
+    "deleted": "Đã xóa",
+    "domain_error": "Không thể hoàn tất yêu cầu",
+    "bad_request": "Yêu cầu không hợp lệ",
+    "unauthorized": "Chưa xác thực",
+    "forbidden": "Không có quyền truy cập",
+    "not_found": "Không tìm thấy",
+    "conflict": "Xung đột dữ liệu",
+    "validation_failed": "Xác thực không thành công",
+    "internal_error": "Lỗi máy chủ nội bộ",
+    "rate_limited": "Quá nhiều yêu cầu. Vui lòng thử lại sau."
+  },
+  "auth": {
+    "login": {
+      "success": "Đăng nhập thành công"
+    },
+    "register": {
+      "success": "Đăng ký thành công",
+      "password_confirm_mismatch": "Mật khẩu xác nhận không khớp",
+      "username_exists": "Tên đăng nhập đã tồn tại"
+    },
+    "reset": {
+      "user_not_found": "Không tìm thấy người dùng",
+      "user_no_email": "Tài khoản chưa có email",
+      "password_too_short": "Mật khẩu mới quá ngắn",
+      "invalid_expired_token": "Token đặt lại mật khẩu không hợp lệ hoặc đã hết hạn",
+      "invalid_token": "Token đặt lại mật khẩu không hợp lệ",
+      "invalid_or_used_token": "Token đặt lại mật khẩu không hợp lệ hoặc đã được sử dụng",
+      "email_sent": "Đã gửi email đặt lại mật khẩu",
+      "success": "Đặt lại mật khẩu thành công"
+    },
+    "token": {
+      "invalid_type": "Loại token không hợp lệ"
+    },
+    "refresh": {
+      "token_not_found": "Không tìm thấy refresh token",
+      "token_reuse": "Phát hiện tái sử dụng token",
+      "expired": "Refresh token đã hết hạn",
+      "invalid": "Refresh token không hợp lệ",
+      "success": "Làm mới phiên thành công"
+    },
+    "unauthorized": "Chưa xác thực",
+    "me": {
+      "user_not_found": "Không tìm thấy người dùng",
+      "success": "Đã tải hồ sơ"
+    },
+    "logout": {
+      "session_logged_out": "Phiên đã đăng xuất trước đó",
+      "success": "Đăng xuất thành công",
+      "already": "Đã đăng xuất"
+    },
+    "logout_all": {
+      "success": "Đã đăng xuất tất cả phiên thành công"
+    }
+  },
+  "user": {
+    "admin_portal_required": "Cần quyền truy cập admin",
+    "account_inactive": "Tài khoản chưa kích hoạt",
+    "duplicate_username_email": "Tên đăng nhập hoặc email đã tồn tại",
+    "profile": {
+      "updated": "Cập nhật hồ sơ thành công"
+    },
+    "created": "Đã tạo người dùng"
+  },
+  "language": {
+    "code_already_exists": "Mã ngôn ngữ đã tồn tại",
+    "not_found": "Không tìm thấy ngôn ngữ",
+    "created": "Tạo ngôn ngữ thành công",
+    "updated": "Cập nhật ngôn ngữ thành công",
+    "deleted": "Xóa ngôn ngữ thành công"
+  },
+  "booking": {
+    "room_not_found": "Không tìm thấy phòng",
+    "invalid_check_in_out": "Ngày nhận / trả phòng không hợp lệ",
+    "min_nights": "Chưa đạt số đêm tối thiểu",
+    "max_nights": "Vượt quá số đêm tối đa",
+    "inventory_not_configured": "Chưa cấu hình tồn kho phòng",
+    "room_not_available": "Phòng không còn trống",
+    "rooms_available_limit": "Không đủ phòng trống",
+    "exceed_max_guests": "Vượt quá số khách tối đa mỗi phòng",
+    "exceed_max_adults": "Vượt quá số người lớn tối đa mỗi phòng",
+    "exceed_max_children": "Vượt quá số trẻ em tối đa mỗi phòng",
+    "not_found": "Không tìm thấy booking",
+    "paid_cannot_update": "Booking đã thanh toán không thể chỉnh sửa",
+    "cancel_forbidden": "Chỉ chủ booking hoặc admin mới có thể hủy booking này",
+    "paid_must_refund_before_cancel": "Booking đã thanh toán cần hoàn tiền trước khi hủy",
+    "receipt_required": "Cần ảnh biên lai",
+    "already_paid_or_expired": "Booking đã thanh toán hoặc đã hết hạn",
+    "receipt_uploaded": "Tải biên lai lên thành công",
+    "no_receipt": "Chưa có biên lai",
+    "created": "Tạo booking thành công",
+    "updated": "Cập nhật booking thành công",
+    "cancelled": "Hủy booking thành công",
+    "receipt_verified": "Xác minh biên lai thành công"
+  },
+  "tour": {
+    "slug_already_exists": "Slug tour đã tồn tại",
+    "code_already_exists": "Mã tour đã tồn tại",
+    "invalid_departure_province": "Tỉnh khởi hành không hợp lệ",
+    "invalid_destination_provinces": "Tỉnh điểm đến không hợp lệ",
+    "invalid_id": "ID tour không hợp lệ",
+    "not_found": "Không tìm thấy tour",
+    "created": "Tạo tour thành công",
+    "updated": "Cập nhật tour thành công"
+  },
+  "payment": {
+    "bad_request": "Không thể xử lý yêu cầu thanh toán",
+    "booking_not_found": "Không tìm thấy booking",
+    "not_found": "Không tìm thấy thanh toán",
+    "tour_booking_not_found": "Không tìm thấy booking tour"
+  },
+  "pipe": {
+    "bad_request": "Dữ liệu đầu vào không hợp lệ"
+  },
+  "guards": {
+    "forbidden": "Truy cập bị từ chối"
+  },
+  "rbac": {
+    "role_not_found": "Không tìm thấy vai trò",
+    "super_admin_immutable": "Vai trò super_admin không dùng role_permissions; dùng User.isSuperAdmin",
+    "bad_request": "Yêu cầu RBAC không hợp lệ"
+  },
+  "blog": {
+    "not_found": "Không tìm thấy bài viết blog"
+  },
+  "room": {
+    "not_found": "Không tìm thấy phòng"
+  },
+  "amenities": {
+    "not_found": "Không tìm thấy tiện ích"
+  },
+  "otp": {
+    "bad_request": "Yêu cầu OTP không hợp lệ",
+    "rate_limited": "OTP vừa được gửi, vui lòng đợi trước khi yêu cầu lại"
+  },
+  "idempotency": {
+    "conflict": "Yêu cầu idempotency trùng lặp hoặc xung đột"
+  }
+}

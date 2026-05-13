@@ -47,12 +47,39 @@ class AxiosClient {
     this.client.interceptors.response.use(
       (res: AxiosResponse) => (res.config.rawResponse ? res : res.data?.data),
       (error) => {
-        const message =
-          error?.response?.data?.message ??
-          error?.message ??
-          'Unexpected error';
+        const data = error?.response?.data as
+          | {
+              message?: unknown;
+              messageKey?: unknown;
+              errorCode?: unknown;
+              requestId?: unknown;
+            }
+          | undefined;
 
-        return Promise.reject({ ...error, message });
+        const rawMsg = data?.message;
+        let message: string;
+        if (typeof rawMsg === 'string' && rawMsg.trim()) {
+          message = rawMsg;
+        } else if (Array.isArray(rawMsg)) {
+          message = rawMsg.map(String).join(', ');
+        } else {
+          message = error?.message ?? 'Unexpected error';
+        }
+
+        const messageKey =
+          typeof data?.messageKey === 'string' ? data.messageKey : undefined;
+        const errorCode =
+          typeof data?.errorCode === 'string' ? data.errorCode : undefined;
+        const requestId =
+          typeof data?.requestId === 'string' ? data.requestId : undefined;
+
+        return Promise.reject({
+          ...error,
+          message,
+          messageKey,
+          errorCode,
+          requestId,
+        });
       },
     );
   }
