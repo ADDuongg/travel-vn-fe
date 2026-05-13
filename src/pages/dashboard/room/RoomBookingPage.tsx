@@ -46,10 +46,10 @@ const StatusFilterBar: React.FC<{
           onClick={() => onChange(s)}
           className={cn(
             'shrink-0 snap-start rounded-full border px-3 py-1.5 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none',
-            'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3B82F6]/40 focus-visible:ring-offset-2',
+            'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest/35 focus-visible:ring-offset-2',
             isActive
-              ? 'border-[#1E3A8A] bg-[#1E3A8A] text-white shadow-sm'
-              : 'border-slate-200 bg-white text-slate-600 hover:border-[#3B82F6]/35 hover:bg-slate-50',
+              ? 'border-forest bg-forest text-sand-50 shadow-soft'
+              : 'border-charcoal/15 bg-card text-charcoal/75 hover:border-forest/25 hover:bg-charcoal/4',
           )}
         >
           {labels[s]}
@@ -108,20 +108,21 @@ const RoomBookingPage: React.FC = () => {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm sm:p-6">
-        <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 className="text-lg font-semibold tracking-tight text-[#1E3A8A] sm:text-xl">
-              {t('bookings.my_room_bookings')}
-            </h2>
-            <p className="mt-1 max-w-2xl text-sm text-slate-600">
-              {t('bookings.table_section_room_sub')}
-            </p>
-          </div>
-        </div>
+      <div className="rounded-2xl border border-charcoal/10 bg-gradient-to-br from-sand-100/90 via-sand-50 to-sand-100/85 p-5 shadow-soft sm:p-6">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal/45">
+          {t('bookings.dashboard_room_eyebrow')}
+        </p>
+        <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-charcoal sm:text-[1.65rem]">
+          {t('bookings.my_room_bookings')}
+        </h2>
+        <p className="mt-2 max-w-2xl text-pretty text-sm leading-relaxed text-charcoal/60 sm:text-base">
+          {t('bookings.table_section_room_sub')}
+        </p>
+      </div>
 
-        <div className="mt-5">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+      <div className="rounded-2xl border border-charcoal/10 bg-card p-4 shadow-soft sm:p-6">
+        <div className="mt-0">
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-charcoal/45">
             {t('bookings.table_filter_status')}
           </p>
           <StatusFilterBar

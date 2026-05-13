@@ -66,9 +66,9 @@ function reviewStatusBadgeClass(status: ReviewStatus | string) {
     case ReviewStatus.REJECTED:
       return 'border-rose-200 bg-rose-50 text-rose-900';
     case ReviewStatus.HIDDEN:
-      return 'border-border bg-slate-100 text-slate-800';
+      return 'border-charcoal/15 bg-sand-100/80 text-charcoal';
     default:
-      return 'border-border bg-slate-50 text-slate-800';
+      return 'border-charcoal/10 bg-sand-50 text-charcoal';
   }
 }
 
@@ -91,7 +91,7 @@ function RatingStars({ value }: { value?: number }) {
         <Star
           key={i}
           className={`size-4 shrink-0 ${
-            i < n ? 'fill-amber-400 text-amber-500' : 'text-slate-200'
+            i < n ? 'fill-amber-400 text-amber-500' : 'text-charcoal/20'
           }`}
           aria-hidden
         />
@@ -168,12 +168,12 @@ const MyReviewsPanel: React.FC = () => {
           const thumb = r.entitySummary?.thumbnailUrl;
           return (
             <div className="flex max-w-[min(100vw-8rem,22rem)] items-start gap-3">
-              <div className="size-12 shrink-0 overflow-hidden rounded-xl border border-border bg-vn-cream/50">
+              <div className="size-12 shrink-0 overflow-hidden rounded-xl border border-charcoal/10 bg-sand-50/80">
                 {thumb ? (
                   <img src={thumb} alt="" className="size-full object-cover" />
                 ) : (
                   <div
-                    className="flex size-full items-center justify-center text-[10px] font-medium text-slate-400"
+                    className="flex size-full items-center justify-center text-[10px] font-medium text-charcoal/40"
                     aria-hidden
                   >
                     —
@@ -181,7 +181,7 @@ const MyReviewsPanel: React.FC = () => {
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="font-medium leading-snug text-primary line-clamp-2">
+                <p className="font-medium leading-snug text-charcoal line-clamp-2">
                   {name}
                 </p>
               </div>
@@ -263,7 +263,7 @@ const MyReviewsPanel: React.FC = () => {
               size="sm"
               variant="outline"
               disabled={unsupported}
-              className="cursor-pointer border-primary/30 text-primary hover:bg-vn-red-soft/50"
+              className="cursor-pointer border-charcoal/15 text-charcoal hover:bg-charcoal/4"
               title={
                 unsupported
                   ? t('savedReviews.view_unsupported')
@@ -324,7 +324,7 @@ const MyReviewsPanel: React.FC = () => {
             value={entityFilter}
             onValueChange={(v) => setEntityFilter(v as EntityFilter)}
           >
-            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-border bg-white text-primary sm:w-[240px]">
+            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-charcoal/15 bg-card text-charcoal sm:w-[240px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -347,7 +347,7 @@ const MyReviewsPanel: React.FC = () => {
             value={statusFilter}
             onValueChange={(v) => setStatusFilter(v as StatusFilter)}
           >
-            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-border bg-white text-primary sm:w-[260px]">
+            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-charcoal/15 bg-card text-charcoal sm:w-[260px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -482,10 +482,18 @@ const MyFavoritesPanel: React.FC = () => {
       setActionError(null);
       setLoadingRowId(row._id);
       try {
-        await toggleMutation.mutateAsync({
-          entityType: row.entityType,
-          entityId: row.entityId,
-        });
+        await toggleMutation.mutateAsync(
+          {
+            entityType: row.entityType,
+            entityId: row.entityId,
+          },
+          {
+            notify: {
+              silentSuccess: false,
+              successKey: 'notifications.favorite.removed',
+            },
+          },
+        );
       } catch (e: unknown) {
         setActionError(
           (e as { message?: string })?.message ??
@@ -511,12 +519,12 @@ const MyFavoritesPanel: React.FC = () => {
           const total = r.entitySummary?.ratingSummary?.total;
           return (
             <div className="flex max-w-[min(100vw-8rem,22rem)] items-start gap-3">
-              <div className="size-12 shrink-0 overflow-hidden rounded-xl border border-border bg-vn-cream/50">
+              <div className="size-12 shrink-0 overflow-hidden rounded-xl border border-charcoal/10 bg-sand-50/80">
                 {thumb ? (
                   <img src={thumb} alt="" className="size-full object-cover" />
                 ) : (
                   <div
-                    className="flex size-full items-center justify-center text-[10px] font-medium text-slate-400"
+                    className="flex size-full items-center justify-center text-[10px] font-medium text-charcoal/40"
                     aria-hidden
                   >
                     —
@@ -524,7 +532,7 @@ const MyFavoritesPanel: React.FC = () => {
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="font-medium leading-snug text-primary line-clamp-2">
+                <p className="font-medium leading-snug text-charcoal line-clamp-2">
                   {name}
                 </p>
                 {rating != null && total != null && total > 0 && (
@@ -582,7 +590,7 @@ const MyFavoritesPanel: React.FC = () => {
                 disabled={
                   unsupported && r.entityType !== FavoriteEntityType.TOUR
                 }
-                className="cursor-pointer border-primary/30 text-primary hover:bg-vn-red-soft/50"
+                className="cursor-pointer border-charcoal/15 text-charcoal hover:bg-charcoal/4"
                 title={
                   unsupported && r.entityType !== FavoriteEntityType.TOUR
                     ? t('savedFavorites.view_unsupported')
@@ -671,7 +679,7 @@ const MyFavoritesPanel: React.FC = () => {
             value={entityFilter}
             onValueChange={(v) => setEntityFilter(v as FavoriteEntityFilter)}
           >
-            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-border bg-white text-primary sm:w-[240px]">
+            <SelectTrigger className="h-10 w-full min-w-[200px] max-w-sm cursor-pointer border-charcoal/15 bg-card text-charcoal sm:w-[240px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -736,33 +744,36 @@ const DashboardSavedPage: React.FC = () => {
   return (
     <div className="flex-1 space-y-6">
       <div>
-        <h1 className="text-xl font-semibold tracking-tight text-primary sm:text-2xl">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal/45">
+          {t('savedReviews.page_eyebrow')}
+        </p>
+        <h1 className="mt-2 font-display text-2xl font-semibold tracking-tight text-charcoal sm:text-[1.75rem]">
           {t('savedReviews.page_title')}
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground sm:text-base">
+        <p className="mt-2 text-sm text-charcoal/60 sm:text-base">
           {t('savedReviews.page_subtitle')}
         </p>
       </div>
 
-      <Card className="overflow-hidden rounded-2xl border-border/90 bg-white shadow-sm">
-        <CardHeader className="border-b border-border bg-vn-cream/50/80 px-4 py-4 sm:px-6">
-          <CardTitle className="flex items-center gap-2 text-lg font-semibold text-primary">
-            <MessageSquareText className="size-5 text-primary" aria-hidden />
+      <Card className="overflow-hidden rounded-2xl border-charcoal/10 bg-card shadow-soft">
+        <CardHeader className="border-b border-charcoal/10 bg-sand-50/70 px-4 py-4 sm:px-6">
+          <CardTitle className="flex items-center gap-2 font-display text-lg font-semibold tracking-tight text-charcoal">
+            <MessageSquareText className="size-5 text-forest" aria-hidden />
             {t('savedReviews.card_title')}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-4 sm:p-6">
           <Tabs value={activeTab} onValueChange={setTab} className="w-full">
-            <TabsList className="mb-6 h-auto w-full justify-start gap-6 border-b border-border bg-transparent p-0">
+            <TabsList className="mb-6 h-auto w-full justify-start gap-6 border-b border-charcoal/10 bg-transparent p-0">
               <TabsTrigger
                 value="reviews"
-                className="cursor-pointer rounded-none border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-muted-foreground shadow-none transition-colors data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
+                className="cursor-pointer rounded-none border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-charcoal/55 shadow-none transition-colors data-[state=active]:border-forest data-[state=active]:bg-transparent data-[state=active]:text-charcoal data-[state=active]:shadow-none"
               >
                 {t('savedReviews.tab_reviews')}
               </TabsTrigger>
               <TabsTrigger
                 value="wishlist"
-                className="cursor-pointer rounded-none border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-muted-foreground shadow-none transition-colors data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary data-[state=active]:shadow-none"
+                className="cursor-pointer rounded-none border-b-2 border-transparent px-1 pb-3 text-sm font-medium text-charcoal/55 shadow-none transition-colors data-[state=active]:border-forest data-[state=active]:bg-transparent data-[state=active]:text-charcoal data-[state=active]:shadow-none"
               >
                 {t('savedReviews.tab_wishlist')}
               </TabsTrigger>

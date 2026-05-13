@@ -273,10 +273,12 @@ build:production:
 # Chi chay khi push/merge vao branch "staging".
 deploy:staging:
   stage: deploy
+
   script:
-    - cp docker-compose.staging.yml /opt/travel-fe/staging/docker-compose.staging.yml # thêm dòng này
+    - cp docker-compose.staging.yml /opt/travel-fe/staging/docker-compose.staging.yml
 
     - cd /opt/travel-fe/staging
+
     - echo "Login registry..."
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
@@ -287,19 +289,24 @@ deploy:staging:
     - docker compose -f docker-compose.staging.yml pull
 
     - echo "Restart container..."
-    - docker compose -f docker-compose.staging.yml up -d --force-recreate
+    - docker compose -f docker-compose.staging.yml up -d --no-deps frontend-staging
+
+    - echo "Cleanup old images..."
+    - docker image prune -af
 
     - echo "Health check..."
     - sleep 10
+
     - curl -f http://127.0.0.1:8080/health || exit 1
 
     - echo "Deploy staging success"
-  after_script:
-    - docker image prune -f || true
+
   rules:
     - if: '$CI_COMMIT_BRANCH == "staging"'
+
   environment:
     name: staging
+
   tags:
     - travel-staging
 
@@ -311,23 +318,36 @@ deploy:staging:
 # Tuong tu deploy:staging nhung dung production compose file va image tag.
 deploy:production:
   stage: deploy
+
   script:
     - cp docker-compose.production.yml /opt/travel-fe/production/docker-compose.production.yml
+
     - cd /opt/travel-fe/production
+
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
     - export IMAGE_TAG=prod-$CI_COMMIT_SHORT_SHA
+
     - docker compose -f docker-compose.production.yml pull
-    - docker compose -f docker-compose.production.yml up -d --force-recreate
+
+    - docker compose -f docker-compose.production.yml up -d --no-deps frontend-production
+
+    - docker image prune -af
+
     - echo "Health check..."
+
     - sleep 10
+
     - curl -f http://127.0.0.1:9080/health || exit 1
+
     - echo "Deploy production success"
-  after_script:
-    - docker image prune -f || true
+
   rules:
     - if: '$CI_COMMIT_BRANCH == "production"'
+
   environment:
     name: production
     url: https://yourdomain.com
+
   tags:
     - travel-production

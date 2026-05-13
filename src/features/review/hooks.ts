@@ -1,6 +1,7 @@
 // features/review/hooks.ts
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNotifyMutation } from '@/lib/mutation';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   deleteReview,
   getMyReviews,
@@ -87,8 +88,10 @@ export function useMyReviewsListQuery(
 export function useSubmitReview() {
   const qc = useQueryClient();
 
-  const mutation = useMutation({
+  const mutation = useNotifyMutation({
     mutationFn: submitReview,
+    successKey: 'notifications.review.submit_success',
+    errorKey: 'notifications.review.submit_error',
     onSuccess: (_, variables) => {
       invalidateEntityReviews(qc, {
         entityType: variables.entityType,
@@ -110,8 +113,10 @@ export function useSubmitReview() {
 export function useDeleteReview() {
   const qc = useQueryClient();
 
-  const mutation = useMutation({
+  const mutation = useNotifyMutation({
     mutationFn: deleteReview,
+    successKey: 'notifications.review.delete_success',
+    errorKey: 'notifications.review.delete_error',
     onSuccess: (_, variables) => {
       invalidateEntityReviews(qc, {
         entityType: variables.entityType,
@@ -133,8 +138,10 @@ export function useDeleteReview() {
 export function useEditReview() {
   const qc = useQueryClient();
 
-  const mutation = useMutation({
+  const mutation = useNotifyMutation({
     mutationFn: updateReview,
+    successKey: 'notifications.review.edit_success',
+    errorKey: 'notifications.review.edit_error',
     onSuccess: (_, variables) => {
       invalidateEntityReviews(qc, {
         entityType: variables.entityType,

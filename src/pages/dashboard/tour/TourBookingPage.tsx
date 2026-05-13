@@ -79,7 +79,7 @@ const TourActionsCell: React.FC<{ item: TourBookingListItem }> = ({ item }) => {
       <Button
         variant="outline"
         size="sm"
-        className="cursor-pointer border-[#1E3A8A]/25 font-medium text-[#1E3A8A] transition-colors hover:bg-[#1E3A8A]/5"
+        className="cursor-pointer border-charcoal/15 font-medium text-charcoal transition-colors hover:bg-charcoal/4"
         asChild
       >
         <Link
@@ -95,7 +95,7 @@ const TourActionsCell: React.FC<{ item: TourBookingListItem }> = ({ item }) => {
         <Button
           variant="default"
           size="sm"
-          className="cursor-pointer bg-[#CA8A04] font-medium text-white shadow-sm transition-colors hover:bg-[#B45309]"
+          className="cursor-pointer rounded-full bg-forest font-semibold text-sand-50 shadow-soft transition-colors hover:bg-forest/90"
           asChild
         >
           <Link to={ROUTES.TOUR_BOOKING_PAYMENT.replace(':id', item._id)}>
@@ -165,7 +165,7 @@ const useColumns = (): ColumnDef<TourBookingListItem>[] => {
                 ':code',
                 item.bookingCode,
               )}
-              className="cursor-pointer font-mono text-sm font-semibold text-[#2563EB] underline-offset-2 hover:text-[#1D4ED8] hover:underline"
+              className="cursor-pointer font-mono text-sm font-semibold text-forest underline-offset-2 hover:text-forest/85 hover:underline"
             >
               {item.bookingCode}
             </Link>
@@ -183,20 +183,20 @@ const useColumns = (): ColumnDef<TourBookingListItem>[] => {
             return (
               <Link
                 to={ROUTES.TOUR.DETAIL.replace(':id', id)}
-                className="cursor-pointer font-medium text-[#2563EB] underline-offset-2 hover:text-[#1D4ED8] hover:underline"
+                className="cursor-pointer font-medium text-forest underline-offset-2 hover:text-forest/85 hover:underline"
               >
                 {name}
               </Link>
             );
           }
-          return <span className="font-medium text-slate-800">{name}</span>;
+          return <span className="font-medium text-charcoal">{name}</span>;
         },
       },
       {
         accessorKey: 'departureDate',
         header: () => t('bookings.table_departure_date'),
         cell: ({ getValue }) => (
-          <span className="tabular-nums text-slate-800">
+          <span className="tabular-nums text-charcoal">
             {fmtDate(getValue<string>())}
           </span>
         ),
@@ -205,7 +205,7 @@ const useColumns = (): ColumnDef<TourBookingListItem>[] => {
         accessorKey: 'totalAmount',
         header: () => t('bookings.table_total'),
         cell: ({ row }) => (
-          <span className="font-semibold tabular-nums text-[#1E40AF]">
+          <span className="font-semibold tabular-nums text-charcoal">
             {fmtMoney(row.original.totalAmount, 'VND')}
           </span>
         ),
@@ -320,17 +320,20 @@ const TourBookingPage: React.FC = () => {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm sm:p-6">
-        <div>
-          <h2 className="text-lg font-semibold tracking-tight text-[#1E3A8A] sm:text-xl">
-            {t('bookings.my_tour_bookings')}
-          </h2>
-          <p className="mt-1 max-w-2xl text-sm text-slate-600">
-            {t('bookings.table_section_tour_sub')}
-          </p>
-        </div>
+      <div className="rounded-2xl border border-charcoal/10 bg-gradient-to-br from-sand-100/90 via-sand-50 to-sand-100/85 p-5 shadow-soft sm:p-6">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal/45">
+          {t('bookings.dashboard_tour_eyebrow')}
+        </p>
+        <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-charcoal sm:text-[1.65rem]">
+          {t('bookings.my_tour_bookings')}
+        </h2>
+        <p className="mt-2 max-w-2xl text-pretty text-sm leading-relaxed text-charcoal/60 sm:text-base">
+          {t('bookings.table_section_tour_sub')}
+        </p>
+      </div>
 
-        <div className="mt-6">
+      <div className="rounded-2xl border border-charcoal/10 bg-card p-4 shadow-soft sm:p-6">
+        <div className="mt-0">
           <DataTable
             columns={columns}
             data={tableData}

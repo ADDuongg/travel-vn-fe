@@ -60,7 +60,6 @@ const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
   const {
     handleSubmit,
     formState: { isSubmitting },
-    setError,
   } = methods;
 
   const selectableDates = availability.filter(
@@ -87,35 +86,29 @@ const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
     async (data: BookingFormValues) => {
       if (!tour?._id || !authUser?._id) return;
       setBookingSuccess(null);
-      try {
-        const adults = Math.max(1, parseInt(data.adults, 10) || 1);
-        const children = Math.max(0, parseInt(data.children, 10) || 0);
-        const infants = Math.max(0, parseInt(data.infants, 10) || 0);
-        const result = await createBooking.mutateAsync({
-          tourId: tour._id,
-          departureDate: data.departureDate,
-          guest: {
-            fullName: data.fullName,
-            email: data.email,
-            phone: data.phone || undefined,
-            note: data.note || undefined,
-          },
-          adults,
-          children,
-          infants,
-          userId: authUser._id,
-        });
-        setBookingSuccess({
-          bookingCode: result.bookingCode,
-          bookingId: result._id,
-        });
-      } catch (err: unknown) {
-        const message =
-          (err as { message?: string })?.message ?? 'Đặt tour thất bại';
-        setError('root', { type: 'manual', message });
-      }
+      const adults = Math.max(1, parseInt(data.adults, 10) || 1);
+      const children = Math.max(0, parseInt(data.children, 10) || 0);
+      const infants = Math.max(0, parseInt(data.infants, 10) || 0);
+      const result = await createBooking.mutateAsync({
+        tourId: tour._id,
+        departureDate: data.departureDate,
+        guest: {
+          fullName: data.fullName,
+          email: data.email,
+          phone: data.phone || undefined,
+          note: data.note || undefined,
+        },
+        adults,
+        children,
+        infants,
+        userId: authUser._id,
+      });
+      setBookingSuccess({
+        bookingCode: result.bookingCode,
+        bookingId: result._id,
+      });
     },
-    [tour?._id, authUser?._id, createBooking, setError],
+    [tour?._id, authUser?._id, createBooking],
   );
 
   const prevMonth = () => {

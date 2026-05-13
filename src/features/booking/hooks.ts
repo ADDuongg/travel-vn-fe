@@ -1,5 +1,6 @@
 // features/bookings/hooks/useMyBookings.ts
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNotifyMutation } from '@/lib/mutation';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getBookingById, getMyBookings, cancelBooking } from '../booking/api';
 import * as I from '@/types/api';
 import type { Booking } from '../shared/types';
@@ -60,8 +61,10 @@ export function useGetBookingById(id?: string) {
 /** PATCH bookings/:id/cancel – invalidates list & detail */
 export function useCancelRoomBookingMutation() {
   const qc = useQueryClient();
-  return useMutation({
+  return useNotifyMutation({
     mutationFn: (id: string) => cancelBooking(id),
+    successKey: 'notifications.booking.room.cancel_success',
+    errorKey: 'notifications.booking.room.cancel_error',
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: bookingKeys.all });
     },

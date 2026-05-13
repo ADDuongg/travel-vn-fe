@@ -45,7 +45,8 @@ const statusStyle: Record<string, string> = {
     'bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200/90 shadow-sm shadow-emerald-100/50',
   CANCELLED:
     'bg-rose-50 text-rose-800 ring-1 ring-rose-200/90 shadow-sm shadow-rose-100/50',
-  COMPLETED: 'bg-[#EFF6FF] text-[#1E40AF] ring-1 ring-[#3B82F6]/25 shadow-sm',
+  COMPLETED:
+    'bg-sand-100/90 text-charcoal ring-1 ring-charcoal/15 shadow-soft',
   REJECTED:
     'bg-rose-50 text-rose-800 ring-1 ring-rose-200/90 shadow-sm shadow-rose-100/50',
 };
@@ -91,7 +92,7 @@ const applySale = (base: number, sale?: SaleInfo) => {
 };
 
 const cardClass =
-  'rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm sm:p-6';
+  'rounded-2xl border border-charcoal/10 bg-card p-5 shadow-soft sm:p-6';
 
 const MyBookingDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -107,12 +108,8 @@ const MyBookingDetailPage: React.FC = () => {
 
   const handleCancel = async () => {
     if (!booking?._id || !window.confirm(t('bookings.confirm_cancel'))) return;
-    try {
-      await cancelMutation.mutateAsync(booking._id);
-      navigate(ROUTES.DASHBOARD.ROOM_BOOKINGS);
-    } catch {
-      // error already handled by mutation
-    }
+    await cancelMutation.mutateAsync(booking._id);
+    navigate(ROUTES.DASHBOARD.ROOM_BOOKINGS);
   };
 
   const summary = useMemo(() => {
@@ -235,25 +232,25 @@ const MyBookingDetailPage: React.FC = () => {
     <div className="space-y-6 font-dashboard-sans">
       <Link
         to={ROUTES.DASHBOARD.ROOM_BOOKINGS}
-        className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-[#2563EB] transition-colors duration-200 hover:text-[#1D4ED8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3B82F6]/40 focus-visible:ring-offset-2"
+        className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-forest transition-colors duration-200 hover:text-forest/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest/35 focus-visible:ring-offset-2"
       >
         <ArrowLeft className="size-4 shrink-0" aria-hidden />
         {t('bookings.back_to_my_bookings')}
       </Link>
 
       {/* Header */}
-      <header className={cn(cardClass, 'border-t-4 border-t-[#1E3A8A]')}>
+      <header className={cn(cardClass, 'border-t-4 border-t-forest')}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0 space-y-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
               {t('bookings.detail_title')}
             </p>
-            <h1 className="text-2xl font-bold tracking-tight text-[#1E3A8A] sm:text-3xl">
+            <h1 className="text-2xl font-bold tracking-tight text-charcoal sm:text-3xl">
               {summary?.id}
             </h1>
             <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate-600">
               <span className="inline-flex items-center gap-1">
-                <CalendarRange className="size-4 text-[#3B82F6]" aria-hidden />
+                <CalendarRange className="size-4 text-forest" aria-hidden />
                 {t('bookings.created_at')} {summary?.createdAt}
               </span>
               {summary?.nights ? (
@@ -269,7 +266,7 @@ const MyBookingDetailPage: React.FC = () => {
           <div className="flex flex-wrap gap-2">
             <Button
               variant="outline"
-              className="cursor-pointer border-slate-200 text-[#1E3A8A] shadow-sm transition-colors hover:bg-slate-50"
+              className="cursor-pointer border-charcoal/15 text-charcoal shadow-soft transition-colors hover:bg-charcoal/4"
               asChild
             >
               <Link to={ROUTES.DASHBOARD.ROOM_BOOKINGS}>
@@ -277,7 +274,7 @@ const MyBookingDetailPage: React.FC = () => {
               </Link>
             </Button>
             <Button
-              className="cursor-pointer bg-[#CA8A04] font-semibold text-white shadow-md transition-colors hover:bg-[#B45309] disabled:opacity-50"
+              className="cursor-pointer rounded-full bg-forest font-semibold text-sand-50 shadow-soft transition-colors hover:bg-forest/90 disabled:opacity-50"
               disabled={booking.paymentStatus !== 'UNPAID'}
               onClick={() => navigate(`/bookings/${booking._id}/payment`)}
             >
@@ -316,7 +313,7 @@ const MyBookingDetailPage: React.FC = () => {
             </div>
 
             <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <div className="rounded-xl border border-slate-100 bg-[#F8FAFC] p-4">
+              <div className="rounded-xl border border-slate-100 bg-sand-50/80 p-4">
                 <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
                   {t('bookings.payment')}
                 </p>
@@ -330,15 +327,15 @@ const MyBookingDetailPage: React.FC = () => {
                   {t(roomPaymentLabelKey(booking.paymentStatus))}
                 </p>
               </div>
-              <div className="rounded-xl border border-slate-100 bg-[#F8FAFC] p-4">
+              <div className="rounded-xl border border-slate-100 bg-sand-50/80 p-4">
                 <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
                   {t('bookings.total_amount')}
                 </p>
-                <p className="mt-2 text-base font-bold tabular-nums text-[#1E40AF]">
+                <p className="mt-2 text-base font-bold tabular-nums text-charcoal">
                   {computedAmount.toLocaleString()} {booking.currency}
                 </p>
               </div>
-              <div className="rounded-xl border border-slate-100 bg-[#F8FAFC] p-4">
+              <div className="rounded-xl border border-slate-100 bg-sand-50/80 p-4">
                 <p className="flex items-center gap-1 text-xs font-medium uppercase tracking-wide text-slate-500">
                   <User className="size-3.5" aria-hidden />
                   {t('bookings.contact')}
@@ -390,8 +387,8 @@ const MyBookingDetailPage: React.FC = () => {
           {/* Rooms */}
           <section className={cardClass}>
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-              <h2 className="flex items-center gap-2 text-base font-semibold text-[#1E3A8A]">
-                <Hotel className="size-5 text-[#3B82F6]" aria-hidden />
+              <h2 className="flex items-center gap-2 text-base font-semibold text-charcoal">
+                <Hotel className="size-5 text-forest" aria-hidden />
                 {t('bookings.rooms_and_stay')}
               </h2>
               <p className="text-xs font-medium text-slate-500">
@@ -403,9 +400,9 @@ const MyBookingDetailPage: React.FC = () => {
               {booking.rooms.map((r: any, index: number) => (
                 <li
                   key={index}
-                  className="flex flex-col gap-4 rounded-xl border border-slate-200/90 p-4 transition-all duration-200 hover:border-[#3B82F6]/35 hover:shadow-md motion-reduce:transition-none sm:flex-row"
+                  className="flex flex-col gap-4 rounded-xl border border-charcoal/10 p-4 transition-all duration-200 hover:border-forest/30 hover:shadow-soft motion-reduce:transition-none sm:flex-row"
                 >
-                  <div className="h-28 w-full shrink-0 overflow-hidden rounded-xl bg-[#F8FAFC] sm:h-auto sm:w-36">
+                  <div className="h-28 w-full shrink-0 overflow-hidden rounded-xl bg-sand-50/80 sm:h-auto sm:w-36">
                     {r.room.thumbnail?.url ? (
                       <img
                         src={r.room.thumbnail.url}
@@ -425,7 +422,7 @@ const MyBookingDetailPage: React.FC = () => {
                         {r.room.name || r.room.slug}
                       </p>
                       {r.room.roomType && (
-                        <span className="rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[11px] font-semibold text-[#1E40AF] ring-1 ring-[#3B82F6]/20">
+                        <span className="rounded-full bg-sand-100/90 px-2 py-0.5 text-[11px] font-semibold text-charcoal ring-1 ring-charcoal/15">
                           {r.room.roomType}
                         </span>
                       )}
@@ -466,7 +463,7 @@ const MyBookingDetailPage: React.FC = () => {
           {/* Price */}
           <section className={cardClass}>
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-              <h2 className="text-base font-semibold text-[#1E3A8A]">
+              <h2 className="text-base font-semibold text-charcoal">
                 {t('bookings.price_breakdown')}
               </h2>
               <p className="text-xs font-medium text-slate-500">
@@ -487,7 +484,7 @@ const MyBookingDetailPage: React.FC = () => {
                       ? `, ${room.guestsChildren} ${t('bookings.children_label')}`
                       : ''}
                   </span>
-                  <span className="shrink-0 font-semibold tabular-nums text-[#1E40AF]">
+                  <span className="shrink-0 font-semibold tabular-nums text-charcoal">
                     {room.total.toLocaleString()} {priceDetail.currency}
                   </span>
                 </div>
@@ -496,7 +493,7 @@ const MyBookingDetailPage: React.FC = () => {
                 <span className="font-medium text-slate-800">
                   {t('bookings.room_total')}
                 </span>
-                <span className="font-semibold tabular-nums text-[#1E40AF]">
+                <span className="font-semibold tabular-nums text-charcoal">
                   {computedAmount.toLocaleString()}{' '}
                   {priceDetail?.currency || booking.currency}
                 </span>
@@ -507,7 +504,7 @@ const MyBookingDetailPage: React.FC = () => {
               </div>
               <div className="flex flex-col justify-between gap-1 border-t border-slate-200 pt-4 text-base font-bold text-slate-900 sm:flex-row sm:items-center">
                 <span>{t('bookings.amount_due')}</span>
-                <span className="tabular-nums text-[#1E3A8A]">
+                <span className="tabular-nums text-charcoal">
                   {computedAmount.toLocaleString()}{' '}
                   {priceDetail?.currency || booking.currency}
                 </span>
@@ -522,7 +519,7 @@ const MyBookingDetailPage: React.FC = () => {
         >
           <div className="space-y-3 border-b border-slate-100 pb-5">
             <div className="flex items-center justify-between gap-2">
-              <h3 className="text-sm font-semibold text-[#1E3A8A]">
+              <h3 className="text-sm font-semibold text-charcoal">
                 {t('bookings.next_step')}
               </h3>
               <span
@@ -542,7 +539,7 @@ const MyBookingDetailPage: React.FC = () => {
 
           <div className="space-y-3 pt-5">
             <Button
-              className="w-full cursor-pointer border-[#1E3A8A]/25 text-[#1E3A8A] shadow-sm transition-colors hover:bg-[#1E3A8A]/5"
+              className="w-full cursor-pointer border-charcoal/15 text-charcoal shadow-soft transition-colors hover:bg-charcoal/4"
               variant="outline"
               onClick={() => setOpenReceiptModal(true)}
               disabled={booking.paymentStatus !== 'UNPAID'}
@@ -552,7 +549,7 @@ const MyBookingDetailPage: React.FC = () => {
             </Button>
 
             <Button
-              className="w-full cursor-pointer bg-[#CA8A04] font-semibold text-white shadow-md transition-colors hover:bg-[#B45309] disabled:opacity-50"
+              className="w-full cursor-pointer rounded-full bg-forest font-semibold text-sand-50 shadow-soft transition-colors hover:bg-forest/90 disabled:opacity-50"
               variant="default"
               disabled={booking.paymentStatus !== 'UNPAID'}
               onClick={() => navigate(`/bookings/${booking._id}/payment`)}
@@ -562,8 +559,8 @@ const MyBookingDetailPage: React.FC = () => {
             </Button>
 
             <Button
-              className="w-full cursor-pointer border-slate-200 text-slate-700 transition-colors hover:bg-slate-50"
-              variant="secondary"
+              className="w-full cursor-pointer border-charcoal/15 text-charcoal transition-colors hover:bg-charcoal/4"
+              variant="outline"
               onClick={() => navigate('/dashboard/support')}
               type="button"
             >
@@ -572,8 +569,8 @@ const MyBookingDetailPage: React.FC = () => {
             </Button>
           </div>
 
-          <div className="mt-6 rounded-xl border border-slate-200/90 bg-[#F8FAFC] p-4 text-xs leading-relaxed text-slate-600">
-            <p className="font-semibold text-[#1E3A8A]">
+          <div className="mt-6 rounded-xl border border-charcoal/10 bg-sand-50/80 p-4 text-xs leading-relaxed text-charcoal/65">
+            <p className="font-semibold text-charcoal">
               {t('bookings.need_help')}
             </p>
             <p className="mt-2">{t('bookings.need_help_tour_desc')}</p>

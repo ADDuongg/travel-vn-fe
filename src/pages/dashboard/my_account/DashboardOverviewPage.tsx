@@ -3,14 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useMe } from '@/features/auth/hooks';
 import { ROUTES } from '@/constants/router';
 import { cn } from '@/lib/utils';
-import {
-  ArrowRight,
-  BookOpen,
-  Heart,
-  MapPin,
-  Sparkles,
-  UserPen,
-} from 'lucide-react';
+import { ArrowRight, BookOpen, Heart, MapPin, UserPen } from 'lucide-react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -86,30 +79,24 @@ const DashboardOverviewPage: React.FC = () => {
 
   return (
     <div className="flex-1 space-y-6 sm:space-y-8">
-      {/* Welcome strip — kit colors */}
-      <div className="relative overflow-hidden rounded-2xl border border-[#1E3A8A]/15 bg-gradient-to-br from-[#1E3A8A] via-[#2563EB] to-[#3B82F6] p-6 text-white shadow-lg shadow-[#1E3A8A]/20 sm:p-8 motion-reduce:transition-none">
-        <div
-          className="pointer-events-none absolute -right-8 -top-8 size-40 rounded-full bg-white/10 blur-2xl"
-          aria-hidden
-        />
-        <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-4">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/25 backdrop-blur-sm">
-              <Sparkles className="size-6 text-amber-200" aria-hidden />
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold tracking-tight sm:text-xl">
-                Chào mừng trở lại
-                {!isLoading && name !== '—' ? `, ${name.split(/\s+/)[0]}` : ''}
-              </h2>
-              <p className="mt-1 max-w-md text-sm leading-relaxed text-blue-100 sm:text-base">
-                Tóm tắt tài khoản và lối tắt tới các mục hay dùng.
-              </p>
-            </div>
+      <div className="rounded-2xl border border-charcoal/10 bg-gradient-to-br from-sand-100/95 via-sand-50 to-sand-100/90 p-6 shadow-soft sm:p-8 motion-reduce:transition-none">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal/45">
+          Tổng quan
+        </p>
+        <div className="mt-4 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <div className="min-w-0">
+            <h2 className="font-display text-2xl font-semibold tracking-tight text-charcoal sm:text-[1.75rem]">
+              Chào mừng trở lại
+              {!isLoading && name !== '—' ? `, ${name.split(/\s+/)[0]}` : ''}
+            </h2>
+            <p className="mt-2 max-w-lg text-pretty text-sm leading-relaxed text-charcoal/60 sm:text-base">
+              Tóm tắt tài khoản và lối tắt tới những việc bạn hay làm — không vội,
+              cứ xem từng bước.
+            </p>
           </div>
           <Button
             asChild
-            className="h-11 cursor-pointer border-0 bg-[#CA8A04] text-white shadow-md transition-colors duration-200 hover:bg-[#B45309] focus-visible:ring-2 focus-visible:ring-amber-200"
+            className="h-11 shrink-0 cursor-pointer rounded-full border-0 bg-forest px-6 text-sm font-semibold text-sand-50 shadow-soft transition-colors duration-200 hover:bg-forest/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest/40 focus-visible:ring-offset-2"
           >
             <Link to={ROUTES.DASHBOARD.TOUR_BOOKINGS}>
               Xem đơn tour
@@ -123,7 +110,7 @@ const DashboardOverviewPage: React.FC = () => {
       <section aria-labelledby="quick-links-heading">
         <h2
           id="quick-links-heading"
-          className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500"
+          className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal/45"
         >
           Lối tắt
         </h2>
@@ -133,18 +120,20 @@ const DashboardOverviewPage: React.FC = () => {
               <Link
                 to={to}
                 className={cn(
-                  'group flex h-full cursor-pointer flex-col rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm transition-all duration-200',
-                  'hover:border-[#3B82F6]/35 hover:shadow-md motion-reduce:transition-none',
+                  'group flex h-full cursor-pointer flex-col rounded-2xl border border-charcoal/10 bg-card p-4 shadow-soft transition-all duration-200',
+                  'hover:-translate-y-0.5 hover:border-charcoal/18 hover:shadow-[var(--shadow-soft)] motion-reduce:transition-none motion-reduce:hover:translate-y-0',
                 )}
               >
-                <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-[#F8FAFC] text-[#1E3A8A] ring-1 ring-slate-200/80 transition-colors group-hover:bg-[#EFF6FF]">
+                <div className="mb-3 flex size-10 items-center justify-center rounded-xl border border-charcoal/10 bg-sand-50/90 text-charcoal/70 transition-colors group-hover:border-forest/25 group-hover:text-forest">
                   <Icon className="size-5" aria-hidden />
                 </div>
-                <span className="font-semibold text-[#1E40AF]">{title}</span>
-                <span className="mt-1 text-sm leading-snug text-slate-600">
+                <span className="font-display text-lg font-semibold tracking-tight text-charcoal">
+                  {title}
+                </span>
+                <span className="mt-1 text-sm leading-snug text-charcoal/60">
                   {description}
                 </span>
-                <span className="mt-3 inline-flex items-center text-sm font-medium text-[#2563EB]">
+                <span className="mt-3 inline-flex items-center text-sm font-medium text-forest">
                   Mở
                   <ArrowRight className="ml-1 size-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
@@ -155,16 +144,16 @@ const DashboardOverviewPage: React.FC = () => {
       </section>
 
       {/* Profile */}
-      <Card className="overflow-hidden rounded-2xl border-slate-200/90 bg-white shadow-sm">
-        <CardHeader className="flex flex-col gap-3 border-b border-slate-100 bg-[#F8FAFC]/80 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <CardTitle className="text-lg font-semibold text-[#1E3A8A]">
+      <Card className="overflow-hidden rounded-2xl border-charcoal/10 bg-card shadow-soft">
+        <CardHeader className="flex flex-col gap-3 border-b border-charcoal/10 bg-sand-50/70 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <CardTitle className="font-display text-xl font-semibold tracking-tight text-charcoal">
             Hồ sơ của tôi
           </CardTitle>
           <Button
             asChild
             variant="outline"
             size="sm"
-            className="cursor-pointer border-[#1E3A8A]/25 text-[#1E3A8A] hover:bg-[#1E3A8A]/5"
+            className="cursor-pointer border-charcoal/15 text-charcoal hover:bg-charcoal/4"
           >
             <Link to={ROUTES.DASHBOARD.PROFILE}>Chỉnh sửa</Link>
           </Button>
@@ -176,11 +165,11 @@ const DashboardOverviewPage: React.FC = () => {
                 <img
                   src={me?.avatar?.url}
                   alt={name !== '—' ? `Ảnh đại diện ${name}` : 'Ảnh đại diện'}
-                  className="size-24 rounded-2xl border border-slate-200 object-cover shadow-sm sm:size-28"
+                  className="size-24 rounded-2xl border border-charcoal/10 object-cover shadow-soft sm:size-28"
                 />
               ) : (
                 <div
-                  className="flex size-24 items-center justify-center rounded-2xl border border-slate-200 bg-gradient-to-br from-[#EEF2FF] to-[#F8FAFC] text-xl font-semibold text-[#1E3A8A] shadow-inner sm:size-28"
+                  className="flex size-24 items-center justify-center rounded-2xl border border-charcoal/10 bg-sand-100/80 font-display text-xl font-semibold text-charcoal shadow-inner sm:size-28"
                   aria-hidden={false}
                   role="img"
                   aria-label={`Avatar ${name}`}
@@ -191,56 +180,56 @@ const DashboardOverviewPage: React.FC = () => {
             </div>
             <dl className="grid min-w-0 flex-1 grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
               <div className="space-y-1">
-                <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                <dt className="text-xs font-medium uppercase tracking-wide text-charcoal/45">
                   Họ tên
                 </dt>
-                <dd className="text-sm font-medium text-[#1E40AF]">
+                <dd className="text-sm font-medium text-charcoal">
                   {isLoading ? '…' : name}
                 </dd>
               </div>
               <div className="space-y-1">
-                <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                <dt className="text-xs font-medium uppercase tracking-wide text-charcoal/45">
                   Email
                 </dt>
-                <dd className="break-all text-sm font-medium text-[#1E40AF]">
+                <dd className="break-all text-sm font-medium text-charcoal">
                   {isLoading ? '…' : email}
                 </dd>
               </div>
               <div className="space-y-1">
-                <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                <dt className="text-xs font-medium uppercase tracking-wide text-charcoal/45">
                   Điện thoại
                 </dt>
-                <dd className="text-sm font-medium text-[#1E40AF]">
+                <dd className="text-sm font-medium text-charcoal">
                   {isLoading ? '…' : phone}
                 </dd>
               </div>
               <div className="space-y-1">
-                <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                <dt className="text-xs font-medium uppercase tracking-wide text-charcoal/45">
                   Ngày sinh
                 </dt>
-                <dd className="text-sm font-medium text-[#1E40AF]">
+                <dd className="text-sm font-medium text-charcoal">
                   {isLoading ? '…' : birthDate}
                 </dd>
               </div>
               <div className="space-y-1">
-                <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                <dt className="text-xs font-medium uppercase tracking-wide text-charcoal/45">
                   Giới tính
                 </dt>
-                <dd className="text-sm font-medium text-[#1E40AF]">
+                <dd className="text-sm font-medium text-charcoal">
                   {isLoading ? '…' : gender}
                 </dd>
               </div>
               <div className="space-y-1">
-                <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                <dt className="text-xs font-medium uppercase tracking-wide text-charcoal/45">
                   Quốc gia
                 </dt>
-                <dd className="text-sm font-medium text-[#1E40AF]">—</dd>
+                <dd className="text-sm font-medium text-charcoal">—</dd>
               </div>
               <div className="space-y-1 sm:col-span-2">
-                <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                <dt className="text-xs font-medium uppercase tracking-wide text-charcoal/45">
                   Địa chỉ
                 </dt>
-                <dd className="text-sm leading-relaxed text-[#1E40AF]">
+                <dd className="text-sm leading-relaxed text-charcoal">
                   {isLoading ? '…' : addressText}
                 </dd>
               </div>

@@ -22,31 +22,31 @@ export function Pagination<T>({
   const safePageCount = Math.max(pageCount || 1, 1);
 
   return (
-    <div className="flex flex-col items-stretch gap-3 border-t border-slate-100 bg-[#F8FAFC]/40 px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-4 sm:py-3">
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-slate-600">
+    <div className="flex flex-col items-stretch gap-3 border-t border-charcoal/10 bg-sand-50/50 px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-4 sm:py-3">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-charcoal/65">
         <span>
           {t('bookings.table_page_label')}{' '}
-          <strong className="font-semibold text-[#1E3A8A]">
+          <strong className="font-semibold text-charcoal">
             {pageIndex + 1}
           </strong>{' '}
           {t('bookings.table_page_of')}{' '}
-          <strong className="font-semibold text-[#1E3A8A]">
+          <strong className="font-semibold text-charcoal">
             {safePageCount}
           </strong>
         </span>
         {typeof total === 'number' && (
-          <span className="text-slate-500">
-            · <strong className="font-semibold text-slate-700">{total}</strong>{' '}
+          <span className="text-charcoal/50">
+            · <strong className="font-semibold text-charcoal">{total}</strong>{' '}
             {t('bookings.table_rows_short')}
           </span>
         )}
-        <label className="inline-flex items-center gap-2 text-slate-600">
+        <label className="inline-flex items-center gap-2 text-charcoal/65">
           <span className="sr-only">{t('bookings.table_page_size_aria')}</span>
           <select
             className={cn(
-              'h-9 cursor-pointer rounded-lg border border-slate-200 bg-white px-2.5 text-sm font-medium',
-              'text-[#1E40AF] shadow-sm transition-colors duration-200',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3B82F6]/30',
+              'h-9 cursor-pointer rounded-lg border border-charcoal/15 bg-card px-2.5 text-sm font-medium',
+              'text-charcoal shadow-soft transition-colors duration-200',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest/30',
             )}
             value={pageSize}
             onChange={(e) => table.setPageSize(Number(e.target.value))}

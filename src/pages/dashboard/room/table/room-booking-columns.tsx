@@ -50,30 +50,30 @@ const MultiRoomPopover: React.FC<{ rooms: Booking['rooms'] }> = ({ rooms }) => {
         <button
           type="button"
           className={cn(
-            'cursor-pointer text-xs font-medium text-[#2563EB] underline-offset-2 transition-colors hover:text-[#1D4ED8] hover:underline',
+            'cursor-pointer text-xs font-medium text-forest underline-offset-2 transition-colors hover:text-forest/85 hover:underline',
           )}
         >
           +{rooms.length - 1} {t('bookings.more_rooms')}
         </button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-80 space-y-3 rounded-xl border-slate-200/90 p-4 shadow-lg">
-        <div className="font-semibold text-[#1E3A8A]">
+      <PopoverContent className="w-80 space-y-3 rounded-xl border-charcoal/10 bg-card p-4 shadow-soft">
+        <div className="font-display text-base font-semibold text-charcoal">
           {t('bookings.booked_rooms')}
         </div>
 
         {rooms.map((r, i) => (
           <div
             key={i}
-            className="space-y-1 rounded-lg border border-slate-100 bg-[#F8FAFC]/80 p-3 text-sm"
+            className="space-y-1 rounded-lg border border-charcoal/10 bg-sand-50/80 p-3 text-sm"
           >
-            <div className="font-medium text-slate-800">{r.room.name}</div>
+            <div className="font-medium text-charcoal">{r.room.name}</div>
 
-            <div className="text-xs text-slate-600 sm:text-sm">
+            <div className="text-xs text-charcoal/60 sm:text-sm">
               {fmtDate(r.checkIn)} → {fmtDate(r.checkOut)}
             </div>
 
-            <div className="text-xs text-slate-600">
+            <div className="text-xs text-charcoal/60">
               {r.guests.adults} {t('bookings.adults_label')}
               {r.guests.children
                 ? `, ${r.guests.children} ${t('bookings.children_label')}`
@@ -144,17 +144,17 @@ export const useColumns = (): ColumnDef<Booking>[] => {
               {room._id ? (
                 <Link
                   to={ROUTES.ROOM.DETAIL.replace(':id', room._id)}
-                  className="font-medium text-[#2563EB] underline-offset-2 transition-colors hover:text-[#1D4ED8] hover:underline"
+                  className="font-medium text-forest underline-offset-2 transition-colors hover:text-forest/85 hover:underline"
                 >
                   {room.name}
                 </Link>
               ) : (
-                <span className="font-medium text-slate-900">{room.name}</span>
+                <span className="font-medium text-charcoal">{room.name}</span>
               )}
 
-              <span className="text-xs text-slate-600">
+              <span className="text-xs text-charcoal/60">
                 {room.roomType && (
-                  <span className="font-semibold text-[#1E3A8A]">
+                  <span className="font-semibold text-charcoal">
                     {room.roomType}
                   </span>
                 )}
@@ -180,10 +180,10 @@ export const useColumns = (): ColumnDef<Booking>[] => {
 
           return (
             <div className="text-sm tabular-nums">
-              <div className="font-medium text-slate-800">
+              <div className="font-medium text-charcoal">
                 {fmtDate(r.checkIn)}
               </div>
-              <div className="text-xs text-slate-500 sm:text-sm">
+              <div className="text-xs text-charcoal/50 sm:text-sm">
                 → {fmtDate(r.checkOut)}
               </div>
             </div>
@@ -213,7 +213,7 @@ export const useColumns = (): ColumnDef<Booking>[] => {
         accessorKey: 'amount',
         header: () => t('bookings.table_total'),
         cell: ({ row }) => (
-          <span className="font-semibold tabular-nums text-[#1E40AF]">
+          <span className="font-semibold tabular-nums text-charcoal">
             {fmtMoney(row.original.amount, row.original.currency)}
           </span>
         ),
@@ -291,7 +291,7 @@ export const useColumns = (): ColumnDef<Booking>[] => {
           <Button
             variant="outline"
             size="sm"
-            className="cursor-pointer border-[#1E3A8A]/25 font-medium text-[#1E3A8A] transition-colors hover:bg-[#1E3A8A]/5"
+            className="cursor-pointer border-charcoal/15 font-medium text-charcoal transition-colors hover:bg-charcoal/4"
             asChild
           >
             <Link

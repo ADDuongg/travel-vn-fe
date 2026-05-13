@@ -214,7 +214,8 @@
     "remove": "Gỡ",
     "share": "Chia sẻ",
     "copied": "Đã sao chép",
-    "more": "thêm"
+    "more": "thêm",
+    "retry": "Thử lại"
   },
   "input": {
     "field_label": {
@@ -1177,7 +1178,12 @@
       "submit": "Gửi yêu cầu đặt phòng",
       "err_check_in": "Vui lòng chọn ngày nhận phòng",
       "err_check_out": "Vui lòng chọn ngày trả phòng",
-      "err_room_qty": "Vui lòng chọn số phòng"
+      "err_room_qty": "Vui lòng chọn số phòng",
+      "from": "Từ",
+      "book_now": "Đặt ngay",
+      "drawer_title": "Đặt phòng này",
+      "best_value": "Gợi ý lưu trú",
+      "sale_badge": "-{{percent}}% · có hạn"
     },
     "detail": {
       "not_found": "Không tìm thấy phòng",
@@ -1217,13 +1223,6 @@
       "price_asc": "Giá thấp đến cao",
       "price_desc": "Giá cao đến thấp",
       "rating_desc": "Đánh giá cao"
-    },
-    "booking": {
-      "from": "Từ",
-      "book_now": "Đặt ngay",
-      "drawer_title": "Đặt phòng này",
-      "best_value": "Gợi ý lưu trú",
-      "sale_badge": "-{{percent}}% · có hạn"
     },
     "confidence": {
       "title": "Đặt với sự yên tâm"
@@ -1445,6 +1444,8 @@
   "bookings": {
     "my_room_bookings": "Đơn phòng của tôi",
     "my_tour_bookings": "Đơn tour của tôi",
+    "dashboard_tour_eyebrow": "Đặt tour",
+    "dashboard_room_eyebrow": "Đặt phòng",
     "detail_title": "Chi tiết đặt phòng",
     "back_to_my_bookings": "← Đơn của tôi",
     "back_to_list": "Về danh sách",
@@ -1585,6 +1586,7 @@
   },
   "savedReviews": {
     "page_title": "Đánh giá & Yêu thích",
+    "page_eyebrow": "Đã lưu",
     "page_subtitle": "Quản lý đánh giá và danh sách yêu thích của bạn ở một nơi.",
     "card_title": "Đã lưu",
     "tab_reviews": "Đánh giá của tôi",
@@ -1849,6 +1851,7 @@
     "specialties_and_certifications": "Chuyên môn & Chứng chỉ",
     "reviews_section_title": "Đánh giá từ khách hàng",
     "register_title": "Đăng ký làm hướng dẫn viên",
+    "page_eyebrow": "Đất Việt · Hồ sơ hướng dẫn viên",
     "register_subtitle": "Tạo hồ sơ HDV chuyên nghiệp để admin xác minh và hiển thị cho khách hàng.",
     "register_status_title": "Trạng thái đăng ký",
     "register_status_desc": "Mỗi tài khoản chỉ đăng ký HDV một lần. Admin sẽ duyệt hồ sơ trước khi hiển thị công khai.",
@@ -1885,7 +1888,35 @@
     "register_error_title": "Đăng ký thất bại",
     "register_error_desc": "Không thể gửi đăng ký. Vui lòng thử lại sau.",
     "register_already_title": "Đã có hồ sơ HDV",
-    "register_already_desc": "Tài khoản của bạn đã có hồ sơ hướng dẫn viên. Vui lòng liên hệ admin nếu cần cập nhật thông tin."
+    "register_already_desc": "Tài khoản của bạn đã có hồ sơ hướng dẫn viên. Vui lòng liên hệ admin nếu cần cập nhật thông tin.",
+    "profile_title": "Hồ sơ hướng dẫn viên của bạn",
+    "profile_subtitle": "Cập nhật thông tin nghề nghiệp, CV và thư viện ảnh. Dữ liệu lưu dạng JSON sau khi tải file lên media.",
+    "profile_form_title": "Chỉnh sửa hồ sơ",
+    "profile_form_desc": "Tải CV hoặc ảnh mới qua media trước, rồi bấm lưu. Để xoá CV, dùng nút Xoá. Khi lưu, danh sách gallery gửi lên là toàn bộ danh sách bạn thấy bên dưới.",
+    "profile_load_error_title": "Không tải được hồ sơ",
+    "profile_load_error_desc": "Vui lòng đăng nhập và thử lại, hoặc bấm Thử lại.",
+    "field_cv": "CV / sơ yếu lý lịch",
+    "field_cv_upload": "Tải CV",
+    "field_cv_replace": "Thay CV",
+    "field_cv_remove": "Xoá CV",
+    "field_cv_help": "PDF hoặc ảnh. File được tải lên kho lưu trữ trước; hồ sơ chỉ lưu tham chiếu.",
+    "field_cv_uploading": "Đang tải CV…",
+    "field_gallery": "Thư viện ảnh",
+    "field_gallery_upload": "Thêm ảnh",
+    "field_gallery_help": "Ảnh được tải lên trước. Khi chỉnh gallery, lưu sẽ thay thế toàn bộ danh sách—giữ lại mọi ảnh bạn muốn trong danh sách.",
+    "field_gallery_empty": "Chưa có ảnh. Thêm tối đa {{max}} ảnh.",
+    "field_gallery_uploading": "Đang tải ảnh…",
+    "field_gallery_alt_placeholder": "Mô tả ảnh (tuỳ chọn)",
+    "field_gallery_move_up": "Lên trên",
+    "field_gallery_move_down": "Xuống dưới",
+    "field_gallery_max": "Tối đa {{max}} ảnh.",
+    "update_submit": "Lưu thay đổi",
+    "update_success_title": "Đã cập nhật hồ sơ",
+    "update_success_desc": "Hồ sơ HDV của bạn đã được lưu.",
+    "update_error_title": "Cập nhật thất bại",
+    "update_error_desc": "Không thể lưu hồ sơ. Vui lòng thử lại.",
+    "media_upload_error_title": "Tải lên thất bại",
+    "media_upload_error_desc": "Không thể tải file. Vui lòng thử lại."
   },
   "chatbot": {
     "title": "Trợ lý du lịch",
@@ -2432,6 +2463,77 @@
         "verse": "Cua dạy khiêm nhường; tầm nhìn đền bằng im lặng có thể mang trên người.",
         "body": "Đèo phác thần kinh trước cái đẹp — ruộng bậc, đá vôi, sương xóa khoảng cách đến khi khúc sau giới thiệu lại thế giới với tương phản dịu hơn."
       }
+    }
+  },
+  "notifications": {
+    "common": {
+      "error_fallback": "Đã có lỗi xảy ra"
+    },
+    "auth": {
+      "login_success": "Đăng nhập thành công",
+      "login_error": "Đăng nhập thất bại",
+      "register_success": "Tạo tài khoản thành công",
+      "register_error": "Đăng ký thất bại",
+      "logout_success": "Đã đăng xuất",
+      "forgot_request_sent": "Nếu có tài khoản, chúng tôi đã gửi hướng dẫn đặt lại mật khẩu.",
+      "forgot_request_error": "Không gửi được email đặt lại mật khẩu",
+      "forgot_reset_done": "Đã cập nhật mật khẩu. Bạn có thể đăng nhập.",
+      "forgot_reset_error": "Không đặt lại được mật khẩu",
+      "otp_sent": "Đã gửi mã xác minh",
+      "otp_send_error": "Không gửi được mã",
+      "otp_verified": "Đã xác minh email",
+      "otp_verify_error": "Mã không đúng hoặc đã hết hạn"
+    },
+    "booking": {
+      "room": {
+        "create_success": "Đã gửi yêu cầu đặt phòng",
+        "create_error": "Không gửi được yêu cầu đặt phòng",
+        "cancel_success": "Đã hủy đặt phòng",
+        "cancel_error": "Không hủy được đặt phòng"
+      },
+      "tour": {
+        "create_success": "Đặt tour thành công",
+        "create_error": "Đặt tour thất bại",
+        "delete_success": "Đã xóa đặt tour",
+        "delete_error": "Không xóa được đặt tour",
+        "cancel_success": "Đã hủy đặt tour",
+        "cancel_error": "Không hủy được đặt tour",
+        "receipt_uploaded": "Đã tải lên biên lai",
+        "receipt_upload_error": "Không tải lên được biên lai"
+      }
+    },
+    "review": {
+      "submit_success": "Đã đăng đánh giá",
+      "submit_error": "Không đăng được đánh giá",
+      "edit_success": "Đã cập nhật đánh giá",
+      "edit_error": "Không cập nhật được đánh giá",
+      "delete_success": "Đã xóa đánh giá",
+      "delete_error": "Không xóa được đánh giá"
+    },
+    "favorite": {
+      "added": "Đã lưu vào yêu thích",
+      "removed": "Đã bỏ khỏi yêu thích",
+      "error": "Không cập nhật được yêu thích"
+    },
+    "payment": {
+      "intent_error": "Không khởi tạo được thanh toán"
+    },
+    "media": {
+      "upload_success": "Tải lên thành công",
+      "upload_error": "Tải lên thất bại"
+    },
+    "inbox": {
+      "mark_all_read": "Đã đánh dấu đọc tất cả",
+      "mark_all_error": "Không đánh dấu đọc được"
+    },
+    "tour_guide": {
+      "register_success": "Đã gửi hồ sơ hướng dẫn viên",
+      "update_success": "Đã cập nhật hồ sơ",
+      "error": "Đã có lỗi xảy ra"
+    },
+    "profile": {
+      "update_success": "Đã lưu hồ sơ",
+      "update_error": "Không lưu được hồ sơ"
     }
   }
 }

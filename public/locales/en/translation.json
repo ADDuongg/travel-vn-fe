@@ -214,7 +214,8 @@
     "remove": "Remove",
     "share": "Share",
     "copied": "Copied",
-    "more": "more"
+    "more": "more",
+    "retry": "Retry"
   },
   "input": {
     "field_label": {
@@ -1177,7 +1178,12 @@
       "submit": "Submit booking request",
       "err_check_in": "Please select check-in date",
       "err_check_out": "Please select check-out date",
-      "err_room_qty": "Please select number of rooms"
+      "err_room_qty": "Please select number of rooms",
+      "from": "From",
+      "book_now": "Book now",
+      "drawer_title": "Book this room",
+      "best_value": "Recommended stay",
+      "sale_badge": "-{{percent}}% · limited"
     },
     "detail": {
       "not_found": "Room not found",
@@ -1217,13 +1223,6 @@
       "price_asc": "Price low to high",
       "price_desc": "Price high to low",
       "rating_desc": "Top rated"
-    },
-    "booking": {
-      "from": "From",
-      "book_now": "Book now",
-      "drawer_title": "Book this room",
-      "best_value": "Recommended stay",
-      "sale_badge": "-{{percent}}% · limited"
     },
     "confidence": {
       "title": "Book with confidence"
@@ -1445,6 +1444,8 @@
   "bookings": {
     "my_room_bookings": "My room bookings",
     "my_tour_bookings": "My tour bookings",
+    "dashboard_tour_eyebrow": "Tour bookings",
+    "dashboard_room_eyebrow": "Room bookings",
     "detail_title": "Booking detail",
     "back_to_my_bookings": "← My bookings",
     "back_to_list": "Back to list",
@@ -1585,6 +1586,7 @@
   },
   "savedReviews": {
     "page_title": "Reviews & wishlist",
+    "page_eyebrow": "Saved",
     "page_subtitle": "Manage your reviews and favorites in one place.",
     "card_title": "Saved",
     "tab_reviews": "My reviews",
@@ -1849,6 +1851,7 @@
     "specialties_and_certifications": "Specialties & Certifications",
     "reviews_section_title": "Customer reviews",
     "register_title": "Register as a tour guide",
+    "page_eyebrow": "Đất Việt · Tour guide profile",
     "register_subtitle": "Create a professional guide profile so admin can verify and publish you to customers.",
     "register_status_title": "Registration status",
     "register_status_desc": "You can only register once. Admin will review your profile before it is visible publicly.",
@@ -1885,7 +1888,35 @@
     "register_error_title": "Registration failed",
     "register_error_desc": "Could not submit registration. Please try again later.",
     "register_already_title": "Already registered",
-    "register_already_desc": "Your account already has a tour guide profile. Please contact admin if you need to update information."
+    "register_already_desc": "Your account already has a tour guide profile. Please contact admin if you need to update information.",
+    "profile_title": "Your tour guide profile",
+    "profile_subtitle": "Update your professional information, CV, and gallery. Changes are saved as JSON references after files are uploaded to media.",
+    "profile_form_title": "Edit profile",
+    "profile_form_desc": "Upload a new CV or images via media first; then save. To remove your CV, use Remove. Replacing the gallery sends the full list you see below.",
+    "profile_load_error_title": "Could not load your profile",
+    "profile_load_error_desc": "Please sign in and try again, or use Retry.",
+    "field_cv": "CV / resume",
+    "field_cv_upload": "Upload CV",
+    "field_cv_replace": "Replace CV",
+    "field_cv_remove": "Remove CV",
+    "field_cv_help": "PDF or image. File is uploaded to secure storage first; only the reference is saved with your profile.",
+    "field_cv_uploading": "Uploading CV…",
+    "field_gallery": "Gallery",
+    "field_gallery_upload": "Add photos",
+    "field_gallery_help": "Images are uploaded first. Editing the gallery replaces the entire list on save—keep every photo you want to keep in the list.",
+    "field_gallery_empty": "No photos yet. Add up to {{max}} images.",
+    "field_gallery_uploading": "Uploading photos…",
+    "field_gallery_alt_placeholder": "Image description (optional)",
+    "field_gallery_move_up": "Move up",
+    "field_gallery_move_down": "Move down",
+    "field_gallery_max": "You can add at most {{max}} images.",
+    "update_submit": "Save changes",
+    "update_success_title": "Profile updated",
+    "update_success_desc": "Your tour guide profile has been saved.",
+    "update_error_title": "Update failed",
+    "update_error_desc": "Could not save your profile. Please try again.",
+    "media_upload_error_title": "Upload failed",
+    "media_upload_error_desc": "Could not upload the file. Please try again."
   },
   "chatbot": {
     "title": "Travel Assistant",
@@ -2432,6 +2463,77 @@
         "verse": "Curves teach humility; vistas repay it with silence you can wear.",
         "body": "Switchbacks sketch nerve against beauty — rice terraces, limestone sentinels, mist erasing distance until the next bend reintroduces the world with gentler contrast."
       }
+    }
+  },
+  "notifications": {
+    "common": {
+      "error_fallback": "Something went wrong"
+    },
+    "auth": {
+      "login_success": "Signed in successfully",
+      "login_error": "Sign-in failed",
+      "register_success": "Account created",
+      "register_error": "Registration failed",
+      "logout_success": "Signed out",
+      "forgot_request_sent": "If an account exists, we sent reset instructions.",
+      "forgot_request_error": "Could not send reset email",
+      "forgot_reset_done": "Password updated. You can sign in now.",
+      "forgot_reset_error": "Could not reset password",
+      "otp_sent": "Verification code sent",
+      "otp_send_error": "Could not send code",
+      "otp_verified": "Email verified",
+      "otp_verify_error": "Invalid or expired code"
+    },
+    "booking": {
+      "room": {
+        "create_success": "Booking request submitted",
+        "create_error": "Could not submit booking",
+        "cancel_success": "Booking cancelled",
+        "cancel_error": "Could not cancel booking"
+      },
+      "tour": {
+        "create_success": "Tour booking created",
+        "create_error": "Could not book tour",
+        "delete_success": "Booking removed",
+        "delete_error": "Could not remove booking",
+        "cancel_success": "Tour booking cancelled",
+        "cancel_error": "Could not cancel tour booking",
+        "receipt_uploaded": "Receipt uploaded",
+        "receipt_upload_error": "Could not upload receipt"
+      }
+    },
+    "review": {
+      "submit_success": "Review published",
+      "submit_error": "Could not publish review",
+      "edit_success": "Review updated",
+      "edit_error": "Could not update review",
+      "delete_success": "Review removed",
+      "delete_error": "Could not remove review"
+    },
+    "favorite": {
+      "added": "Saved to favorites",
+      "removed": "Removed from favorites",
+      "error": "Could not update favorites"
+    },
+    "payment": {
+      "intent_error": "Could not start payment"
+    },
+    "media": {
+      "upload_success": "Upload complete",
+      "upload_error": "Upload failed"
+    },
+    "inbox": {
+      "mark_all_read": "All notifications marked read",
+      "mark_all_error": "Could not mark all as read"
+    },
+    "tour_guide": {
+      "register_success": "Tour guide profile submitted",
+      "update_success": "Profile updated",
+      "error": "Something went wrong"
+    },
+    "profile": {
+      "update_success": "Profile saved",
+      "update_error": "Could not save profile"
     }
   }
 }

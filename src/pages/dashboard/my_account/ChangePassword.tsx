@@ -41,14 +41,22 @@ const ChangePasswordPage: React.FC = () => {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="sr-only">Change Password</CardTitle>
-            <H3>Change Password</H3>
+        <Card className="overflow-hidden rounded-2xl border-charcoal/10 bg-card shadow-soft">
+          <CardHeader className="space-y-1 border-b border-charcoal/10 bg-sand-50/70 px-4 py-5 sm:px-6">
+            <CardTitle className="sr-only">Đổi mật khẩu</CardTitle>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal/45">
+              Bảo mật
+            </p>
+            <H3 className="font-display text-2xl font-semibold tracking-tight text-charcoal">
+              Đổi mật khẩu
+            </H3>
+            <p className="text-sm leading-relaxed text-charcoal/60">
+              Nhập mật khẩu hiện tại và mật khẩu mới bạn muốn sử dụng.
+            </p>
           </CardHeader>
 
-          <CardContent className="space-y-5">
-            <Row label="Old Password *">
+          <CardContent className="space-y-5 px-4 py-6 sm:px-6">
+            <Row label="Mật khẩu hiện tại *">
               <CustomInput
                 name="oldPassword"
                 type="password"
@@ -57,16 +65,16 @@ const ChangePasswordPage: React.FC = () => {
               />
             </Row>
 
-            <Row label="New Password *">
+            <Row label="Mật khẩu mới *">
               <CustomInput
                 name="newPassword"
                 type="password"
                 labelPosition="horizontal"
-                rules={{ required: 'Vui lòng nhập mật khẩu cũ' }}
+                rules={{ required: 'Vui lòng nhập mật khẩu mới' }}
               />
             </Row>
 
-            <Row label="Confirm Password *">
+            <Row label="Xác nhận mật khẩu *">
               <CustomInput
                 name="confirmPassword"
                 type="password"
@@ -75,9 +83,12 @@ const ChangePasswordPage: React.FC = () => {
               />
             </Row>
 
-            <div className="flex justify-start md:justify-center pt-2">
-              <Button type="submit" className="px-6">
-                {'Update Password'}
+            <div className="flex justify-start pt-2 md:justify-center">
+              <Button
+                type="submit"
+                className="min-w-[200px] rounded-full bg-forest px-8 font-semibold text-sand-50 shadow-soft transition-colors hover:bg-forest/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest/35 focus-visible:ring-offset-2"
+              >
+                Cập nhật mật khẩu
               </Button>
             </div>
           </CardContent>
@@ -93,7 +104,7 @@ const Row: React.FC<{ label: React.ReactNode; children: React.ReactNode }> = ({
   children,
 }) => (
   <div className="flex items-start gap-6">
-    <Label className="w-40 shrink-0 text-sm text-muted-foreground pt-2">
+    <Label className="w-40 shrink-0 pt-2 text-sm text-charcoal/55">
       {label}
     </Label>
     <div className="flex-1">{children}</div>

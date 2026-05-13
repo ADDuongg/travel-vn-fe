@@ -15,6 +15,23 @@ export interface TourGuideTranslation {
   specialtyItems?: string[];
 }
 
+/** CV reference (JSON body after MediaModule upload) */
+export interface TourGuideCv {
+  url: string;
+  publicId?: string;
+  filename?: string;
+  format?: string;
+}
+
+/** Gallery item (JSON body; full replace on PATCH when sent) */
+export interface TourGuideGalleryItem {
+  url: string;
+  publicId?: string;
+  alt?: string;
+  /** integer >= 0; BE may infer from index if omitted */
+  order?: number;
+}
+
 /** User info populated trên guide (public) */
 export interface TourGuideUserRef {
   _id: string;
@@ -42,7 +59,7 @@ export interface TourGuideListItem {
   certifications: string[];
   licenseNumber?: string;
   yearsOfExperience?: number;
-  gallery?: Array<{ url: string; publicId?: string; alt?: string }>;
+  gallery?: TourGuideGalleryItem[];
   ratingSummary: TourGuideRatingSummary;
   /** Tỷ lệ phản hồi (0–100) */
   responseRate?: number;
@@ -62,11 +79,7 @@ export interface TourGuideListItem {
 
 /** TourGuide – full detail (GET /api/v1/public/tour-guides/:id) */
 export interface TourGuide extends TourGuideListItem {
-  cv?: {
-    url: string;
-    publicId?: string;
-    filename?: string;
-  };
+  cv?: TourGuideCv;
   verifiedAt?: string;
 }
 
@@ -85,7 +98,8 @@ export interface TourGuideRegisterPayload {
   certifications?: string[];
   licenseNumber?: string;
   yearsOfExperience?: number;
-  gallery?: Array<{ url: string; publicId?: string; alt?: string }>;
+  cv?: TourGuideCv;
+  gallery?: TourGuideGalleryItem[];
   /** Tỷ lệ phản hồi (0–100) – optional, thường do hệ thống tính */
   responseRate?: number;
   /** Số chuyến đi hoàn tất – optional, thường do hệ thống tính */
@@ -97,6 +111,25 @@ export interface TourGuideRegisterPayload {
   currency?: string;
   contactMethods?: string[];
 }
+
+/** Partial update (PATCH /api/v1/client/tour-guides/my-profile) */
+export type TourGuideUpdatePayload = Partial<{
+  translations: Record<string, TourGuideTranslation>;
+  languages: string[];
+  specializedProvinces: string[];
+  certifications: string[];
+  licenseNumber: string;
+  yearsOfExperience: number;
+  cv: TourGuideCv | null;
+  gallery: TourGuideGalleryItem[];
+  responseRate: number;
+  completedTripsCount: number;
+  returningCustomerRate: number;
+  isAvailable: boolean;
+  dailyRate: number;
+  currency: string;
+  contactMethods: string[];
+}>;
 
 export interface TourGuidePaginatedResponse {
   items: TourGuideListItem[];

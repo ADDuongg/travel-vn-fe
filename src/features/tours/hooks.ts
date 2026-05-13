@@ -1,4 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNotifyMutation } from '@/lib/mutation';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   cancelTourBooking,
   createTourBooking,
@@ -41,8 +42,10 @@ export function useBookingsQuery(params: GetBookingsParams) {
 
 export function useCreateBooking() {
   const qc = useQueryClient();
-  return useMutation({
+  return useNotifyMutation({
     mutationFn: createBooking,
+    successKey: 'notifications.booking.tour.create_success',
+    errorKey: 'notifications.booking.tour.create_error',
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: bookingKeys.all });
     },
@@ -51,8 +54,10 @@ export function useCreateBooking() {
 
 export function useDeleteBooking() {
   const qc = useQueryClient();
-  return useMutation({
+  return useNotifyMutation({
     mutationFn: (id: string) => deleteBooking(id),
+    successKey: 'notifications.booking.tour.delete_success',
+    errorKey: 'notifications.booking.tour.delete_error',
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: bookingKeys.all });
     },
@@ -76,7 +81,10 @@ export function useToursQuery(params?: TourQueryParams) {
   });
 }
 
-export function useTourQuery(id: string | undefined, options?: { enabled?: boolean }) {
+export function useTourQuery(
+  id: string | undefined,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: tourCatalogKeys.detail(id ?? ''),
     queryFn: () => getTourById(id!),
@@ -101,7 +109,8 @@ export const tourBookingKeys = {
   byId: (id: string) => [...tourBookingKeys.all, 'by-id', id] as const,
   myList: (params: { page?: number; limit?: number }) =>
     [...tourBookingKeys.all, 'my-list', params] as const,
-  myDetail: (code: string) => [...tourBookingKeys.all, 'my-detail', code] as const,
+  myDetail: (code: string) =>
+    [...tourBookingKeys.all, 'my-detail', code] as const,
 };
 
 export function useTourAvailabilityQuery(
@@ -119,8 +128,11 @@ export function useTourAvailabilityQuery(
 
 export function useCreateTourBookingMutation() {
   const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (payload: CreateTourBookingPayload) => createTourBooking(payload),
+  return useNotifyMutation({
+    mutationFn: (payload: CreateTourBookingPayload) =>
+      createTourBooking(payload),
+    successKey: 'notifications.booking.tour.create_success',
+    errorKey: 'notifications.booking.tour.create_error',
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: tourBookingKeys.all });
     },
@@ -139,7 +151,10 @@ export function useTourBookingByCodeQuery(
   });
 }
 
-export function useMyTourBookingsQuery(params: { page?: number; limit?: number }) {
+export function useMyTourBookingsQuery(params: {
+  page?: number;
+  limit?: number;
+}) {
   return useQuery({
     queryKey: tourBookingKeys.myList(params),
     queryFn: () => getMyTourBookings(params),
@@ -171,14 +186,11 @@ export function useTourBookingByIdQuery(
 
 export function useCancelTourBookingMutation() {
   const qc = useQueryClient();
-  return useMutation({
-    mutationFn: ({
-      id,
-      body,
-    }: {
-      id: string;
-      body?: CancelTourBookingBody;
-    }) => cancelTourBooking(id, body),
+  return useNotifyMutation({
+    mutationFn: ({ id, body }: { id: string; body?: CancelTourBookingBody }) =>
+      cancelTourBooking(id, body),
+    successKey: 'notifications.booking.tour.cancel_success',
+    errorKey: 'notifications.booking.tour.cancel_error',
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: tourBookingKeys.all });
     },
@@ -187,9 +199,11 @@ export function useCancelTourBookingMutation() {
 
 export function useUploadTourBookingReceiptMutation() {
   const qc = useQueryClient();
-  return useMutation({
+  return useNotifyMutation({
     mutationFn: ({ id, file }: { id: string; file: File }) =>
       uploadTourBookingReceipt(id, file),
+    successKey: 'notifications.booking.tour.receipt_uploaded',
+    errorKey: 'notifications.booking.tour.receipt_upload_error',
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: tourBookingKeys.all });
     },

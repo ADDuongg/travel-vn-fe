@@ -1,12 +1,29 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNotifyMutation } from '@/lib/mutation';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  getMyTourGuideProfile,
   getTourGuideById,
   getTourGuides,
   getTourGuideReviews,
   registerTourGuide,
+  updateMyTourGuideProfile,
 } from './api';
 import { tourGuideKeys } from './key';
-import type { TourGuide, TourGuideQueryParams, TourGuideRegisterPayload } from './types';
+import type {
+  TourGuide,
+  TourGuideQueryParams,
+  TourGuideRegisterPayload,
+  TourGuideUpdatePayload,
+} from './types';
+
+export function useMyTourGuideQuery(options?: { enabled?: boolean }) {
+  return useQuery({
+    queryKey: tourGuideKeys.myProfile(),
+    queryFn: getMyTourGuideProfile,
+    enabled: options?.enabled ?? true,
+    staleTime: 2 * 60 * 1000,
+  });
+}
 
 export function useTourGuidesQuery(
   params?: TourGuideQueryParams,
@@ -52,14 +69,16 @@ export function useTourGuideReviewsQuery(
 export function useRegisterTourGuide() {
   const queryClient = useQueryClient();
 
-  const mutation = useMutation<
+  const mutation = useNotifyMutation<
     TourGuide,
     Error,
     TourGuideRegisterPayload
   >({
     mutationFn: registerTourGuide,
+    successKey: 'notifications.tour_guide.register_success',
+    errorKey: 'notifications.tour_guide.error',
     onSuccess: (guide) => {
-      // Invalidate tour guide lists so new profile appears where relevant
+      queryClient.invalidateQueries({ queryKey: tourGuideKeys.myProfile() });
       queryClient.invalidateQueries({ queryKey: tourGuideKeys.lists() });
       if (guide._id) {
         queryClient.invalidateQueries({
@@ -71,6 +90,34 @@ export function useRegisterTourGuide() {
 
   return {
     registerTourGuide: mutation.mutate,
+    isPending: mutation.isPending,
+  };
+}
+
+export function useUpdateMyTourGuide() {
+  const queryClient = useQueryClient();
+
+  const mutation = useNotifyMutation<
+    TourGuide,
+    Error,
+    TourGuideUpdatePayload
+  >({
+    mutationFn: updateMyTourGuideProfile,
+    successKey: 'notifications.tour_guide.update_success',
+    errorKey: 'notifications.tour_guide.error',
+    onSuccess: (guide) => {
+      queryClient.invalidateQueries({ queryKey: tourGuideKeys.myProfile() });
+      queryClient.invalidateQueries({ queryKey: tourGuideKeys.lists() });
+      if (guide._id) {
+        queryClient.invalidateQueries({
+          queryKey: tourGuideKeys.detail(guide._id),
+        });
+      }
+    },
+  });
+
+  return {
+    updateMyTourGuide: mutation.mutate,
     isPending: mutation.isPending,
   };
 }

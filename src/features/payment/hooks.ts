@@ -1,4 +1,5 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useNotifyMutation } from '@/lib/mutation';
+import { useQuery } from '@tanstack/react-query';
 import {
   createPaymentIntent,
   generateIdempotencyKey,
@@ -18,7 +19,7 @@ const paymentKeys = {
 };
 
 export function useCreatePaymentIntent() {
-  return useMutation<
+  return useNotifyMutation<
     CreatePaymentIntentResponse,
     Error,
     { bookingId: string }
@@ -27,6 +28,7 @@ export function useCreatePaymentIntent() {
       const idempotencyKey = generateIdempotencyKey(bookingId);
       return createPaymentIntent(bookingId, idempotencyKey);
     },
+    errorKey: 'notifications.payment.intent_error',
   });
 }
 
@@ -47,7 +49,7 @@ export function usePaymentStatus(bookingId: string | undefined) {
 
 /** Tour: create Stripe payment intent for tour booking */
 export function useCreateTourPaymentIntent() {
-  return useMutation<
+  return useNotifyMutation<
     CreatePaymentIntentResponse,
     Error,
     { tourBookingId: string }
@@ -56,6 +58,7 @@ export function useCreateTourPaymentIntent() {
       const idempotencyKey = generateTourIdempotencyKey(tourBookingId);
       return createTourPaymentIntent(tourBookingId, idempotencyKey);
     },
+    errorKey: 'notifications.payment.intent_error',
   });
 }
 

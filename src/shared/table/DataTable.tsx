@@ -83,28 +83,28 @@ function DataTable<TData>({
   const hasSelectableRows = columns.some((c) => 'id' in c && c.id === 'select');
 
   return (
-    <div className="space-y-0 overflow-hidden rounded-xl border border-slate-200/90 bg-white shadow-sm">
+    <div className="space-y-0 overflow-hidden rounded-xl border border-charcoal/10 bg-card shadow-soft">
       {/* Toolbar */}
-      <div className="flex flex-col gap-3 border-b border-slate-100 bg-gradient-to-b from-[#F8FAFC] to-white px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:px-4 sm:py-4">
+      <div className="flex flex-col gap-3 border-b border-charcoal/10 bg-gradient-to-b from-sand-50/95 to-card px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:px-4 sm:py-4">
         <div className="flex min-w-0 flex-1 flex-col gap-2 sm:max-w-md sm:flex-row sm:items-center">
           {!hideSearch && (
             <div className="relative w-full">
               <Search
-                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+                className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-charcoal/40"
                 aria-hidden
               />
               <Input
                 placeholder={placeholder}
                 value={globalFilter}
                 onChange={(e) => table.setGlobalFilter(e.target.value)}
-                className="h-10 border-slate-200 bg-white pl-9 text-sm text-[#1E40AF] placeholder:text-slate-400 transition-colors duration-200 focus-visible:border-[#3B82F6] focus-visible:ring-[#3B82F6]/20"
+                className="h-10 border-charcoal/15 bg-card pl-9 text-sm text-charcoal placeholder:text-charcoal/45 transition-colors duration-200 focus-visible:border-forest/40 focus-visible:ring-forest/25"
                 aria-label={placeholder}
               />
             </div>
           )}
           {isFetching && (
             <span
-              className="flex items-center gap-1.5 text-xs font-medium text-[#2563EB] sm:ml-1 sm:shrink-0"
+              className="flex items-center gap-1.5 text-xs font-medium text-forest sm:ml-1 sm:shrink-0"
               aria-live="polite"
             >
               <Loader2 className="size-3.5 shrink-0 animate-spin" aria-hidden />
@@ -122,7 +122,7 @@ function DataTable<TData>({
                 type="button"
                 variant="outline"
                 size="sm"
-                className="h-9 cursor-pointer border-slate-200 bg-white text-sm font-medium text-[#1E3A8A] shadow-sm transition-colors duration-200 hover:bg-slate-50"
+                className="h-9 cursor-pointer border-charcoal/15 bg-card text-sm font-medium text-charcoal shadow-soft transition-colors duration-200 hover:bg-charcoal/4"
               >
                 {t('bookings.table_columns')}
                 <ChevronDown className="ml-1 size-4 opacity-70" aria-hidden />
@@ -148,15 +148,15 @@ function DataTable<TData>({
           </DropdownMenu>
 
           {hasSelectableRows && (
-            <div className="flex w-full flex-wrap items-center gap-2 border-t border-slate-100 pt-3 sm:w-auto sm:border-t-0 sm:pt-0">
-              <span className="text-xs font-medium text-slate-600 sm:text-sm">
+            <div className="flex w-full flex-wrap items-center gap-2 border-t border-charcoal/10 pt-3 sm:w-auto sm:border-t-0 sm:pt-0">
+              <span className="text-xs font-medium text-charcoal/65 sm:text-sm">
                 {t('bookings.table_selected', { count: selectedRows.length })}
               </span>
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
-                className="h-9 cursor-pointer border-[#CA8A04]/40 text-[#92400E] transition-colors hover:bg-amber-50"
+                className="h-9 cursor-pointer border-forest/35 text-forest transition-colors hover:bg-charcoal/4"
                 disabled={!selectedRows.length}
                 onClick={() =>
                   console.log(
@@ -190,16 +190,16 @@ function DataTable<TData>({
       {/* Table */}
       <div className="overflow-x-auto">
         <Table className="min-w-[640px]">
-          <TableHeader className="sticky top-0 z-[1] border-b border-slate-200 bg-[#F8FAFC] shadow-[0_1px_0_0_rgb(226_232_240)]">
+          <TableHeader className="sticky top-0 z-[1] border-b border-charcoal/10 bg-sand-50/90 shadow-[0_1px_0_0_oklch(22%_0.02_75/0.08)]">
             {table.getHeaderGroups().map((hg) => (
               <TableRow
                 key={hg.id}
-                className="border-b-slate-200 hover:bg-transparent"
+                className="border-b-charcoal/10 hover:bg-transparent"
               >
                 {hg.headers.map((h) => (
                   <TableHead
                     key={h.id}
-                    className="h-11 whitespace-nowrap px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-[#1E3A8A] sm:px-4"
+                    className="h-11 whitespace-nowrap px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-charcoal/70 sm:px-4"
                   >
                     {h.isPlaceholder
                       ? null
@@ -217,15 +217,15 @@ function DataTable<TData>({
                   key={r.id}
                   data-state={r.getIsSelected() && 'selected'}
                   className={cn(
-                    'border-slate-100 transition-colors duration-150',
-                    'hover:bg-[#F8FAFC]/80',
-                    'data-[state=selected]:bg-[#EFF6FF]',
+                    'border-charcoal/8 transition-colors duration-150',
+                    'hover:bg-sand-50/80',
+                    'data-[state=selected]:bg-sand-100/90',
                   )}
                 >
                   {r.getVisibleCells().map((c) => (
                     <TableCell
                       key={c.id}
-                      className="align-top whitespace-normal px-3 py-3 text-sm leading-relaxed text-slate-800 sm:px-4"
+                      className="align-top whitespace-normal px-3 py-3 text-sm leading-relaxed text-charcoal sm:px-4"
                     >
                       {flexRender(c.column.columnDef.cell, c.getContext())}
                     </TableCell>
@@ -236,15 +236,15 @@ function DataTable<TData>({
               <TableRow className="hover:bg-transparent">
                 <TableCell
                   colSpan={columns.length}
-                  className="h-32 px-4 py-10 text-center text-slate-500"
+                  className="h-32 px-4 py-10 text-center text-charcoal/50"
                 >
                   <div className="flex flex-col items-center gap-2">
                     <Inbox
-                      className="size-10 text-slate-300"
+                      className="size-10 text-charcoal/25"
                       strokeWidth={1.25}
                       aria-hidden
                     />
-                    <span className="text-sm font-medium text-slate-600">
+                    <span className="text-sm font-medium text-charcoal/60">
                       {emptyMessage ?? t('bookings.table_empty')}
                     </span>
                   </div>

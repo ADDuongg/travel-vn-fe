@@ -17,12 +17,13 @@ import type { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const dashActive =
-  'bg-[#1E3A8A] text-white shadow-md shadow-[#1E3A8A]/15 ring-1 ring-[#1E3A8A]/20';
+  'border-charcoal/12 border-l-forest bg-sand-50/95 text-charcoal shadow-soft ring-1 ring-charcoal/8';
+
 const dashIdle =
-  'bg-transparent text-slate-700 hover:bg-slate-100 active:bg-slate-100/90';
+  'border-l-transparent text-charcoal/75 hover:bg-charcoal/4 hover:text-charcoal active:bg-charcoal/6';
 
 const linkBase =
-  'flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none';
+  'flex w-full cursor-pointer items-center gap-3 rounded-xl border border-transparent border-l-2 px-3 py-2.5 text-sm font-medium transition-colors duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background';
 
 const NavItem = ({
   to,
@@ -46,7 +47,7 @@ const NavItem = ({
 );
 
 const SectionLabel = ({ children }: { children: ReactNode }) => (
-  <p className="mb-2 px-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+  <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-charcoal/45">
     {children}
   </p>
 );
@@ -73,27 +74,27 @@ const SidebarDashboard = ({
         <div className="space-y-1">
           <NavItem to={ROUTES.DASHBOARD.INDEX} end onNavigate={onNavigate}>
             <LayoutDashboard
-              className="size-4 shrink-0 opacity-90"
+              className="size-4 shrink-0 text-charcoal/60"
               aria-hidden
             />
             Tổng quan
           </NavItem>
           <NavItem to={ROUTES.DASHBOARD.PROFILE} onNavigate={onNavigate}>
-            <UserPen className="size-4 shrink-0 opacity-90" aria-hidden />
+            <UserPen className="size-4 shrink-0 text-charcoal/60" aria-hidden />
             Chỉnh sửa hồ sơ
           </NavItem>
           <NavItem
             to={ROUTES.DASHBOARD.TOUR_GUIDE_REGISTER}
             onNavigate={onNavigate}
           >
-            <UserRound className="size-4 shrink-0 opacity-90" aria-hidden />
+            <UserRound className="size-4 shrink-0 text-charcoal/60" aria-hidden />
             Hồ sơ hướng dẫn viên
           </NavItem>
           <NavItem
             to={ROUTES.DASHBOARD.CHANGE_PASSWORD}
             onNavigate={onNavigate}
           >
-            <KeyRound className="size-4 shrink-0 opacity-90" aria-hidden />
+            <KeyRound className="size-4 shrink-0 text-charcoal/60" aria-hidden />
             Đổi mật khẩu
           </NavItem>
         </div>
@@ -103,11 +104,11 @@ const SidebarDashboard = ({
         <SectionLabel>Đặt tour</SectionLabel>
         <div className="space-y-1">
           <NavItem to={ROUTES.DASHBOARD.TOUR_BOOKINGS} onNavigate={onNavigate}>
-            <BookOpen className="size-4 shrink-0 opacity-90" aria-hidden />
+            <BookOpen className="size-4 shrink-0 text-charcoal/60" aria-hidden />
             Đơn tour của tôi
           </NavItem>
           <NavItem to={ROUTES.DASHBOARD.INVOICES} onNavigate={onNavigate}>
-            <FileText className="size-4 shrink-0 opacity-90" aria-hidden />
+            <FileText className="size-4 shrink-0 text-charcoal/60" aria-hidden />
             Hóa đơn tour
           </NavItem>
         </div>
@@ -117,11 +118,11 @@ const SidebarDashboard = ({
         <SectionLabel>Đặt phòng</SectionLabel>
         <div className="space-y-1">
           <NavItem to={ROUTES.DASHBOARD.ROOM_BOOKINGS} onNavigate={onNavigate}>
-            <BookOpen className="size-4 shrink-0 opacity-90" aria-hidden />
+            <BookOpen className="size-4 shrink-0 text-charcoal/60" aria-hidden />
             Đơn phòng của tôi
           </NavItem>
           <NavItem to={ROUTES.DASHBOARD.ROOM_INVOICES} onNavigate={onNavigate}>
-            <FileText className="size-4 shrink-0 opacity-90" aria-hidden />
+            <FileText className="size-4 shrink-0 text-charcoal/60" aria-hidden />
             Hóa đơn phòng
           </NavItem>
         </div>
@@ -132,7 +133,7 @@ const SidebarDashboard = ({
         <div className="space-y-1">
           <NavItem to={ROUTES.DASHBOARD.SAVED} onNavigate={onNavigate}>
             <MessageSquareText
-              className="size-4 shrink-0 opacity-90"
+              className="size-4 shrink-0 text-charcoal/60"
               aria-hidden
             />
             Đánh giá & Yêu thích
@@ -140,7 +141,7 @@ const SidebarDashboard = ({
         </div>
       </div>
 
-      <Separator className="bg-slate-200" />
+      <Separator className="bg-charcoal/10" />
 
       <Button
         type="button"
@@ -151,20 +152,23 @@ const SidebarDashboard = ({
           onNavigate?.();
         }}
         className={cn(
-          linkBase,
-          'h-auto justify-start border-slate-200 font-medium text-slate-700 hover:bg-red-50 hover:text-red-700 hover:border-red-200',
+          'flex h-auto w-full cursor-pointer items-center justify-start gap-3 rounded-xl border border-charcoal/15 bg-transparent px-3 py-2.5 text-sm font-medium text-charcoal/85 transition-colors duration-200 hover:border-red-200/80 hover:bg-red-50/90 hover:text-red-800 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest/30 focus-visible:ring-offset-2',
         )}
       >
         <LogOut className="size-4 shrink-0" aria-hidden />
         {isPending ? 'Đang đăng xuất…' : 'Đăng xuất'}
       </Button>
 
-      <div className="rounded-xl border border-slate-200/90 bg-[#F8FAFC] p-4">
-        <p className="font-semibold text-[#1E3A8A]">Cần hỗ trợ?</p>
-        <p className="mt-1 text-slate-600">1.828.456.345</p>
+      <div className="rounded-2xl border border-charcoal/10 bg-sand-50/90 p-4 shadow-soft">
+        <p className="font-display text-base font-semibold tracking-tight text-charcoal">
+          Cần hỗ trợ?
+        </p>
+        <p className="mt-1.5 text-sm tabular-nums text-charcoal/65">
+          1.828.456.345
+        </p>
         <a
           href="mailto:help@traveltourwp.com"
-          className="mt-1 inline-flex text-sm font-medium text-[#2563EB] underline-offset-4 transition-colors hover:text-[#1D4ED8] hover:underline"
+          className="mt-1.5 inline-flex text-sm font-medium text-forest underline-offset-4 transition-colors hover:text-forest/85 hover:underline"
         >
           help@traveltourwp.com
         </a>

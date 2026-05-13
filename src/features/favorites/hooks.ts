@@ -1,4 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNotifyMutation } from '@/lib/mutation';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { getMyFavoritesList, getMyIsFavorited, toggleFavorite } from './api';
 import { favoritesKeys } from './query-keys';
@@ -39,8 +40,10 @@ export function useMyIsFavoritedQuery(
 export function useToggleFavoriteMutation() {
   const qc = useQueryClient();
 
-  return useMutation({
+  return useNotifyMutation({
     mutationFn: toggleFavorite,
+    silentSuccess: true,
+    errorKey: 'notifications.favorite.error',
     onSuccess: () => {
       invalidateMyFavoritesList(qc);
       qc.invalidateQueries({ queryKey: [...favoritesKeys.all, 'isFavorited'] });

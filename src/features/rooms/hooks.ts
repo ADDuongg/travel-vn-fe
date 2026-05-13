@@ -1,4 +1,5 @@
-import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
+import { useNotifyMutation } from '@/lib/mutation';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import {
   getRooms,
   getRoomById,
@@ -55,7 +56,7 @@ export function useRoomDetailQuery(id?: string) {
 }
 
 export function useCreateRoomBooking() {
-  return useMutation({
+  return useNotifyMutation({
     mutationFn: ({
       room,
       payload,
@@ -63,6 +64,8 @@ export function useCreateRoomBooking() {
       room: Room;
       payload: RoomBookingPayload;
     }) => createRoomBooking(room, payload),
+    successKey: 'notifications.booking.room.create_success',
+    errorKey: 'notifications.booking.room.create_error',
   });
 }
 

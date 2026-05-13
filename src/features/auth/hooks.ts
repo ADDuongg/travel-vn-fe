@@ -1,6 +1,7 @@
 // features/auth/hooks.ts
 
 import { ROUTES } from '@/constants/router';
+import { useNotifyMutation } from '@/lib/mutation';
 import { useAuthStore } from '@/stores/useAuthStore';
 import * as I from '@/types/auth';
 import { authUtils } from '@lib/auth-token';
@@ -22,8 +23,10 @@ import { authKeyQuery } from './key';
 export function useLogin() {
   const queryClient = useQueryClient();
   const setUser = useAuthStore((s) => s.setUser);
-  const mutation = useMutation<I.LoginPayload, Error, I.LoginFormValues>({
+  const mutation = useNotifyMutation<I.LoginPayload, Error, I.LoginFormValues>({
     mutationFn: login,
+    successKey: 'notifications.auth.login_success',
+    errorKey: 'notifications.auth.login_error',
     onSuccess: (data) => {
       authUtils.setAccessToken(data.access_token);
       setUser(data.account);
@@ -45,8 +48,14 @@ export function useRegister() {
   const queryClient = useQueryClient();
   const setUser = useAuthStore((s) => s.setUser);
 
-  const mutation = useMutation<I.LoginPayload, Error, I.RegisterFormValues>({
+  const mutation = useNotifyMutation<
+    I.LoginPayload,
+    Error,
+    I.RegisterFormValues
+  >({
     mutationFn: register,
+    successKey: 'notifications.auth.register_success',
+    errorKey: 'notifications.auth.register_error',
     onSuccess: (data) => {
       authUtils.setAccessToken(data.access_token);
       setUser(data.account);
@@ -69,8 +78,9 @@ export function useLogout() {
   const navigate = useNavigate();
   const clearUser = useAuthStore((s) => s.clearUser);
 
-  const mutation = useMutation({
+  const mutation = useNotifyMutation({
     mutationFn: logout,
+    successKey: 'notifications.auth.logout_success',
     onSuccess: () => {
       authUtils.clearAccessToken();
       clearUser();
@@ -112,13 +122,14 @@ export function useRefresh() {
 
   return {
     refresh: mutation.mutate,
-    // isPending: mutation.isPending,
   };
 }
 
 export function useForgotPasswordRequest() {
-  const mutation = useMutation({
+  const mutation = useNotifyMutation({
     mutationFn: forgotPasswordRequest,
+    successKey: 'notifications.auth.forgot_request_sent',
+    errorKey: 'notifications.auth.forgot_request_error',
   });
 
   return {
@@ -130,8 +141,10 @@ export function useForgotPasswordRequest() {
 }
 
 export function useForgotPasswordConfirm() {
-  const mutation = useMutation({
+  const mutation = useNotifyMutation({
     mutationFn: forgotPasswordConfirm,
+    successKey: 'notifications.auth.forgot_reset_done',
+    errorKey: 'notifications.auth.forgot_reset_error',
   });
 
   return {
@@ -143,8 +156,10 @@ export function useForgotPasswordConfirm() {
 }
 
 export function useSendOtpVerifyEmail() {
-  const mutation = useMutation({
+  const mutation = useNotifyMutation({
     mutationFn: sendOtpVerifyEmail,
+    successKey: 'notifications.auth.otp_sent',
+    errorKey: 'notifications.auth.otp_send_error',
   });
 
   return {
@@ -156,8 +171,10 @@ export function useSendOtpVerifyEmail() {
 }
 
 export function useVerifyOtpEmail() {
-  const mutation = useMutation({
+  const mutation = useNotifyMutation({
     mutationFn: verifyOtpEmail,
+    successKey: 'notifications.auth.otp_verified',
+    errorKey: 'notifications.auth.otp_verify_error',
   });
 
   return {

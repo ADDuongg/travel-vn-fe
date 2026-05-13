@@ -8,6 +8,9 @@ import {
 } from 'lucide-react';
 import * as React from 'react';
 
+/**
+ * @deprecated Prefer Sonner toasts via `notify` from `@/lib/notify`. Kept for legacy call sites.
+ */
 export type StatusAlertVariant = 'success' | 'error' | 'warning' | 'info';
 
 const variantConfig: Record<
@@ -65,6 +68,7 @@ const positionClasses: Record<StatusAlertPosition, string> = {
   'bottom-left': 'fixed bottom-4 left-4 z-50',
 };
 
+/** @deprecated See `StatusAlertVariant` JSDoc above. */
 export function StatusAlert({
   variant,
   title,

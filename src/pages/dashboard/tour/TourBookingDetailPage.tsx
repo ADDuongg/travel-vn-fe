@@ -46,7 +46,7 @@ const statusStyle: Record<string, string> = {
     'bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200/90 shadow-sm shadow-emerald-100/50',
   PAID: 'bg-emerald-50 text-emerald-900 ring-1 ring-emerald-200/90 shadow-sm font-semibold',
   COMPLETED:
-    'bg-[#EFF6FF] text-[#1E40AF] ring-1 ring-[#3B82F6]/25 shadow-sm font-semibold',
+    'bg-sand-100/90 text-charcoal ring-1 ring-charcoal/15 shadow-soft font-semibold',
   CANCELLED:
     'bg-rose-50 text-rose-800 ring-1 ring-rose-200/90 shadow-sm shadow-rose-100/50',
 };
@@ -58,7 +58,7 @@ const paymentStyle: Record<string, string> = {
 };
 
 const cardClass =
-  'rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm sm:p-6';
+  'rounded-2xl border border-charcoal/10 bg-card p-5 shadow-soft sm:p-6';
 
 function getTourName(tourId: TourBookingDetail['tourId']): string {
   if (!tourId) return '—';
@@ -123,12 +123,8 @@ const TourBookingDetailPage = () => {
 
   const handleCancel = async () => {
     if (!booking?._id || !window.confirm(t('bookings.confirm_cancel'))) return;
-    try {
-      await cancelMutation.mutateAsync({ id: booking._id });
-      navigate(ROUTES.DASHBOARD.TOUR_BOOKINGS);
-    } catch {
-      // error already handled by mutation
-    }
+    await cancelMutation.mutateAsync({ id: booking._id });
+    navigate(ROUTES.DASHBOARD.TOUR_BOOKINGS);
   };
 
   const handleReceiptFileChange = async (
@@ -137,11 +133,7 @@ const TourBookingDetailPage = () => {
     const file = e.target.files?.[0];
     if (!file || !booking?._id) return;
     e.target.value = '';
-    try {
-      await uploadReceiptMutation.mutateAsync({ id: booking._id, file });
-    } catch {
-      // error already handled by mutation
-    }
+    await uploadReceiptMutation.mutateAsync({ id: booking._id, file });
   };
 
   if (isLoading) {
@@ -213,29 +205,29 @@ const TourBookingDetailPage = () => {
     <div className="space-y-6 font-dashboard-sans">
       <Link
         to={ROUTES.DASHBOARD.TOUR_BOOKINGS}
-        className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-[#2563EB] transition-colors duration-200 hover:text-[#1D4ED8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3B82F6]/40 focus-visible:ring-offset-2"
+        className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-forest transition-colors duration-200 hover:text-forest/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest/35 focus-visible:ring-offset-2"
       >
         <ArrowLeft className="size-4 shrink-0" aria-hidden />
         {t('bookings.back_to_my_bookings')}
       </Link>
 
-      <header className={cn(cardClass, 'border-t-4 border-t-[#1E3A8A]')}>
+      <header className={cn(cardClass, 'border-t-4 border-t-forest')}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0 space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <p className="text-xs font-semibold uppercase tracking-wide text-charcoal/45">
               {t('bookings.detail_title')}
             </p>
-            <h1 className="font-mono text-2xl font-bold tracking-tight text-[#1E3A8A] sm:text-3xl">
+            <h1 className="font-mono text-2xl font-bold tracking-tight text-charcoal sm:text-3xl">
               {booking.bookingCode}
             </h1>
-            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate-600">
+            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-charcoal/65">
               <span className="inline-flex items-center gap-1">
-                <CalendarRange className="size-4 text-[#3B82F6]" aria-hidden />
+                <CalendarRange className="size-4 text-forest" aria-hidden />
                 {t('bookings.created_at')} {fmtDate(booking.createdAt)}
               </span>
               {durationStr ? (
                 <>
-                  <span className="text-slate-400">·</span>
+                  <span className="text-charcoal/35">·</span>
                   <span>{durationStr}</span>
                 </>
               ) : null}
@@ -244,7 +236,7 @@ const TourBookingDetailPage = () => {
           <div className="flex flex-wrap gap-2">
             <Button
               variant="outline"
-              className="cursor-pointer border-slate-200 text-[#1E3A8A] shadow-sm hover:bg-slate-50"
+              className="cursor-pointer border-charcoal/15 text-charcoal shadow-soft hover:bg-charcoal/4"
               asChild
             >
               <Link to={ROUTES.DASHBOARD.TOUR_BOOKINGS}>
@@ -253,7 +245,7 @@ const TourBookingDetailPage = () => {
             </Button>
             {canPay && (
               <Button
-                className="cursor-pointer bg-[#CA8A04] font-semibold text-white shadow-md hover:bg-[#B45309]"
+                className="cursor-pointer rounded-full bg-forest font-semibold text-sand-50 shadow-soft hover:bg-forest/90"
                 asChild
               >
                 <Link
@@ -296,7 +288,7 @@ const TourBookingDetailPage = () => {
             </div>
 
             <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <div className="rounded-xl border border-slate-100 bg-[#F8FAFC] p-4">
+              <div className="rounded-xl border border-slate-100 bg-sand-50/80 p-4">
                 <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
                   {t('bookings.payment')}
                 </p>
@@ -310,15 +302,15 @@ const TourBookingDetailPage = () => {
                   {paymentStatusLabel}
                 </p>
               </div>
-              <div className="rounded-xl border border-slate-100 bg-[#F8FAFC] p-4">
+              <div className="rounded-xl border border-slate-100 bg-sand-50/80 p-4">
                 <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
                   {t('bookings.total_amount')}
                 </p>
-                <p className="mt-2 text-base font-bold tabular-nums text-[#1E40AF]">
+                <p className="mt-2 text-base font-bold tabular-nums text-charcoal">
                   {booking.totalAmount.toLocaleString()} {booking.currency}
                 </p>
               </div>
-              <div className="rounded-xl border border-slate-100 bg-[#F8FAFC] p-4">
+              <div className="rounded-xl border border-slate-100 bg-sand-50/80 p-4">
                 <p className="flex items-center gap-1 text-xs font-medium uppercase tracking-wide text-slate-500">
                   <User className="size-3.5" aria-hidden />
                   {t('bookings.contact')}
@@ -382,14 +374,14 @@ const TourBookingDetailPage = () => {
           {/* Tour & departure */}
           <section className={cardClass}>
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-              <h2 className="text-base font-semibold text-[#1E3A8A]">
+              <h2 className="text-base font-semibold text-charcoal">
                 {t('bookings.tour_and_departure')}
               </h2>
               <p className="text-xs font-medium text-slate-500">1 tour</p>
             </div>
 
-            <div className="mt-5 flex flex-col gap-4 rounded-xl border border-slate-200/90 p-4 transition-all duration-200 hover:border-[#3B82F6]/35 hover:shadow-md motion-reduce:transition-none sm:flex-row">
-              <div className="h-28 w-full shrink-0 overflow-hidden rounded-xl bg-[#F8FAFC] sm:h-auto sm:w-40">
+            <div className="mt-5 flex flex-col gap-4 rounded-xl border border-charcoal/10 p-4 transition-all duration-200 hover:border-forest/30 hover:shadow-soft motion-reduce:transition-none sm:flex-row">
+              <div className="h-28 w-full shrink-0 overflow-hidden rounded-xl bg-sand-50/80 sm:h-auto sm:w-40">
                 {thumbnailUrl ? (
                   <img
                     src={thumbnailUrl}
@@ -397,8 +389,8 @@ const TourBookingDetailPage = () => {
                     className="h-full min-h-[7rem] w-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-full min-h-[7rem] w-full items-center justify-center bg-gradient-to-br from-[#EEF2FF] to-[#F8FAFC]">
-                    <MapPin className="h-10 w-10 text-[#94A3B8]" aria-hidden />
+                  <div className="flex h-full min-h-[7rem] w-full items-center justify-center bg-gradient-to-br from-sand-100 to-sand-50">
+                    <MapPin className="h-10 w-10 text-charcoal/30" aria-hidden />
                   </div>
                 )}
               </div>
@@ -407,7 +399,7 @@ const TourBookingDetailPage = () => {
                   {tourDetailUrl ? (
                     <Link
                       to={tourDetailUrl}
-                      className="text-base font-semibold text-[#2563EB] underline-offset-2 transition-colors hover:text-[#1D4ED8] hover:underline"
+                      className="text-base font-semibold text-forest underline-offset-2 transition-colors hover:text-forest/85 hover:underline"
                     >
                       {getTourName(booking.tourId)}
                     </Link>
@@ -417,7 +409,7 @@ const TourBookingDetailPage = () => {
                     </p>
                   )}
                   {durationStr && (
-                    <span className="rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[11px] font-semibold text-[#1E40AF] ring-1 ring-[#3B82F6]/20">
+                    <span className="rounded-full bg-sand-100/90 px-2 py-0.5 text-[11px] font-semibold text-charcoal ring-1 ring-charcoal/15">
                       {durationStr}
                     </span>
                   )}
@@ -451,7 +443,7 @@ const TourBookingDetailPage = () => {
           {/* Price breakdown */}
           <section className={cardClass}>
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-              <h2 className="text-base font-semibold text-[#1E3A8A]">
+              <h2 className="text-base font-semibold text-charcoal">
                 {t('bookings.price_breakdown')}
               </h2>
               <p className="text-xs font-medium text-slate-500">
@@ -469,7 +461,7 @@ const TourBookingDetailPage = () => {
                   {(booking.infants ?? 0) > 0 &&
                     `, ${booking.infants} ${t('bookings.infants')}`}
                 </span>
-                <span className="shrink-0 font-semibold tabular-nums text-[#1E40AF]">
+                <span className="shrink-0 font-semibold tabular-nums text-charcoal">
                   {booking.totalAmount.toLocaleString()} {booking.currency}
                 </span>
               </div>
@@ -477,7 +469,7 @@ const TourBookingDetailPage = () => {
                 <span className="font-medium text-slate-800">
                   {t('bookings.tour_total')}
                 </span>
-                <span className="font-semibold tabular-nums text-[#1E40AF]">
+                <span className="font-semibold tabular-nums text-charcoal">
                   {booking.totalAmount.toLocaleString()} {booking.currency}
                 </span>
               </div>
@@ -502,7 +494,7 @@ const TourBookingDetailPage = () => {
               </div>
               <div className="flex flex-col justify-between gap-1 border-t border-slate-200 pt-4 text-base font-bold text-slate-900 sm:flex-row sm:items-center">
                 <span>{t('bookings.amount_due')}</span>
-                <span className="tabular-nums text-[#1E3A8A]">
+                <span className="tabular-nums text-charcoal">
                   {balanceDue.toLocaleString()} {booking.currency}
                 </span>
               </div>
@@ -511,8 +503,8 @@ const TourBookingDetailPage = () => {
 
           {/* Bank receipt */}
           <section className={cardClass}>
-            <h2 className="flex items-center gap-2 text-base font-semibold text-[#1E3A8A]">
-              <Receipt className="size-5 text-[#3B82F6]" aria-hidden />
+            <h2 className="flex items-center gap-2 text-base font-semibold text-charcoal">
+              <Receipt className="size-5 text-forest" aria-hidden />
               {t('bookings.bank_receipt')}
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-slate-600">
@@ -520,7 +512,7 @@ const TourBookingDetailPage = () => {
             </p>
             {booking.bankReceipt?.url ? (
               <div className="mt-4 space-y-3">
-                <div className="inline-block max-w-xs overflow-hidden rounded-xl border border-slate-200/90 bg-[#F8FAFC]">
+                <div className="inline-block max-w-xs overflow-hidden rounded-xl border border-charcoal/10 bg-sand-50/80">
                   <a
                     href={booking.bankReceipt.url}
                     target="_blank"
@@ -573,7 +565,7 @@ const TourBookingDetailPage = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  className="cursor-pointer gap-2 border-[#1E3A8A]/25 text-[#1E3A8A] hover:bg-[#1E3A8A]/5"
+                  className="cursor-pointer gap-2 border-charcoal/15 text-charcoal hover:bg-charcoal/4"
                   onClick={() => receiptInputRef.current?.click()}
                   disabled={uploadReceiptMutation.isPending}
                 >
@@ -592,7 +584,7 @@ const TourBookingDetailPage = () => {
         >
           <div className="space-y-3 border-b border-slate-100 pb-5">
             <div className="flex items-center justify-between gap-2">
-              <h3 className="text-sm font-semibold text-[#1E3A8A]">
+              <h3 className="text-sm font-semibold text-charcoal">
                 {t('bookings.next_step')}
               </h3>
               <span
@@ -613,7 +605,7 @@ const TourBookingDetailPage = () => {
           <div className="space-y-3 pt-5">
             {canUploadReceipt && (
               <Button
-                className="w-full cursor-pointer border-[#1E3A8A]/25 text-[#1E3A8A] hover:bg-[#1E3A8A]/5"
+                className="w-full cursor-pointer border-charcoal/15 text-charcoal hover:bg-charcoal/4"
                 variant="outline"
                 type="button"
                 onClick={() => receiptInputRef.current?.click()}
@@ -626,7 +618,7 @@ const TourBookingDetailPage = () => {
             )}
             {canPay && (
               <Button
-                className="w-full cursor-pointer bg-[#CA8A04] font-semibold text-white shadow-md hover:bg-[#B45309]"
+                className="w-full cursor-pointer rounded-full bg-forest font-semibold text-sand-50 shadow-soft hover:bg-forest/90"
                 variant="default"
                 asChild
               >
@@ -640,7 +632,7 @@ const TourBookingDetailPage = () => {
             )}
             {tourDetailUrl && (
               <Button
-                className="w-full cursor-pointer border-slate-200 text-[#1E3A8A] hover:bg-slate-50"
+                className="w-full cursor-pointer border-charcoal/15 text-charcoal hover:bg-charcoal/4"
                 variant="outline"
                 asChild
               >
@@ -651,8 +643,8 @@ const TourBookingDetailPage = () => {
             )}
           </div>
 
-          <div className="mt-6 rounded-xl border border-slate-200/90 bg-[#F8FAFC] p-4 text-xs leading-relaxed text-slate-600">
-            <p className="font-semibold text-[#1E3A8A]">
+          <div className="mt-6 rounded-xl border border-charcoal/10 bg-sand-50/80 p-4 text-xs leading-relaxed text-slate-600">
+            <p className="font-semibold text-charcoal">
               {t('bookings.need_help')}
             </p>
             <p className="mt-2">{t('bookings.need_help_tour_desc')}</p>

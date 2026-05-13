@@ -1,7 +1,7 @@
 import { useAuthStore } from '@/stores/useAuthStore';
+import { useNotifyMutation } from '@/lib/mutation';
 import {
   useInfiniteQuery,
-  useMutation,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
@@ -70,8 +70,10 @@ export function useInfiniteNotificationsList(limit = 5, enabled = true) {
 export function useMarkNotificationAsRead() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useNotifyMutation({
     mutationFn: (id: string) => markNotificationAsRead(id),
+    silentSuccess: true,
+    silentError: true,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: notificationKeys.all });
     },
@@ -81,8 +83,10 @@ export function useMarkNotificationAsRead() {
 export function useMarkAllNotificationsAsRead() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useNotifyMutation({
     mutationFn: () => markAllNotificationsAsRead(),
+    successKey: 'notifications.inbox.mark_all_read',
+    errorKey: 'notifications.inbox.mark_all_error',
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: notificationKeys.all });
     },

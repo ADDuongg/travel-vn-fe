@@ -110,20 +110,16 @@ const RoomBookingForm = ({
   };
 
   const onSubmit = async (data: RoomBookingValues) => {
-    try {
-      await createRoomBooking({
-        room,
-        payload: {
-          roomId: room._id,
-          checkIn: data.checkIn as string,
-          checkOut: data.checkOut as string,
-          userId: currentUserId,
-          rooms: guestsByRoom,
-        },
-      });
-    } catch (error) {
-      console.log('error', error);
-    }
+    await createRoomBooking({
+      room,
+      payload: {
+        roomId: room._id,
+        checkIn: data.checkIn as string,
+        checkOut: data.checkOut as string,
+        userId: currentUserId,
+        rooms: guestsByRoom,
+      },
+    });
   };
 
   const isEd = visualVariant === 'editorial';

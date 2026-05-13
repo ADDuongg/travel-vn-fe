@@ -1,6 +1,5 @@
 import CustomInput from '@/components/CustomInput';
 import { LoadingOverlay } from '@/components/LoadingOverlay';
-import { StatusAlert } from '@/components/StatusAlert';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,7 +8,6 @@ import {
   useProvinceSelectOptions,
   useWardSelectOptions,
 } from '@/hooks/useAddressSelectOptions';
-import { useStatusAlert } from '@/hooks/useStatusAlert';
 import { H3, P } from '@/components/ui/typography';
 import * as I from '@/types/auth';
 import type { ProfileFormValues } from '@/pages/dashboard/my_account/types';
@@ -43,12 +41,6 @@ interface ProfileFormContentProps {
 }
 
 const ProfileFormContent: React.FC<ProfileFormContentProps> = ({ me }) => {
-  const {
-    showSuccess,
-    showError,
-    alertState,
-    clear: clearAlert,
-  } = useStatusAlert({ position: 'top-right' });
   const { submitProfileForm, isPending } = useUpdateProfile();
   const { provinceOptions, provincesList } = useProvinceSelectOptions();
   const methods = useForm<ProfileFormValues>({
@@ -103,13 +95,6 @@ const ProfileFormContent: React.FC<ProfileFormContentProps> = ({ me }) => {
     await submitProfileForm(data, {
       avatarFile: avatarFile ?? undefined,
       clearPassword: () => methods.setValue('password', ''),
-      onSuccess: () =>
-        showSuccess('Thành công', 'Cập nhật profile thành công.'),
-      onError: (error) =>
-        showError(
-          'Lỗi',
-          error.message ?? 'Không thể cập nhật profile. Vui lòng thử lại.',
-        ),
     });
     if (avatarFile && preview.startsWith('blob:')) URL.revokeObjectURL(preview);
     setAvatarFile(null);
@@ -119,27 +104,25 @@ const ProfileFormContent: React.FC<ProfileFormContentProps> = ({ me }) => {
   return (
     <FormProvider {...methods}>
       <LoadingOverlay visible={isPending} />
-      {alertState && (
-        <StatusAlert
-          variant={alertState.variant}
-          title={alertState.title}
-          description={alertState.description}
-          position={alertState.position}
-          onDismiss={clearAlert}
-        />
-      )}
       <form
         onSubmit={methods.handleSubmit(onSubmit)}
         className="space-y-6 mx-auto"
       >
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="sr-only">Edit Profile</CardTitle>
-            <H3>Edit Profile</H3>
-            <P className="mt-1">Cập nhật thông tin cá nhân của bạn</P>
+        <Card className="overflow-hidden rounded-2xl border-charcoal/10 bg-card shadow-soft">
+          <CardHeader className="space-y-1 border-b border-charcoal/10 bg-sand-50/70 px-4 py-5 sm:px-6">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal/45">
+              Tài khoản
+            </p>
+            <CardTitle className="sr-only">Chỉnh sửa hồ sơ</CardTitle>
+            <H3 className="font-display text-2xl font-semibold tracking-tight text-charcoal">
+              Chỉnh sửa hồ sơ
+            </H3>
+            <P className="text-sm leading-relaxed text-charcoal/60">
+              Cập nhật thông tin cá nhân của bạn.
+            </P>
           </CardHeader>
 
-          <CardContent className="space-y-8">
+          <CardContent className="space-y-8 px-4 py-6 sm:px-6">
             <div className="flex items-center gap-6">
               <Avatar className="h-20 w-20">
                 <AvatarImage src={preview} alt="Avatar" />
@@ -153,15 +136,15 @@ const ProfileFormContent: React.FC<ProfileFormContentProps> = ({ me }) => {
                   onChange={handleFileChange}
                   className="hidden"
                 />
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="px-5"
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  Chọn ảnh đại diện
-                </Button>
-                <span className="text-xs text-muted-foreground">
+              <Button
+                type="button"
+                variant="outline"
+                className="border-charcoal/15 px-5 text-charcoal hover:bg-charcoal/4"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                Chọn ảnh đại diện
+              </Button>
+              <span className="text-xs text-charcoal/50">
                   JPG, PNG hoặc GIF. Ảnh sẽ gửi kèm khi bấm &quot;Cập nhật
                   profile&quot;.
                 </span>
@@ -299,8 +282,12 @@ const ProfileFormContent: React.FC<ProfileFormContentProps> = ({ me }) => {
             </div>
 
             <div className="flex flex-col items-center gap-3 pt-2">
-              <Button type="submit" className="px-6" disabled={isPending}>
-                {isPending ? 'Đang cập nhật...' : 'Update Profile'}
+              <Button
+                type="submit"
+                className="min-w-[200px] rounded-full bg-forest px-8 font-semibold text-sand-50 shadow-soft transition-colors hover:bg-forest/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest/35 focus-visible:ring-offset-2"
+                disabled={isPending}
+              >
+                {isPending ? 'Đang cập nhật...' : 'Cập nhật hồ sơ'}
               </Button>
             </div>
           </CardContent>
@@ -315,9 +302,7 @@ const Row: React.FC<{
   children: React.ReactNode;
 }> = ({ label, children }) => (
   <div className="flex items-start gap-6">
-    <div className="w-40 shrink-0 text-sm text-muted-foreground pt-2">
-      {label}
-    </div>
+    <div className="w-40 shrink-0 pt-2 text-sm text-charcoal/55">{label}</div>
     <div className="flex-1">{children}</div>
   </div>
 );
