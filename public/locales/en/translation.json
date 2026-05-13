@@ -1,6 +1,11 @@
 {
   "greeting": "Hello",
   "welcome": "Welcome to the app",
+  "site_meta": {
+    "title": "Dat Viet — Travel, hotels & tours",
+    "description": "Discover Vietnam through destinations, hotels, tours, and local cuisine. Book when you're ready — Dat Viet blends editorial travel with booking you can trust.",
+    "site_name": "Dat Viet"
+  },
   "home": "Home",
   "pages": "Pages",
   "tour_list": "Tours",

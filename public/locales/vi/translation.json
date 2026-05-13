@@ -1,6 +1,11 @@
 {
   "greeting": "Xin chào",
   "welcome": "Chào mừng đến với ứng dụng",
+  "site_meta": {
+    "title": "Đất Việt — Du lịch, khách sạn & tour",
+    "description": "Đất Việt — khám phá Việt Nam qua điểm đến, khách sạn, tour và ẩm thực địa phương. Đặt chỗ khi bạn sẵn sàng.",
+    "site_name": "Đất Việt"
+  },
   "home": "Trang chủ",
   "pages": "Trang",
   "tour_list": "Danh sách tour",
