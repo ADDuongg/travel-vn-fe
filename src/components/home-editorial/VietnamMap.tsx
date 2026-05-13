@@ -10,7 +10,7 @@ const hotspots: {
 }[] = [
   {
     labelKey: 'editorial.map.hotspots.hanoi',
-    searchQuery: 'Hanoi',
+    searchQuery: 'Ha Noi',
     cx: 52,
     cy: 26,
   },
