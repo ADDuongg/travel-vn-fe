@@ -1,5 +1,7 @@
 # React + TypeScript + Vite
 
+This project uses **Yarn** (Classic) for installs and scripts. Use `yarn install`, `yarn dev`, `yarn build`, etc. Do not add or commit `pnpm-lock.yaml`.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

@@ -4,10 +4,11 @@ import { MainLayout } from '@/layout';
 import Container from '@components/Container';
 import CustomInput from '@components/CustomInput';
 import { Button } from '@components/ui/button';
-import { P, ResponsiveH1 } from '@components/ui/typography';
+import { Card, CardContent } from '@components/ui/card';
+import { ResponsiveH1 } from '@components/ui/typography';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 
 type ForgotPasswordRequestFormValues = {
   identifier: string;
@@ -15,80 +16,90 @@ type ForgotPasswordRequestFormValues = {
 
 const ForgotPasswordRequestPage = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const methods = useForm<ForgotPasswordRequestFormValues>({
     defaultValues: {
       identifier: '',
     },
   });
 
-  const { forgotPasswordRequest, isPending, error, isSuccess } =
-    useForgotPasswordRequest();
+  const { forgotPasswordRequest, isPending, error } = useForgotPasswordRequest();
 
   const onSubmit = (values: ForgotPasswordRequestFormValues) => {
-    forgotPasswordRequest(values);
+    forgotPasswordRequest(values, {
+      notify: { silentSuccess: true },
+      onSuccess: () => {
+        navigate(ROUTES.FORGOT_PASSWORD_CONFIRM, {
+          state: { identifier: values.identifier.trim() },
+        });
+      },
+    });
   };
 
   const identifierError = methods.formState.errors.identifier;
 
   return (
     <MainLayout>
-      <div className="bg-background_paleGray p-32 text-center space-y-3">
-        <ResponsiveH1 className="font-dm-serif-display">
-          {t('auth.forgot_password_title')}
-        </ResponsiveH1>
-      </div>
-      <Container className="py-20 px-10 max-w-[800px]">
-        <div className="flex flex-col gap-6">
-          <P className="text-muted-foreground">
-            {t('auth.forgot_password_desc')}
-          </P>
-          <FormProvider {...methods}>
-            <form
-              className="w-full flex flex-col gap-4"
-              onSubmit={methods.handleSubmit(onSubmit)}
-            >
-              <CustomInput
-                className="w-full"
-                name="identifier"
-                type="text"
-                label={t('input.field_label.username_or_email')}
-                placeHolder={t('input.placeholder.username_or_email')}
-                size="lg"
-                rules={{
-                  required: t('common.field_required'),
-                }}
-                error={identifierError?.message as string | undefined}
-              />
+      <section className="bg-background_paleGray">
+        <Container className="py-14 md:py-20">
+          <div className="mx-auto grid max-w-5xl items-center gap-10 lg:grid-cols-5">
+            <div className="text-center lg:col-span-2 lg:text-left">
+              <ResponsiveH1 className="font-dm-serif-display text-foreground">
+                {t('auth.forgot_password_title')}
+              </ResponsiveH1>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                {t('auth.forgot_password_desc')}
+              </p>
+            </div>
 
-              {error && (
-                <P className="text-sm text-destructive">
-                  {error.message || t('common.error')}
-                </P>
-              )}
+            <div className="lg:col-span-3">
+              <Card className="rounded-2xl border-border/60 bg-card py-0 shadow-sm">
+                <CardContent className="p-6 sm:p-8">
+                  <FormProvider {...methods}>
+                    <form
+                      className="flex w-full flex-col gap-5"
+                      onSubmit={methods.handleSubmit(onSubmit)}
+                    >
+                      <CustomInput
+                        className="w-full"
+                        name="identifier"
+                        type="text"
+                        label={t('input.field_label.username_or_email')}
+                        placeHolder={t('input.placeholder.username_or_email')}
+                        size="lg"
+                        rules={{
+                          required: t('common.field_required'),
+                        }}
+                        error={identifierError?.message as string | undefined}
+                      />
 
-              {isSuccess && (
-                <P className="text-sm text-emerald-600">
-                  {t('auth.forgot_password_request_success')}
-                </P>
-              )}
+                      {error && (
+                        <p className="text-sm text-destructive">
+                          {error.message || t('common.error')}
+                        </p>
+                      )}
 
-              <Button size="lg" loading={isPending}>
-                {t('auth.forgot_password_submit')}
-              </Button>
-            </form>
-          </FormProvider>
+                      <Button size="lg" loading={isPending} className="w-full rounded-xl">
+                        {t('auth.forgot_password_submit')}
+                      </Button>
+                    </form>
+                  </FormProvider>
 
-          <P className="text-sm text-muted-foreground">
-            {t('auth.forgot_password_hint')}
-          </P>
+                  <p className="mt-6 text-sm text-muted-foreground leading-relaxed">
+                    {t('auth.forgot_password_hint')}
+                  </p>
 
-          <P className="text-sm">
-            <Link to={ROUTES.LOGIN} className="text-primary font-semibold">
-              {t('buttons.login')}
-            </Link>
-          </P>
-        </div>
-      </Container>
+                  <p className="mt-4 text-sm">
+                    <Link to={ROUTES.LOGIN} className="font-semibold text-primary hover:underline">
+                      {t('buttons.login')}
+                    </Link>
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </Container>
+      </section>
     </MainLayout>
   );
 };

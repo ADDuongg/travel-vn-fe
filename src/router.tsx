@@ -16,6 +16,9 @@ const DestinationSearchPage = Loadable(
   () => import('@/pages/destination/DestinationSearch'),
 );
 const RegisterPage = Loadable(() => import('@/pages/auth/register/Register'));
+const VerifyEmailPage = Loadable(
+  () => import('@/pages/auth/verify-email/VerifyEmail'),
+);
 const TourPage = Loadable(() => import('@/pages/tour/TourList'));
 const TourDetailPage = Loadable(() => import('@/pages/tour/TourDetail'));
 const RoomDetailPage = Loadable(() => import('@/pages/room/RoomDetail'));
@@ -296,6 +299,10 @@ export const routes: RouteConfig[] = [
   {
     path: ROUTES.REGISTER,
     element: <RegisterPage />,
+  },
+  {
+    path: ROUTES.VERIFY_EMAIL,
+    element: <VerifyEmailPage />,
   },
   {
     path: ROUTES.FORGOT_PASSWORD_REQUEST,

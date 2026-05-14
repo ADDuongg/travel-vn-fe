@@ -1,22 +1,45 @@
 import { ROUTES } from '@/constants/router';
 import { useLogin } from '@/features/auth/hooks';
+import { getMutationErrorDescription } from '@/lib/mutation';
 import { MainLayout } from '@/layout';
 import Container from '@components/Container';
 import CustomInput from '@components/CustomInput';
+import { Alert, AlertDescription, AlertTitle } from '@components/ui/alert';
 import { Button } from '@components/ui/button';
 import { Card, CardContent } from '@components/ui/card';
 import { Separator } from '@components/ui/separator';
 import { ResponsiveH1, ResponsiveH5 } from '@components/ui/typography';
 import * as I from '@/types/auth';
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
+
+function isLoginLockedOut(err: unknown): boolean {
+  if (!err || typeof err !== 'object') return false;
+  const o = err as { messageKey?: string; errorCode?: string };
+  return (
+    o.errorCode === 'LOGIN_LOCKED' ||
+    o.messageKey === 'auth.login.too_many_attempts'
+  );
+}
 
 const LoginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const methods = useForm<I.LoginFormValues>();
-  const { login, isPending } = useLogin();
+  const username = methods.watch('username');
+  const { login, isPending, error, isError, reset } = useLogin();
+
+  useEffect(() => {
+    reset();
+  }, [username, reset]);
+
+  const showLoginLockAlert = isError && isLoginLockedOut(error);
+  const loginLockDescription =
+    error !== null && error !== undefined
+      ? getMutationErrorDescription(error)
+      : undefined;
 
   const handleSubmit = (data: I.LoginFormValues) => login(data);
   return (
@@ -36,6 +59,14 @@ const LoginPage = () => {
             <div className="lg:col-span-3">
               <Card className="rounded-2xl border-border/60 bg-card py-0 shadow-sm">
                 <CardContent className="p-6 sm:p-8">
+                  {showLoginLockAlert && (
+                    <Alert variant="destructive" className="mb-5">
+                      <AlertTitle>{t('auth.login_locked_title')}</AlertTitle>
+                      <AlertDescription>
+                        {loginLockDescription ?? t('api:auth.login.too_many_attempts')}
+                      </AlertDescription>
+                    </Alert>
+                  )}
                   <FormProvider {...methods}>
                     <form
                       className="flex w-full flex-col gap-5"

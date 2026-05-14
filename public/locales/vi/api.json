@@ -16,7 +16,8 @@
   },
   "auth": {
     "login": {
-      "success": "Đăng nhập thành công"
+      "success": "Đăng nhập thành công",
+      "too_many_attempts": "Đăng nhập sai quá nhiều lần với tài khoản này từ mạng của bạn. Vui lòng đợi một lúc rồi thử lại."
     },
     "register": {
       "success": "Đăng ký thành công",
@@ -55,7 +56,15 @@
     },
     "logout_all": {
       "success": "Đã đăng xuất tất cả phiên thành công"
-    }
+    },
+    "verify_email": {
+      "success": "Xác minh email thành công",
+      "already_verified": "Email đã được xác minh trước đó",
+      "invalid_code": "Mã xác minh không hợp lệ hoặc đã hết hạn",
+      "resend_sent": "Nếu tài khoản tồn tại, chúng tôi đã gửi mã xác minh tới email của bạn.",
+      "resend_throttled": "Gửi lại mã quá nhiều lần. Vui lòng thử lại sau."
+    },
+    "email_not_verified": "Vui lòng xác minh email để tiếp tục sử dụng tính năng này."
   },
   "user": {
     "admin_portal_required": "Cần quyền truy cập admin",
@@ -134,8 +143,8 @@
     "not_found": "Không tìm thấy tiện ích"
   },
   "otp": {
-    "bad_request": "Yêu cầu OTP không hợp lệ",
-    "rate_limited": "OTP vừa được gửi, vui lòng đợi trước khi yêu cầu lại"
+    "bad_request": "Mã xác minh không hợp lệ, đã hết hạn hoặc không tồn tại.",
+    "rate_limited": "Gửi hoặc nhập mã OTP quá nhiều lần. Vui lòng đợi trước khi thử lại."
   },
   "idempotency": {
     "conflict": "Yêu cầu idempotency trùng lặp hoặc xung đột"

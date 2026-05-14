@@ -78,6 +78,7 @@ export const ROUTES = {
   GALLERY: '/gallery',
   LOGIN: '/login',
   REGISTER: '/register',
+  VERIFY_EMAIL: '/verify-email',
   FORGOT_PASSWORD_REQUEST: '/forgot-password',
   FORGOT_PASSWORD_CONFIRM: '/forgot-password/confirm',
   BOOKING_PAYMENT: '/bookings/:id/payment',

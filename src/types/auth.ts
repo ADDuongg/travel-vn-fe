@@ -29,6 +29,8 @@ export type Account = {
     publicId?: string;
   };
   email?: string;
+  /** `false` = must verify; omit/`true` = treated as verified (legacy). */
+  isEmailVerified?: boolean;
   dateOfBirth?: string;
   gender?: Gender;
   address?: {
@@ -50,6 +52,13 @@ export type LoginFormValues = {
   password: string;
 };
 
+/** POST /auth/forgot-password/confirm — OTP flow (no JWT token). */
+export type ForgotPasswordConfirmPayload = {
+  identifier: string;
+  code: string;
+  newPassword: string;
+};
+
 export type RegisterFormValues = {
   username: string;
   email: string;
@@ -59,6 +68,17 @@ export type RegisterFormValues = {
   phone?: string;
   dateOfBirth?: string;
   address?: string;
+};
+
+/** POST /auth/verify-email */
+export type VerifyEmailPayload = {
+  email: string;
+  code: string;
+};
+
+/** POST /auth/resend-verify-email */
+export type ResendVerifyEmailPayload = {
+  email: string;
 };
 
 export type UserProfile = {
@@ -74,6 +94,8 @@ export type UserProfile = {
     publicId?: string;
   };
   email?: string;
+  /** `false` = must verify; omit/`true` = treated as verified (legacy). */
+  isEmailVerified?: boolean;
   dateOfBirth?: string;
   gender?: Gender;
   address?: {

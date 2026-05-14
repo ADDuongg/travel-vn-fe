@@ -114,14 +114,24 @@ export function useNotifyMutation<
           if (!skipSuccess && successTitleKey) {
             notify.success(successTitleKey);
           }
-          restOpts.onSuccess?.(data, variables, context);
+          const afterSuccess = restOpts.onSuccess as
+            | ((d: TData, v: TVariables, c: TContext) => void)
+            | undefined;
+          afterSuccess?.(data, variables, context as TContext);
         },
         onError: (error, variables, context) => {
           if (!skipError && errorTitleKey) {
             const desc = getMutationErrorDescription(error);
             notify.error(errorTitleKey, desc);
           }
-          restOpts.onError?.(error, variables, context);
+          const afterError = restOpts.onError as
+            | ((
+                e: TError,
+                v: TVariables,
+                c: TContext | undefined,
+              ) => void)
+            | undefined;
+          afterError?.(error, variables, context);
         },
       };
     },

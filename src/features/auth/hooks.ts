@@ -3,6 +3,7 @@
 import { ROUTES } from '@/constants/router';
 import { useNotifyMutation } from '@/lib/mutation';
 import { useAuthStore } from '@/stores/useAuthStore';
+import type { ForgotPasswordConfirmPayload } from '@/types/auth';
 import * as I from '@/types/auth';
 import { authUtils } from '@lib/auth-token';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -15,8 +16,8 @@ import {
   logout,
   refresh,
   register,
-  sendOtpVerifyEmail,
-  verifyOtpEmail,
+  resendVerifyEmail,
+  verifyEmail,
 } from './api';
 import { authKeyQuery } from './key';
 
@@ -41,6 +42,9 @@ export function useLogin() {
   return {
     login: mutation.mutate,
     isPending: mutation.isPending,
+    error: mutation.error,
+    isError: mutation.isError,
+    reset: mutation.reset,
   };
 }
 
@@ -54,7 +58,7 @@ export function useRegister() {
     I.RegisterFormValues
   >({
     mutationFn: register,
-    successKey: 'notifications.auth.register_success',
+    silentSuccess: true,
     errorKey: 'notifications.auth.register_error',
     onSuccess: (data) => {
       authUtils.setAccessToken(data.access_token);
@@ -141,7 +145,11 @@ export function useForgotPasswordRequest() {
 }
 
 export function useForgotPasswordConfirm() {
-  const mutation = useNotifyMutation({
+  const mutation = useNotifyMutation<
+    { message: string },
+    Error,
+    ForgotPasswordConfirmPayload
+  >({
     mutationFn: forgotPasswordConfirm,
     successKey: 'notifications.auth.forgot_reset_done',
     errorKey: 'notifications.auth.forgot_reset_error',
@@ -155,32 +163,57 @@ export function useForgotPasswordConfirm() {
   };
 }
 
-export function useSendOtpVerifyEmail() {
+export function useResendVerifyEmail() {
   const mutation = useNotifyMutation({
-    mutationFn: sendOtpVerifyEmail,
-    successKey: 'notifications.auth.otp_sent',
-    errorKey: 'notifications.auth.otp_send_error',
+    mutationFn: resendVerifyEmail,
+    successKey: 'notifications.auth.verify_email_resend_sent',
+    errorKey: 'notifications.auth.verify_email_resend_error',
   });
 
   return {
-    sendOtpVerifyEmail: mutation.mutate,
+    resendVerifyEmail: mutation.mutate,
+    resendVerifyEmailAsync: mutation.mutateAsync,
     isPending: mutation.isPending,
     error: mutation.error as Error | null,
     isSuccess: mutation.isSuccess,
+    reset: mutation.reset,
   };
 }
 
-export function useVerifyOtpEmail() {
-  const mutation = useNotifyMutation({
-    mutationFn: verifyOtpEmail,
-    successKey: 'notifications.auth.otp_verified',
-    errorKey: 'notifications.auth.otp_verify_error',
+export function useVerifyEmail() {
+  const queryClient = useQueryClient();
+  const setUser = useAuthStore((s) => s.setUser);
+  const navigate = useNavigate();
+
+  const mutation = useNotifyMutation<
+    I.LoginPayload,
+    Error,
+    I.VerifyEmailPayload
+  >({
+    mutationFn: async (payload) => {
+      await verifyEmail(payload);
+      return refresh();
+    },
+    successKey: 'notifications.auth.verify_email_done',
+    errorKey: 'notifications.auth.verify_email_error',
+    onSuccess: (data) => {
+      authUtils.setAccessToken(data.access_token);
+      setUser(data.account);
+      queryClient.removeQueries({ queryKey: authKeyQuery.me });
+      queryClient.prefetchQuery({
+        queryKey: authKeyQuery.me,
+        queryFn: () => getMe(),
+      });
+      navigate(ROUTES.DASHBOARD.INDEX);
+    },
   });
 
   return {
-    verifyOtpEmail: mutation.mutate,
+    verifyEmail: mutation.mutate,
+    verifyEmailAsync: mutation.mutateAsync,
     isPending: mutation.isPending,
     error: mutation.error as Error | null,
     isSuccess: mutation.isSuccess,
+    reset: mutation.reset,
   };
 }

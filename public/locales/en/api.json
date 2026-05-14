@@ -16,7 +16,8 @@
   },
   "auth": {
     "login": {
-      "success": "Logged in successfully"
+      "success": "Logged in successfully",
+      "too_many_attempts": "Too many failed sign-in attempts for this account from your network. Please wait before trying again."
     },
     "register": {
       "success": "Registered successfully",
@@ -55,7 +56,15 @@
     },
     "logout_all": {
       "success": "All sessions logged out successfully"
-    }
+    },
+    "verify_email": {
+      "success": "Email verified successfully",
+      "already_verified": "Email is already verified",
+      "invalid_code": "Invalid or expired verification code",
+      "resend_sent": "If an account exists, we sent a verification code to your email.",
+      "resend_throttled": "Too many resend attempts. Please try again later."
+    },
+    "email_not_verified": "Please verify your email to use this feature."
   },
   "user": {
     "admin_portal_required": "Admin access required",
@@ -134,8 +143,8 @@
     "not_found": "Amenity not found"
   },
   "otp": {
-    "bad_request": "Invalid OTP request",
-    "rate_limited": "OTP recently sent, please wait before requesting again"
+    "bad_request": "Invalid or expired verification code, or the code does not exist.",
+    "rate_limited": "Too many OTP requests or verification attempts. Please wait before trying again."
   },
   "idempotency": {
     "conflict": "Duplicate or conflicting idempotency request"

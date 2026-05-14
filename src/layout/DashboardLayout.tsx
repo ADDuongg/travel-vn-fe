@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/drawer';
 import DashboardBreadcrumbs from './DashboardBreadcrumbs';
 import SidebarDashboard from './SidebarDashboard';
+import { EmailVerificationBanner } from '@/features/auth/EmailVerificationBanner';
 import { Menu } from 'lucide-react';
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
@@ -78,6 +79,7 @@ const DashboardLayout = () => {
               <div className="mb-4">
                 <DashboardBreadcrumbs />
               </div>
+              <EmailVerificationBanner />
               <Outlet />
             </main>
           </div>

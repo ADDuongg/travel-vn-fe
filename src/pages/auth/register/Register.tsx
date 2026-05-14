@@ -1,9 +1,5 @@
 import { ROUTES } from '@/constants/router';
-import {
-  useRegister,
-  useSendOtpVerifyEmail,
-  useVerifyOtpEmail,
-} from '@/features/auth/hooks';
+import { useRegister } from '@/features/auth/hooks';
 import { MainLayout } from '@/layout';
 import Container from '@components/Container';
 import CustomInput from '@components/CustomInput';
@@ -11,7 +7,6 @@ import { Button } from '@components/ui/button';
 import { Card, CardContent } from '@components/ui/card';
 import { Separator } from '@components/ui/separator';
 import {
-  P,
   ResponsiveH1,
   ResponsiveH5,
   ResponsiveH6,
@@ -20,24 +15,13 @@ import * as I from '@/types/auth';
 import * as IC from '@/types/commons';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 const RegisterPage = () => {
   const { t } = useTranslation();
   const methods = useForm<I.RegisterFormValues>();
   const navigate = useNavigate();
   const { register: registerMutation, isPending } = useRegister();
-  const {
-    sendOtpVerifyEmail,
-    isPending: isSendingOtp,
-    isSuccess: isOtpSent,
-  } = useSendOtpVerifyEmail();
-  const {
-    verifyOtpEmail,
-    isPending: isVerifyingOtp,
-    isSuccess: isOtpVerified,
-    error: verifyOtpError,
-  } = useVerifyOtpEmail();
 
   const handleSubmit = (data: I.RegisterFormValues) => {
     const payload: I.RegisterFormValues = {
@@ -52,8 +36,11 @@ const RegisterPage = () => {
     };
 
     registerMutation(payload, {
-      onSuccess: () => {
-        navigate(ROUTES.DASHBOARD.INDEX);
+      onSuccess: (_loginPayload, variables) => {
+        const email = variables.email.trim();
+        navigate(
+          `${ROUTES.VERIFY_EMAIL}?target=${encodeURIComponent(email)}`,
+        );
       },
     });
   };
@@ -68,6 +55,13 @@ const RegisterPage = () => {
         defaultValue: 'Enter Username',
       }),
       gridClass: 'col-span-12 md:col-span-6',
+    },
+    {
+      name: 'email',
+      label: t('input.field_label.email'),
+      placeholder: t('input.placeholder.email'),
+      gridClass: 'col-span-12 md:col-span-6',
+      type: 'email',
     },
     {
       name: 'fullName',
@@ -154,101 +148,9 @@ const RegisterPage = () => {
                         ))}
                       </div>
 
-                      {/* Email verification — grouped for clarity */}
-                      <div className="rounded-2xl border border-border/60 bg-background p-5 shadow-sm sm:p-6">
-                        <ResponsiveH6 className="mb-4 font-semibold text-foreground">
-                          {t('auth.verify_email_title', {
-                            defaultValue: 'Verify your email',
-                          })}
-                        </ResponsiveH6>
-
-                        <div className="grid gap-4">
-                          <div className="grid gap-3 sm:grid-cols-5 sm:items-end">
-                            <div className="sm:col-span-3">
-                              <CustomInput
-                                name="email"
-                                type="email"
-                                label={t('input.field_label.email')}
-                                placeHolder={t('input.placeholder.email')}
-                                size="lg"
-                                rules={{ required: t('common.field_required') }}
-                              />
-                            </div>
-                            <div className="sm:col-span-2">
-                              <Button
-                                type="button"
-                                size="lg"
-                                loading={isSendingOtp}
-                                className="w-full rounded-xl"
-                                onClick={() => {
-                                  const email = methods.getValues('email');
-                                  if (!email) {
-                                    methods.setError('email', {
-                                      type: 'required',
-                                      message: t('common.field_required'),
-                                    });
-                                    return;
-                                  }
-                                  sendOtpVerifyEmail({ target: email });
-                                }}
-                              >
-                                {t('auth.verify_email_send_otp')}
-                              </Button>
-                            </div>
-                          </div>
-
-                          {isOtpSent && (
-                            <P className="text-xs text-emerald-600">
-                              {t('auth.verify_email_otp_sent')}
-                            </P>
-                          )}
-
-                          <div className="grid gap-3 sm:grid-cols-5 sm:items-end">
-                            <div className="sm:col-span-3">
-                              <CustomInput
-                                name="emailOtp"
-                                type="text"
-                                label={t('input.field_label.otp_code')}
-                                placeHolder={t('input.placeholder.otp_code')}
-                                size="lg"
-                              />
-                            </div>
-                            <div className="sm:col-span-2">
-                              <Button
-                                type="button"
-                                size="lg"
-                                variant="outline"
-                                loading={isVerifyingOtp}
-                                className="w-full rounded-xl"
-                                onClick={() => {
-                                  const email = methods.getValues('email');
-                                  const code = (methods.getValues() as any)
-                                    .emailOtp;
-                                  if (!email || !code) return;
-                                  verifyOtpEmail({ target: email, code });
-                                }}
-                              >
-                                {t('auth.verify_email_verify_button')}
-                              </Button>
-                            </div>
-                          </div>
-
-                          {verifyOtpError && (
-                            <P className="text-xs text-destructive">
-                              {verifyOtpError.message || t('common.error')}
-                            </P>
-                          )}
-                          {isOtpVerified && (
-                            <P className="text-xs text-emerald-600">
-                              {t('auth.verify_email_success')}
-                            </P>
-                          )}
-                        </div>
-                      </div>
-
                       <Button
                         size="lg"
-                        disabled={isPending || !isOtpVerified}
+                        disabled={isPending}
                         className="w-full rounded-xl"
                       >
                         {t('buttons.register')}
