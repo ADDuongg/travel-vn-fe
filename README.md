@@ -1,4 +1,17 @@
-# React + TypeScript + Vite
+# Travel VN — Frontend
+
+SPA du lịch Việt Nam (React + TypeScript + Vite). Chi tiết stack & patterns: [`docs/FE-STACK-AND-PATTERNS.md`](docs/FE-STACK-AND-PATTERNS.md).
+
+## Tài khoản đăng nhập (dev)
+
+| Trường | Giá trị |
+|--------|---------|
+| **Tài khoản** | `duongnv` |
+| **Mật khẩu** | `123123123` |
+
+> Chỉ dùng cho môi trường dev/staging. Không dùng mật khẩu này trên production.
+
+---
 
 This project uses **Yarn** (Classic) for installs and scripts. Use `yarn install`, `yarn dev`, `yarn build`, etc. Do not add or commit `pnpm-lock.yaml`.
 
