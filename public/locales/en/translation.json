@@ -265,6 +265,8 @@
       "otp_code": "OTP code",
       "new_password": "New password"
     },
+    "show_password": "Show password",
+    "hide_password": "Hide password",
     "placeholder": {
       "keyword": "Enter keyword",
       "destination": "Select destination",
@@ -594,6 +596,7 @@
   },
   "auth": {
     "login_title": "Login",
+    "login_desc": "Sign in to manage bookings, payments, and your profile.",
     "login_locked_title": "Sign-in temporarily paused",
     "forget_password": "Forget password?",
     "no_account": "DO NOT HAVE AN ACCOUNT?",
@@ -630,6 +633,7 @@
     "verify_email_submit_button": "Verify email",
     "verify_email_resend_button": "Resend code",
     "verify_email_go_dashboard": "Go to dashboard",
+    "verify_email_skip_to_dashboard": "Skip for now and go to dashboard",
     "verify_email_banner_title": "Verify your email",
     "verify_email_banner_desc": "Some actions stay locked until your email is verified.",
     "verify_email_banner_cta": "Enter verification code",

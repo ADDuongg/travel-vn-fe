@@ -265,6 +265,8 @@
       "otp_code": "Mã OTP",
       "new_password": "Mật khẩu mới"
     },
+    "show_password": "Hiện mật khẩu",
+    "hide_password": "Ẩn mật khẩu",
     "placeholder": {
       "keyword": "Nhập từ khóa",
       "destination": "Chọn điểm đến",
@@ -594,6 +596,7 @@
   },
   "auth": {
     "login_title": "Đăng nhập",
+    "login_desc": "Đăng nhập để quản lý đặt chỗ, thanh toán và hồ sơ của bạn.",
     "login_locked_title": "Đăng nhập tạm thời bị tạm dừng",
     "forget_password": "Quên mật khẩu?",
     "no_account": "CHƯA CÓ TÀI KHOẢN?",
@@ -630,6 +633,7 @@
     "verify_email_submit_button": "Xác minh email",
     "verify_email_resend_button": "Gửi lại mã",
     "verify_email_go_dashboard": "Vào bảng điều khiển",
+    "verify_email_skip_to_dashboard": "Bỏ qua và vào bảng điều khiển",
     "verify_email_banner_title": "Xác minh email của bạn",
     "verify_email_banner_desc": "Một số thao tác vẫn bị khóa cho đến khi email được xác minh.",
     "verify_email_banner_cta": "Nhập mã xác minh",

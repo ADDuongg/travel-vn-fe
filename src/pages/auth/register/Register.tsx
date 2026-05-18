@@ -38,9 +38,7 @@ const RegisterPage = () => {
     registerMutation(payload, {
       onSuccess: (_loginPayload, variables) => {
         const email = variables.email.trim();
-        navigate(
-          `${ROUTES.VERIFY_EMAIL}?target=${encodeURIComponent(email)}`,
-        );
+        navigate(`${ROUTES.VERIFY_EMAIL}?target=${encodeURIComponent(email)}`);
       },
     });
   };
@@ -54,13 +52,13 @@ const RegisterPage = () => {
       placeholder: t('input.placeholder.username', {
         defaultValue: 'Enter Username',
       }),
-      gridClass: 'col-span-12 md:col-span-6',
+      gridClass: 'col-span-12 sm:col-span-6',
     },
     {
       name: 'email',
       label: t('input.field_label.email'),
       placeholder: t('input.placeholder.email'),
-      gridClass: 'col-span-12 md:col-span-6',
+      gridClass: 'col-span-12 sm:col-span-6',
       type: 'email',
     },
     {
@@ -71,13 +69,20 @@ const RegisterPage = () => {
       placeholder: t('input.placeholder.full_name', {
         defaultValue: 'Enter Full Name',
       }),
-      gridClass: 'col-span-12 md:col-span-6',
+      gridClass: 'col-span-12 sm:col-span-6',
+    },
+    {
+      name: 'phone',
+      label: t('input.field_label.phone'),
+      placeholder: t('input.placeholder.phone'),
+      gridClass: 'col-span-12 sm:col-span-6',
     },
     {
       name: 'password',
       label: t('input.field_label.password'),
       placeholder: t('input.placeholder.password'),
-      gridClass: 'col-span-12 md:col-span-6',
+      type: 'password',
+      gridClass: 'col-span-12 sm:col-span-6',
     },
     {
       name: 'confirmPassword',
@@ -87,27 +92,21 @@ const RegisterPage = () => {
       placeholder: t('input.placeholder.confirm_password', {
         defaultValue: 'Enter Confirm Password',
       }),
-      gridClass: 'col-span-12 md:col-span-6',
-    },
-
-    {
-      name: 'phone',
-      label: t('input.field_label.phone'),
-      placeholder: t('input.placeholder.phone'),
-      gridClass: 'col-span-12 md:col-span-4',
+      type: 'password',
+      gridClass: 'col-span-12 sm:col-span-6',
     },
     {
       name: 'dateOfBirth',
       label: t('input.field_label.birth'),
       placeholder: t('input.placeholder.birth'),
       type: 'date',
-      gridClass: 'col-span-12 md:col-span-8',
+      gridClass: 'col-span-12 sm:col-span-5',
     },
     {
       name: 'address',
       label: t('input.field_label.address'),
       placeholder: t('input.placeholder.address'),
-      gridClass: 'col-span-12 md:col-span-12',
+      gridClass: 'col-span-12 sm:col-span-7',
     },
   ];
 
@@ -116,7 +115,7 @@ const RegisterPage = () => {
       <section className="bg-background_paleGray">
         <Container className="py-14 md:py-20">
           <div className="mx-auto grid max-w-5xl items-start gap-10 lg:grid-cols-5">
-            <div className="text-center lg:col-span-2 lg:text-left">
+            <div className="text-center lg:col-span-2 lg:text-left mt-6">
               <ResponsiveH1 className="font-dm-serif-display text-foreground">
                 {t('auth.register_title')}
               </ResponsiveH1>

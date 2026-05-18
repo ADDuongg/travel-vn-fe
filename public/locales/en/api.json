@@ -22,7 +22,9 @@
     "register": {
       "success": "Registered successfully",
       "password_confirm_mismatch": "Password confirmation does not match",
-      "username_exists": "Username already exists"
+      "username_exists": "Username already exists",
+      "email_exists": "Email already exists",
+      "email_required": "Email is required"
     },
     "reset": {
       "user_not_found": "User not found",

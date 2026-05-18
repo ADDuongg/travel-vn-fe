@@ -22,7 +22,9 @@
     "register": {
       "success": "Đăng ký thành công",
       "password_confirm_mismatch": "Mật khẩu xác nhận không khớp",
-      "username_exists": "Tên đăng nhập đã tồn tại"
+      "username_exists": "Tên đăng nhập đã tồn tại",
+      "email_exists": "Email đã tồn tại",
+      "email_required": "Vui lòng nhập email"
     },
     "reset": {
       "user_not_found": "Không tìm thấy người dùng",
