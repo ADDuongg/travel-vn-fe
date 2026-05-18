@@ -1,4 +1,3 @@
-/** Giá trị form edit profile */
 export type ProfileFormValues = {
   firstName: string;
   lastName: string;
@@ -14,3 +13,4 @@ export type ProfileFormValues = {
   wardCode: string;
   detail: string;
 };
+

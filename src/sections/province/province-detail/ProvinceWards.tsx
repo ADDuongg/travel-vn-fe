@@ -14,7 +14,7 @@ interface ProvinceWardsProps {
 }
 
 const PIN_SHOWN = 3;
-/** Same page size as province atlas list for consistent atlas/folio rhythm */
+
 const WARDS_PAGE_SIZE = 9;
 
 function pinStyle(index: number, total: number): CSSProperties {
@@ -157,8 +157,6 @@ export function ProvinceWards({ province }: ProvinceWardsProps) {
         </Reveal>
 
         <div className="flex min-w-0 flex-1 flex-col gap-8">
-          {/* key remounts when page changes — Stagger uses whileInView once:true; without this,
-              replaced ward cards stay at opacity 0 (hidden variant). */}
           <Stagger
             key={`wards-page-${safePage}`}
             className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3"
@@ -198,3 +196,4 @@ export function ProvinceWards({ province }: ProvinceWardsProps) {
     </section>
   );
 }
+

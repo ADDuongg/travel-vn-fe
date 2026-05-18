@@ -102,3 +102,4 @@ export function ProvinceSidebar({ province }: ProvinceSidebarProps) {
     </div>
   );
 }
+

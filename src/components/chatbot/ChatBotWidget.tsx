@@ -26,7 +26,7 @@ function ChatBotWidget() {
 
   return (
     <>
-      {/* Chat panel */}
+      {}
       <div
         className={cn(
           'fixed bottom-20 right-6 z-[100] flex w-[380px] flex-col rounded-2xl border bg-background shadow-2xl transition-all duration-300',
@@ -36,7 +36,7 @@ function ChatBotWidget() {
         )}
         style={{ height: '520px' }}
       >
-        {/* Header */}
+        {}
         <div className="flex items-center justify-between rounded-t-2xl bg-primary px-4 py-3">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-foreground/20 text-sm">
@@ -74,7 +74,7 @@ function ChatBotWidget() {
           </div>
         </div>
 
-        {/* Error banner when BE down / network error */}
+        {}
         {showError && (
           <div className="border-b bg-destructive/10 px-3 py-2">
             <div className="flex items-start gap-2">
@@ -96,14 +96,14 @@ function ChatBotWidget() {
           </div>
         )}
 
-        {/* Messages */}
+        {}
         <ChatBotMessages messages={messages} isLoading={isLoading} />
 
-        {/* Input */}
+        {}
         <ChatBotInput onSend={handleSend} onStop={stop} isLoading={isLoading} />
       </div>
 
-      {/* Toggle button */}
+      {}
       <Button
         onClick={toggleChat}
         className={cn(
@@ -119,3 +119,4 @@ function ChatBotWidget() {
 }
 
 export default ChatBotWidget;
+

@@ -128,3 +128,4 @@ export const galleryStoryStills: Record<StoryStillId, { src: string }> = {
   ss2: { src: u('photo-1528164344705-47542687000d') },
   ss3: { src: u('photo-1476514525535-07fb3b4ae5f1') },
 };
+

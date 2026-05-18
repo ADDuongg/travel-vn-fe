@@ -21,3 +21,4 @@ export function QuoteBlock({ block }: QuoteBlockProps) {
     </blockquote>
   );
 }
+

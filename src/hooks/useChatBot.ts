@@ -21,7 +21,7 @@ function parseSSEChunks(buffer: string, onChunk: (data: any) => void): string {
       const json = JSON.parse(payload);
       onChunk(json);
     } catch {
-      // ignore malformed chunk
+      continue;
     }
   }
 
@@ -56,7 +56,7 @@ export function useChatBot() {
 
   const sendMessage = useCallback(
     async (content: string) => {
-      // Push user message immediately
+
       const userMessage: ChatMessage = {
         id: `${Date.now()}-user`,
         role: 'user',
@@ -64,7 +64,6 @@ export function useChatBot() {
       };
       appendMessage(userMessage);
 
-      // Prepare streaming request
       stop();
       setIsLoading(true);
       setError(null);
@@ -101,7 +100,6 @@ export function useChatBot() {
         const assistantId = `${Date.now()}-assistant`;
         let assistantText = '';
 
-        // create empty assistant message to update as stream arrives
         appendMessage({ id: assistantId, role: 'assistant', content: '' });
 
         while (true) {
@@ -122,9 +120,7 @@ export function useChatBot() {
           });
         }
       } catch (err) {
-        if ((err as any)?.name === 'AbortError') {
-          // stopped by user
-        } else {
+        if ((err as { name?: string })?.name !== 'AbortError') {
           setError((err as { message?: string })?.message ?? 'Unexpected error');
         }
       } finally {
@@ -144,3 +140,4 @@ export function useChatBot() {
     clear,
   };
 }
+

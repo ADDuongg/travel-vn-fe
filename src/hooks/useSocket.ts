@@ -16,3 +16,4 @@ const useSocket = (event: SocketEvent, handler: Handler) => {
 };
 
 export default useSocket;
+

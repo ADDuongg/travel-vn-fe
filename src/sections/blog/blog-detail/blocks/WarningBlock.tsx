@@ -19,3 +19,4 @@ export function WarningBlock({ block }: WarningBlockProps) {
     </div>
   );
 }
+

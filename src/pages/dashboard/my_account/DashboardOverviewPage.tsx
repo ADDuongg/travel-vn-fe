@@ -106,7 +106,6 @@ const DashboardOverviewPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Quick links */}
       <section aria-labelledby="quick-links-heading">
         <h2
           id="quick-links-heading"
@@ -143,7 +142,6 @@ const DashboardOverviewPage: React.FC = () => {
         </ul>
       </section>
 
-      {/* Profile */}
       <Card className="overflow-hidden rounded-2xl border-charcoal/10 bg-card shadow-soft">
         <CardHeader className="flex flex-col gap-3 border-b border-charcoal/10 bg-sand-50/70 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <CardTitle className="font-display text-xl font-semibold tracking-tight text-charcoal">
@@ -237,35 +235,9 @@ const DashboardOverviewPage: React.FC = () => {
           </div>
         </CardContent>
       </Card>
-
-      {/* Reviews — unified */}
-      {/* <Card className="rounded-2xl border-slate-200/90 bg-white shadow-sm">
-        <CardHeader className="flex flex-col gap-3 border-b border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <CardTitle className="flex items-center gap-2 text-lg font-semibold text-[#1E3A8A]">
-            <MessageSquareText className="size-5 text-[#2563EB]" aria-hidden />
-            Đánh giá của tôi
-          </CardTitle>
-          <Button
-            asChild
-            variant="ghost"
-            size="sm"
-            className="cursor-pointer text-[#2563EB] hover:bg-[#EFF6FF] hover:text-[#1D4ED8]"
-          >
-            <Link to={`${ROUTES.DASHBOARD.SAVED}?tab=reviews`}>
-              Xem tất cả đánh giá
-              <ArrowRight className="ml-1 size-4" />
-            </Link>
-          </Button>
-        </CardHeader>
-        <CardContent className="px-4 py-8 sm:px-6">
-          <p className="mx-auto max-w-md text-center text-sm leading-relaxed text-slate-600">
-            Xem và quản lý đánh giá tour, phòng, khách sạn và hướng dẫn viên tại
-            một nơi.
-          </p>
-        </CardContent>
-      </Card> */}
     </div>
   );
 };
 
 export default DashboardOverviewPage;
+

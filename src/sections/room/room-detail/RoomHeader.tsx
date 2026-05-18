@@ -232,3 +232,4 @@ const RoomHeader = ({ room }: RoomHeaderProps) => {
 };
 
 export default RoomHeader;
+

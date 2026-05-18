@@ -1,4 +1,3 @@
-// stores/useAuthStore.ts
 import { create } from 'zustand';
 
 export type AuthStatus = 'checking' | 'authenticated' | 'unauthenticated';
@@ -30,3 +29,4 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   setStatus: (status) => set({ status }),
 }));
+

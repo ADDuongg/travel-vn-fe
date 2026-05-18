@@ -77,3 +77,4 @@ const SharedHeader: React.FC<SharedHeaderProps> = ({
 };
 
 export default SharedHeader;
+

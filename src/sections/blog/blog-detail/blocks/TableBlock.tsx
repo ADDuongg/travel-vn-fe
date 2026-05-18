@@ -30,3 +30,4 @@ export function TableBlock({ block }: TableBlockProps) {
     </div>
   );
 }
+

@@ -3,7 +3,6 @@ import { cn } from '@/lib/utils';
 
 type PageToken = number | 'ellipsis';
 
-/** 1-based page indices; inserts `"ellipsis"` for gaps. */
 function atlasPageItemsOneBased(current: number, totalPages: number): PageToken[] {
   if (totalPages <= 1) return totalPages === 1 ? [1] : [];
   if (totalPages <= 9) {
@@ -30,20 +29,20 @@ function atlasPageItemsOneBased(current: number, totalPages: number): PageToken[
 }
 
 export type AtlasPaginationLabels = {
-  /** e.g. "Showing 1–9 of 24 provinces" */
+
   showingRange: string;
-  /** e.g. "Folio" */
+
   folioLabel: string;
-  /** aria-label for prev button */
+
   prevSpread: string;
-  /** aria-label for next button */
+
   nextSpread: string;
-  /** aria-label for nav region */
+
   spreadNavLabel: string;
 };
 
 type AtlasPaginationProps = {
-  /** 1-based current page */
+
   page: number;
   totalPages: number;
   onPageChange: (page: number) => void;
@@ -166,3 +165,4 @@ function PaginationArrow({
     </button>
   );
 }
+

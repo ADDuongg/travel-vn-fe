@@ -77,3 +77,4 @@ const FoodRelated: React.FC = () => {
 };
 
 export default FoodRelated;
+

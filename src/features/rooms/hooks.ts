@@ -13,7 +13,6 @@ import type {
   RoomQueryParams,
 } from './types';
 
-/** Params for infinite list (`page` is supplied by the query). */
 export type RoomsInfiniteListParams = Omit<RoomQueryParams, 'page'>;
 
 export const roomKeys = {
@@ -77,3 +76,4 @@ export function useGetTotalRoomByDate(id?: string, from?: string, to?: string) {
     enabled: !!id && !!from && !!to,
   });
 }
+

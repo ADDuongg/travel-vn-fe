@@ -1,5 +1,3 @@
-// features/user/hooks.ts
-
 import type { ProfileFormValues } from '@/pages/dashboard/my_account/types';
 import { profileFormValuesToPayload } from '@/utils/profileForm';
 import * as I from '@/types/auth';
@@ -61,3 +59,4 @@ export function useUpdateProfile() {
     reset: mutation.reset,
   };
 }
+

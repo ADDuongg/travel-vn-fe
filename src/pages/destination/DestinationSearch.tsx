@@ -12,7 +12,7 @@ const DestinationSearchPage: React.FC = () => {
 
   return (
     <MainLayout>
-      {/* Hero — aligned with ListLayout: same gradient, overlay, and spacing scale for visual consistency */}
+      {}
       <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-primary/90 to-slate-800 text-white">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-30"
@@ -28,7 +28,7 @@ const DestinationSearchPage: React.FC = () => {
         </Container>
       </section>
 
-      {/* Content — same layout pattern as RoomListPage: sticky filter, consistent gap and padding */}
+      {}
       <Container>
         <div className="flex flex-col gap-8 py-10 lg:flex-row">
           <aside className="w-full shrink-0 lg:w-80">
@@ -50,3 +50,4 @@ const DestinationSearchPage: React.FC = () => {
 };
 
 export default DestinationSearchPage;
+

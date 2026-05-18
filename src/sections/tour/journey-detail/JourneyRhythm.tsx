@@ -59,3 +59,4 @@ export function JourneyRhythm({ departureRhythm, nextWindows }: Props) {
     </div>
   );
 }
+

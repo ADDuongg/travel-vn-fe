@@ -101,3 +101,4 @@ const TourItinerary: React.FC<TourItineraryProps> = ({ tour }) => {
 };
 
 export default TourItinerary;
+

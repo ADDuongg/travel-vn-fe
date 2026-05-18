@@ -1,4 +1,3 @@
-// axios.ts
 import type {
   AxiosInstance,
   AxiosRequestConfig,
@@ -8,7 +7,6 @@ import type {
 import axios from 'axios';
 import { authUtils } from './auth-token';
 
-// Mở rộng config để xin "raw response" khi cần
 declare module 'axios' {
   interface AxiosRequestConfig {
     rawResponse?: boolean;
@@ -23,8 +21,7 @@ class AxiosClient {
       baseURL,
       timeout: 10000,
       withCredentials: true,
-      // Ensure array params are serialized as ?amenities=wifi&amenities=air_condition
-      // instead of ?amenities[]=wifi&amenities[]=air_condition
+
       paramsSerializer: {
         indexes: null,
       },
@@ -134,3 +131,4 @@ class AxiosClient {
 }
 
 export default new AxiosClient();
+

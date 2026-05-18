@@ -10,7 +10,6 @@ import type { DistrictOrWard, Province } from '@/features/provinces/types';
 import { useMemo } from 'react';
 import { useProvincesQuery } from '../features/provinces/hooks';
 
-/** Hook trả về options tỉnh/thành phố cho select (dùng chung nhiều nơi) */
 export function useProvinceSelectOptions(): {
   provinceOptions: SelectOption[];
   provincesList: Province[] | undefined;
@@ -25,7 +24,6 @@ export function useProvinceSelectOptions(): {
   return { provinceOptions, provincesList };
 }
 
-/** Hook trả về options phường/xã theo provinceId (dùng chung nhiều nơi) */
 export function useWardSelectOptions(provinceId: string | undefined): {
   wardOptions: SelectOption[];
   wards: DistrictOrWard[];
@@ -59,3 +57,4 @@ export function useWardSelectOptions(provinceId: string | undefined): {
 }
 
 export { ADDRESS_NONE };
+

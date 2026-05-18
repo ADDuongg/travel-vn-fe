@@ -23,7 +23,7 @@ export function BookingPaymentActions({
 
   return (
     <div className="space-y-4">
-      {/* Bank transfer */}
+      {}
       <div>
         <p className="font-semibold mb-2">Bank Payment Receipt</p>
 
@@ -41,7 +41,7 @@ export function BookingPaymentActions({
         )}
       </div>
 
-      {/* Online payment */}
+      {}
       <Button
         className="w-full bg-emerald-500 hover:bg-emerald-600"
         onClick={onOnlinePayment}
@@ -52,3 +52,4 @@ export function BookingPaymentActions({
     </div>
   );
 }
+

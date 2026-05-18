@@ -89,3 +89,4 @@ export function ProvinceHeader({ province }: ProvinceHeaderProps) {
     </section>
   );
 }
+

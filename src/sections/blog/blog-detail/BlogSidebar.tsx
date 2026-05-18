@@ -18,3 +18,4 @@ export function BlogSidebar({ slug, toc, author }: BlogSidebarProps) {
     </div>
   );
 }
+

@@ -74,3 +74,4 @@ export function ProvinceInsightsSection({ province }: ProvinceInsightsSectionPro
     </section>
   );
 }
+

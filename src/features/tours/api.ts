@@ -16,7 +16,7 @@ import * as I from '@/types/api';
 
 export type GetBookingsParams = I.Paginate & {
   q?: string;
-  status?: Exclude<BookingStatus, 'all'>; // nếu 'all' thì bỏ qua param
+  status?: Exclude<BookingStatus, 'all'>;
   sort?: I.SortParam[];
 };
 
@@ -137,3 +137,4 @@ export function uploadTourBookingReceipt(
     },
   );
 }
+

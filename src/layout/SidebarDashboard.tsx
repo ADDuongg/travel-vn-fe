@@ -53,7 +53,7 @@ const SectionLabel = ({ children }: { children: ReactNode }) => (
 );
 
 export type SidebarDashboardProps = {
-  /** Close mobile drawer after navigation */
+
   onNavigate?: () => void;
   layout?: 'desktop' | 'mobile';
 };
@@ -178,3 +178,4 @@ const SidebarDashboard = ({
 };
 
 export default SidebarDashboard;
+

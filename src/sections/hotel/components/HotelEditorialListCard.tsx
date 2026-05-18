@@ -157,3 +157,4 @@ export function HotelEditorialListCardSkeleton() {
     </div>
   );
 }
+

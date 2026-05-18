@@ -1,7 +1,6 @@
 import type { ProvinceTranslation, ProvinceHighlight } from './types';
 import type { LangKey } from '@/utils/addressOptions';
 
-/** Record<locale, string> — key chữ thường (docs/PROVINCE-FE.md) */
 export function pickLocale(
   d: Record<string, string> | undefined,
   locale: string,
@@ -18,9 +17,6 @@ export function pickLocale(
   );
 }
 
-/**
- * bestTimeToVisit: nằm trong translations[locale] (string), không còn field root riêng.
- */
 export function getProvinceBestTimeDisplay(
   province: {
     translations?: Record<string, ProvinceTranslation>;
@@ -58,3 +54,4 @@ export function getHighlightTitleAndDescription(
     pickLocale(highlight.description, language) ?? pickLocale(highlight.description, lang) ?? '';
   return { title, description };
 }
+

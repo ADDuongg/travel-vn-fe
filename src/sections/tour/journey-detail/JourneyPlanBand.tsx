@@ -74,3 +74,4 @@ export function JourneyPlanBand({ tour, planCopy, onOpenBooking }: Props) {
     </div>
   );
 }
+

@@ -26,7 +26,7 @@ const EnquiryForm = () => {
 
   const onSubmit = (data: EnquiryFormValues) => {
     console.log('Enquiry form submitted:', data);
-    // TODO: gọi API ở đây
+
   };
 
   return (
@@ -105,3 +105,4 @@ const EnquiryForm = () => {
 };
 
 export default EnquiryForm;
+

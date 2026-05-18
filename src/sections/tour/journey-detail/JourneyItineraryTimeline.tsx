@@ -32,3 +32,4 @@ export function JourneyItineraryTimeline({ stops }: Props) {
     </div>
   );
 }
+

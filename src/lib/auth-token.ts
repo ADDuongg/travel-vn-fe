@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* lưu access_token trong memory nha */
-
 let accessToken: string | null = null;
 
 let authUser: any | null = null;
@@ -39,3 +35,4 @@ export const authUtils = {
     localStorage.removeItem('refresh_token');
   },
 };
+

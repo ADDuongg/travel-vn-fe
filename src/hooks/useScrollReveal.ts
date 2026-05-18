@@ -1,8 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 
-/**
- * Reveals content once when it enters the viewport. Respects `prefers-reduced-motion`.
- */
 export function useScrollReveal(options?: { threshold?: number; rootMargin?: string }) {
   const { threshold = 0.15, rootMargin = '0px' } = options ?? {};
   const ref = useRef<HTMLDivElement | null>(null);
@@ -33,3 +30,4 @@ export function useScrollReveal(options?: { threshold?: number; rootMargin?: str
 
   return { ref, isVisible };
 }
+

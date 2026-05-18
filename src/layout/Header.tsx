@@ -21,7 +21,6 @@ import DrawerHeader from '../components/DrawerHeader';
 
 import type { NotificationItem } from '@/features/notifications/types';
 
-/** Values from API metadata for i18n interpolation (e.g. {{tourName}}). */
 function notificationInterpolation(
   metadata: NotificationItem['metadata'],
 ): Record<string, string | number> {
@@ -427,3 +426,4 @@ const Header = () => {
 };
 
 export default Header;
+

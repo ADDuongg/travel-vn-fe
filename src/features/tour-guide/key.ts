@@ -11,3 +11,4 @@ export const tourGuideKeys = {
   reviews: (guideId: string, page?: number) =>
     [...tourGuideKeys.all, 'detail', guideId, 'reviews', page] as const,
 };
+

@@ -10,9 +10,9 @@ import type { Tour } from '@/features/tours/types';
 
 type TourRelatedProps = {
   tour: Tour;
-  /** Parent wraps scroll target + headings (journey layout). */
+
   embedded?: boolean;
-  /** Hide title row when parent supplies section heading (journey). */
+
   omitHeading?: boolean;
 };
 
@@ -87,3 +87,4 @@ const TourRelated: React.FC<TourRelatedProps> = ({
 };
 
 export default TourRelated;
+

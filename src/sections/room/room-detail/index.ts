@@ -13,3 +13,4 @@ export { RoomEditorialBookingPostureSection } from './RoomEditorialBookingPostur
 export { RoomEditorialAmenitiesPills } from './RoomEditorialAmenitiesPills';
 export { RoomEditorialGalleryGrid } from './RoomEditorialGalleryGrid';
 export { RoomEditorialPlanSection } from './RoomEditorialPlanSection';
+

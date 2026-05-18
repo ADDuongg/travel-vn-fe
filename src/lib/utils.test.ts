@@ -17,3 +17,4 @@ describe('cn', () => {
     expect(cn('px-2 py-1', 'px-4')).toBe('py-1 px-4');
   });
 });
+

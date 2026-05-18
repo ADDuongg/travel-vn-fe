@@ -74,7 +74,6 @@ const TourSidebar: React.FC<TourSidebarProps> = ({ tour }) => {
     <div
       className={cn(
         'space-y-0',
-        // MainLayout header 136px + tabs (py-3 md:py-4) + 8px gap — avoids card top border under z-20 tab bar
         'lg:sticky lg:top-[calc(136px+4rem+8px)] lg:max-h-[calc(100vh-10rem)] lg:overflow-y-auto lg:pb-8',
       )}
     >
@@ -121,3 +120,4 @@ const TourSidebar: React.FC<TourSidebarProps> = ({ tour }) => {
 };
 
 export default TourSidebar;
+

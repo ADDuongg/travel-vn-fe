@@ -106,3 +106,4 @@ const FoodWhereToTry: React.FC = () => {
 };
 
 export default FoodWhereToTry;
+

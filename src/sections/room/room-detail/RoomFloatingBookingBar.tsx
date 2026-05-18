@@ -69,3 +69,4 @@ const RoomFloatingBookingBar = ({ room }: RoomFloatingBookingBarProps) => {
 };
 
 export default RoomFloatingBookingBar;
+

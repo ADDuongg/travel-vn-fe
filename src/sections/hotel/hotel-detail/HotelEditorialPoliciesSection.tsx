@@ -100,3 +100,4 @@ export function HotelEditorialPoliciesSection({ hotel }: Props) {
     </section>
   );
 }
+

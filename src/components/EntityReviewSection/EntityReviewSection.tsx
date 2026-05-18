@@ -10,7 +10,7 @@ import type { RatingSummary } from './ReviewSection';
 interface Props {
   entityType: ReviewEntityType;
   entityId: string;
-  /** Optional: from entity API (e.g. tour.ratingSummary) for header */
+
   ratingSummary?: RatingSummary | null;
 }
 
@@ -71,3 +71,4 @@ export default function EntityReviewSection({
     />
   );
 }
+

@@ -73,3 +73,4 @@ export function BlogCard({ item }: BlogCardProps) {
     </Link>
   );
 }
+

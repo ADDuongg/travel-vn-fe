@@ -12,3 +12,4 @@ export function CodeBlock({ block }: CodeBlockProps) {
     </pre>
   );
 }
+

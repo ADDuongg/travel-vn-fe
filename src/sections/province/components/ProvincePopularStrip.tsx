@@ -112,3 +112,4 @@ export function ProvincePopularStrip({ items }: ProvincePopularStripProps) {
     </section>
   );
 }
+

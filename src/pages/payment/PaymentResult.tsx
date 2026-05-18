@@ -25,7 +25,7 @@ const PaymentResult = () => {
   );
 
   useEffect(() => {
-    // If no bookingId in URL, redirect to bookings
+
     if (!bookingId) {
       navigate(ROUTES.DASHBOARD.ROOM_BOOKINGS);
     }
@@ -33,7 +33,6 @@ const PaymentResult = () => {
 
   const isLoading = isLoadingPayment || isLoadingBooking;
 
-  // Determine payment status
   const isSuccess =
     status === 'success' ||
     paymentStatus?.status === 'SUCCEEDED' ||
@@ -170,3 +169,4 @@ const PaymentResult = () => {
 };
 
 export default PaymentResult;
+

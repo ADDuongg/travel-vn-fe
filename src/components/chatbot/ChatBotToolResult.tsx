@@ -150,3 +150,4 @@ function GenericResult({ data }: { data: unknown }) {
 }
 
 export default ChatBotToolResult;
+

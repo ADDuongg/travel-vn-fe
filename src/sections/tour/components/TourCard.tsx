@@ -70,7 +70,7 @@ export function TourCardSkeleton() {
 interface TourCardProps {
   item: TourListItem;
   lang?: string;
-  /** Wider image ratio for horizontal strips */
+
   variant?: 'default' | 'wide';
 }
 
@@ -231,3 +231,4 @@ const TourCard: React.FC<TourCardProps> = ({ item, lang = 'vi', variant = 'defau
 };
 
 export default TourCard;
+

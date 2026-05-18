@@ -14,7 +14,6 @@ export const defaultProvinceListQuery: ProvinceListQuery = {
   sortBy: 'name',
 };
 
-/** True when URL/query matches first-page default filters (no search, no extra filters). */
 export function isDefaultProvinceQuery(
   query: ProvinceListQuery,
   page: number,
@@ -27,3 +26,4 @@ export function isDefaultProvinceQuery(
     query.sortBy === defaultProvinceListQuery.sortBy
   );
 }
+

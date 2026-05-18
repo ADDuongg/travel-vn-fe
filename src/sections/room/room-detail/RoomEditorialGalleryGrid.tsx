@@ -54,3 +54,4 @@ export function RoomEditorialGalleryGrid({ room }: Props) {
     </section>
   );
 }
+

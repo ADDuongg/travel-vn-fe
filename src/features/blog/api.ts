@@ -12,14 +12,13 @@ import type {
   PaginationInfo,
 } from './types';
 
-/** Under global prefix `/api/v1` — see docs/architecture/API-ARCHITECTURE.md & docs/BLOG-FE-API.md */
 const CATEGORY_BASE = '/api/v1/public/blog-categories';
 const TAG_BASE = '/api/v1/public/blog-tags';
 const POST_BASE = '/api/v1/public/blogs';
 
 type RawPaginatedBody<T> = {
   items?: T[];
-  /** Mongoose pagination style until fully normalized */
+
   docs?: T[];
   pagination?: PaginationInfo;
   page?: number;
@@ -100,3 +99,4 @@ export function getBlogPostBySlug(slug: string) {
 export function getRelatedBlogPosts(slug: string) {
   return api.get<BlogPostListItem[]>(`${POST_BASE}/${slug}/related`);
 }
+

@@ -1,7 +1,3 @@
-/**
- * Chi tiết đơn tour – layout đồng bộ Room Booking Detail (UI UX Pro Max kit)
- * GET my-bookings/:code, PATCH cancel, POST :id/receipt (bank receipt)
- */
 import React, { useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/constants/router';
@@ -262,8 +258,7 @@ const TourBookingDetailPage = () => {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
         <div className="space-y-6 lg:col-span-2">
-          {/* Order summary */}
-          <section className={cardClass}>
+                    <section className={cardClass}>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="space-y-1">
                 <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -371,8 +366,7 @@ const TourBookingDetailPage = () => {
             )}
           </section>
 
-          {/* Tour & departure */}
-          <section className={cardClass}>
+                    <section className={cardClass}>
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="text-base font-semibold text-charcoal">
                 {t('bookings.tour_and_departure')}
@@ -440,8 +434,7 @@ const TourBookingDetailPage = () => {
             </div>
           </section>
 
-          {/* Price breakdown */}
-          <section className={cardClass}>
+                    <section className={cardClass}>
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="text-base font-semibold text-charcoal">
                 {t('bookings.price_breakdown')}
@@ -501,8 +494,7 @@ const TourBookingDetailPage = () => {
             </div>
           </section>
 
-          {/* Bank receipt */}
-          <section className={cardClass}>
+                    <section className={cardClass}>
             <h2 className="flex items-center gap-2 text-base font-semibold text-charcoal">
               <Receipt className="size-5 text-forest" aria-hidden />
               {t('bookings.bank_receipt')}
@@ -656,3 +648,4 @@ const TourBookingDetailPage = () => {
 };
 
 export default TourBookingDetailPage;
+

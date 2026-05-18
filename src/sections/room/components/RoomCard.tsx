@@ -28,7 +28,6 @@ function getProvinceDisplay(hotel: string | HotelRef | undefined, lang: string):
   return name ?? null;
 }
 
-/** Skeleton placeholder đồng bộ layout với RoomCard (shadcn Skeleton) */
 export function RoomCardSkeleton() {
   return (
     <Card className="overflow-hidden rounded-2xl border border-[rgba(28,26,20,0.1)] bg-white shadow-[var(--shadow-card)] transition-shadow hover:shadow-[var(--shadow-elevated)]">
@@ -51,7 +50,7 @@ export function RoomCardSkeleton() {
 interface RoomCardProps {
   item: Room;
   lang?: string;
-  /** Khi true hiển thị skeleton thay vì nội dung */
+
   loading?: boolean;
 }
 
@@ -91,15 +90,13 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi', loading = false 
   return (
     <Link to={ROUTES.ROOM.DETAIL.replace(':id', item._id)}>
       <Card className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[rgba(28,26,20,0.1)] bg-white shadow-[var(--shadow-card)] transition-all duration-300 hover:shadow-[var(--shadow-elevated)]">
-        {/* Image */}
-        <div className="relative w-full aspect-[4/3] min-h-[10rem] sm:min-h-[12rem] lg:min-h-[14rem] overflow-hidden">
+                <div className="relative w-full aspect-[4/3] min-h-[10rem] sm:min-h-[12rem] lg:min-h-[14rem] overflow-hidden">
           <img
             src={imageUrl}
             alt={item.thumbnail?.alt ?? translation?.name ?? item.code}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
-          {/* Gradient overlay on hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
           <div className="absolute top-3 right-3 z-[1]">
             <FavoriteButton
@@ -111,15 +108,13 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi', loading = false 
             />
           </div>
 
-          {/* Discount badge */}
-          {discountLabel && (
+                    {discountLabel && (
             <span className="absolute right-14 top-3 inline-flex items-center rounded-full bg-[#c8102e] px-2.5 py-1 text-xs font-bold text-white shadow-sm">
               {discountLabel}
             </span>
           )}
 
-          {/* Price pill */}
-          <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center gap-2">
+                    <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center gap-2">
             <span className="inline-flex flex-wrap items-baseline gap-1.5 rounded-lg bg-[#1c1a14]/82 px-3 py-2 text-xs font-semibold text-white backdrop-blur-sm sm:text-sm">
               <span className="text-white/70">{t('room.from')}</span>
               {oldPrice != null && (
@@ -134,10 +129,8 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi', loading = false 
           </div>
         </div>
 
-        {/* Content */}
-        <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
-          {/* Type & Title */}
-          <div className="mb-2">
+                <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
+                    <div className="mb-2">
             {item.roomType && (
               <span className="text-xs font-semibold uppercase tracking-wider text-[#2d6a4f]">
                 {item.roomType}
@@ -153,8 +146,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi', loading = false 
             </h3>
           </div>
 
-          {/* Location */}
-          {(hotelName || provinceName) && (
+                    {(hotelName || provinceName) && (
             <div className="mb-2 flex min-w-0 items-center gap-2 text-sm text-[rgba(28,26,20,0.62)]">
               <FaLocationDot className="size-3.5 shrink-0 text-[#2d6a4f]" />
               <span className="truncate">
@@ -163,8 +155,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi', loading = false 
             </div>
           )}
 
-          {/* Meta: size & guests */}
-          <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[rgba(28,26,20,0.62)]">
+                    <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[rgba(28,26,20,0.62)]">
             <span className="inline-flex items-center gap-1.5">
               <FaBed className="size-4 shrink-0 text-[rgba(28,26,20,0.45)]" />
               {item.roomSize ? `${item.roomSize} m²` : t('input.field_label.room')}
@@ -175,8 +166,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi', loading = false 
             </span>
           </div>
 
-          {/* Rating */}
-          {hasRating && (
+                    {hasRating && (
             <div className="mb-3 inline-flex items-center gap-1.5 text-sm text-[rgba(28,26,20,0.62)]">
               <span className="inline-flex items-center gap-1 rounded bg-[#f5e9d0] px-2 py-0.5 text-xs font-medium text-[#8c5d10]">
                 <FaStar className="size-3 fill-current" />
@@ -188,8 +178,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi', loading = false 
             </div>
           )}
 
-          {/* CTA */}
-          <span className="mt-auto inline-flex items-center gap-2 pt-1 text-sm font-semibold uppercase tracking-wide text-[#2d6a4f] transition-[gap] group-hover:gap-3">
+                    <span className="mt-auto inline-flex items-center gap-2 pt-1 text-sm font-semibold uppercase tracking-wide text-[#2d6a4f] transition-[gap] group-hover:gap-3">
             {t('room.view_details')}
             <span aria-hidden>→</span>
           </span>
@@ -200,3 +189,4 @@ const RoomCard: React.FC<RoomCardProps> = ({ item, lang = 'vi', loading = false 
 };
 
 export default RoomCard;
+

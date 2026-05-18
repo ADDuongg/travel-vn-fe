@@ -22,7 +22,7 @@ const FoodStory: React.FC = () => {
         </p>
       </div>
 
-      {/* Obama Story Highlight */}
+      {}
       <div className="mt-8 rounded-xl bg-paleGray-100 p-6 border border-border">
         <div className="flex items-start gap-4">
           <div className="shrink-0 w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xl font-bold">
@@ -49,3 +49,4 @@ const FoodStory: React.FC = () => {
 };
 
 export default FoodStory;
+

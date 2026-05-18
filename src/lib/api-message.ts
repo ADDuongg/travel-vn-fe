@@ -1,6 +1,5 @@
 import i18n from '@/i18n';
 
-/** Resolve BE `messageKey` via the `api` i18n namespace; fall back to raw `message`. */
 export function resolveApiMessage(
   messageKey?: string,
   fallback?: string,
@@ -10,3 +9,4 @@ export function resolveApiMessage(
   }
   return fallback;
 }
+

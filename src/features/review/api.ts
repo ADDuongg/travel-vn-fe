@@ -1,5 +1,3 @@
-// features/review/api.ts
-
 import api from '@/lib/axios';
 import type * as I from '@/types/api';
 import type {
@@ -39,9 +37,6 @@ function isListPayload(
   return !Array.isArray(v) && Array.isArray(v?.data);
 }
 
-/**
- * GET /api/v1/client/reviews/me/list — maps to shared ApiListResponse for DataTable.
- */
 export async function getMyReviewsList(
   params: MyReviewsListParams,
 ): Promise<I.ApiListResponse<MyReviewTableRow>> {
@@ -94,3 +89,4 @@ export const deleteReview = ({ id }: DeleteReviewInput) =>
 export const updateReview = (payload: UpdateReviewInput) => {
   return api.post('/api/v1/client/reviews', payload);
 };
+

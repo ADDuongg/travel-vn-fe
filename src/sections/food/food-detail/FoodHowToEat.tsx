@@ -58,3 +58,4 @@ const FoodHowToEat: React.FC = () => {
 };
 
 export default FoodHowToEat;
+

@@ -33,7 +33,6 @@ export function getProvinceName(province: string | ProvinceRef, lang: string): s
   return names?.[lang as 'vi' | 'en'] ?? names?.vi ?? names?.en ?? '';
 }
 
-/** Split long bio into paragraphs for editorial layout (Open Design–style story). */
 export function splitBioToParagraphs(bio: string | undefined): string[] {
   if (!bio?.trim()) return [];
   const normalized = bio.replace(/\r\n/g, '\n').trim();
@@ -45,7 +44,6 @@ export function splitBioToParagraphs(bio: string | undefined): string[] {
     .filter(Boolean);
 }
 
-/** Highest-rated approved public review with a non-empty comment (editorial “voice” block). */
 export function pickFeaturedGuideReview(reviews: Review[] | undefined): Review | null {
   if (!reviews?.length) return null;
   const approved = reviews.filter(
@@ -54,3 +52,4 @@ export function pickFeaturedGuideReview(reviews: Review[] | undefined): Review |
   if (!approved.length) return null;
   return [...approved].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))[0];
 }
+

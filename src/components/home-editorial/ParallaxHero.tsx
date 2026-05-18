@@ -59,3 +59,4 @@ export const ParallaxHero = forwardRef<HTMLElement, ParallaxHeroProps>(function 
     </section>
   );
 });
+

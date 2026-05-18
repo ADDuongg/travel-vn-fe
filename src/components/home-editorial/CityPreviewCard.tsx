@@ -109,3 +109,4 @@ export function CityPreviewCard({
     </motion.article>
   );
 }
+

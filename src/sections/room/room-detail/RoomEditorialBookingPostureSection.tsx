@@ -93,3 +93,4 @@ export function RoomEditorialBookingPostureSection({ room }: Props) {
     </section>
   );
 }
+

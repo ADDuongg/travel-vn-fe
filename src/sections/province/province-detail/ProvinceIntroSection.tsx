@@ -70,3 +70,4 @@ export function ProvinceIntroSection({ province, images }: ProvinceIntroSectionP
     </section>
   );
 }
+

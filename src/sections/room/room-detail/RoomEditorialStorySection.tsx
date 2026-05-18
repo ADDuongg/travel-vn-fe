@@ -42,3 +42,4 @@ export function RoomEditorialStorySection({ room, lang }: Props) {
     </section>
   );
 }
+

@@ -1,4 +1,3 @@
-// features/bookings/booking/api.ts
 import api from '@/lib/axios';
 import type { Booking } from '../shared/types';
 import * as I from '@/types/api';
@@ -24,8 +23,7 @@ export async function getMyBookings(params: {
 export async function getBookingById(id: string) {
   return api.get<Booking>(`/api/v1/client/bookings/me/${id}`);
 }
-
-/** PATCH /api/v1/client/bookings/:id/cancel – user owner, Bearer required */
 export async function cancelBooking(id: string) {
   return api.patch<Booking>(`/api/v1/client/bookings/${id}/cancel`);
 }
+

@@ -66,14 +66,12 @@ export type DeleteReviewInput = {
   entityId: string;
 };
 
-/** Resolved title + thumbnail from backend (`entitySummary`) */
 export interface EntitySummary {
   name: string;
   thumbnailUrl: string;
   slug?: string;
 }
 
-/** Item from GET /api/v1/client/reviews/me/list (lean + entitySummary) */
 export interface MyReviewListItem extends Review {
   entitySummary?: EntitySummary;
 }
@@ -82,12 +80,11 @@ export type MyReviewsListParams = {
   page?: number;
   limit?: number;
   entityType?: ReviewEntityType;
-  /** CSV e.g. `PENDING,APPROVED` — omit for all non-deleted */
+
   status?: string;
   lang?: string;
 };
 
-/** Raw API body before mapping to ApiListResponse */
 export type MyReviewsListPayload = {
   data: MyReviewListItem[];
   pagination: {
@@ -97,5 +94,5 @@ export type MyReviewsListPayload = {
   };
 };
 
-/** Table row: stable `id` for TanStack Table */
 export type MyReviewTableRow = MyReviewListItem & { id: string };
+

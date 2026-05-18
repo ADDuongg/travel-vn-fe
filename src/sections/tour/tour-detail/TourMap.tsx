@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/ui/card';
 
 type TourMapProps = {
-  /** When true, omit outer section + id (parent supplies scroll target). */
+
   embedded?: boolean;
   omitHeading?: boolean;
 };
@@ -47,3 +47,4 @@ const TourMap: React.FC<TourMapProps> = ({ embedded, omitHeading }) => {
 };
 
 export default TourMap;
+

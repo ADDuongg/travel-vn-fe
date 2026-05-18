@@ -30,3 +30,4 @@ export function BlogAuthorCard({ author }: BlogAuthorCardProps) {
     </div>
   );
 }
+

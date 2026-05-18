@@ -88,12 +88,9 @@ export type DestinationGridItem = {
   image: string;
   tour_number: number;
   bestSeasonKey: string;
-  /** 0: short, 1: tall — masonry rhythm */
-  variant: 0 | 1;
+variant: 0 | 1;
   slug: string;
 };
-
-/** Popular destinations — homepage grid (Vietnam-focused) */
 export const DestinationItem: DestinationGridItem[] = [
   {
     id: 1,
@@ -321,8 +318,6 @@ export const foodExperiences: FoodExperienceItem[] = [
     category: 'hidden',
   },
 ];
-
-/** @deprecated use foodExperiences for homepage; kept for legacy imports */
 export const freshlyTours: FreshlyTourItem[] = foodExperiences.map((f, i) => ({
   id: f.id,
   name: f.name,
@@ -418,8 +413,6 @@ export const feedbacks = [
       'Transparent pricing, fast responses, and beautiful routes through the north. The 2-day Hà Nội itinerary in the app made exploring feel effortless. Highly recommend for anyone visiting Vietnam the first time.',
   },
 ];
-
-/** Tours — used on destination/tour search pages; Vietnam-themed */
 export const ToursItem: TourItem[] = [
   {
     id: 1,
@@ -502,8 +495,7 @@ const galleryPhoto = (id: string) =>
 
 export type GalleryImageItem = {
   src: string;
-  /** i18n key under `gallery.*` */
-  captionKey: string;
+captionKey: string;
 };
 
 export type GalleryCollection = {
@@ -512,8 +504,6 @@ export type GalleryCollection = {
   descKey: string;
   images: GalleryImageItem[];
 };
-
-/** Curated gallery — Vietnam-focused Unsplash photography */
 export const galleryCollections: GalleryCollection[] = [
   {
     id: 'hanoi',

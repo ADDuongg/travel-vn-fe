@@ -54,7 +54,7 @@ export function TourGuideCardSkeleton() {
 interface TourGuideCardProps {
   item: TourGuideListItem;
   lang?: string;
-  /** Grid position for alternating split layout on medium+ screens */
+
   index?: number;
 }
 
@@ -206,3 +206,4 @@ const TourGuideCard: React.FC<TourGuideCardProps> = ({
 };
 
 export default TourGuideCard;
+

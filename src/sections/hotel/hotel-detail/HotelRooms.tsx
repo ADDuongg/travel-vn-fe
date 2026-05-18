@@ -196,3 +196,4 @@ const HotelRooms = ({ hotel }: { hotel: Hotel }) => {
 };
 
 export default HotelRooms;
+

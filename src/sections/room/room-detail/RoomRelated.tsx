@@ -68,3 +68,4 @@ const RoomRelated: React.FC<RoomRelatedProps> = ({ currentRoomId }) => {
 };
 
 export default RoomRelated;
+

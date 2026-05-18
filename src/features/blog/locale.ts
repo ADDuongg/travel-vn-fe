@@ -63,3 +63,4 @@ export function getBlogPlainText(blocks: EditorJsBlock[] | undefined) {
     .replace(/\s+/g, ' ')
     .trim();
 }
+

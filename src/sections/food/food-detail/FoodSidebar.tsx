@@ -23,7 +23,7 @@ const tourIncludes = [
 const FoodSidebar: React.FC = () => {
   return (
     <div className="sticky top-[180px] space-y-6">
-      {/* Book a Food Tour Card */}
+      {}
       <div className="rounded-xl border border-border p-6 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
           <MdOutlineRestaurantMenu size={24} className="text-primary" />
@@ -65,7 +65,7 @@ const FoodSidebar: React.FC = () => {
         </p>
       </div>
 
-      {/* Nutrition Info Card */}
+      {}
       <div className="rounded-xl border border-border p-6">
         <h3 className="font-bold text-base mb-4">Nutrition per Serving</h3>
         <div className="grid grid-cols-2 gap-3">
@@ -82,3 +82,4 @@ const FoodSidebar: React.FC = () => {
 };
 
 export default FoodSidebar;
+

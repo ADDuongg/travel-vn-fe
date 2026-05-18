@@ -53,3 +53,4 @@ export function resendVerifyEmail(payload: ResendVerifyEmailPayload) {
     payload,
   );
 }
+

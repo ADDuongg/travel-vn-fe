@@ -11,6 +11,7 @@ export function useAmenitiesQuery() {
   return useQuery<Amenity[]>({
     queryKey: amenityKeys.list(),
     queryFn: getAmenities,
-    staleTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 10 * 60 * 1000,
   });
 }
+

@@ -22,11 +22,11 @@ const TourSearchPage: React.FC = () => {
       </div>
       <Container>
         <div className="flex flex-col lg:flex-row gap-12 py-8 ">
-          {/* Left Filter Panel */}
+          {}
           <div className="w-full lg:w-[320px] bg-white rounded-lg shadow p-6 flex flex-col gap-4 border">
             <FilterComponent />
           </div>
-          {/* Right Grid Panel */}
+          {}
           <div className="flex-1 flex flex-col gap-12">
             <div className="col-span-2 space-y-4">
               <ResponsiveH3>22 Results Found</ResponsiveH3>
@@ -51,3 +51,4 @@ const TourSearchPage: React.FC = () => {
 };
 
 export default TourSearchPage;
+

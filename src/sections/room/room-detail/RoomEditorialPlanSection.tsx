@@ -250,3 +250,4 @@ export function RoomEditorialPlanSection({ room, lang }: Props) {
     </section>
   );
 }
+

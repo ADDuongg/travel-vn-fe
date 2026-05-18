@@ -10,7 +10,6 @@ export type TourBookingRow = {
   paymentStatus: BookingPaymentStatus;
 };
 
-/** Province ref (populated) */
 export interface ProvinceRef {
   _id: string;
   name: { vi: string; en: string };
@@ -88,12 +87,11 @@ export interface TourSchedule {
   }>;
 }
 
-/** Tour - list item (summary) */
 export interface TourListItem {
   _id: string;
   slug: string;
   code: string;
-  /** Returned when request includes Authorization (Favorites module). */
+
   isFavorited?: boolean;
   tourType: TourType;
   duration: { days: number; nights: number };
@@ -118,7 +116,6 @@ export interface TourListItem {
   updatedAt: string;
 }
 
-/** Tour - full detail */
 export interface Tour extends TourListItem {
   itinerary: TourItineraryDay[];
   contact?: { phone?: string; email?: string; hotline?: string };
@@ -160,7 +157,6 @@ export interface TourQueryParams {
   transportTypes?: string;
 }
 
-/** Availability item per date (GET tours/:id/availability?month=YYYY-MM) */
 export interface TourAvailabilityItem {
   departureDate: string;
   availableSlots: number;
@@ -170,7 +166,6 @@ export interface TourAvailabilityItem {
   currency: string;
 }
 
-/** Guest info for creating a booking */
 export interface TourBookingGuest {
   fullName: string;
   email: string;
@@ -178,7 +173,6 @@ export interface TourBookingGuest {
   note?: string;
 }
 
-/** Payload for POST /api/v1/client/tour-bookings */
 export interface CreateTourBookingPayload {
   tourId: string;
   departureDate: string;
@@ -265,3 +259,4 @@ export interface TourBookingListResponse {
 export interface CancelTourBookingBody {
   reason?: string;
 }
+

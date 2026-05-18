@@ -16,9 +16,9 @@ import DataTable from '@/shared/table/DataTable';
 import { useTranslation } from 'react-i18next';
 
 type WishRow = {
-  id: string; // bắt buộc để getRowId/selection
-  tourName: string; // chỉ cần trường này để hiển thị
-  tourUrl?: string; // nếu có link
+  id: string;
+  tourName: string;
+  tourUrl?: string;
 };
 
 const WishListPage: React.FC = () => {
@@ -151,3 +151,4 @@ const WishListPage: React.FC = () => {
 };
 
 export default WishListPage;
+

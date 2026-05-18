@@ -106,3 +106,4 @@ const FoodHeader: React.FC = () => {
 };
 
 export default FoodHeader;
+

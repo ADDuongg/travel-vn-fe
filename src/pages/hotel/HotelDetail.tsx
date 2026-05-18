@@ -296,3 +296,4 @@ const HotelDetailError = ({ title, description }: HotelDetailErrorProps) => (
 );
 
 export default HotelDetailPage;
+

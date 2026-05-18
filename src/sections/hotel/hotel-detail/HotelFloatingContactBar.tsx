@@ -124,3 +124,4 @@ export function HotelFloatingContactBar({ hotel, className }: Props) {
     </div>
   );
 }
+

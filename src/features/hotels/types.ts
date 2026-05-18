@@ -1,4 +1,3 @@
-/** Province ref (populated) */
 export interface ProvinceRef {
   _id: string;
   name: { vi: string; en: string };
@@ -7,17 +6,15 @@ export interface ProvinceRef {
   fullName?: { vi: string; en: string };
 }
 
-/** HotelOption – list/options response */
 export interface HotelOption {
   _id: string;
   slug: string;
-  /** Returned when request includes Authorization (Favorites module). */
+
   isFavorited?: boolean;
   translations: Record<string, { name?: string; [key: string]: unknown }>;
   provinceId: string | ProvinceRef;
 }
 
-/** Hotel – detail response (full) */
 export interface HotelTranslation {
   name: string;
   description?: string;
@@ -51,7 +48,7 @@ export interface Hotel extends HotelOption {
     order?: number;
   }>;
   amenities?: Array<{ _id: string; [key: string]: unknown }>;
-  /** From API when included — for review header (average / count) */
+
   ratingSummary?: { average: number; total: number };
 }
 
@@ -78,3 +75,4 @@ export interface HotelPaginatedResponse {
   items: Hotel[];
   pagination: HotelPagination;
 }
+

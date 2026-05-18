@@ -2,7 +2,6 @@ import * as I from '@/types/auth';
 import type { ProfileFormValues } from '@/pages/dashboard/my_account/types';
 import { ADDRESS_NONE } from './addressOptions';
 
-/** Tách fullName thành firstName + lastName */
 export function splitFullName(
   fullName?: string,
 ): Pick<ProfileFormValues, 'firstName' | 'lastName'> {
@@ -14,19 +13,16 @@ export function splitFullName(
   return { firstName, lastName };
 }
 
-/** Tháng dùng cho DOB (label = value) */
 export const DOB_MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December',
 ].map((m) => ({ label: m, value: m }));
 
-/** Options ngày (1–31) */
 export const DOB_DAYS = Array.from({ length: 31 }, (_, i) => ({
   label: String(i + 1),
   value: String(i + 1),
 }));
 
-/** Options năm (2025 → 1936) */
 export const DOB_YEARS = Array.from({ length: 90 }, (_, i) => 2025 - i).map(
   (y) => ({ label: String(y), value: String(y) }),
 );
@@ -47,7 +43,6 @@ export const DEFAULT_PROFILE_FORM_VALUES: ProfileFormValues = {
   detail: '',
 };
 
-/** Từ form values → chuỗi dateOfBirth YYYY-MM-DD */
 export function buildDateOfBirth(values: ProfileFormValues): string | undefined {
   const { dobDay, dobMonth, dobYear } = values;
   if (!dobDay || !dobMonth || !dobYear) return undefined;
@@ -57,8 +52,6 @@ export function buildDateOfBirth(values: ProfileFormValues): string | undefined 
   const month = String(monthIndex + 1).padStart(2, '0');
   return `${dobYear}-${month}-${day}`;
 }
-
-/** Form values → payload cho API update profile (dùng trong useUpdateProfile) */
 export function profileFormValuesToPayload(
   data: ProfileFormValues,
 ): I.UpdateProfilePayload {
@@ -94,8 +87,6 @@ export function profileFormValuesToPayload(
       : undefined,
   };
 }
-
-/** Map UserProfile → defaultValues cho form */
 export function mapUserToForm(user?: I.UserProfile): Partial<ProfileFormValues> {
   if (!user) return {};
   const { firstName, lastName } = splitFullName(user.fullName);
@@ -127,3 +118,4 @@ export function mapUserToForm(user?: I.UserProfile): Partial<ProfileFormValues> 
     detail: user.address?.detail ?? '',
   };
 }
+

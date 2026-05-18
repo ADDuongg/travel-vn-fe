@@ -69,3 +69,4 @@ export function HotelEditorialStorySection({ hotel, lang }: Props) {
     </section>
   );
 }
+

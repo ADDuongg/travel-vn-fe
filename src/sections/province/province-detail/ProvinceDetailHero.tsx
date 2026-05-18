@@ -90,3 +90,4 @@ export function ProvinceDetailHero({ province, heroRef }: ProvinceDetailHeroProp
     </section>
   );
 }
+

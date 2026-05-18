@@ -98,7 +98,6 @@ export interface PaginationInfo {
   totalPages: number;
 }
 
-/** Matches API-ARCHITECTURE §9 (items + page/limit/total/totalPages). */
 export interface PaginatedList<T> {
   items: T[];
   page: number;
@@ -129,3 +128,4 @@ export interface BlogSimpleListParams {
   limit?: number;
   search?: string;
 }
+

@@ -5,23 +5,19 @@ import type { ReactNode } from 'react';
 export type PageHeroProps = {
   title: string;
   subtitle: string;
-  /** Optional pill above the title (e.g. “Vietnam — our home”) */
+
   badge?: string;
   backgroundImage: string;
-  /** For aria-labelledby; defaults to a generic id if omitted */
+
   id?: string;
   className?: string;
-  /** Min height + padding for the hero content area (e.g. tour list) */
+
   contentClassName?: string;
-  /** e.g. bottom gradient to blend into the next section (tour list + filters) */
+
   footerSlot?: ReactNode;
   children?: ReactNode;
 };
 
-/**
- * Full-width marketing page hero: Vietnam photography, warm gradient overlay, Playfair heading.
- * Matches [DESIGN.md] hero treatment (Taste. Stay. Explore / homepage).
- */
 export function PageHero({
   title,
   subtitle,
@@ -74,3 +70,4 @@ export function PageHero({
     </section>
   );
 }
+

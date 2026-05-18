@@ -26,3 +26,4 @@ export function BlogRelatedPosts({ items }: BlogRelatedPostsProps) {
     </section>
   );
 }
+

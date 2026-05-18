@@ -192,7 +192,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
       }}
       className={cn('w-full', props.className)}
     >
-      {/* Chỉ render label nếu không phải checkbox */}
+      {}
       {label && type !== 'checkbox' && (
         <Label
           style={{
@@ -226,3 +226,4 @@ const CustomInput: React.FC<CustomInputProps> = ({
 };
 
 export default CustomInput;
+

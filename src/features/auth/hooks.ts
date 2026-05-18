@@ -1,5 +1,3 @@
-// features/auth/hooks.ts
-
 import { ROUTES } from '@/constants/router';
 import { useNotifyMutation } from '@/lib/mutation';
 import { useAuthStore } from '@/stores/useAuthStore';
@@ -217,3 +215,4 @@ export function useVerifyEmail() {
     reset: mutation.reset,
   };
 }
+

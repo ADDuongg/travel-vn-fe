@@ -71,3 +71,4 @@ const FoodIngredients: React.FC = () => {
 };
 
 export default FoodIngredients;
+

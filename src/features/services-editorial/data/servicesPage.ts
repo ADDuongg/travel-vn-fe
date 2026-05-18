@@ -1,7 +1,5 @@
 const u = (id: string) =>
   `https://images.unsplash.com/${id}?ixlib=rb-4.1.0&auto=format&fit=crop&q=85&w=2400`;
-
-/** Background / inline images — URLs only; copy in i18n */
 export const serviceVisuals = {
   hero: u('photo-1469854523086-cc02fe5d8800'),
   cityJourney: u('photo-1469474968028-56623f02e42e'),
@@ -106,3 +104,4 @@ export type ShowcaseImageKey = (typeof showcaseImageKeys)[number];
 
 export const flowStepIds = ['discover', 'wander', 'immerse', 'connect', 'remember'] as const;
 export type FlowStepId = (typeof flowStepIds)[number];
+

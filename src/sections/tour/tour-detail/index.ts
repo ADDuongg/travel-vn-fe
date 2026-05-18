@@ -9,3 +9,4 @@ export { default as TourFAQ } from './TourFAQ';
 export { default as TourReviews } from './TourReviews';
 export { default as TourSidebar } from './TourSidebar';
 export { default as TourFloatingBookingBar } from './TourFloatingBookingBar';
+

@@ -47,7 +47,6 @@ export function usePaymentStatus(bookingId: string | undefined) {
   });
 }
 
-/** Tour: create Stripe payment intent for tour booking */
 export function useCreateTourPaymentIntent() {
   return useNotifyMutation<
     CreatePaymentIntentResponse,
@@ -62,7 +61,6 @@ export function useCreateTourPaymentIntent() {
   });
 }
 
-/** Tour: get payment status by tour booking ID */
 export function useTourPaymentStatus(tourBookingId: string | undefined) {
   return useQuery<PaymentStatusResponse>({
     queryKey: tourBookingId ? paymentKeys.tourStatus(tourBookingId) : [],
@@ -77,3 +75,4 @@ export function useTourPaymentStatus(tourBookingId: string | undefined) {
     },
   });
 }
+

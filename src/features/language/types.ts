@@ -5,13 +5,11 @@ export interface Room {
   slug: string;
   isActive: boolean;
 
-  /* capacity */
   maxGuests: number;
   adults: number;
   children: number;
   roomSize?: number;
 
-  /* pricing */
   pricing: {
     basePrice: number;
     currency: string;
@@ -20,7 +18,6 @@ export interface Room {
     extraChildPrice?: number;
   };
 
-  /* media */
   thumbnail?: {
     _id: string;
     url: string;
@@ -34,7 +31,6 @@ export interface Room {
     order?: number;
   }>;
 
-  /* translations */
   translations: {
     [langCode: string]: {
       name: string;
@@ -48,7 +44,6 @@ export interface Room {
     };
   };
 
-  /* sale */
   sale?: {
     isActive: boolean;
     type: 'PERCENT' | 'FIXED';
@@ -57,13 +52,11 @@ export interface Room {
     endDate?: string;
   };
 
-  /* rating */
   ratingSummary: {
     average: number;
     total: number;
   };
 
-  /* amenities */
   amenities: {
     translations: {
       [langCode: string]: {
@@ -98,3 +91,4 @@ export interface RoomListResponse {
     totalPages: number;
   };
 }
+

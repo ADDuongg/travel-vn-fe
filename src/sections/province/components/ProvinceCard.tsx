@@ -149,3 +149,4 @@ export function ProvinceCard({ item, className }: ProvinceCardProps) {
     </Link>
   );
 }
+

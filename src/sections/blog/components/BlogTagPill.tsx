@@ -16,3 +16,4 @@ export function BlogTagPill({ slug, label }: BlogTagPillProps) {
     </Link>
   );
 }
+

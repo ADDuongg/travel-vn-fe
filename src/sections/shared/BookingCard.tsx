@@ -15,10 +15,7 @@ interface BookingCardProps {
   EnquiryFormComponent: React.ReactNode;
   price?: string;
   badge?: string;
-  /**
-   * `tour` — single booking form + optional enquiry in a dialog (TravelVN).
-   * `default` — legacy tabbed booking + enquiry.
-   */
+
   variant?: 'default' | 'tour';
 }
 
@@ -104,3 +101,4 @@ const BookingCard: React.FC<BookingCardProps> = ({
 };
 
 export default BookingCard;
+

@@ -2,7 +2,6 @@ import type { Hotel } from '@/features/hotels/types';
 
 export type GalleryItem = { url: string; alt: string };
 
-/** Ordered gallery: thumbnail first, then gallery by `order`. */
 export function buildOrderedGallery(hotel: Hotel): GalleryItem[] {
   const out: GalleryItem[] = [];
   const thumb = hotel.thumbnail;
@@ -20,7 +19,6 @@ export function buildOrderedGallery(hotel: Hotel): GalleryItem[] {
   return out;
 }
 
-/** Split hotel HTML description into plain paragraphs for editorial layout. */
 export function paragraphsFromHotelDescription(html?: string): string[] {
   if (!html?.trim()) return [];
   const normalized = html.replace(/\r\n/g, '\n');
@@ -67,3 +65,4 @@ export function formatVndAmount(n: number, locale: string): string {
     return `${n} ₫`;
   }
 }
+

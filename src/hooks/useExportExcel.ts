@@ -49,7 +49,6 @@ const mockData = [
   },
 ];
 
-// Lấy tên cột Excel: A, B, C...
 const columnLetter = (colIndex: number): string => {
   let letter = '';
   let num = colIndex;
@@ -61,7 +60,6 @@ const columnLetter = (colIndex: number): string => {
   return letter;
 };
 
-// Lấy độ sâu tối đa của headers
 const getMaxDepth = (cols: any[], depth = 1): number =>
   Math.max(
     ...cols.map((col) =>
@@ -69,7 +67,6 @@ const getMaxDepth = (cols: any[], depth = 1): number =>
     ),
   );
 
-// Phân tích headers để lấy thông tin merge + key
 const parseHeaders = (
   cols: any[],
   depth: number,
@@ -134,7 +131,6 @@ export const useExportExcel = () => {
       const maxDepth = getMaxDepth(columns);
       const { metas } = parseHeaders(columns, maxDepth);
 
-      // === Headers
       metas.forEach(({ header, colStart, colEnd, rowStart, rowEnd }) => {
         const from = columnLetter(colStart);
         const to = columnLetter(colEnd);
@@ -149,14 +145,12 @@ export const useExportExcel = () => {
       const leafMetas = metas.filter((m) => m.key);
       const leafKeys = leafMetas.map((m) => m.key!);
 
-      // === Set column width
       leafMetas.forEach((meta, index) => {
         if (meta.width) {
           sheet.getColumn(index + 1).width = meta.width;
         }
       });
 
-      // === Gán dữ liệu
       const formatters: Record<string, (value: any) => any> = {
         ...format,
       };
@@ -187,3 +181,4 @@ export const useExportExcel = () => {
     error,
   };
 };
+

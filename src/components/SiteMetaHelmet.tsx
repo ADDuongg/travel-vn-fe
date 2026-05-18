@@ -8,10 +8,6 @@ function normalizeDocumentLang(code: string): 'en' | 'vi' {
   return SUPPORTED_LANGS.has(base) ? (base as 'en' | 'vi') : 'en';
 }
 
-/**
- * Syncs document title, description, and social meta from i18n.
- * Bots that do not run JS still see the static fallback in index.html only.
- */
 export function SiteMetaHelmet() {
   const { t, i18n } = useTranslation('translation');
   const lang = normalizeDocumentLang(i18n.language);
@@ -50,3 +46,4 @@ export function SiteMetaHelmet() {
     </Helmet>
   );
 }
+

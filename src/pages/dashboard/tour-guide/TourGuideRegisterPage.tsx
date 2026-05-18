@@ -679,3 +679,4 @@ const TourGuideRegisterPage: React.FC = () => {
 };
 
 export default TourGuideRegisterPage;
+

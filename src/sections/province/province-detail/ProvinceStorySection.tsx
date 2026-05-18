@@ -48,3 +48,4 @@ export function ProvinceStorySection({ province }: ProvinceStorySectionProps) {
     </section>
   );
 }
+

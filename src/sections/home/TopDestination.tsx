@@ -25,7 +25,7 @@ export const TopDestination = () => {
           </p>
         </div>
 
-        {/* City strip */}
+        {}
         <div
           className="mb-10 flex gap-3 overflow-x-auto pb-2 md:mb-12 md:justify-center md:overflow-visible md:pb-0"
           role="list"
@@ -122,3 +122,4 @@ export const TopDestination = () => {
     </SectionReveal>
   );
 };
+

@@ -7,7 +7,7 @@ type TourGuideDetailPresenceSectionProps = {
   guide: TourGuide;
   specialtyLines: string[];
   specialtiesText?: string;
-  /** When false, section is omitted (nav should skip `presence` too). */
+
   show: boolean;
 };
 
@@ -112,3 +112,4 @@ export function TourGuideDetailPresenceSection({
     </section>
   );
 }
+

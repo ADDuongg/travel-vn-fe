@@ -29,3 +29,4 @@ export const defaultRoomListQuery: RoomListQuery = {
   amenities: [],
   roomSize: [],
 };
+

@@ -123,3 +123,4 @@ const RoomSidebar = ({ room }: RoomSidebarProps) => {
 };
 
 export default RoomSidebar;
+

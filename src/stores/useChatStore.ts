@@ -58,3 +58,4 @@ export const useChatStore = create<ChatState>((set) => ({
       error: null,
     }),
 }));
+

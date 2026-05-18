@@ -12,7 +12,7 @@ import { FaCircleCheck } from 'react-icons/fa6';
 export type TourGuideDetailHeroProps = {
   guide: TourGuide;
   name: string;
-  /** Avatar URL first; caller resolves fallbacks. */
+
   heroImage: string;
   storyLead?: string;
   rating: number;
@@ -126,3 +126,4 @@ export const TourGuideDetailHero = forwardRef<
     </ParallaxHero>
   );
 });
+

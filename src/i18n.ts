@@ -13,7 +13,7 @@ i18n
     nonExplicitSupportedLngs: true,
 
     defaultNS: 'translation',
-    /** Load with translation so notification keys resolve (nested paths use keySeparator). */
+
     ns: ['translation', 'notification', 'api'],
 
     detection: {
@@ -39,3 +39,4 @@ i18n
   });
 
 export default i18n;
+

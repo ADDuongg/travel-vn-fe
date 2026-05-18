@@ -70,3 +70,4 @@ const RoomDetail = ({ room }: RoomDetailProps) => {
 };
 
 export default RoomDetail;
+

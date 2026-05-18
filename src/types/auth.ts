@@ -3,7 +3,6 @@ export type Permissions = {
   apis: string[];
 };
 
-/** Giới tính – dùng cho profile */
 export const Gender = {
   Male: 'male',
   Female: 'female',
@@ -29,7 +28,7 @@ export type Account = {
     publicId?: string;
   };
   email?: string;
-  /** `false` = must verify; omit/`true` = treated as verified (legacy). */
+
   isEmailVerified?: boolean;
   dateOfBirth?: string;
   gender?: Gender;
@@ -52,7 +51,6 @@ export type LoginFormValues = {
   password: string;
 };
 
-/** POST /auth/forgot-password/confirm — OTP flow (no JWT token). */
 export type ForgotPasswordConfirmPayload = {
   identifier: string;
   code: string;
@@ -70,13 +68,11 @@ export type RegisterFormValues = {
   address?: string;
 };
 
-/** POST /auth/verify-email */
 export type VerifyEmailPayload = {
   email: string;
   code: string;
 };
 
-/** POST /auth/resend-verify-email */
 export type ResendVerifyEmailPayload = {
   email: string;
 };
@@ -94,7 +90,7 @@ export type UserProfile = {
     publicId?: string;
   };
   email?: string;
-  /** `false` = must verify; omit/`true` = treated as verified (legacy). */
+
   isEmailVerified?: boolean;
   dateOfBirth?: string;
   gender?: Gender;
@@ -125,3 +121,4 @@ export type UpdateProfilePayload = {
     detail?: string;
   };
 };
+

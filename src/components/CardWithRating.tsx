@@ -60,3 +60,4 @@ const CardWithRating: React.FC<{ item: any }> = ({ item }) => {
 };
 
 export default CardWithRating;
+

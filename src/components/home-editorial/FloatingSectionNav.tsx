@@ -11,11 +11,11 @@ type FloatingSectionNavProps = {
   items: FloatingSectionNavItem[];
   ariaLabel: string;
   onNavigate: (sectionId: string) => void;
-  /** Tailwind `top-*` (+ optional `md:top-*`) for bar position under header */
+
   stickyTopClassName?: string;
-  /** Pill container — merge over defaults (e.g. background tint) */
+
   navClassName?: string;
-  /** Scrollable row of buttons */
+
   buttonsRowClassName?: string;
   buttonClassName?: string;
 };
@@ -70,3 +70,4 @@ export function FloatingSectionNav({
     </motion.div>
   );
 }
+

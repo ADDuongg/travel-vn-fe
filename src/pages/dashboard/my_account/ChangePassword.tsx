@@ -1,4 +1,3 @@
-// ChangePasswordPage.tsx
 import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -98,7 +97,6 @@ const ChangePasswordPage: React.FC = () => {
   );
 };
 
-/** Hàng form: nhãn cột trái (160px), input cột phải — giống design */
 const Row: React.FC<{ label: React.ReactNode; children: React.ReactNode }> = ({
   label,
   children,
@@ -112,3 +110,4 @@ const Row: React.FC<{ label: React.ReactNode; children: React.ReactNode }> = ({
 );
 
 export default ChangePasswordPage;
+

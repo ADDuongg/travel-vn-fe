@@ -1,4 +1,3 @@
-// DataTable.tsx — TanStack Table core unchanged; UI styled (dashboard / UI UX Pro Max kit)
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -30,9 +29,9 @@ type DataTableProps<TData> = {
   data: I.ApiListResponse<TData>;
   tableState: IC.TableState;
   searchPlaceholder?: string;
-  /** Hide global search input (e.g. server-only filters elsewhere) */
+
   hideSearch?: boolean;
-  /** Override default empty state copy */
+
   emptyMessage?: string;
 };
 
@@ -84,7 +83,7 @@ function DataTable<TData>({
 
   return (
     <div className="space-y-0 overflow-hidden rounded-xl border border-charcoal/10 bg-card shadow-soft">
-      {/* Toolbar */}
+      {}
       <div className="flex flex-col gap-3 border-b border-charcoal/10 bg-gradient-to-b from-sand-50/95 to-card px-3 py-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:px-4 sm:py-4">
         <div className="flex min-w-0 flex-1 flex-col gap-2 sm:max-w-md sm:flex-row sm:items-center">
           {!hideSearch && (
@@ -187,7 +186,7 @@ function DataTable<TData>({
         </div>
       </div>
 
-      {/* Table */}
+      {}
       <div className="overflow-x-auto">
         <Table className="min-w-[640px]">
           <TableHeader className="sticky top-0 z-[1] border-b border-charcoal/10 bg-sand-50/90 shadow-[0_1px_0_0_oklch(22%_0.02_75/0.08)]">
@@ -265,3 +264,4 @@ function DataTable<TData>({
 }
 
 export default DataTable;
+

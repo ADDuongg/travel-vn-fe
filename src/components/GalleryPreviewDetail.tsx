@@ -17,12 +17,12 @@ export function GalleryPreviewDetail({
     url: string;
     alt?: string;
   };
-  /** e.g. "View all 24 photos" */
+
   overlayLabel?: string;
 }) {
   return (
     <div className="grid grid-cols-12 gap-4">
-      {/* Main image (left) - Explore Vietnam style */}
+      {}
       <div className="relative col-span-12 md:col-span-8 rounded-xl overflow-hidden ring-1 ring-border aspect-[16/9]">
         <img
           src={thumbnail?.url ?? gallery[0]?.url}
@@ -53,7 +53,7 @@ export function GalleryPreviewDetail({
         </div>
       </div>
 
-      {/* Ảnh nhỏ (index 1 → 4) */}
+      {}
       <div className="col-span-12 md:col-span-4 grid grid-cols-2 grid-rows-2 gap-4">
         {gallery.slice(1).map((img) => (
           <div
@@ -71,3 +71,4 @@ export function GalleryPreviewDetail({
     </div>
   );
 }
+

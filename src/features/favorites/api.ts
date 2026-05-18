@@ -14,9 +14,6 @@ export async function toggleFavorite(payload: {
   return api.post('/api/v1/client/favorites/toggle', payload);
 }
 
-/**
- * GET /api/v1/client/favorites/me/list — maps to shared ApiListResponse for DataTable.
- */
 export async function getMyFavoritesList(
   params: MyFavoritesListParams,
 ): Promise<I.ApiListResponse<FavoriteRecord>> {

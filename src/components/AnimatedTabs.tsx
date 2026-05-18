@@ -20,7 +20,7 @@ export type AnimatedTabsProps = {
   defaultActiveId?: string;
   omitContainer?: boolean;
   scrollOffset?: number;
-  /** TravelVN product pages — warm ivory, red active indicator */
+
   variant?: 'default' | 'travel';
 };
 
@@ -40,7 +40,6 @@ export function AnimatedTabs({
   }>({});
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // scroll spy
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -64,7 +63,6 @@ export function AnimatedTabs({
     return () => observer.disconnect();
   }, [tabs]);
 
-  // update indicator khi active hoặc hovered đổi
   useEffect(() => {
     const id = hovered || active;
     const container = containerRef.current;
@@ -132,3 +130,4 @@ export function AnimatedTabs({
   if (omitContainer) return content;
   return <Container>{content}</Container>;
 }
+

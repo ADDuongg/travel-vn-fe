@@ -1,4 +1,3 @@
-/** Province ref (populated) – từ GET /api/v1/public/provinces */
 export interface ProvinceRef {
   _id: string;
   name: { vi: string; en: string };
@@ -11,11 +10,10 @@ export interface TourGuideTranslation {
   bio?: string;
   shortBio?: string;
   specialties?: string;
-  /** Mảng chuyên môn theo ngôn ngữ (cùng thứ tự giữa các lang) */
+
   specialtyItems?: string[];
 }
 
-/** CV reference (JSON body after MediaModule upload) */
 export interface TourGuideCv {
   url: string;
   publicId?: string;
@@ -23,16 +21,14 @@ export interface TourGuideCv {
   format?: string;
 }
 
-/** Gallery item (JSON body; full replace on PATCH when sent) */
 export interface TourGuideGalleryItem {
   url: string;
   publicId?: string;
   alt?: string;
-  /** integer >= 0; BE may infer from index if omitted */
+
   order?: number;
 }
 
-/** User info populated trên guide (public) */
 export interface TourGuideUserRef {
   _id: string;
   fullName?: string;
@@ -46,11 +42,10 @@ export interface TourGuideRatingSummary {
   total: number;
 }
 
-/** TourGuide – list item (GET /api/v1/public/tour-guides) */
 export interface TourGuideListItem {
   _id: string;
   userId: string;
-  /** Returned when request includes Authorization (Favorites module). */
+
   isFavorited?: boolean;
   user?: TourGuideUserRef;
   translations: Record<string, TourGuideTranslation>;
@@ -61,11 +56,11 @@ export interface TourGuideListItem {
   yearsOfExperience?: number;
   gallery?: TourGuideGalleryItem[];
   ratingSummary: TourGuideRatingSummary;
-  /** Tỷ lệ phản hồi (0–100) */
+
   responseRate?: number;
-  /** Số chuyến đi hoàn tất */
+
   completedTripsCount?: number;
-  /** Tỷ lệ khách quay lại (0–100) */
+
   returningCustomerRate?: number;
   isAvailable: boolean;
   isActive: boolean;
@@ -77,7 +72,6 @@ export interface TourGuideListItem {
   updatedAt?: string;
 }
 
-/** TourGuide – full detail (GET /api/v1/public/tour-guides/:id) */
 export interface TourGuide extends TourGuideListItem {
   cv?: TourGuideCv;
   verifiedAt?: string;
@@ -90,7 +84,6 @@ export interface TourGuidePagination {
   totalPages: number;
 }
 
-/** Payload when registering a new tour guide (POST /api/v1/client/tour-guides/register) */
 export interface TourGuideRegisterPayload {
   translations: Record<string, TourGuideTranslation>;
   languages: string[];
@@ -100,11 +93,11 @@ export interface TourGuideRegisterPayload {
   yearsOfExperience?: number;
   cv?: TourGuideCv;
   gallery?: TourGuideGalleryItem[];
-  /** Tỷ lệ phản hồi (0–100) – optional, thường do hệ thống tính */
+
   responseRate?: number;
-  /** Số chuyến đi hoàn tất – optional, thường do hệ thống tính */
+
   completedTripsCount?: number;
-  /** Tỷ lệ khách quay lại (0–100) – optional, thường do hệ thống tính */
+
   returningCustomerRate?: number;
   isAvailable?: boolean;
   dailyRate?: number;
@@ -112,7 +105,6 @@ export interface TourGuideRegisterPayload {
   contactMethods?: string[];
 }
 
-/** Partial update (PATCH /api/v1/client/tour-guides/my-profile) */
 export type TourGuideUpdatePayload = Partial<{
   translations: Record<string, TourGuideTranslation>;
   languages: string[];
@@ -137,28 +129,27 @@ export interface TourGuidePaginatedResponse {
 }
 
 export interface TourGuideQueryParams {
-  /** Pagination */
+
   page?: number;
   limit?: number;
-  /** Filter by province */
+
   provinceId?: string;
-  /** Filter by language code (vi, en, ...) */
+
   language?: string;
-  /** Filter by verification status */
+
   isVerified?: boolean;
-  /** Filter by availability */
+
   isAvailable?: boolean;
-  /** Minimum rating filter */
+
   minRating?: number;
-  /** Keyword search (guide name, etc.) */
+
   search?: string;
-  /** Sort key */
+
   sort?: TourGuideSortBy;
-  /** (Internal) Filter by owner user id – used for my-profile dashboard */
+
   userId?: string;
 }
 
-/** Review item – GET /api/v1/public/tour-guides/:id/reviews (may mirror global review schema) */
 export interface TourGuideReview {
   _id: string;
   entityType: 'GUIDE';
@@ -167,7 +158,7 @@ export interface TourGuideReview {
   comment?: string;
   userId?: string | null;
   isAnonymous: boolean;
-  /** @deprecated Prefer `status` when backend exposes it */
+
   isApproved?: boolean;
   status?: 'PENDING' | 'APPROVED' | 'REJECTED' | 'HIDDEN';
   createdAt: string;
@@ -177,3 +168,4 @@ export interface TourGuideReviewsResponse {
   items: TourGuideReview[];
   pagination: TourGuidePagination;
 }
+

@@ -6,15 +6,14 @@ type MagazineSectionHeadingProps = {
   kicker: string;
   title: string;
   revealDelay?: number;
-  /** Spacing/stack for heading block + optional `children` (e.g. `space-y-8`) */
+
   className?: string;
-  /** `responsive` bumps title at md (editorial sections); `flat` stays text-4xl */
+
   titleSize?: 'responsive' | 'flat';
   titleClassName?: string;
   children?: ReactNode;
 };
 
-/** Uppercase kicker + `font-display` title — shared editorial detail sections */
 export function MagazineSectionHeading({
   kicker,
   title,
@@ -39,3 +38,4 @@ export function MagazineSectionHeading({
     </Reveal>
   );
 }
+

@@ -135,3 +135,4 @@ export function RoomEditorialMetaStrip({ room, lang }: Props) {
     </div>
   );
 }
+

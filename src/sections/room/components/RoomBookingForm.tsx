@@ -38,7 +38,7 @@ const editorialSelectWrap =
 
 type RoomBookingFormProps = {
   room: Room;
-  /** Editorial tokens for room plan modal (Open Design reference) */
+
   visualVariant?: 'default' | 'editorial';
 };
 
@@ -473,3 +473,4 @@ const RoomBookingForm = ({
 };
 
 export default RoomBookingForm;
+

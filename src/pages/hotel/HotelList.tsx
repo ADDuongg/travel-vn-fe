@@ -208,3 +208,4 @@ const HotelList: React.FC = () => {
 };
 
 export default HotelList;
+

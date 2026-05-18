@@ -10,7 +10,7 @@ export type TourGuideDetailNavItem = FloatingSectionNavItem;
 type TourGuideDetailFloatingNavProps = {
   visible: boolean;
   items: TourGuideDetailNavItem[];
-  /** Override fixed offset under main header (Open Design uses ~4.5rem / 5.5rem). */
+
   stickyTopClassName?: string;
 };
 
@@ -36,3 +36,4 @@ export function TourGuideDetailFloatingNav({
     />
   );
 }
+

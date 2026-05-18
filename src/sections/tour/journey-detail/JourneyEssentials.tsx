@@ -48,3 +48,4 @@ export function JourneyEssentials({ included, excluded }: Props) {
     </div>
   );
 }
+

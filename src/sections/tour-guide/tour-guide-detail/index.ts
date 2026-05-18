@@ -11,3 +11,4 @@ export { TourGuideDetailVoiceSection } from './TourGuideDetailVoiceSection';
 export { TourGuideDetailPlanBand } from './TourGuideDetailPlanBand';
 export { TourGuideDetailMobileBar } from './TourGuideDetailMobileBar';
 export * from './helpers';
+

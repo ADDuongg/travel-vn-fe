@@ -1,4 +1,3 @@
-// components/CardCarousel.tsx
 import {
   Carousel,
   CarouselContent,
@@ -42,7 +41,7 @@ const BASIS_BY_BP = {
   },
 } as const;
 
-type BasisCount = keyof typeof BASIS_BASE; // 1 | 2 | 3 | 4
+type BasisCount = keyof typeof BASIS_BASE;
 
 const toBasisCount = (n?: number): BasisCount => {
   if (n === 2 || n === 3 || n === 4) return n;
@@ -55,7 +54,7 @@ interface CardCarouselProps<T> {
   renderItem: (item: T, index: number) => React.ReactNode;
   seeMoreButton?: React.ReactNode;
   classNameContainer?: string;
-  /** Mobile-first like Tailwind: `base` is smallest screens; larger keys apply from that breakpoint up. */
+
   itemsPerView?: {
     base?: number;
     sm?: number;
@@ -71,13 +70,11 @@ export function CardCarousel<T>({
   renderItem,
   seeMoreButton,
   classNameContainer,
-  // Mobile-first (Tailwind): `base` applies to the smallest screens,
-  // then `sm/md/lg/xl` apply from that breakpoint and up.
-  // Default: 1 card on mobile, 2 on md, 3 on lg+.
+
   itemsPerView = { base: 1, md: 2, lg: 3 },
 }: CardCarouselProps<T>) {
   const getBasisClass = () => {
-    // Keep responsive variants as string literals so Tailwind JIT picks them up.
+
     const base = BASIS_BASE[toBasisCount(itemsPerView.base)];
     const sm = itemsPerView.sm ? BASIS_BY_BP.sm[toBasisCount(itemsPerView.sm)] : '';
     const md = itemsPerView.md ? BASIS_BY_BP.md[toBasisCount(itemsPerView.md)] : '';
@@ -115,3 +112,4 @@ export function CardCarousel<T>({
     </div>
   );
 }
+

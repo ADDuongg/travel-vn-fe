@@ -18,7 +18,7 @@ const CardSearchingFlex: React.FC<{
         className,
       )}
     >
-      {/* Image */}
+      {}
       <div className="relative w-[260px] h-[200px] flex-shrink-0">
         <img
           src={item?.image}
@@ -32,12 +32,12 @@ const CardSearchingFlex: React.FC<{
         )}
       </div>
 
-      {/* Content */}
+      {}
       <div className="flex flex-1 px-6 py-4 items-center justify-between">
-        {/* Left info */}
+        {}
         <div className="flex flex-col gap-2">
           <CardName className="text-xl font-semibold">{item?.name}</CardName>
-          {/* Optional: mô tả ngắn */}
+          {}
           {item?.description && (
             <p className="text-gray-600 text-sm line-clamp-2">
               {item.description}
@@ -45,10 +45,10 @@ const CardSearchingFlex: React.FC<{
           )}
         </div>
 
-        {/* Divider */}
+        {}
         <div className="h-full w-px bg-gray-200 mx-4" />
 
-        {/* Right info */}
+        {}
         <div className="flex flex-col items-center gap-2 min-w-[120px]">
           <p className="text-sm text-gray-500">From</p>
           <p className="text-lg font-bold text-blue-600">€{item?.price}</p>
@@ -64,3 +64,4 @@ const CardSearchingFlex: React.FC<{
 };
 
 export default CardSearchingFlex;
+

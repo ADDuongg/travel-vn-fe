@@ -13,7 +13,7 @@ import { ResponsiveH1, P } from '@/components/ui/typography';
 export type CheckoutFormType = 'room' | 'tour';
 
 interface CheckoutFormProps {
-  /** Room: bookingId. Tour: tourBookingId (MongoDB _id of TourBooking) */
+
   bookingId: string;
   type?: CheckoutFormType;
 }
@@ -115,3 +115,4 @@ export default function CheckoutForm({
     </div>
   );
 }
+

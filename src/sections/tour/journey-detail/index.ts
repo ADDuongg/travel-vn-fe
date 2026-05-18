@@ -8,3 +8,4 @@ export { JourneyPlanBand } from './JourneyPlanBand';
 export { JourneyRhythm } from './JourneyRhythm';
 export { JourneyShareSave } from './JourneyShareSave';
 export * from './tourJourneyMap';
+

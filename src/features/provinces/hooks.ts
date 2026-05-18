@@ -21,7 +21,6 @@ export const provinceKeys = {
   dropdown: () => [...provinceKeys.all, 'dropdown'] as const,
 };
 
-/** Dropdown – form select (tỉnh → quận/huyện) */
 export function useProvincesQuery() {
   return useQuery<Province[]>({
     queryKey: provinceKeys.dropdown(),
@@ -30,7 +29,6 @@ export function useProvincesQuery() {
   });
 }
 
-/** Danh sách tỉnh (filter, pagination) */
 export function useProvincesListQuery(params?: ProvinceListParams) {
   return useQuery({
     queryKey: provinceKeys.list(params),
@@ -39,7 +37,6 @@ export function useProvincesListQuery(params?: ProvinceListParams) {
   });
 }
 
-/** Tỉnh nổi bật */
 export function usePopularProvincesQuery() {
   return useQuery<ProvinceListItem[]>({
     queryKey: provinceKeys.popular(),
@@ -48,7 +45,6 @@ export function usePopularProvincesQuery() {
   });
 }
 
-/** Chi tiết tỉnh theo slug */
 export function useProvinceDetailQuery(slug: string) {
   return useQuery<ProvinceDetail>({
     queryKey: provinceKeys.detail(slug),
@@ -57,3 +53,4 @@ export function useProvinceDetailQuery(slug: string) {
     staleTime: 10 * 60 * 1000,
   });
 }
+

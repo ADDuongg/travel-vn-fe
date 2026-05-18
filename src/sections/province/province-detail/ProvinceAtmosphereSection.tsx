@@ -64,3 +64,4 @@ export function ProvinceAtmosphereSection({ province, images }: ProvinceAtmosphe
     </section>
   );
 }
+

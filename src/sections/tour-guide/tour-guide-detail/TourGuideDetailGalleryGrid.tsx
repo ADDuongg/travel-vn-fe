@@ -5,7 +5,7 @@ import type { TourGuide } from '@/features/tour-guide/types';
 
 type TourGuideDetailGalleryGridProps = {
   guide: TourGuide;
-  /** Images to show (caller may slice gallery). */
+
   images: Array<{ url: string; alt?: string }>;
 };
 
@@ -72,3 +72,4 @@ export function TourGuideDetailGalleryGrid({
     </section>
   );
 }
+

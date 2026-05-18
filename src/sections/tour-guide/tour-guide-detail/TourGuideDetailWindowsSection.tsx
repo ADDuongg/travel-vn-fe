@@ -3,9 +3,6 @@ import { Reveal } from '@/components/home-editorial/Reveal';
 
 const WINDOW_KEYS = ['a', 'b', 'c'] as const;
 
-/**
- * General seasonal hints (not guide-specific commitments). Copy is neutral per product plan.
- */
 export function TourGuideDetailWindowsSection() {
   const { t } = useTranslation();
 
@@ -45,3 +42,4 @@ export function TourGuideDetailWindowsSection() {
     </section>
   );
 }
+

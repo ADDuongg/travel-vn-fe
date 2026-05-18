@@ -32,7 +32,6 @@ function parsePositiveInt(raw: string | null): number | undefined {
   return Math.floor(n);
 }
 
-/** Parse URL → full query used by `useToursQuery` (includes page + limit). */
 export function parseTourListSearchParams(
   sp: URLSearchParams,
 ): TourQueryParams {
@@ -81,7 +80,6 @@ export function parseTourListSearchParams(
   return next;
 }
 
-/** Serialize tour query to shareable URL (short keys; omit defaults). */
 export function serializeTourListSearchParams(params: TourQueryParams): URLSearchParams {
   const next = new URLSearchParams();
   const page = params.page ?? 1;
@@ -117,3 +115,4 @@ export function defaultTourListQueryParams(): TourQueryParams {
     sortBy: 'newest',
   };
 }
+

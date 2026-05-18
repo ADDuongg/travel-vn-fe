@@ -100,7 +100,8 @@ export interface Booking {
 
   createdAt: string;
   updatedAt: string;
-  /** Set when status is CANCELLED (from PATCH cancel) */
+
   cancelledAt?: string;
   cancelReason?: string;
 }
+

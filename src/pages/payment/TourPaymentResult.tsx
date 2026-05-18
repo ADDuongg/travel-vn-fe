@@ -1,7 +1,3 @@
-/**
- * Trang kết quả thanh toán tour – GET payments/status/tour/:tourBookingId
- * Hiển thị SUCCEEDED / FAILED / PENDING, link chi tiết đơn (theo code).
- */
 import { useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -181,3 +177,4 @@ const TourPaymentResult = () => {
 };
 
 export default TourPaymentResult;
+

@@ -86,7 +86,7 @@ export const Ratings: React.FC<RatingsProps> = ({
         let starElement: React.ReactNode;
 
         if (i < fullStars) {
-          // full star
+
           starElement = React.cloneElement(Icon, {
             size,
             className: cn(
@@ -97,7 +97,7 @@ export const Ratings: React.FC<RatingsProps> = ({
             style: { display: 'block', width: size, height: size },
           });
         } else if (i === fullStars && hasHalfStar) {
-          // half star
+
           starElement = (
             <PartialStar
               key={i}
@@ -108,7 +108,7 @@ export const Ratings: React.FC<RatingsProps> = ({
             />
           );
         } else {
-          // empty star
+
           starElement = React.cloneElement(Icon, {
             size,
             className: cn(
@@ -136,7 +136,7 @@ export const Ratings: React.FC<RatingsProps> = ({
 };
 
 interface PartialStarProps {
-  fillPercentage: number; // 0.5 for half
+  fillPercentage: number;
   size: number;
   className?: string;
   Icon: React.ReactElement<{
@@ -188,3 +188,4 @@ const PartialStar: React.FC<PartialStarProps> = ({
     </div>
   );
 };
+

@@ -1,4 +1,3 @@
-// hooks/useInitAuth.ts
 import { useRefresh } from '@/features/auth/hooks';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useEffect } from 'react';
@@ -21,3 +20,4 @@ export function useInitAuth() {
     init();
   }, []);
 }
+

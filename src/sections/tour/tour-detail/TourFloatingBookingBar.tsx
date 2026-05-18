@@ -12,9 +12,6 @@ import {
 import TourBookingForm from '../components/TourBookingForm';
 import type { Tour } from '@/features/tours/types';
 
-/**
- * Mobile-only: fixed bar with price + CTA; opens booking in a bottom sheet.
- */
 type TourFloatingBookingBarProps = {
   tour: Tour;
 };
@@ -74,3 +71,4 @@ const TourFloatingBookingBar = ({ tour }: TourFloatingBookingBarProps) => {
 };
 
 export default TourFloatingBookingBar;
+

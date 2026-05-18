@@ -44,3 +44,4 @@ export function JourneyBookingShell({ open, onClose, tour }: Props) {
     </Dialog>
   );
 }
+

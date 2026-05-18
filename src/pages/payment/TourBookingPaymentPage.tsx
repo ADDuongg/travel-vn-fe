@@ -1,7 +1,3 @@
-/**
- * Trang thanh toán đơn tour (Stripe) – tương tự RoomBookingPaymentPage
- * POST /api/v1/client/payments/create-intent/tour
- */
 import { Elements } from '@stripe/react-stripe-js';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -102,3 +98,4 @@ const TourBookingPaymentPage = () => {
 };
 
 export default TourBookingPaymentPage;
+

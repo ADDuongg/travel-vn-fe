@@ -17,3 +17,4 @@ export function useUploadMediaMultiple() {
     errorKey: 'notifications.media.upload_error',
   });
 }
+

@@ -33,10 +33,10 @@ export function useBookingsQuery(params: GetBookingsParams) {
   return useQuery<I.ApiListResponse<TourBookingRow>>({
     queryKey: bookingKeys.list(params),
     queryFn: () => getBookings(params),
-    // keepPreviousData: true,
+
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
-    // select: (page) => page, // tuỳ nếu muốn map về UI shape
+
   });
 }
 
@@ -209,3 +209,4 @@ export function useUploadTourBookingReceiptMutation() {
     },
   });
 }
+

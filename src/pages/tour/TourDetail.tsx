@@ -502,3 +502,4 @@ const TourDetailError = ({ title, description }: TourDetailErrorProps) => (
 );
 
 export default TourDetailPage;
+

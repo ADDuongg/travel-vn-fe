@@ -58,3 +58,4 @@ export function ProvinceGallery({ province }: ProvinceGalleryProps) {
     </section>
   );
 }
+

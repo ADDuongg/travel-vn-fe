@@ -16,12 +16,12 @@ export type ContactEditorialConversationPick = {
 };
 
 type ContactEditorialInquiryFormProps = {
-  /** Full card + hero copy on Contact page vs compact block inside room modal */
+
   mode: 'page' | 'embedded';
   className?: string;
-  /** When guide deep-link resolves, prefill journey line once if field still empty */
+
   guideJourneyPrefill?: string;
-  /** When user taps a conversation tile on the Contact page */
+
   conversationPick?: ContactEditorialConversationPick | null;
 };
 
@@ -200,3 +200,4 @@ export function ContactEditorialInquiryForm({
 
   return <div className={className}>{inner}</div>;
 }
+

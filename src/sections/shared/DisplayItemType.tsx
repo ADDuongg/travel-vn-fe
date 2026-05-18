@@ -73,3 +73,4 @@ const DisplayItemType: React.FC<{
 };
 
 export default DisplayItemType;
+

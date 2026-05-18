@@ -331,3 +331,4 @@ const TourHeader: React.FC<TourHeaderProps> = ({ tour }) => {
 };
 
 export default TourHeader;
+

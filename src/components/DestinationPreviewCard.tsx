@@ -40,3 +40,4 @@ const DestinationPreviewCard = ({ item }: { item: any }) => {
 };
 
 export default DestinationPreviewCard;
+

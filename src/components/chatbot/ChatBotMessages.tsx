@@ -5,8 +5,7 @@ import { cn } from '@/lib/utils';
 import ChatBotToolResult from './ChatBotToolResult';
 
 interface ChatBotMessagesProps {
-  // `useChat` returns simple { id, role, content } messages,
-  // but we also support UIMessage with parts from TanStack AI.
+
   messages: Array<
     | UIMessage
     | {
@@ -67,9 +66,6 @@ function MessageBubble({
 }) {
   const isUser = message.role === 'user';
 
-  // Normalize message text:
-  // - If UIMessage with parts → join text parts
-  // - Else fall back to plain `content` string
   const renderContent = () => {
     if ('parts' in message && Array.isArray(message.parts)) {
       return message.parts.map((part, idx) => {
@@ -118,7 +114,6 @@ function MessageBubble({
       });
     }
 
-    // Plain text message from `useChat`
     return (
       <span className="whitespace-pre-wrap">
         {'content' in message ? message.content : ''}
@@ -157,3 +152,4 @@ function TypingIndicator() {
 }
 
 export default ChatBotMessages;
+

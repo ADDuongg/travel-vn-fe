@@ -58,8 +58,7 @@ function Carousel({
     ...opts,
     axis: orientation === 'horizontal' ? ('x' as const) : ('y' as const),
     loop: true,
-    /* slidesToScroll: 1,
-    containScroll: 'trimSnaps' as const, */
+
   };
 
   const [carouselRef, api] = useEmblaCarousel(emblaOpts, plugins);
@@ -251,3 +250,4 @@ export {
   CarouselNext,
   useCarousel,
 };
+

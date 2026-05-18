@@ -26,7 +26,7 @@ type BookingFormValues = {
   note: string;
 };
 
-const currentMonth = () => new Date().toISOString().slice(0, 7); // YYYY-MM
+const currentMonth = () => new Date().toISOString().slice(0, 7);
 
 const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
   const tour = tourProp;
@@ -124,7 +124,6 @@ const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
 
   if (!tour) return null;
 
-  // Yêu cầu đăng nhập mới cho đặt tour
   if (!authUser) {
     return (
       <div className="rounded-xl border border-amber-200 bg-amber-50/80 dark:border-amber-800 dark:bg-amber-950/30 p-5 space-y-4">
@@ -209,8 +208,7 @@ const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
-        {/* Tháng & Ngày khởi hành */}
-        <div className="space-y-3">
+                <div className="space-y-3">
           <p className="text-sm font-medium text-muted-foreground">
             Ngày khởi hành
           </p>
@@ -256,8 +254,7 @@ const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
           )}
         </div>
 
-        {/* Số khách */}
-        <div className="space-y-3">
+                <div className="space-y-3">
           <p className="text-sm font-medium text-muted-foreground">Số khách</p>
           <div className="grid grid-cols-3 gap-2">
             <CustomInput
@@ -291,8 +288,7 @@ const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
           </div>
         </div>
 
-        {/* Thông tin liên hệ */}
-        <div className="space-y-3">
+                <div className="space-y-3">
           <p className="text-sm font-medium text-muted-foreground">
             Thông tin liên hệ
           </p>
@@ -356,3 +352,4 @@ const TourBookingForm = ({ tour: tourProp }: { tour?: Tour | null }) => {
 };
 
 export default TourBookingForm;
+

@@ -120,7 +120,6 @@ function buildQueryParams(values: TourFilterValues): TourQueryParams {
   return params;
 }
 
-/** Hydrate tour filter form from URL / parent query (Tour list editorial sync). */
 export function tourQueryParamsToFilterValues(
   q: TourQueryParams,
 ): TourFilterValues {
@@ -173,7 +172,7 @@ const chipBtnAtlasActive =
 interface TourFilterProps {
   onFilter?: (values: TourQueryParams) => void;
   onClear?: () => void;
-  /** When URL query string changes, form resets from this snapshot (share link / history). */
+
   syncedTourQuery?: TourQueryParams;
   urlSignature?: string;
   variant?: 'default' | 'atlas';
@@ -1064,3 +1063,4 @@ const TourFilter: React.FC<TourFilterProps> = ({
 };
 
 export default TourFilter;
+

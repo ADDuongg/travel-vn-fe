@@ -21,3 +21,4 @@ export const notify = {
   info: (m: NotifyMsg, description?: string) =>
     toast(resolve(m), description ? { description } : undefined),
 };
+

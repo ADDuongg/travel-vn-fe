@@ -19,3 +19,4 @@ export function getHotelOptions(params?: GetHotelsParams) {
 export function getHotelById(id: string) {
   return api.get<Hotel>(`/api/v1/public/hotels/${id}`);
 }
+

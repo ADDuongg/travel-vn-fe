@@ -1,4 +1,3 @@
-// features/bookings/hooks/useMyBookings.ts
 import { useNotifyMutation } from '@/lib/mutation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getBookingById, getMyBookings, cancelBooking } from '../booking/api';
@@ -58,7 +57,6 @@ export function useGetBookingById(id?: string) {
   });
 }
 
-/** PATCH bookings/:id/cancel – invalidates list & detail */
 export function useCancelRoomBookingMutation() {
   const qc = useQueryClient();
   return useNotifyMutation({
@@ -70,3 +68,4 @@ export function useCancelRoomBookingMutation() {
     },
   });
 }
+

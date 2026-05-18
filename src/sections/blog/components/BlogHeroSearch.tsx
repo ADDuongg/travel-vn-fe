@@ -36,3 +36,4 @@ export function BlogHeroSearch({ initialSearch = '', onApply }: BlogHeroSearchPr
     </form>
   );
 }
+

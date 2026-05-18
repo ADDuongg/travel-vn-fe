@@ -2,7 +2,6 @@ import { ROUTES } from '@/constants/router';
 import { generatePath } from 'react-router-dom';
 import { ReviewEntityType } from './types';
 
-/** Paths that only need `entityId` (no extra fetch). */
 export function getSyncDetailPath(
   entityType: ReviewEntityType,
   entityId: string,
@@ -21,3 +20,4 @@ export function getSyncDetailPath(
       return null;
   }
 }
+

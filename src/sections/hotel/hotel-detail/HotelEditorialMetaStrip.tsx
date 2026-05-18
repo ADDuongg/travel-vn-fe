@@ -118,3 +118,4 @@ export function HotelEditorialMetaStrip({ hotel, lang }: Props) {
     </div>
   );
 }
+

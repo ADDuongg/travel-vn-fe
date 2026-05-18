@@ -260,3 +260,4 @@ const RoomDetailError = ({ title, description }: RoomDetailErrorProps) => (
 );
 
 export default RoomDetailPage;
+

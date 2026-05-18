@@ -17,3 +17,4 @@ export function ImageBlock({ block }: ImageBlockProps) {
     </figure>
   );
 }
+

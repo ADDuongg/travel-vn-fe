@@ -36,7 +36,6 @@ export default function ProvinceDetailPage() {
     [province],
   );
 
-  /** Mirrors Open Design province detail — fixed anchors so the strip always matches Intro → Journeys. */
   const navItems = useMemo((): ProvinceDetailNavItem[] => {
     if (!province) return [];
     return [
@@ -143,3 +142,4 @@ const ProvinceDetailError = ({
     <p className="mt-2 text-sm text-mist">{description}</p>
   </div>
 );
+

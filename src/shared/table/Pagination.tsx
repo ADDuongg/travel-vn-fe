@@ -1,4 +1,3 @@
-// shared/table/Pagination.tsx
 import { cn } from '@/lib/utils';
 import { type Table } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
@@ -76,3 +75,4 @@ export function Pagination<T>({
     </div>
   );
 }
+

@@ -14,9 +14,7 @@ export type FavoriteButtonProps = {
   entityId: string;
   initialIsFavorited?: boolean;
   className?: string;
-  /**
-   * When true, prevents parent Link navigation (use on cards wrapped by <Link />).
-   */
+
   stopNavigation?: boolean;
   size?: 'icon' | 'sm' | 'default';
 };
@@ -118,3 +116,4 @@ export function FavoriteButton({
     </Button>
   );
 }
+

@@ -37,3 +37,4 @@ export function BlogContentRenderer({ blocks }: BlogContentRendererProps) {
     </article>
   );
 }
+

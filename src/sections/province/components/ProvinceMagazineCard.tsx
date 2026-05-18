@@ -130,3 +130,4 @@ export const ProvinceMagazineCard = memo(function ProvinceMagazineCard({
     </motion.article>
   );
 });
+

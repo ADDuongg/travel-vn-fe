@@ -1,7 +1,6 @@
 import { useCallback, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
-/** Open Design–style field (JourneyReviews `field` constant). */
 export const REVIEW_OD_FIELD =
   'w-full rounded-2xl border border-charcoal/12 bg-sand-50/90 px-4 py-3 text-[0.95rem] text-charcoal shadow-inner outline-none transition placeholder:text-charcoal/35 focus:border-forest/35 focus:ring-2 focus:ring-forest/15';
 
@@ -139,3 +138,4 @@ export function StarPicker({
     </div>
   );
 }
+

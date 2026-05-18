@@ -28,3 +28,4 @@ export function BlogReviews({ post }: BlogReviewsProps) {
     </section>
   );
 }
+

@@ -24,3 +24,4 @@ export function uploadMediaMultiple(files: File[]): Promise<MediaUploadItem[]> {
     },
   );
 }
+

@@ -50,3 +50,4 @@ const RulesSection: React.FC<RulesSectionProps> = ({ room }) => {
 };
 
 export default RulesSection;
+

@@ -51,3 +51,4 @@ const RoomAmenities = ({ room }: RoomAmenitiesProps) => {
 };
 
 export default RoomAmenities;
+

@@ -24,7 +24,7 @@ export function TourListHeroSearch({
 }: {
   onApply: (params: { search?: string; destinationId?: string }) => void;
   className?: string;
-  /** Synced from URL / parent query (tour list editorial). */
+
   initialSearch?: string;
   initialDestinationId?: string;
 }) {
@@ -121,3 +121,4 @@ export function TourListHeroSearch({
     </form>
   );
 }
+

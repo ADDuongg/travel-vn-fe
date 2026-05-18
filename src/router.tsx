@@ -107,7 +107,7 @@ export const routes: RouteConfig[] = [
       {
         path: ROUTES.DASHBOARD.INDEX,
         element: <DashboardOverviewPage />,
-        // handle: { crumb: 'Overview' },
+
       },
       {
         path: ROUTES.DASHBOARD.PROFILE,
@@ -170,7 +170,6 @@ export const routes: RouteConfig[] = [
         path: ROUTES.DASHBOARD.TOUR_REVIEWS,
         element: <Navigate to={ROUTES.DASHBOARD.SAVED} replace />,
       },
-      // ví dụ route động:
       {
         path: 'bookings/:id',
         element: <div>Booking</div>,
@@ -329,3 +328,4 @@ export const routes: RouteConfig[] = [
     element: <TourPaymentResultPage />,
   },
 ];
+

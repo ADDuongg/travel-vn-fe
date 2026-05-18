@@ -238,8 +238,7 @@ const MyBookingDetailPage: React.FC = () => {
         {t('bookings.back_to_my_bookings')}
       </Link>
 
-      {/* Header */}
-      <header className={cn(cardClass, 'border-t-4 border-t-forest')}>
+            <header className={cn(cardClass, 'border-t-4 border-t-forest')}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0 space-y-2">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -287,8 +286,7 @@ const MyBookingDetailPage: React.FC = () => {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
         <div className="space-y-6 lg:col-span-2">
-          {/* Order summary */}
-          <section className={cardClass}>
+                    <section className={cardClass}>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="space-y-1">
                 <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
@@ -384,8 +382,7 @@ const MyBookingDetailPage: React.FC = () => {
             )}
           </section>
 
-          {/* Rooms */}
-          <section className={cardClass}>
+                    <section className={cardClass}>
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="flex items-center gap-2 text-base font-semibold text-charcoal">
                 <Hotel className="size-5 text-forest" aria-hidden />
@@ -460,8 +457,7 @@ const MyBookingDetailPage: React.FC = () => {
             </ul>
           </section>
 
-          {/* Price */}
-          <section className={cardClass}>
+                    <section className={cardClass}>
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="text-base font-semibold text-charcoal">
                 {t('bookings.price_breakdown')}
@@ -513,8 +509,7 @@ const MyBookingDetailPage: React.FC = () => {
           </section>
         </div>
 
-        {/* Sidebar */}
-        <aside
+                <aside
           className={cn(cardClass, 'h-fit lg:sticky lg:top-24 lg:self-start')}
         >
           <div className="space-y-3 border-b border-slate-100 pb-5">
@@ -582,3 +577,4 @@ const MyBookingDetailPage: React.FC = () => {
 };
 
 export default MyBookingDetailPage;
+

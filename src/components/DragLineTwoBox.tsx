@@ -1,6 +1,5 @@
 import React, { useRef, useState, useCallback, type RefObject } from 'react';
 
-// Kiểu dữ liệu cho item và match
 type MatchItem = { id: string; label: string };
 type MatchPair = { a: string; b: string };
 type DraggingState =
@@ -27,7 +26,7 @@ const correctAnswer: MatchPair[] = [
 ];
 
 const DragLineTwoBox: React.FC = () => {
-  // Ref tới từng div của A/B và svg overlay
+
   const refsA = useRef<RefObject<HTMLDivElement | null>[]>(
     itemsA.map(() => React.createRef<HTMLDivElement>()),
   );
@@ -39,13 +38,7 @@ const DragLineTwoBox: React.FC = () => {
   const [matches, setMatches] = useState<MatchPair[]>([]);
   const [dragging, setDragging] = useState<DraggingState>(null);
   const [currentPos, setCurrentPos] = useState<Pos>(null);
-  /* useEffect(() => {
-    setMatches([
-      { a: 'a1', b: 'b3' },
-      { a: 'a2', b: 'b2' },
-    ]);
-  }, []); */
-  // Lấy toạ độ bên phải của box A (vào viền phải)
+
   function getRightCenter(ref: RefObject<HTMLDivElement | null>) {
     if (!ref.current || !svgRef.current) return { x: 0, y: 0 };
     const rect = ref.current.getBoundingClientRect();
@@ -55,7 +48,7 @@ const DragLineTwoBox: React.FC = () => {
       y: rect.top - svgRect.top + rect.height / 2,
     };
   }
-  // Lấy toạ độ bên trái của box B (vào viền trái)
+
   function getLeftCenter(ref: RefObject<HTMLDivElement | null>) {
     if (!ref.current || !svgRef.current) return { x: 0, y: 0 };
     const rect = ref.current.getBoundingClientRect();
@@ -65,7 +58,7 @@ const DragLineTwoBox: React.FC = () => {
       y: rect.top - svgRect.top + rect.height / 2,
     };
   }
-  // Lấy center của box (dùng cho drag start)
+
   function getCenter(ref: RefObject<HTMLDivElement | null>) {
     if (!ref.current || !svgRef.current) return { x: 0, y: 0 };
     const rect = ref.current.getBoundingClientRect();
@@ -76,7 +69,6 @@ const DragLineTwoBox: React.FC = () => {
     };
   }
 
-  // Bắt đầu kéo
   function handleStart(from: 'a' | 'b', idx: number, e: React.MouseEvent) {
     e.preventDefault();
     const ref = from === 'a' ? refsA.current[idx] : refsB.current[idx];
@@ -136,7 +128,6 @@ const DragLineTwoBox: React.FC = () => {
     [dragging, matches, itemsA, itemsB, refsA, refsB],
   );
 
-  // Tính toạ độ hai đầu line giữa A và B
   function getLineCoords(aId: string, bId: string) {
     const idxA = itemsA.findIndex((i) => i.id === aId);
     const idxB = itemsB.findIndex((i) => i.id === bId);
@@ -145,7 +136,6 @@ const DragLineTwoBox: React.FC = () => {
     return { x1: cA.x, y1: cA.y, x2: cB.x, y2: cB.y };
   }
 
-  // Line đang kéo
   let dragLine: React.ReactNode = null;
   if (dragging && currentPos) {
     if (dragging.from === 'a') {
@@ -190,7 +180,7 @@ const DragLineTwoBox: React.FC = () => {
           pointerEvents: 'none',
         }}
       >
-        {/* Line đã nối */}
+        {}
         {matches.map(({ a, b }, i) => {
           const { x1, y1, x2, y2 } = getLineCoords(a, b);
           const isCorrect = !!correctAnswer.find((c) => c.a === a && c.b === b);
@@ -201,13 +191,13 @@ const DragLineTwoBox: React.FC = () => {
               y1={y1}
               x2={x2}
               y2={y2}
-              stroke={isCorrect ? '#52c41a' : '#ff4d4f'} // Xanh đúng, đỏ sai
+              stroke={isCorrect ? '#52c41a' : '#ff4d4f'}
               strokeWidth={3}
             />
           );
         })}
 
-        {/* Line đang kéo */}
+        {}
         {dragLine}
       </svg>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -250,7 +240,7 @@ const DragLineTwoBox: React.FC = () => {
         <div>
           {itemsB.map((item, idx) => {
             const match = matches.find((m) => m.b === item.id);
-            // Xác định đúng/sai
+
             let icon = null;
             if (match) {
               const isCorrect = correctAnswer.some(
@@ -344,3 +334,4 @@ const DragLineTwoBox: React.FC = () => {
 };
 
 export default DragLineTwoBox;
+

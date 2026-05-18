@@ -13,10 +13,6 @@ export interface UseStatusAlertOptions {
   duration?: number;
 }
 
-/**
- * @deprecated Prefer `notify` from `@/lib/notify` (Sonner) and `useNotifyMutation` from
- * `@/lib/mutation` for mutation feedback. Kept for legacy call sites.
- */
 export function useStatusAlert(options: UseStatusAlertOptions = {}) {
   const { position = 'top-right', duration = 2000 } = options;
   const [alertState, setAlertState] = useState<StatusAlertState | null>(null);
@@ -73,3 +69,4 @@ export function useStatusAlert(options: UseStatusAlertOptions = {}) {
     alertState,
   };
 }
+

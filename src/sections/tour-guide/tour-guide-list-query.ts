@@ -13,3 +13,4 @@ export const defaultTourGuideListQuery: TourGuideListQuery = {
   isVerified: 'all',
   sortBy: 'newest',
 };
+

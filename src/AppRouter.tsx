@@ -1,4 +1,3 @@
-// AppRouter.tsx
 import React from 'react';
 import {
   createBrowserRouter,
@@ -77,3 +76,4 @@ const AppRouter = () => {
 };
 
 export default AppRouter;
+

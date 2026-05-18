@@ -27,3 +27,4 @@ export function hasRoomEditorialStory(room: Room, lang: string): boolean {
     room.translations?.en;
   return toParagraphs(tr?.description ?? '').length > 0;
 }
+

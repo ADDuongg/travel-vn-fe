@@ -27,7 +27,7 @@ function AccordionItem({ className, styleOpen, ...props }: AccordionItemProps) {
       data-slot="accordion-item"
       className={cn(
         'border-b last:border-b-0 transition-all',
-        // nếu có styleOpen thì apply khi open
+
         styleOpen ? `data-[state=open]:${styleOpen}` : '',
         className,
       )}
@@ -72,7 +72,6 @@ function AccordionTrigger({
         {...props}
       >
         {children}
-        {/* Nếu có iconOpen/iconClosed thì dùng */}
         {iconOpen || iconClosed ? (
           isOpen ? (
             renderIcon(iconOpen, '')
@@ -108,3 +107,4 @@ function AccordionContent({
 }
 
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+

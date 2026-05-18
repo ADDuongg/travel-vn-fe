@@ -9,8 +9,7 @@ import { cn } from '@/lib/utils';
 type HotelMapSectionProps = {
   hotel: Hotel;
   className?: string;
-  /** When true, render map grid only (no outer section or H2 — parent supplies headings). */
-  embedded?: boolean;
+embedded?: boolean;
 };
 
 export function HotelMapSection({

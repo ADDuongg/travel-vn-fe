@@ -45,13 +45,13 @@ export function JourneyShareSave({
         await navigator.share({ title, text: title, url });
         return;
       } catch {
-        /* dismissed */
+        void 0;
       }
     }
     try {
       await navigator.clipboard.writeText(url);
     } catch {
-      /* clipboard blocked */
+      void 0;
     }
   }, [title]);
 
@@ -79,3 +79,4 @@ export function JourneyShareSave({
     </div>
   );
 }
+

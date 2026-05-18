@@ -1,4 +1,3 @@
-/** Response item from POST /api/v1/client/media/upload(-multiple) */
 export interface MediaUploadItem {
   url: string;
   publicId: string;
@@ -7,3 +6,4 @@ export interface MediaUploadItem {
   height?: number;
   bytes?: number;
 }
+

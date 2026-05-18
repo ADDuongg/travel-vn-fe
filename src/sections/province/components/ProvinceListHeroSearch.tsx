@@ -16,9 +16,9 @@ const ALL = 'ALL';
 
 interface ProvinceListHeroSearchProps {
   onApply: (params: { search?: string; region?: ProvinceRegion }) => void;
-  /** Synced from URL (`?search=`) */
+
   initialSearch: string;
-  /** Synced from URL (`?region=`) */
+
   initialRegion: ProvinceRegion;
   className?: string;
 }
@@ -103,3 +103,4 @@ export function ProvinceListHeroSearch({
     </form>
   );
 }
+

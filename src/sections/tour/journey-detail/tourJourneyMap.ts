@@ -32,7 +32,6 @@ function pickTranslation(tour: Tour, lang: string) {
   );
 }
 
-/** Merge thumbnail + gallery URLs like TourHeader (dedupe by url). */
 export function getTourGalleryItems(tour: Tour): TourGalleryItemVm[] {
   const seen = new Set<string>();
   const out: TourGalleryItemVm[] = [];
@@ -58,8 +57,6 @@ export function getHeroCoverUrl(tour: Tour): string {
     'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=2400&q=85'
   );
 }
-
-/** Image beside story column — first gallery image after hero cover, if any. */
 export function getSecondaryStoryImage(tour: Tour): string | undefined {
   const items = getTourGalleryItems(tour);
   return items.length > 1 ? items[1]?.url : undefined;
@@ -107,8 +104,6 @@ export function getIncludedExcludedLists(tour: Tour, lang: string) {
   const excluded = tr?.exclusions ?? [];
   return { included, excluded };
 }
-
-/** Inclusions + amenities fallback (matches TourIncluded behaviour). */
 export function buildEssentialsLines(tour: Tour, lang: string) {
   const tr = pickTranslation(tour, lang);
   const rawInclusions = tr?.inclusions ?? [];
@@ -317,3 +312,4 @@ export function getPlanLeadCopy(
     'Tell us your pace, dietary notes, and celebration dates — we shape departures around real availability.',
   );
 }
+

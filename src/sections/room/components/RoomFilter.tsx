@@ -34,7 +34,7 @@ type RoomFilterProps = {
   value: RoomListQuery;
   onChange: (next: RoomListQuery) => void;
   onReset: () => void;
-  /** When true, drops sticky positioning for use inside editorial room list. */
+
   embedded?: boolean;
 };
 
@@ -406,3 +406,4 @@ const RoomFilter = ({
 };
 
 export default RoomFilter;
+

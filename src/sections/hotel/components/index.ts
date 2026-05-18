@@ -7,3 +7,4 @@ export {
   HotelEditorialListCardSkeleton,
 } from './HotelEditorialListCard';
 export { HotelEditorialListFilters } from './HotelEditorialListFilters';
+

@@ -1,7 +1,6 @@
 import type { DistrictOrWard, Province } from '@/features/provinces/types';
 import { pickLocale } from '@/features/provinces/locale';
 
-/** Giá trị "không chọn" cho select tỉnh/xã */
 export const ADDRESS_NONE = '__none__';
 
 export type LangKey = 'vi' | 'en';
@@ -10,7 +9,6 @@ export function langKey(lang: string): LangKey {
   return lang === 'en' ? 'en' : 'vi';
 }
 
-/** Lấy label phường/xã theo ngôn ngữ */
 export function getWardLabel(w: DistrictOrWard, lang: LangKey): string {
   return pickLocale(w.name, lang) ?? '';
 }
@@ -20,7 +18,6 @@ export interface SelectOption {
   value: string;
 }
 
-/** Chuyển danh sách tỉnh thành options cho select */
 export function toProvinceSelectOptions(
   provinces: Province[] | undefined,
   lang: LangKey,
@@ -38,7 +35,6 @@ export function toProvinceSelectOptions(
   ];
 }
 
-/** Chuyển danh sách phường/xã thành options cho select */
 export function toWardSelectOptions(
   wards: DistrictOrWard[] | undefined,
   lang: LangKey,
@@ -55,3 +51,4 @@ export function toWardSelectOptions(
     })),
   ];
 }
+

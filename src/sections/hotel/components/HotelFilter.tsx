@@ -238,3 +238,4 @@ const HotelFilter: React.FC<HotelFilterProps> = ({
 };
 
 export default HotelFilter;
+

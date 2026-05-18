@@ -7,7 +7,7 @@ import type { TourGuide } from '@/features/tour-guide/types';
 
 interface GuideReviewsProps {
   guide: TourGuide | null | undefined;
-  /** Omit outer editorial shell when the page provides its own section heading (Open Design detail). */
+
   embedded?: boolean;
 }
 
@@ -53,3 +53,4 @@ const GuideReviews: React.FC<GuideReviewsProps> = ({
 };
 
 export default GuideReviews;
+

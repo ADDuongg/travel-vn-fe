@@ -18,3 +18,4 @@ function useMediaQuery(query: string) {
 }
 
 export default useMediaQuery;
+

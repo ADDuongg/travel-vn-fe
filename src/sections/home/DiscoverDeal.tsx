@@ -16,7 +16,7 @@ export const DiscoverDeal: React.FC = () => {
   const { register, handleSubmit } = useForm<{ email: string }>();
 
   const onSubmit = (data: { email: string }) => {
-    // Newsletter — wire to API when ready
+
     void data.email;
   };
 
@@ -144,3 +144,4 @@ export const DiscoverDeal: React.FC = () => {
     </div>
   );
 };
+

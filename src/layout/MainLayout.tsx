@@ -1,4 +1,3 @@
-// layout/MainLayout.tsx
 import { ChatBotWidget } from '@components/chatbot';
 import React from 'react';
 import Footer from './Footer';
@@ -18,3 +17,4 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default MainLayout;
+

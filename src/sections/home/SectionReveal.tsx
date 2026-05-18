@@ -7,9 +7,6 @@ type SectionRevealProps = {
   className?: string;
 };
 
-/**
- * Scroll-triggered reveal wrapper (CSS: `.scroll-reveal` + `.is-visible` in `index.css`).
- */
 export function SectionReveal({ children, className }: SectionRevealProps) {
   const { ref, isVisible } = useScrollReveal();
   return (
@@ -18,3 +15,4 @@ export function SectionReveal({ children, className }: SectionRevealProps) {
     </div>
   );
 }
+

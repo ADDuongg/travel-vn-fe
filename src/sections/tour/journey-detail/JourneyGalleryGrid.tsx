@@ -49,3 +49,4 @@ export function JourneyGalleryGrid({ items }: Props) {
     </div>
   );
 }
+

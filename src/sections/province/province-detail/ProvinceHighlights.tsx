@@ -89,3 +89,4 @@ export function ProvinceHighlights({ province }: ProvinceHighlightsProps) {
     </section>
   );
 }
+

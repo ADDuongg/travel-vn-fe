@@ -1,4 +1,3 @@
-/** Split long description into two columns (editorial), like sentence chunks. */
 export function splitStoryParagraphs(description: string): { paraA: string; paraB: string } {
   const trimmed = description.trim();
   if (!trimmed) {
@@ -14,3 +13,4 @@ export function splitStoryParagraphs(description: string): { paraA: string; para
   const paraB = fragments.slice(mid).join(' ');
   return { paraA, paraB };
 }
+

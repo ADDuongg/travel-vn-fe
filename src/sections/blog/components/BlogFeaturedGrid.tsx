@@ -23,3 +23,4 @@ export function BlogFeaturedGrid({ items }: BlogFeaturedGridProps) {
     </div>
   );
 }
+

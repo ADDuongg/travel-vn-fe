@@ -9,3 +9,4 @@ export { HotelEditorialStorySection } from './HotelEditorialStorySection';
 export { HotelEditorialGalleryGrid } from './HotelEditorialGalleryGrid';
 export { HotelEditorialPoliciesSection } from './HotelEditorialPoliciesSection';
 export { HotelEditorialPlanSection } from './HotelEditorialPlanSection';
+

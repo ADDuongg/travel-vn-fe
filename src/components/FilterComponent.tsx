@@ -235,3 +235,4 @@ const FilterComponent: React.FC<Props> = ({ onFilter, onClear }) => {
 };
 
 export default FilterComponent;
+

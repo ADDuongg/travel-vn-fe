@@ -20,12 +20,12 @@ export interface RatingSummary {
 
 interface Props {
   reviews: Review[];
-  /** Current user's review for this entity, if any */
+
   myReview: Review | null;
   canReview: boolean;
   entityId: string;
   entityType: ReviewEntityType;
-  /** Optional: from entity (tour/room) API – used for header display */
+
   ratingSummary?: RatingSummary | null;
 }
 
@@ -247,3 +247,4 @@ export default function ReviewSection({
     </section>
   );
 }
+

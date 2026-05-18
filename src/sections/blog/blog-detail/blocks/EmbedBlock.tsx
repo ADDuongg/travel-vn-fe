@@ -22,3 +22,4 @@ export function EmbedBlock({ block }: EmbedBlockProps) {
     </div>
   );
 }
+

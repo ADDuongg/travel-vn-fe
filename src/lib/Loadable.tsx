@@ -25,3 +25,4 @@ function Loadable<T extends ComponentType<any>>(
 }
 
 export default Loadable;
+

@@ -64,3 +64,4 @@ function ChatBotInput({ onSend, onStop, isLoading }: ChatBotInputProps) {
 }
 
 export default ChatBotInput;
+

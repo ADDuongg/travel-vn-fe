@@ -6,7 +6,7 @@ import type { Tour } from '@/features/tours/types';
 
 type TourReviewsProps = {
   tour: Tour;
-  /** Parent provides section + title (journey layout). */
+
   embedded?: boolean;
 };
 
@@ -38,3 +38,4 @@ const TourReviews: React.FC<TourReviewsProps> = ({ tour, embedded }) => {
 };
 
 export default TourReviews;
+

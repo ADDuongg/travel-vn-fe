@@ -16,3 +16,4 @@ export function BlogCategoryPill({ slug, label }: BlogCategoryPillProps) {
     </Link>
   );
 }
+

@@ -32,3 +32,4 @@ export function ProvinceOverview({ province }: ProvinceOverviewProps) {
     </section>
   );
 }
+

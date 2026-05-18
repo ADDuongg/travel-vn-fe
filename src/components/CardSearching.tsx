@@ -62,3 +62,4 @@ const CardSearching: React.FC<{ item: any; displayType?: EnumDisplayItem }> = ({
 };
 
 export default CardSearching;
+

@@ -48,7 +48,6 @@ const DEFAULT_PAGE_SIZE = 20;
 
 type EntityFilter = 'all' | ReviewEntityType;
 
-/** Matches GET /client/reviews/me/list `?status=` CSV */
 type StatusFilter =
   | 'all'
   | 'PENDING'
@@ -792,3 +791,4 @@ const DashboardSavedPage: React.FC = () => {
 };
 
 export default DashboardSavedPage;
+

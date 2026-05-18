@@ -72,3 +72,4 @@ const HotelReviews = ({
 };
 
 export default HotelReviews;
+

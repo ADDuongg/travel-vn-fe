@@ -1,4 +1,3 @@
-// shared/tablekit/useServerTable.ts
 import * as I from '@/types/api';
 import * as IC from '@/types/commons';
 import {
@@ -58,3 +57,4 @@ export function useServerTable<TData>(opts: {
 export type ServerTableInstance<T extends { id: string | number }> = ReturnType<
   typeof useServerTable<T>
 >;
+

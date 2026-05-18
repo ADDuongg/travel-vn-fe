@@ -1,9 +1,5 @@
 import type { ProvinceListItem } from './types';
 
-/**
- * Fallback when GET /popular or GET list returns empty (UI-only; dev/staging).
- * Three stable demo provinces — North / Central / South.
- */
 export const MOCK_PROVINCES_FALLBACK: ProvinceListItem[] = [
   {
     _id: 'mock-prov-north',
@@ -147,3 +143,4 @@ export const MOCK_PROVINCES_FALLBACK: ProvinceListItem[] = [
     ],
   },
 ];
+

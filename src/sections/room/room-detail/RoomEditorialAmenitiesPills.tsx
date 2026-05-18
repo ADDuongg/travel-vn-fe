@@ -46,3 +46,4 @@ export function RoomEditorialAmenitiesPills({ room, lang }: Props) {
     </section>
   );
 }
+

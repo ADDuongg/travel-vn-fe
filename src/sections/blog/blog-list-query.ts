@@ -13,3 +13,4 @@ export const defaultBlogListQuery: BlogListQuery = {
   tag: '',
   sort: 'latest',
 };
+

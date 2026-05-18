@@ -60,3 +60,4 @@ const TourDetail: React.FC<TourDetailProps> = ({ tour }) => {
 };
 
 export default TourDetail;
+

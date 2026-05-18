@@ -49,3 +49,4 @@ export async function getMyTourGuideProfile(): Promise<TourGuide | null> {
 export function updateMyTourGuideProfile(payload: TourGuideUpdatePayload) {
   return api.patch<TourGuide>(`${CLIENT_BASE}/my-profile`, payload);
 }
+

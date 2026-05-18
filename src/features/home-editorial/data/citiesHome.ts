@@ -1,5 +1,3 @@
-/** Editorial homepage data — sourced from Open Design prototype (static imagery). */
-
 export type CitySlug =
   | 'hanoi'
   | 'da-nang'
@@ -90,3 +88,4 @@ export const collectionImages = [
   u('photo-1526778548025-fa2f459cd5c1'),
   u('photo-1476514525535-07fb3b4ae5f1'),
 ];
+

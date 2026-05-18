@@ -1,4 +1,3 @@
-// App.tsx
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ChatRoom from './components/ChatRoom';
@@ -37,3 +36,4 @@ function App() {
 }
 
 export default App;
+

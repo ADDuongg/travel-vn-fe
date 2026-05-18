@@ -98,3 +98,4 @@ const RoomBookingPaymentPage = () => {
 };
 
 export default RoomBookingPaymentPage;
+

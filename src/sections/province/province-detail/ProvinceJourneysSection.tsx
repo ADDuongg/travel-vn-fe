@@ -89,3 +89,4 @@ export function ProvinceJourneysSection({ province }: ProvinceJourneysSectionPro
     </section>
   );
 }
+

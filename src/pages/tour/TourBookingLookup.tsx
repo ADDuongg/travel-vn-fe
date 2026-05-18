@@ -1,7 +1,3 @@
-/**
- * Tra cứu đơn tour theo mã – GET /api/v1/tour-bookings/by-code/:code
- * docs/FE-API-TOUR-PHASE2.md
- */
 import { useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { MainLayout } from '@/layout';
@@ -158,3 +154,4 @@ const TourBookingLookupPage = () => {
 };
 
 export default TourBookingLookupPage;
+

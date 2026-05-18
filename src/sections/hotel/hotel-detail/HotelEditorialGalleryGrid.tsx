@@ -66,3 +66,4 @@ export function HotelEditorialGalleryGrid({ items }: Props) {
     </section>
   );
 }
+

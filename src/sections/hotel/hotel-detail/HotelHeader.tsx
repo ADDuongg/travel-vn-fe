@@ -69,9 +69,7 @@ const HotelHeader = ({ hotel }: { hotel: Hotel }) => {
   };
 
   const copyLink = (url: string) => {
-    void navigator.clipboard.writeText(url).then(() => {
-      /* no toast lib — silent success */
-    });
+    void navigator.clipboard.writeText(url);
   };
 
   const summary = hotel.ratingSummary;
@@ -230,3 +228,4 @@ const HotelHeader = ({ hotel }: { hotel: Hotel }) => {
 };
 
 export default HotelHeader;
+

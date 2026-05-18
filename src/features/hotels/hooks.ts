@@ -7,7 +7,6 @@ import {
 } from './api';
 import type { Hotel, HotelOption, HotelPaginatedResponse } from './types';
 
-/** Params for infinite list (page is supplied by the query). */
 export type HotelsInfiniteListParams = Omit<GetHotelsParams, 'page'>;
 
 export const hotelKeys = {
@@ -59,3 +58,4 @@ export function useHotelsInfiniteQuery(baseParams: HotelsInfiniteListParams) {
     staleTime: 5 * 60 * 1000,
   });
 }
+

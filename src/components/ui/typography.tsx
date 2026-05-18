@@ -1,7 +1,6 @@
 import { cn } from '@lib/utils';
 import React, { forwardRef, type JSX } from 'react';
 
-// Reusable helper to create components with consistent structure
 const createComponent = <T extends HTMLElement>(
   tag: keyof JSX.IntrinsicElements,
   defaultClassName: string,
@@ -149,3 +148,4 @@ export const ResponsiveH6 = createComponent<HTMLHeadingElement>(
   'scroll-m-20 text-sm sm:text-base xl:text-md font-semibold tracking-tight',
   'ResponsiveH6',
 );
+

@@ -58,7 +58,6 @@ type MutateCallOptions<TData, TError, TVariables, TContext> = MutateOptions<
 > &
   MutationNotifyCallOptions;
 
-/** Result of `useNotifyMutation` — `mutate` / `mutateAsync` accept optional `notify` overrides. */
 export type MutationResultWithNotify<TData, TError, TVariables, TContext> =
   Omit<
     UseMutationResult<TData, TError, TVariables, TContext>,
@@ -164,3 +163,4 @@ export function useNotifyMutation<
     [mutation, mutate, mutateAsync],
   );
 }
+

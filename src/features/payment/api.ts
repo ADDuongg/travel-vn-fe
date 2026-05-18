@@ -1,6 +1,5 @@
 import api from '@/lib/axios';
 
-/** User JWT routes under global prefix — see MODULES-12-15-FE-API.md */
 const CLIENT_PAYMENTS_BASE = '/api/v1/client/payments';
 
 export interface CreatePaymentIntentResponse {
@@ -29,17 +28,9 @@ export interface CreatePaymentIntentDto {
   bookingId: string;
 }
 
-/**
- * Generate idempotency key for payment intent creation
- */
 export function generateIdempotencyKey(bookingId: string): string {
   return `payment-intent-${bookingId}-${Date.now()}`;
 }
-
-/**
- * Create Stripe payment intent (room booking)
- * POST /api/v1/client/payments/create-intent
- */
 export async function createPaymentIntent(
   bookingId: string,
   idempotencyKey: string,
@@ -56,11 +47,6 @@ export async function createPaymentIntent(
     },
   );
 }
-
-/**
- * Get payment status by booking ID (room)
- * GET /api/v1/client/payments/status/:bookingId
- */
 export async function getPaymentStatus(
   bookingId: string,
 ): Promise<PaymentStatusResponse> {
@@ -69,16 +55,9 @@ export async function getPaymentStatus(
   );
 }
 
-// --- Tour payment (Phase 2) ---
-
 export interface CreateTourPaymentIntentDto {
   tourBookingId: string;
 }
-
-/**
- * Create Stripe payment intent for tour booking
- * POST /api/v1/client/payments/create-intent/tour
- */
 export async function createTourPaymentIntent(
   tourBookingId: string,
   idempotencyKey: string,
@@ -93,11 +72,6 @@ export async function createTourPaymentIntent(
     },
   );
 }
-
-/**
- * Get payment status for tour booking
- * GET /api/v1/client/payments/status/tour/:tourBookingId
- */
 export async function getTourPaymentStatus(
   tourBookingId: string,
 ): Promise<PaymentStatusResponse> {
@@ -109,3 +83,4 @@ export async function getTourPaymentStatus(
 export function generateTourIdempotencyKey(tourBookingId: string): string {
   return `tour-payment-${tourBookingId}-${Date.now()}`;
 }
+

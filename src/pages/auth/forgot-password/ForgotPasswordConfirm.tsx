@@ -222,3 +222,4 @@ const ForgotPasswordConfirmPage = () => {
 };
 
 export default ForgotPasswordConfirmPage;
+

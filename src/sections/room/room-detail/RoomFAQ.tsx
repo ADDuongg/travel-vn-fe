@@ -62,3 +62,4 @@ const RoomFAQ = ({ room }: RoomFAQProps) => {
 };
 
 export default RoomFAQ;
+

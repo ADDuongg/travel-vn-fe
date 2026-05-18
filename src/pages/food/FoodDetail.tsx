@@ -41,3 +41,4 @@ const FoodDetailPage = () => {
 };
 
 export default FoodDetailPage;
+

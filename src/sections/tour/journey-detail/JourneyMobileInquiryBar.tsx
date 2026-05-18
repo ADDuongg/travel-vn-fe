@@ -51,3 +51,4 @@ export function JourneyMobileInquiryBar({ tour, onOpenBooking }: Props) {
     </div>
   );
 }
+

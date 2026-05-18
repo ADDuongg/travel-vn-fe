@@ -108,3 +108,4 @@ const FilterListComponent: React.FC<Props> = ({ onFilter, onClear }) => {
 };
 
 export default FilterListComponent;
+

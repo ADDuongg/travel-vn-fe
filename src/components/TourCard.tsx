@@ -81,3 +81,4 @@ const TourCard: React.FC<{ item: TourItem }> = ({ item }) => {
 };
 
 export default TourCard;
+

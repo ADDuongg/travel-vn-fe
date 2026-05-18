@@ -1,4 +1,3 @@
-/** Shape of API error envelope (axios interceptor forwards these on rejected errors). */
 export type ApiErrorEnvelope = {
   message: string;
   messageKey?: string;
@@ -25,8 +24,8 @@ export type PageMeta = Paginate & {
   pageCount: number;
 };
 
-/** Hướng sắp xếp */
 export const SortDir = { Asc: 'asc', Desc: 'desc' } as const;
 export type SortDir = (typeof SortDir)[keyof typeof SortDir];
 
 export type SortParam = { by: string; dir: SortDir };
+

@@ -134,3 +134,4 @@ const HotelCard: React.FC<HotelCardProps> = ({
 };
 
 export default HotelCard;
+

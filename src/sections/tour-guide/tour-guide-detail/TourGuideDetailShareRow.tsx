@@ -43,7 +43,7 @@ export function TourGuideDetailShareRow({
           url: shareUrl,
         });
       } catch {
-        /* user cancelled or share failed */
+        await handleCopy();
       }
     } else {
       await handleCopy();
@@ -87,3 +87,4 @@ export function TourGuideDetailShareRow({
     </Reveal>
   );
 }
+

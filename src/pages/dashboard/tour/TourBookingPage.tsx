@@ -1,7 +1,3 @@
-/**
- * Đơn tour của tôi (dashboard) – GET /api/v1/tour-bookings/my-bookings
- * docs/FE-API-TOUR-PHASE2.md
- */
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { ColumnDef } from '@tanstack/react-table';
@@ -60,7 +56,6 @@ const StatusBadge: React.FC<{ status: string; label: string }> = ({
   </Badge>
 );
 
-/** Nút Detail + Pay online; ẩn Pay online khi đã hết hạn (1h) hoặc paymentStatus EXPIRED */
 const TourActionsCell: React.FC<{ item: TourBookingListItem }> = ({ item }) => {
   const { t } = useTranslation();
   const paymentStatus =
@@ -107,7 +102,6 @@ const TourActionsCell: React.FC<{ item: TourBookingListItem }> = ({ item }) => {
   );
 };
 
-/** Giống room: UNPAID thì hoặc "Unpaid + Pay within MM:SS" hoặc chỉ "Expired" (không show cả hai) */
 const TourPaymentCell: React.FC<{ item: TourBookingListItem }> = ({ item }) => {
   const { t } = useTranslation();
   const expireAt = getPaymentExpireAt(item.createdAt);
@@ -357,3 +351,4 @@ const TourBookingPage: React.FC = () => {
 };
 
 export default TourBookingPage;
+

@@ -1,4 +1,3 @@
-/** @type {import('jest').Config} */
 export default {
   testEnvironment: 'jsdom',
   roots: ['<rootDir>/src'],
@@ -54,3 +53,4 @@ export default {
   coverageDirectory: 'coverage',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
 };
+

@@ -115,3 +115,4 @@ const TourIncluded: React.FC<TourIncludedProps> = ({ tour }) => {
 };
 
 export default TourIncluded;
+
