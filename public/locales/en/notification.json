@@ -63,6 +63,9 @@
     "tour_booking_overbooking": {
       "title": "Tour overbooking warning",
       "message": "The system detected a possible overbooking for tour {{tourName}}. Please review inventory and adjust promptly."
+    },
+    "auth": {
+      "otp_send_error": "Error sending OTP"
     }
   }
 }
