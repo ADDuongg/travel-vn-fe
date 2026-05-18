@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Controller,
   useFormContext,
   type RegisterOptions,
 } from 'react-hook-form';
+import { Eye, EyeOff } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { cn } from '@/lib/utils';
 import { Input } from './ui/input';
 import { Checkbox } from './ui/checkbox';
 import { MultiSelect } from './ui/multiple-select';
@@ -28,6 +31,47 @@ interface CustomInputProps {
   placeHolder?: string;
   rules?: RegisterOptions;
   [key: string]: any;
+}
+
+type PasswordFieldProps = {
+  field: Record<string, unknown>;
+  name: string;
+  className?: string;
+  [key: string]: unknown;
+};
+
+function PasswordField({ field, name, className, ...props }: PasswordFieldProps) {
+  const { t } = useTranslation();
+  const [visible, setVisible] = useState(false);
+
+  return (
+    <div className="relative w-full">
+      <Input
+        {...props}
+        {...field}
+        name={name}
+        type={visible ? 'text' : 'password'}
+        className={cn(className, 'pr-12')}
+      />
+      <button
+        type="button"
+        tabIndex={-1}
+        onClick={() => setVisible((current) => !current)}
+        className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+        aria-label={
+          visible
+            ? t('input.hide_password', { defaultValue: 'Hide password' })
+            : t('input.show_password', { defaultValue: 'Show password' })
+        }
+      >
+        {visible ? (
+          <EyeOff className="size-5" aria-hidden />
+        ) : (
+          <Eye className="size-5" aria-hidden />
+        )}
+      </button>
+    </div>
+  );
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -112,7 +156,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
           </Select>
         );
       case 'password':
-        return <Input {...props} {...field} name={name} type="password" />;
+        return <PasswordField field={field} name={name} {...props} />;
       case 'custom-input':
         if (props.render) {
           return props.render(field);
@@ -146,7 +190,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
         alignItems: 'start',
         ...props.style,
       }}
-      className={props.className}
+      className={cn('w-full', props.className)}
     >
       {/* Chỉ render label nếu không phải checkbox */}
       {label && type !== 'checkbox' && (
